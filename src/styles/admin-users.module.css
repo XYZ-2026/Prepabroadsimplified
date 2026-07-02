@@ -1,0 +1,253 @@
+/* ============================================================
+   admin-users.module.css — Admin users management page
+   Migrated from legacy admin-users.css → CSS Module
+   ============================================================ */
+
+.adminContent {
+  padding: calc(var(--topbar-height) + 40px) 40px 40px 40px;
+}
+
+/* Top Stats Cards */
+.adminStatsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 40px;
+  margin-bottom: 30px;
+}
+
+.statCard {
+  background: var(--bg-surface);
+  border-radius: 12px;
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.statIcon {
+  width: 50px;
+  height: 50px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+}
+
+.statIconUsers {
+  background: rgba(211, 47, 47, 0.1);
+  color: var(--color-red-deep);
+}
+
+.statIconStates {
+  background: rgba(76, 175, 80, 0.1);
+  color: #4CAF50;
+}
+
+.statIconAlerts {
+  background: rgba(255, 152, 0, 0.1);
+  color: #FF9800;
+}
+
+.statContent h3 {
+  font-size: 24px;
+  margin: 0 0 4px 0;
+  color: var(--text-heading);
+}
+
+.statContent p {
+  margin: 0;
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+.statTrend {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+/* Controls Header */
+.usersControls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.searchBox {
+  position: relative;
+  width: 400px;
+}
+
+.searchBox input {
+  width: 100%;
+  padding: 12px 16px 12px 40px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 14px;
+  background: var(--bg-surface);
+  color: var(--text-body);
+}
+
+.searchBox svg {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+}
+
+.actionsGroup {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.actionsGroup select {
+  padding: 10px 16px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background: var(--bg-surface);
+  color: var(--text-body);
+  font-weight: 500;
+  outline: none;
+}
+
+.btnExport {
+  background: var(--color-red-deep);
+  color: white;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.3s ease;
+}
+
+.btnExport:hover {
+  opacity: 0.9;
+}
+
+/* Users Table */
+.usersTableContainer {
+  background: var(--bg-surface);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  margin-bottom: 30px;
+}
+
+.usersTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.usersTable th {
+  text-align: left;
+  padding: 16px 24px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.usersTable td {
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--border-color);
+  vertical-align: middle;
+}
+
+.userRow:last-child td {
+  border-bottom: none;
+}
+
+.userDetails {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.userAvatarSmall {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  background: rgba(211, 47, 47, 0.1);
+  color: var(--color-red-deep);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.userNameText {
+  font-weight: 600;
+  color: var(--text-heading);
+  margin-bottom: 4px;
+  display: block;
+}
+
+.userEmailText,
+.userSubtext {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.userPhone {
+  font-weight: 500;
+  color: var(--text-body);
+}
+
+.btnEdit {
+  padding: 8px 16px;
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  background: transparent;
+  color: var(--text-heading);
+  font-weight: 500;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btnEdit:hover {
+  background: var(--bg-hover);
+  border-color: var(--text-muted);
+}
+
+/* Load More */
+.loadMoreContainer {
+  display: flex;
+  justify-content: center;
+  padding: 24px;
+  background: var(--bg-surface);
+  border-top: 1px solid var(--border-color);
+}
+
+.btnLoadMore {
+  background: var(--color-red-deep);
+  color: white;
+  padding: 12px 32px;
+  border-radius: 8px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-size: 15px;
+}
+
+.btnLoadMore:hover {
+  background-color: #b71c1c;
+}
+
+.btnLoadMore:disabled {
+  background-color: var(--text-muted);
+  cursor: not-allowed;
+}

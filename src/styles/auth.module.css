@@ -1,0 +1,301 @@
+/* ============================================================
+   auth.module.css — Auth page styles
+   Migrated from legacy auth.css → CSS Module
+   ============================================================ */
+
+.authTopbar {
+  display: flex;
+  justify-content: flex-start;
+  padding: 0 10%;
+  align-items: center;
+  height: 80px;
+  background: var(--bg-card);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.authTopbarBrand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+}
+
+.authTopbarLogoIcon {
+  width: 40px;
+  height: 40px;
+  background-color: #9c1010;
+  color: #ffffff;
+  font-family: Arial, sans-serif;
+  font-size: 1.5rem;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+}
+
+.authTopbarText {
+  display: flex;
+  flex-direction: column;
+}
+
+.authTopbarTitle {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--text-dark);
+  line-height: 1.2;
+}
+
+.authTopbarSubtitle {
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: var(--text-light);
+  letter-spacing: 0.5px;
+}
+
+.authMain {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: calc(100vh - 80px);
+  padding: 4rem 1.5rem;
+  background: radial-gradient(circle at top left, rgba(156, 16, 16, 0.08) 0%, var(--color-section-alt) 40%, var(--bg-card-alt) 100%);
+}
+
+.authSection {
+  width: 100%;
+  max-width: 520px;
+  margin: auto 0;
+}
+
+.authContainer {
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  padding: 3.5rem 3rem;
+  box-shadow: 0 15px 45px rgba(0,0,0,0.12), 0 5px 15px rgba(0,0,0,0.06);
+  animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.authHeader {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.authLogoIcon {
+  width: 48px;
+  height: 48px;
+  background-color: var(--accent);
+  color: white;
+  border-radius: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0 auto 1.5rem auto;
+}
+
+.authHeaderTitle {
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+  color: var(--text-heading);
+  font-weight: 800;
+}
+
+.authHeaderSubtitle {
+  font-family: var(--font-primary);
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+/* Tabs */
+.authTabs {
+  display: flex;
+  margin-bottom: 2.5rem;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 0;
+}
+
+.authTab {
+  flex: 1;
+  padding: 0.75rem;
+  text-align: center;
+  background: transparent;
+  border: 1px solid transparent;
+  border-bottom: none;
+  color: var(--text-muted);
+  font-family: var(--font-primary);
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: var(--transition);
+  margin-bottom: -1px;
+}
+
+.authTab:hover {
+  color: var(--text-heading);
+}
+
+.authTabActive {
+  color: var(--accent);
+  border: 1px solid var(--text-heading);
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+  background: var(--bg-card);
+}
+
+/* Forms */
+.authFormContainer {
+  display: none;
+  animation: fadeIn 0.3s ease forwards;
+}
+
+.authFormContainerActive {
+  display: block;
+}
+
+.formGroup {
+  margin-bottom: 1.5rem;
+  text-align: left;
+}
+
+.formRow {
+  display: flex;
+  gap: 1rem;
+}
+
+.formRow .formGroup {
+  flex: 1;
+}
+
+.formGroup label {
+  display: block;
+  font-family: var(--font-primary);
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--text-heading);
+}
+
+.formGroup input,
+.formGroup select {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  color: var(--text-heading);
+  font-family: var(--font-primary);
+  font-size: 0.85rem;
+  transition: var(--transition);
+}
+
+.formGroup input:focus,
+.formGroup select:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-light);
+}
+
+.termsGroup {
+  margin-bottom: 1.5rem;
+}
+
+.termsLabel {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  font-weight: 400;
+  color: var(--text-body);
+  cursor: pointer;
+}
+
+.termsLabel input[type="checkbox"] {
+  width: auto;
+  margin-top: 0.2rem;
+  accent-color: var(--accent);
+}
+
+.termsLabel a {
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.termsLabel a:hover {
+  text-decoration: underline;
+}
+
+.authFooterLink {
+  text-align: center;
+  margin-top: 1.5rem;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.authFooterLink a {
+  color: var(--accent);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.authFooterLink a:hover {
+  text-decoration: underline;
+}
+
+.btnBlock {
+  width: 100%;
+  margin-top: 1rem;
+  padding: 0.8rem;
+  font-size: 0.95rem;
+}
+
+.authError {
+  color: #ff4d4d;
+  font-size: 0.85rem;
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+  display: none;
+}
+
+.authErrorVisible {
+  display: block;
+}
+
+.authMessage {
+  color: #2e7d32;
+  font-size: 0.85rem;
+  margin-bottom: 1rem;
+  display: none;
+}
+
+.authMessageVisible {
+  display: block;
+}
+
+/* Animations */
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Responsive */
+@media (max-width: 576px) {
+  .authContainer {
+    padding: 2rem 1.5rem;
+  }
+}

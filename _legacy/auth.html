@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Abroad Simplified is your ultimate study abroad hub. Find universities, scholarships, SOP guidance, and visa support for USA, UK, Germany, Canada, and Australia.">
+  <meta name="keywords" content="study abroad, university finder, scholarship finder, IELTS, TOEFL, SOP builder, visa guidance, abroad simplified">
+  <meta property="og:title" content="Abroad Simplified — Your Ultimate Study Abroad Hub">
+  <meta property="og:description" content="University finder, scholarship matching, SOP builder, and visa guidance — all in one platform.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://www.abroadsimplified.com/">
+  <title>Login | Abroad Simplified</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Lexend:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="assets/css/main.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" href="assets/css/sections.css">
+  <link rel="stylesheet" href="assets/css/auth.css">
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "EducationalOrganization",
+    "name": "Abroad Simplified",
+    "url": "https://www.abroadsimplified.com/",
+    "description": "Your ultimate study abroad hub — university finder, scholarship matching, SOP builder, and visa guidance.",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Mumbai",
+      "addressRegion": "Maharashtra",
+      "addressCountry": "IN"
+    }
+  }
+  </script>
+</head>
+<body>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       TOPBAR
+       ═══════════════════════════════════════════════════════════ -->
+  <header id="topbar" class="auth-topbar">
+    <a href="index.html" class="auth-topbar-brand">
+      <div class="auth-topbar-logo-icon">A</div>
+      <div class="auth-topbar-text">
+        <span class="auth-topbar-title">Abroad Simplified</span>
+        <span class="auth-topbar-subtitle">LOGIN / REGISTER</span>
+      </div>
+    </a>
+  </header>
+
+          <span class="nav-link-text">Counselling Checklist</span>
+        </a>
+      </div>
+    </nav>
+
+  </aside>
+
+
+  <!-- ═══════════════════════════════════════════════════════════
+       MAIN CONTENT AREA
+       ═══════════════════════════════════════════════════════════ -->
+  <main id="main-content" class="auth-main">
+    <section class="auth-section">
+      <div class="auth-container">
+        
+        <div class="auth-header">
+          <div class="auth-logo-icon">A</div>
+          <h2>Abroad Simplified</h2>
+          <p>Your complete counselling toolkit</p>
+        </div>
+        
+        <div class="auth-tabs">
+          <button class="auth-tab active" id="tab-login" onclick="switchAuthTab('login')">Sign In</button>
+          <button class="auth-tab" id="tab-register" onclick="switchAuthTab('register')">Register</button>
+          <button class="auth-tab" id="tab-forgot" onclick="switchAuthTab('forgot')">Forgot Password</button>
+        </div>
+
+        <!-- Login Form -->
+        <div id="form-login" class="auth-form-container active">
+          <form id="login-form">
+            <div class="form-group">
+              <label for="login-email">Email Address</label>
+              <input type="email" id="login-email" required placeholder="you@example.com">
+            </div>
+            <div class="form-group">
+              <label for="login-password">Password</label>
+              <input type="password" id="login-password" required placeholder="••••••••">
+            </div>
+            <div id="login-error" class="auth-error"></div>
+            <button type="submit" class="btn btn-primary btn-block">Sign In &rarr;</button>
+          </form>
+          <p class="auth-footer-link">No account? <a href="#" onclick="switchAuthTab('register'); return false;">Register free &rarr;</a></p>
+        </div>
+
+        <!-- Register Form -->
+        <div id="form-register" class="auth-form-container" style="display: none;">
+          <form id="register-form">
+            <div class="form-group">
+              <label for="reg-name">Full Name</label>
+              <input type="text" id="reg-name" required placeholder="Rahul Sharma">
+            </div>
+            <div class="form-group">
+              <label for="reg-email">Email Address</label>
+              <input type="email" id="reg-email" required placeholder="rahul@example.com">
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="reg-mobile">Mobile Number</label>
+                <input type="tel" id="reg-mobile" required placeholder="98765 43210">
+              </div>
+              <div class="form-group">
+                <label for="reg-type">Student Type</label>
+                <select id="reg-type" required>
+                  <option value="" disabled selected>Select Level</option>
+                  <option value="ug">UG (Undergraduate)</option>
+                  <option value="pg">PG (Postgraduate)</option>
+                  <option value="phd">PhD</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="reg-state">State</label>
+                <select id="reg-state" required>
+                  <option value="" disabled selected>Select State</option>
+                  <option value="maharashtra">Maharashtra</option>
+                  <option value="delhi">Delhi</option>
+                  <!-- Add more states here as needed -->
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="reg-city">City</label>
+                <input type="text" id="reg-city" required placeholder="Pune / Mumbai">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="reg-password">Password</label>
+                <input type="password" id="reg-password" required placeholder="min 6 chars">
+              </div>
+              <div class="form-group">
+                <label for="reg-confirm-password">Confirm Password</label>
+                <input type="password" id="reg-confirm-password" required placeholder="repeat">
+              </div>
+            </div>
+            <div class="form-group terms-group">
+              <label class="terms-label">
+                <input type="checkbox" id="reg-terms" required>
+                <span>I agree to the <a href="#">Terms & Conditions</a> and <a href="#">Privacy Policy</a>.</span>
+              </label>
+            </div>
+            <div id="reg-error" class="auth-error"></div>
+            <button type="submit" class="btn btn-primary btn-block">Create Account &rarr;</button>
+          </form>
+        </div>
+
+        <!-- Forgot Password Form -->
+        <div id="form-forgot" class="auth-form-container" style="display: none;">
+          <form id="forgot-form">
+            <div class="form-group">
+              <label for="forgot-email">Email Address</label>
+              <input type="email" id="forgot-email" required placeholder="you@example.com">
+            </div>
+            <div id="forgot-message" class="auth-message"></div>
+            <div id="forgot-error" class="auth-error"></div>
+            <button type="submit" class="btn btn-primary btn-block">Send Reset Link &rarr;</button>
+          </form>
+          <p class="auth-footer-link">Remember password? <a href="#" onclick="switchAuthTab('login'); return false;">Sign in &rarr;</a></p>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+
+
+  <!-- JavaScript -->
+  <script src="assets/js/main.js"></script>
+  <script src="assets/js/sidebar.js"></script>
+  <script src="assets/js/notifications.js"></script>
+  <script type="module" src="assets/js/auth.js"></script>
+</body>
+</html>

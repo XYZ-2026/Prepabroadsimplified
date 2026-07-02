@@ -1,0 +1,233 @@
+/* ============================================================
+   sections.css — Section-specific styles (Hero, Tools, Notifications)
+   Abroad Simplified (Light Theme)
+   ============================================================ */
+
+
+/* ══════════════════════════════════════════════════════════════
+   HERO SECTION
+   ══════════════════════════════════════════════════════════════ */
+
+#hero {
+  background: var(--bg-primary);
+  text-align: center;
+  padding: 80px 20px 80px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Subtle radial glow behind the hero */
+#hero::before {
+  content: '';
+  position: absolute;
+  top: -200px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 800px;
+  height: 800px;
+  background: radial-gradient(circle, var(--color-red-tint-warm) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.hero-inner {
+  max-width: 900px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+#hero .badge-pill {
+  margin-bottom: 24px;
+}
+
+#hero h1 {
+  font-size: var(--font-size-hero);
+  color: var(--text-heading);
+  margin-bottom: 20px;
+  line-height: 1.15;
+  letter-spacing: -1px;
+}
+
+#hero h1 .accent {
+  color: var(--color-red-deep);
+  font-style: normal; /* Removing italic to match new design */
+}
+
+.subtitle {
+  color: var(--text-body);
+  font-size: var(--font-size-md);
+  max-width: 680px;
+  margin: 0 auto 32px;
+  line-height: 1.7;
+}
+
+.hero-cta-row {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 56px;
+}
+
+.hero-stats {
+  display: flex;
+  gap: 40px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 16px;
+  padding: 32px;
+  background: var(--color-white);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border-light);
+}
+
+.stat {
+  text-align: center;
+}
+
+.stat strong {
+  display: block;
+  font-size: 32px;
+  font-weight: 600;
+  color: var(--color-red-deep);
+  margin-bottom: 4px;
+}
+
+.stat span {
+  font-size: 13px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+}
+
+@media (max-width: 768px) {
+  #hero {
+    padding: 60px 16px 40px;
+  }
+
+  .hero-stats {
+    gap: 24px;
+    padding: 24px;
+  }
+
+  .stat strong {
+    font-size: 24px;
+  }
+
+  .subtitle {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  #hero h1 {
+    font-size: 32px;
+  }
+
+  .hero-cta-row .btn {
+    width: 100%;
+  }
+}
+
+
+/* ══════════════════════════════════════════════════════════════
+   TOOLS SECTION
+   ══════════════════════════════════════════════════════════════ */
+
+#tools {
+  padding: 80px 24px;
+  max-width: calc(var(--max-content-w) + 48px);
+  margin: 0 auto;
+  position: relative;
+}
+
+#tools .section-badge {
+  display: block;
+  text-align: center;
+  margin: 0 auto 16px;
+  width: fit-content;
+}
+
+#tools h2 {
+  text-align: center;
+  font-size: var(--font-size-xl);
+  margin-bottom: 12px;
+  letter-spacing: -0.5px;
+}
+
+.section-subtitle {
+  text-align: center;
+  color: var(--text-body);
+  font-size: var(--font-size-md);
+  margin-bottom: 48px;
+}
+
+.tools-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+}
+
+@media (max-width: 768px) {
+  #tools {
+    padding: 60px 16px;
+  }
+
+  .tools-grid {
+    grid-template-columns: 1fr;
+  }
+
+  #tools h2 {
+    font-size: var(--font-size-lg);
+  }
+}
+
+
+/* ══════════════════════════════════════════════════════════════
+   NOTIFICATIONS SECTION
+   ══════════════════════════════════════════════════════════════ */
+
+#notifications {
+  padding: 0 24px 80px;
+  max-width: calc(var(--max-content-w) + 48px);
+  margin: 0 auto;
+}
+
+.notifications-container {
+  background: var(--color-white);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  padding: 32px;
+  box-shadow: var(--shadow-md);
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.section-header h2 {
+  font-size: var(--font-size-lg);
+  letter-spacing: -0.5px;
+}
+
+@media (max-width: 768px) {
+  #notifications {
+    padding: 0 16px 60px;
+  }
+
+  .notifications-container {
+    padding: 24px;
+  }
+
+  .section-header h2 {
+    font-size: var(--font-size-md);
+  }
+}

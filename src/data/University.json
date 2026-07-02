@@ -1,0 +1,1129 @@
+[
+  {
+    "Country": "USA",
+    "University": "Massachusetts Institute of Technology (MIT)",
+    "QS Ranking": "1",
+    "Required Profile Score": "98",
+    "": ""
+  },
+  {
+    "Country": "UK",
+    "University": "Imperial College London",
+    "QS Ranking": "2",
+    "Required Profile Score": "98",
+    "": ""
+  },
+  {
+    "Country": "USA",
+    "University": "California Institute of Technology (Caltech)",
+    "QS Ranking": "10",
+    "Required Profile Score": "95",
+    "": ""
+  },
+  {
+    "Country": "Australia",
+    "University": "The University of Melbourne",
+    "QS Ranking": "13",
+    "Required Profile Score": "85",
+    "": ""
+  },
+  {
+    "Country": "UK",
+    "University": "University of Oxford",
+    "QS Ranking": "3",
+    "Required Profile Score": "97",
+    "": ""
+  },
+  {
+    "Country": "Singapore",
+    "University": "National University of Singapore (NUS)",
+    "QS Ranking": "8",
+    "Required Profile Score": "92",
+    "": ""
+  },
+  {
+    "Country": "Singapore",
+    "University": "Nanyang Technological University, Singapore (NTU)",
+    "QS Ranking": "15",
+    "Required Profile Score": "90",
+    "": ""
+  },
+  {
+    "Country": "USA",
+    "University": "University of California, Berkeley (UCB)",
+    "QS Ranking": "12",
+    "Required Profile Score": "93",
+    "": ""
+  },
+  {
+    "Country": "UK",
+    "University": "UCL",
+    "QS Ranking": "9",
+    "Required Profile Score": "95",
+    "": ""
+  },
+  {
+    "Country": "USA",
+    "University": "University of Pennsylvania",
+    "QS Ranking": "11",
+    "Required Profile Score": "94",
+    "": ""
+  },
+  {
+    "Country": "USA",
+    "University": "Stanford University",
+    "QS Ranking": "6",
+    "Required Profile Score": "96",
+    "": ""
+  },
+  {
+    "Country": "USA",
+    "University": "Harvard University",
+    "QS Ranking": "4",
+    "Required Profile Score": "97",
+    "": ""
+  },
+  {
+    "Country": "UK",
+    "University": "University of Cambridge",
+    "QS Ranking": "5",
+    "Required Profile Score": "96",
+    "": ""
+  },
+  {
+    "Country": "USA",
+    "University": "Cornell University",
+    "QS Ranking": "16",
+    "Required Profile Score": "92",
+    "": ""
+  },
+  {
+    "Country": "Hong Kong",
+    "University": "The University of Hong Kong",
+    "QS Ranking": "17",
+    "Required Profile Score": "84",
+    "": ""
+  },
+  {
+    "Country": "Australia",
+    "University": "The University of Sydney",
+    "QS Ranking": "18",
+    "Required Profile Score": "80",
+    "": ""
+  },
+  {
+    "Country": "Australia",
+    "University": "The University of New South Wales (UNSW Sydney)",
+    "QS Ranking": "19",
+    "Required Profile Score": "81",
+    "": ""
+  },
+  {
+    "Country": "USA",
+    "University": "University of Chicago",
+    "QS Ranking": "21",
+    "Required Profile Score": "91",
+    "": ""
+  },
+  {
+    "Country": "USA",
+    "University": "Princeton University",
+    "QS Ranking": "22",
+    "Required Profile Score": "90",
+    "": ""
+  },
+  {
+    "Country": "USA",
+    "University": "Yale University",
+    "QS Ranking": "23",
+    "Required Profile Score": "89",
+    "": ""
+  },
+  {
+    "Country": "Canada",
+    "University": "University of Toronto",
+    "QS Ranking": "25",
+    "Required Profile Score": "85",
+    "": ""
+  },
+  {
+    "Country": "UK",
+    "University": "The University of Edinburgh",
+    "QS Ranking": "27",
+    "Required Profile Score": "94",
+    "": ""
+  },
+  {
+    "Country": "Germany",
+    "University": "Technical University of Munich",
+    "QS Ranking": "28",
+    "Required Profile Score": "93",
+    "": ""
+  },
+  {
+    "Country": "Canada",
+    "University": "McGill University",
+    "QS Ranking": "29",
+    "Required Profile Score": "82",
+    "": ""
+  },
+  {
+    "Country": "Australia",
+    "University": "The Australian National University",
+    "QS Ranking": "30",
+    "Required Profile Score": "78",
+    "": ""
+  },
+  {
+    "Country": "South Korea",
+    "University": "Seoul National University",
+    "QS Ranking": "31",
+    "Required Profile Score": "88",
+    "": ""
+  },
+  {
+    "Country": "USA",
+    "University": "Johns Hopkins University",
+    "QS Ranking": "32",
+    "Required Profile Score": "88",
+    "": ""
+  },
+  {
+    "Country": "Japan",
+    "University": "The University of Tokyo",
+    "QS Ranking": "32",
+    "Required Profile Score": "85",
+    "": ""
+  },
+  {
+    "Country": "USA",
+    "University": "Columbia University",
+    "QS Ranking": "34",
+    "Required Profile Score": "87",
+    "": ""
+  },
+  {
+    "Country": "UK",
+    "University": "The University of Manchester",
+    "QS Ranking": "34",
+    "Required Profile Score": "93",
+    "": ""
+  },
+  {
+    "Country": "Hong Kong",
+    "University": "The Chinese University of Hong Kong (CUHK)",
+    "QS Ranking": "36",
+    "Required Profile Score": "78",
+    "": ""
+  },
+  {
+    "Country": "Australia",
+    "University": "Monash University",
+    "QS Ranking": "37",
+    "Required Profile Score": "77",
+    "": ""
+  },
+  {
+    "Country": "Canada",
+    "University": "University of British Columbia",
+    "QS Ranking": "38",
+    "Required Profile Score": "78",
+    "": ""
+  },
+  {
+    "Country": "UK",
+    "University": "King's College London",
+    "QS Ranking": "40",
+    "Required Profile Score": "92",
+    "": ""
+  },
+  {
+    "Country": "Australia",
+    "University": "The University of Queensland",
+    "QS Ranking": "40",
+    "Required Profile Score": "76",
+    "": ""
+  },
+  {
+    "Country": "USA",
+    "University": "University of California, Los Angeles (UCLA)",
+    "QS Ranking": "42",
+    "Required Profile Score": "86",
+    "": ""
+  },
+  {
+    "Country": "USA",
+    "University": "New York University (NYU)",
+    "QS Ranking": "43",
+    "Required Profile Score": "85",
+    "": ""
+  },
+  {
+    "Country": "USA",
+    "University": "University of Michigan-Ann Arbor",
+    "QS Ranking": "44",
+    "Required Profile Score": "84",
+    "": ""
+  },
+  {
+    "Country": "Hong Kong",
+    "University": "The Hong Kong University of Science and Technology",
+    "QS Ranking": "47",
+    "Required Profile Score": "72",
+    "": ""
+  },
+  {
+    "Country": "Netherlands",
+    "University": "Delft University of Technology",
+    "QS Ranking": "49",
+    "Required Profile Score": "78",
+    "": "0"
+  },
+  {
+    "Country": "Japan",
+    "University": "Kyoto University",
+    "QS Ranking": "50",
+    "Required Profile Score": "76",
+    "": ""
+  },
+  {
+    "Country": "USA",
+    "University": "Northwestern University",
+    "QS Ranking": "50",
+    "Required Profile Score": "83",
+    "": ""
+  },
+  {
+    "Country": "UK",
+    "University": "The London School of Economics and Political Science (LSE)",
+    "QS Ranking": "50",
+    "Required Profile Score": "91",
+    "": ""
+  },
+  {
+    "Country": "South Korea",
+    "University": "KAIST - Korea Advanced Institute of Science & Technology",
+    "QS Ranking": "53",
+    "Required Profile Score": "74",
+    "": ""
+  },
+  {
+    "Country": "UK",
+    "University": "University of Bristol",
+    "QS Ranking": "54",
+    "Required Profile Score": "90",
+    "": ""
+  },
+  {
+    "Country": "Netherlands",
+    "University": "University of Amsterdam",
+    "QS Ranking": "55",
+    "Required Profile Score": "73",
+    "": ""
+  },
+  {
+    "Country": "South Korea",
+    "University": "Yonsei University",
+    "QS Ranking": "56",
+    "Required Profile Score": "72",
+    "": ""
+  },
+  {
+    "Country": "Hong Kong",
+    "University": "The Hong Kong Polytechnic University",
+    "QS Ranking": "57",
+    "Required Profile Score": "68",
+    "": ""
+  },
+  {
+    "Country": "USA",
+    "University": "Carnegie Mellon University",
+    "QS Ranking": "58",
+    "Required Profile Score": "82",
+    "": ""
+  },
+  {
+    "Country": "Germany",
+    "University": "Ludwig-Maximilians-Universität München",
+    "QS Ranking": "59",
+    "Required Profile Score": "84",
+    "": ""
+  },
+  {
+    "Country": "USA",
+    "University": "Duke University",
+    "QS Ranking": "61",
+    "Required Profile Score": "81",
+    "": ""
+  },
+  {
+    "Country": "Hong Kong",
+    "University": "City University of Hong Kong",
+    "QS Ranking": "62",
+    "Required Profile Score": "65",
+    "": ""
+  },
+  {
+    "Country": "New Zealand",
+    "University": "The University of Auckland",
+    "QS Ranking": "65",
+    "Required Profile Score": "70",
+    "": ""
+  },
+  {
+    "Country": "USA",
+    "University": "University of Texas at Austin",
+    "QS Ranking": "66",
+    "Required Profile Score": "80",
+    "": ""
+  },
+  {
+    "Country": "South Korea",
+    "University": "Korea University",
+    "QS Ranking": "67",
+    "Required Profile Score": "69",
+    "": ""
+  },
+  {
+    "Country": "UK",
+    "University": "The University of Warwick",
+    "QS Ranking": "69",
+    "Required Profile Score": "89",
+    "": ""
+  },
+  {
+    "Country": "USA",
+    "University": "University of Illinois at Urbana-Champaign",
+    "QS Ranking": "69",
+    "Required Profile Score": "79",
+    "": ""
+  },
+  {
+    "Country": "USA",
+    "University": "University of California, San Diego (UCSD)",
+    "QS Ranking": "72",
+    "Required Profile Score": "78",
+    "": ""
+  },
+  {
+    "Country": "USA",
+    "University": "University of Washington",
+    "QS Ranking": "76",
+    "Required Profile Score": "77",
+    "": ""
+  },
+  {
+    "Country": "Australia",
+    "University": "The University of Western Australia",
+    "QS Ranking": "77",
+    "Required Profile Score": "70",
+    "": ""
+  },
+  {
+    "Country": "UK",
+    "University": "University of Glasgow",
+    "QS Ranking": "78",
+    "Required Profile Score": "88",
+    "": ""
+  },
+  {
+    "Country": "USA",
+    "University": "Brown University",
+    "QS Ranking": "79",
+    "Required Profile Score": "76",
+    "": ""
+  },
+  {
+    "Country": "UK",
+    "University": "University of Birmingham",
+    "QS Ranking": "80",
+    "Required Profile Score": "87",
+    "": ""
+  },
+  {
+    "Country": "UK",
+    "University": "University of Southampton",
+    "QS Ranking": "80",
+    "Required Profile Score": "86",
+    "": ""
+  },
+  {
+    "Country": "Australia",
+    "University": "The University of Adelaide",
+    "QS Ranking": "82",
+    "Required Profile Score": "68",
+    "": ""
+  },
+  {
+    "Country": "UK",
+    "University": "University of Leeds",
+    "QS Ranking": "82",
+    "Required Profile Score": "85",
+    "": ""
+  },
+  {
+    "Country": "Germany",
+    "University": "Ruprecht-Karls-Universität Heidelberg",
+    "QS Ranking": "84",
+    "Required Profile Score": "82",
+    "": ""
+  },
+  {
+    "Country": "Japan",
+    "University": "Tokyo Institute of Technology (Tokyo Tech)",
+    "QS Ranking": "84",
+    "Required Profile Score": "66",
+    "": ""
+  },
+  {
+    "Country": "Japan",
+    "University": "Osaka University",
+    "QS Ranking": "86",
+    "Required Profile Score": "64",
+    "": ""
+  },
+  {
+    "Country": "Ireland",
+    "University": "Trinity College Dublin, The University of Dublin",
+    "QS Ranking": "87",
+    "Required Profile Score": "68",
+    "": ""
+  },
+  {
+    "Country": "Australia",
+    "University": "University of Technology Sydney",
+    "QS Ranking": "88",
+    "Required Profile Score": "66",
+    "": ""
+  },
+  {
+    "Country": "UK",
+    "University": "Durham University",
+    "QS Ranking": "89",
+    "Required Profile Score": "84",
+    "": ""
+  },
+  {
+    "Country": "USA",
+    "University": "Pennsylvania State University",
+    "QS Ranking": "89",
+    "Required Profile Score": "75",
+    "": ""
+  },
+  {
+    "Country": "USA",
+    "University": "Purdue University",
+    "QS Ranking": "89",
+    "Required Profile Score": "74",
+    "": ""
+  },
+  {
+    "Country": "Canada",
+    "University": "University of Alberta",
+    "QS Ranking": "96",
+    "Required Profile Score": "68",
+    "": ""
+  },
+  {
+    "Country": "Germany",
+    "University": "Freie Universitaet Berlin",
+    "QS Ranking": "97",
+    "Required Profile Score": "80",
+    "": ""
+  },
+  {
+    "Country": "South Korea",
+    "University": "Pohang University of Science And Technology (POSTECH)",
+    "QS Ranking": "98",
+    "Required Profile Score": "62",
+    "": ""
+  },
+  {
+    "Country": "Germany",
+    "University": "RWTH Aachen University",
+    "QS Ranking": "99",
+    "Required Profile Score": "78",
+    "": ""
+  },
+  {
+    "Country": "Germany",
+    "University": "KIT, Karlsruhe Institute of Technology",
+    "QS Ranking": "102",
+    "Required Profile Score": "76",
+    "": ""
+  },
+  {
+    "Country": "UK",
+    "University": "University of St Andrews",
+    "QS Ranking": "104",
+    "Required Profile Score": "83",
+    "": ""
+  },
+  {
+    "Country": "UK",
+    "University": "The University of Sheffield",
+    "QS Ranking": "105",
+    "Required Profile Score": "82",
+    "": ""
+  },
+  {
+    "Country": "Netherlands",
+    "University": "Utrecht University",
+    "QS Ranking": "105",
+    "Required Profile Score": "68",
+    "": ""
+  },
+  {
+    "Country": "Japan",
+    "University": "Tohoku University",
+    "QS Ranking": "107",
+    "Required Profile Score": "62",
+    "": ""
+  },
+  {
+    "Country": "USA",
+    "University": "Boston University",
+    "QS Ranking": "108",
+    "Required Profile Score": "73",
+    "": ""
+  },
+  {
+    "Country": "UK",
+    "University": "University of Nottingham",
+    "QS Ranking": "108",
+    "Required Profile Score": "81",
+    "": ""
+  },
+  {
+    "Country": "USA",
+    "University": "Georgia Institute of Technology",
+    "QS Ranking": "114",
+    "Required Profile Score": "72",
+    "": ""
+  },
+  {
+    "Country": "Canada",
+    "University": "University of Waterloo",
+    "QS Ranking": "115",
+    "Required Profile Score": "65",
+    "": ""
+  },
+  {
+    "Country": "USA",
+    "University": "University of Wisconsin-Madison",
+    "QS Ranking": "116",
+    "Required Profile Score": "71",
+    "": ""
+  },
+  {
+    "Country": "UK",
+    "University": "Queen Mary University of London",
+    "QS Ranking": "120",
+    "Required Profile Score": "80",
+    "": ""
+  },
+  {
+    "Country": "Canada",
+    "University": "Western University",
+    "QS Ranking": "120",
+    "Required Profile Score": "62",
+    "": ""
+  },
+  {
+    "Country": "Australia",
+    "University": "RMIT University",
+    "QS Ranking": "123",
+    "Required Profile Score": "64",
+    "": ""
+  },
+  {
+    "Country": "South Korea",
+    "University": "Sungkyunkwan University(SKKU)",
+    "QS Ranking": "123",
+    "Required Profile Score": "60",
+    "": ""
+  },
+  {
+    "Country": "USA",
+    "University": "University of Southern California",
+    "QS Ranking": "125",
+    "Required Profile Score": "70",
+    "": ""
+  },
+  {
+    "Country": "Germany",
+    "University": "Humboldt-Universität zu Berlin",
+    "QS Ranking": "126",
+    "Required Profile Score": "74",
+    "": ""
+  },
+  {
+    "Country": "Ireland",
+    "University": "University College Dublin",
+    "QS Ranking": "126",
+    "Required Profile Score": "60",
+    "": ""
+  },
+  {
+    "Country": "UK",
+    "University": "Newcastle University",
+    "QS Ranking": "129",
+    "Required Profile Score": "79",
+    "": ""
+  },
+  {
+    "Country": "USA",
+    "University": "University of California, Davis",
+    "QS Ranking": "130",
+    "Required Profile Score": "69",
+    "": ""
+  },
+  {
+    "Country": "Australia",
+    "University": "Macquarie University",
+    "QS Ranking": "133",
+    "Required Profile Score": "62",
+    "": ""
+  },
+  {
+    "Country": "Netherlands",
+    "University": "Eindhoven University of Technology",
+    "QS Ranking": "136",
+    "Required Profile Score": "66",
+    "": ""
+  },
+  {
+    "Country": "UK",
+    "University": "Lancaster University",
+    "QS Ranking": "141",
+    "Required Profile Score": "78",
+    "": ""
+  },
+  {
+    "Country": "Netherlands",
+    "University": "Leiden University",
+    "QS Ranking": "141",
+    "Required Profile Score": "64",
+    "": ""
+  },
+  {
+    "Country": "USA",
+    "University": "Rice University",
+    "QS Ranking": "141",
+    "Required Profile Score": "68",
+    "": ""
+  },
+  {
+    "Country": "Germany",
+    "University": "Technische Universität Berlin (TU Berlin)",
+    "QS Ranking": "147",
+    "Required Profile Score": "72",
+    "": ""
+  },
+  {
+    "Country": "UK",
+    "University": "University of Bath",
+    "QS Ranking": "150",
+    "Required Profile Score": "77",
+    "": ""
+  },
+  {
+    "Country": "USA",
+    "University": "Michigan State University",
+    "QS Ranking": "152",
+    "Required Profile Score": "67",
+    "": ""
+  },
+  {
+    "Country": "Japan",
+    "University": "Nagoya University",
+    "QS Ranking": "152",
+    "Required Profile Score": "60",
+    "": ""
+  },
+  {
+    "Country": "USA",
+    "University": "Texas A&M University",
+    "QS Ranking": "154",
+    "Required Profile Score": "66",
+    "": ""
+  },
+  {
+    "Country": "USA",
+    "University": "University of North Carolina, Chapel Hill",
+    "QS Ranking": "155",
+    "Required Profile Score": "65",
+    "": ""
+  },
+  {
+    "Country": "Netherlands",
+    "University": "Wageningen University & Research",
+    "QS Ranking": "155",
+    "Required Profile Score": "62",
+    "": ""
+  },
+  {
+    "Country": "Netherlands",
+    "University": "Erasmus University Rotterdam",
+    "QS Ranking": "158",
+    "Required Profile Score": "60",
+    "": ""
+  },
+  {
+    "Country": "Canada",
+    "University": "Université de Montréal",
+    "QS Ranking": "159",
+    "Required Profile Score": "59",
+    "": ""
+  },
+  {
+    "Country": "Netherlands",
+    "University": "University of Groningen",
+    "QS Ranking": "159",
+    "Required Profile Score": "58",
+    "": ""
+  },
+  {
+    "Country": "South Korea",
+    "University": "Hanyang University",
+    "QS Ranking": "162",
+    "Required Profile Score": "55",
+    "": ""
+  },
+  {
+    "Country": "UK",
+    "University": "University of Liverpool",
+    "QS Ranking": "165",
+    "Required Profile Score": "76",
+    "": ""
+  },
+  {
+    "Country": "Japan",
+    "University": "Kyushu University",
+    "QS Ranking": "167",
+    "Required Profile Score": "58",
+    "": ""
+  },
+  {
+    "Country": "Australia",
+    "University": "University of Wollongong",
+    "QS Ranking": "167",
+    "Required Profile Score": "60",
+    "": ""
+  },
+  {
+    "Country": "UK",
+    "University": "The University of Exeter",
+    "QS Ranking": "169",
+    "Required Profile Score": "75",
+    "": ""
+  },
+  {
+    "Country": "USA",
+    "University": "Washington University in St. Louis",
+    "QS Ranking": "171",
+    "Required Profile Score": "64",
+    "": ""
+  },
+  {
+    "Country": "UK",
+    "University": "University of Reading",
+    "QS Ranking": "172",
+    "Required Profile Score": "74",
+    "": ""
+  },
+  {
+    "Country": "Japan",
+    "University": "Hokkaido University",
+    "QS Ranking": "173",
+    "Required Profile Score": "56",
+    "": ""
+  },
+  {
+    "Country": "Australia",
+    "University": "Curtin University",
+    "QS Ranking": "174",
+    "Required Profile Score": "58",
+    "": ""
+  },
+  {
+    "Country": "Canada",
+    "University": "McMaster University",
+    "QS Ranking": "176",
+    "Required Profile Score": "56",
+    "": ""
+  },
+  {
+    "Country": "USA",
+    "University": "University of California, Santa Barbara (UCSB)",
+    "QS Ranking": "178",
+    "Required Profile Score": "63",
+    "": ""
+  },
+  {
+    "Country": "Australia",
+    "University": "The University of Newcastle, Australia (UON)",
+    "QS Ranking": "179",
+    "Required Profile Score": "56",
+    "": ""
+  },
+  {
+    "Country": "Japan",
+    "University": "Waseda University",
+    "QS Ranking": "181",
+    "Required Profile Score": "54",
+    "": ""
+  },
+  {
+    "Country": "UK",
+    "University": "University of York",
+    "QS Ranking": "184",
+    "Required Profile Score": "73",
+    "": ""
+  },
+  {
+    "Country": "UK",
+    "University": "Cardiff University",
+    "QS Ranking": "186",
+    "Required Profile Score": "72",
+    "": ""
+  },
+  {
+    "Country": "Japan",
+    "University": "Keio University",
+    "QS Ranking": "188",
+    "Required Profile Score": "52",
+    "": ""
+  },
+  {
+    "Country": "Canada",
+    "University": "University of Ottawa",
+    "QS Ranking": "189",
+    "Required Profile Score": "53",
+    "": ""
+  },
+  {
+    "Country": "Germany",
+    "University": "Universität Hamburg",
+    "QS Ranking": "191",
+    "Required Profile Score": "70",
+    "": ""
+  },
+  {
+    "Country": "Canada",
+    "University": "Queen's University at Kingston",
+    "QS Ranking": "193",
+    "Required Profile Score": "50",
+    "": ""
+  },
+  {
+    "Country": "USA",
+    "University": "Emory University",
+    "QS Ranking": "196",
+    "Required Profile Score": "62",
+    "": ""
+  },
+  {
+    "Country": "Australia",
+    "University": "Deakin University",
+    "QS Ranking": "197",
+    "Required Profile Score": "54",
+    "": ""
+  },
+  {
+    "Country": "Canada",
+    "University": "University of Calgary",
+    "QS Ranking": "198",
+    "Required Profile Score": "47",
+    "": ""
+  },
+  {
+    "Country": "USA",
+    "University": "Arizona State University",
+    "QS Ranking": "200",
+    "Required Profile Score": "61",
+    "": ""
+  },
+  {
+    "Country": "USA",
+    "University": "University of Minnesota Twin Cities",
+    "QS Ranking": "203",
+    "Required Profile Score": "60",
+    "": ""
+  },
+  {
+    "Country": "UK",
+    "University": "Queen's University Belfast",
+    "QS Ranking": "206",
+    "Required Profile Score": "71",
+    "": ""
+  },
+  {
+    "Country": "USA",
+    "University": "The Ohio State University",
+    "QS Ranking": "208",
+    "Required Profile Score": "59",
+    "": ""
+  },
+  {
+    "Country": "Germany",
+    "University": "Albert-Ludwigs-Universitaet Freiburg",
+    "QS Ranking": "212",
+    "Required Profile Score": "68",
+    "": ""
+  },
+  {
+    "Country": "Australia",
+    "University": "Queensland University of Technology (QUT)",
+    "QS Ranking": "213",
+    "Required Profile Score": "52",
+    "": ""
+  },
+  {
+    "Country": "New Zealand",
+    "University": "University of Otago",
+    "QS Ranking": "214",
+    "Required Profile Score": "55",
+    "": ""
+  },
+  {
+    "Country": "USA",
+    "University": "University of Florida",
+    "QS Ranking": "215",
+    "Required Profile Score": "58",
+    "": ""
+  },
+  {
+    "Country": "Australia",
+    "University": "La Trobe University",
+    "QS Ranking": "217",
+    "Required Profile Score": "50",
+    "": ""
+  },
+  {
+    "Country": "USA",
+    "University": "University of Maryland, College Park",
+    "QS Ranking": "218",
+    "Required Profile Score": "57",
+    "": ""
+  },
+  {
+    "Country": "Netherlands",
+    "University": "Vrije Universiteit Amsterdam",
+    "QS Ranking": "221",
+    "Required Profile Score": "56",
+    "": ""
+  },
+  {
+    "Country": "Germany",
+    "University": "Eberhard Karls Universität Tübingen",
+    "QS Ranking": "222",
+    "Required Profile Score": "66",
+    "": ""
+  },
+  {
+    "Country": "Germany",
+    "University": "Friedrich-Alexander-Universität Erlangen-Nürnberg",
+    "QS Ranking": "224",
+    "Required Profile Score": "64",
+    "": ""
+  },
+  {
+    "Country": "UK",
+    "University": "Loughborough University",
+    "QS Ranking": "224",
+    "Required Profile Score": "70",
+    "": ""
+  },
+  {
+    "Country": "Germany",
+    "University": "Rheinische Friedrich-Wilhelms-Universität Bonn",
+    "QS Ranking": "227",
+    "Required Profile Score": "62",
+    "": ""
+  },
+  {
+    "Country": "Netherlands",
+    "University": "Maastricht University",
+    "QS Ranking": "230",
+    "Required Profile Score": "54",
+    "": ""
+  },
+  {
+    "Country": "Netherlands",
+    "University": "University of Twente",
+    "QS Ranking": "233",
+    "Required Profile Score": "52",
+    "": ""
+  },
+  {
+    "Country": "Germany",
+    "University": "Technische Universität Dresden",
+    "QS Ranking": "234",
+    "Required Profile Score": "60",
+    "": ""
+  },
+  {
+    "Country": "New Zealand",
+    "University": "University of Waikato",
+    "QS Ranking": "235",
+    "Required Profile Score": "52",
+    "": ""
+  },
+  {
+    "Country": "UK",
+    "University": "University of Aberdeen",
+    "QS Ranking": "236",
+    "Required Profile Score": "69",
+    "": ""
+  },
+  {
+    "Country": "USA",
+    "University": "University of Rochester",
+    "QS Ranking": "236",
+    "Required Profile Score": "56",
+    "": ""
+  },
+  {
+    "Country": "New Zealand",
+    "University": "Massey University",
+    "QS Ranking": "239",
+    "Required Profile Score": "49",
+    "": ""
+  },
+  {
+    "Country": "Germany",
+    "University": "Technical University of Darmstadt",
+    "QS Ranking": "241",
+    "Required Profile Score": "58",
+    "": ""
+  },
+  {
+    "Country": "USA",
+    "University": "Dartmouth College",
+    "QS Ranking": "243",
+    "Required Profile Score": "55",
+    "": ""
+  },
+  {
+    "Country": "New Zealand",
+    "University": "Victoria University of Wellington",
+    "QS Ranking": "244",
+    "Required Profile Score": "46",
+    "": ""
+  },
+  {
+    "Country": "UK",
+    "University": "University of Sussex",
+    "QS Ranking": "246",
+    "Required Profile Score": "68",
+    "": ""
+  },
+  {
+    "Country": "USA",
+    "University": "Vanderbilt University",
+    "QS Ranking": "248",
+    "Required Profile Score": "54",
+    "": ""
+  }
+]

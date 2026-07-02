@@ -255,116 +255,462 @@ export default function UniversityFinderWizard() {
     
     const pageWidth = doc.internal.pageSize.width;
     const pageHeight = doc.internal.pageSize.height;
+    const margin = 14;
 
-    // --- PAGE 1: COVER PAGE ---
-    // Premium dark header banner
-    doc.setFillColor(33, 37, 41);
-    doc.rect(0, 0, pageWidth, 120, 'F');
+    // Fonts: we will use 'helvetica' (default) but style appropriately.
+    const fontNormal = 'helvetica';
     
-    doc.setTextColor(255, 255, 255);
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(36);
-    doc.text('Abroad Simplified', pageWidth / 2, 60, { align: 'center' });
-    
-    doc.setFont('helvetica', 'normal');
-    doc.setFontSize(18);
-    doc.text('Personalised University Report', pageWidth / 2, 75, { align: 'center' });
-    
-    doc.setTextColor(80, 80, 80);
-    doc.setFontSize(14);
-    doc.text(`Prepared for: ${details.name}`, pageWidth / 2, 160, { align: 'center' });
-    doc.text(`Location: ${details.city}, ${details.state}`, pageWidth / 2, 170, { align: 'center' });
-    
-    const today = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-    doc.setFontSize(12);
-    doc.setTextColor(150, 150, 150);
-    doc.text(`Generated on ${today}`, pageWidth / 2, pageHeight - 30, { align: 'center' });
-
-    doc.addPage();
-
-    // --- PAGE 2: USER DETAILS & COUNTRY SCORES ---
-    doc.setFontSize(22);
-    doc.setTextColor(33, 37, 41);
-    doc.setFont('helvetica', 'bold');
-    doc.text('Student Profile Summary', 14, 25);
-
-    doc.setFontSize(12);
-    doc.setFont('helvetica', 'normal');
-    doc.setTextColor(73, 80, 87);
-    
-    // Draw a box for student info
-    doc.setDrawColor(222, 226, 230);
-    doc.setFillColor(248, 249, 250);
-    doc.roundedRect(14, 32, pageWidth - 28, 40, 3, 3, 'FD');
-
-    doc.setTextColor(33, 37, 41);
-    doc.setFont('helvetica', 'bold');
-    doc.text('Contact Information', 20, 42);
-    doc.setFont('helvetica', 'normal');
-    doc.text(`Name: ${details.name}`, 20, 50);
-    doc.text(`Email: ${details.email}`, 20, 58);
-    doc.text(`Mobile: ${details.mobile}`, 110, 50);
-    doc.text(`Location: ${details.city}, ${details.state}`, 110, 58);
-
-    let y = 85;
-
-    // Helper for rendering tables
-    const renderSection = (title: string, head: string[], body: any[][], headFill: number[], headText: number[], forceNewPage: boolean = true) => {
-      if (body.length === 0) return;
+    // Header text helper
+    const drawPageHeader = (pageTitle: string, subtitle: string) => {
+      doc.setTextColor(150, 150, 150);
+      doc.setFontSize(8);
+      doc.setFont(fontNormal, 'normal');
+      doc.text('ABROAD SIMPLIFIED • PERSONALISED UNIVERSITY REPORT', pageWidth / 2, 15, { align: 'center' });
       
-      if (forceNewPage) {
-        doc.addPage();
-        y = 25;
-      }
-
-      doc.setFontSize(16);
-      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(10);
+      doc.setTextColor(180, 20, 30); // Red accent
+      doc.setFont(fontNormal, 'bold');
+      doc.text(pageTitle, margin, 25);
+      
+      doc.setFontSize(22);
       doc.setTextColor(33, 37, 41);
-      doc.text(title, 14, y);
-      
-      (doc as any).autoTable({
-        startY: y + 6,
-        head: [head],
-        body: body,
-        theme: 'striped',
-        styles: {
-          font: 'helvetica',
-          fontSize: 10,
-          cellPadding: 6,
-        },
-        headStyles: {
-          fillColor: headFill,
-          textColor: headText,
-          fontStyle: 'bold',
-          halign: 'left',
-        },
-        alternateRowStyles: {
-          fillColor: [248, 249, 250],
-        },
-        margin: { top: 20, bottom: 20 },
-      });
-      
-      y = (doc as any).lastAutoTable.finalY + 20;
+      doc.text(subtitle, margin, 35);
     };
 
-    const countryHead = ['Country', 'Total Profile Match (%)'];
-    const countryBody = results.countryScores.map(c => [c.Country, c['Total Profile %']]);
-    renderSection('Country-wise Readiness', countryHead, countryBody, [52, 58, 64], [255, 255, 255], true);
-
-    const gapHead = ['Country', 'University', 'QS Ranking', 'Required Profile Score', 'Your Profile %', 'Gap %'];
-    const gapBody = results.all.map(u => [u.Country, u.University, u['QS Ranking'] || 'N/A', u['Required Profile Score'], u['Your Profile %'], u['Gap %']]);
-    renderSection('University Gap Analysis', gapHead, gapBody, [52, 58, 64], [255, 255, 255], true);
-
-    const uniHead = ['Country', 'University', 'QS Ranking', 'Required Score', 'Your Match %', 'Gap %'];
+    // --- PAGE 1: COVER PAGE ---
+    // Dark background with gradient vibe
+    doc.setFillColor(40, 44, 52); // Dark slate
+    doc.rect(0, 0, pageWidth, pageHeight, 'F');
+    // Top right glow effect simulation (optional, just stick to solid for reliability)
     
-    const ambBody = results.ambitious.map(u => [u.Country, u.University, u['QS Ranking'] || 'N/A', u['Required Profile Score'], u['Your Profile %'], u['Gap %']]);
-    renderSection('Ambitious Universities', uniHead, ambBody, [211, 47, 47], [255, 255, 255], true);
+    // Logo square
+    doc.setFillColor(220, 53, 69); // Red
+    doc.roundedRect(margin, 40, 10, 10, 2, 2, 'F');
+    
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(12);
+    doc.setFont(fontNormal, 'bold');
+    doc.text('ABROAD ', margin + 14, 47);
+    doc.setTextColor(255, 193, 7); // Yellow
+    doc.setFont(fontNormal, 'normal');
+    doc.text('SIMPLIFIED', margin + 35, 47);
+    
+    doc.setTextColor(255, 193, 7); // Yellow
+    doc.setFontSize(10);
+    doc.text('PERSONALISED UNIVERSITY REPORT', margin, 85);
+    
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(36);
+    doc.setFont(fontNormal, 'bold');
+    doc.text('Your Global\nAdmissions Readiness,\nDecoded.', margin, 100);
+    
+    doc.setTextColor(200, 200, 200);
+    doc.setFontSize(12);
+    doc.setFont(fontNormal, 'normal');
+    doc.text('A data-driven breakdown of your profile match across 13\nstudy destinations and 160+ leading universities.', margin, 145);
+    
+    // Red horizontal line
+    doc.setDrawColor(220, 53, 69);
+    doc.setLineWidth(1);
+    doc.line(margin, 175, margin + 30, 175);
+    
+    doc.setTextColor(150, 150, 150);
+    doc.setFontSize(8);
+    doc.setFont(fontNormal, 'bold');
+    doc.text('PREPARED FOR', margin, 200);
+    doc.text('LOCATION', 75, 200);
+    doc.text('GENERATED ON', 140, 200);
+    
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(14);
+    doc.text(details.name, margin, 208);
+    doc.text(`${details.city}, ${details.state}`, 75, 208);
+    const today = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+    doc.text(today, 140, 208);
+    
+    // Footer line
+    doc.setDrawColor(80, 80, 80);
+    doc.setLineWidth(0.5);
+    doc.line(margin, pageHeight - 20, pageWidth - margin, pageHeight - 20);
+    
+    doc.setFontSize(8);
+    doc.setTextColor(150, 150, 150);
+    doc.setFont(fontNormal, 'normal');
+    doc.text('CONFIDENTIAL & PERSONALISED', margin, pageHeight - 12);
+    doc.text('abroadsimplified.com', pageWidth - margin, pageHeight - 12, { align: 'right' });
 
-    const tgtBody = results.target.map(u => [u.Country, u.University, u['QS Ranking'] || 'N/A', u['Required Profile Score'], u['Your Profile %'], u['Gap %']]);
-    renderSection('Target Universities', uniHead, tgtBody, [25, 118, 210], [255, 255, 255], true);
+    // --- PAGE 2: PROFILE SUMMARY ---
+    doc.addPage();
+    drawPageHeader('01  •  STUDENT PROFILE', 'Profile Summary');
+    
+    doc.setFontSize(10);
+    doc.setTextColor(100, 100, 100);
+    doc.setFont(fontNormal, 'normal');
+    doc.text('Here\'s a quick overview of the contact details on file for this report. All readiness scores\nand gap calculations that follow are benchmarked against your current academic and\nextracurricular profile.', margin, 45);
+    
+    // Contact Info Box (Light blue)
+    doc.setFillColor(236, 244, 250);
+    doc.roundedRect(margin, 70, pageWidth - 2 * margin, 50, 4, 4, 'F');
+    
+    // Red avatar circle
+    doc.setFillColor(220, 53, 69);
+    doc.circle(margin + 20, 95, 12, 'F');
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(18);
+    doc.setFont(fontNormal, 'bold');
+    doc.text(details.name.charAt(0).toUpperCase(), margin + 20, 97, { align: 'center', baseline: 'middle' });
+    
+    doc.setFontSize(8);
+    doc.setTextColor(100, 130, 180); // Blueish label
+    doc.text('NAME', margin + 45, 82);
+    doc.text('EMAIL', margin + 95, 82);
+    doc.text('MOBILE', margin + 145, 82);
+    doc.text('LOCATION', margin + 45, 105);
+    
+    doc.setFontSize(12);
+    doc.setTextColor(33, 37, 41);
+    doc.text(details.name, margin + 45, 90);
+    doc.text(details.email, margin + 95, 90);
+    doc.text(details.mobile, margin + 145, 90);
+    doc.text(`${details.city}, ${details.state}`, margin + 45, 113);
+    
+    // How to read this report box (Light pink)
+    doc.setFillColor(252, 232, 233); // light red
+    doc.roundedRect(margin, 135, pageWidth - 2 * margin, 25, 2, 2, 'F');
+    
+    // Thick red left border on the pink box
+    doc.setFillColor(180, 20, 30);
+    doc.rect(margin, 135, 2, 25, 'F');
+    
+    doc.setFontSize(9);
+    doc.setTextColor(33, 37, 41);
+    doc.setFont(fontNormal, 'bold');
+    doc.setTextColor(180, 20, 30);
+    doc.text('How to read this report: ', margin + 8, 145);
+    doc.setTextColor(33, 37, 41);
+    doc.setFont(fontNormal, 'normal');
+    doc.text('Each university below is scored on a Required Profile Score, benchmarked', margin + 45, 145);
+    doc.text('against your current Profile Match %. The Gap % shows how much stronger your profile needs to be — a', margin + 8, 150);
+    doc.text('lower or negative gap means the university is well within reach today.', margin + 8, 155);
 
-    const safeBody = results.safe.map(u => [u.Country, u.University, u['QS Ranking'] || 'N/A', u['Required Profile Score'], u['Your Profile %'], u['Gap %']]);
-    renderSection('Safe Universities', uniHead, safeBody, [56, 142, 60], [255, 255, 255], true);
+    // --- PAGE 3: COUNTRY READINESS ---
+    doc.addPage();
+    drawPageHeader('02  •  COUNTRY READINESS', 'Country-wise Readiness');
+    doc.setFontSize(10);
+    doc.setTextColor(100, 100, 100);
+    doc.setFont(fontNormal, 'normal');
+    doc.text('Your overall profile match, benchmarked against the average admissions bar for\nuniversities in each destination country.', margin, 45);
+    
+    // Country Progress Bars Box
+    doc.setDrawColor(230, 230, 230);
+    doc.setLineWidth(0.5);
+    // Calculate box height
+    const boxHeight = results.countryScores.length * 10 + 25;
+    doc.roundedRect(margin, 60, pageWidth - 2 * margin, boxHeight, 4, 4, 'S');
+    
+    let cy = 70;
+    results.countryScores.forEach(c => {
+      doc.setFontSize(9);
+      doc.setTextColor(33, 37, 41);
+      doc.setFont(fontNormal, 'bold');
+      doc.text(c.Country, margin + 10, cy + 3.5);
+      
+      const barX = margin + 50;
+      const barWidth = 100;
+      const barH = 5;
+      
+      // Empty track
+      doc.setFillColor(240, 240, 240);
+      doc.roundedRect(barX, cy, barWidth, barH, 2.5, 2.5, 'F');
+      
+      // Fill
+      let fillPct = Number(c['Total Profile %']);
+      if (isNaN(fillPct)) fillPct = 50;
+      // Use orange/yellow fill
+      doc.setFillColor(230, 130, 20); // Orange
+      const fillW = Math.max(5, Math.min(barWidth, (fillPct / 100) * barWidth));
+      doc.roundedRect(barX, cy, fillW, barH, 2.5, 2.5, 'F');
+      
+      // Score text
+      doc.setTextColor(180, 20, 30);
+      doc.text(`${c['Total Profile %']}%`, barX + barWidth + 10, cy + 3.5);
+      
+      cy += 10;
+    });
+    
+    // Legend
+    doc.setFillColor(180, 20, 30);
+    doc.rect(margin, 60 + boxHeight + 10, 4, 4, 'F');
+    doc.setFontSize(8);
+    doc.setTextColor(100, 100, 100);
+    doc.setFont(fontNormal, 'normal');
+    doc.text('Lower match', margin + 6, 60 + boxHeight + 13.5);
+    
+    doc.setFillColor(230, 170, 20); // yellow
+    doc.rect(margin + 35, 60 + boxHeight + 10, 4, 4, 'F');
+    doc.text('Higher match', margin + 41, 60 + boxHeight + 13.5);
+
+    // --- PAGE 4+: GAP ANALYSIS TABLES ---
+    doc.addPage();
+    drawPageHeader('03  •  GAP ANALYSIS', 'University Gap Analysis');
+    doc.setFontSize(10);
+    doc.setTextColor(100, 100, 100);
+    doc.setFont(fontNormal, 'normal');
+    doc.text('A full breakdown of 161 universities across your shortlisted countries, ranked from the most\nambitious reach to the safest bet, based on your current profile match.', margin, 45);
+
+    const gapHead = ['COUNTRY', 'UNIVERSITY', 'QS RANK', 'REQUIRED', 'YOUR\nMATCH', 'GAP'];
+    const gapBody = results.all.map(u => [
+      u.Country, 
+      u.University, 
+      u['QS Ranking'] ? `#${u['QS Ranking']}` : 'N/A', 
+      `${u['Required Profile Score']}%`, 
+      `${u['Your Profile %']}%`, 
+      u['Gap %'] > 0 ? `+${u['Gap %']}%` : `${u['Gap %']}%`
+    ]);
+
+    let firstTableDraw = true;
+
+    (doc as any).autoTable({
+      startY: 60,
+      head: [gapHead],
+      body: gapBody,
+      theme: 'grid',
+      styles: {
+        fontSize: 8,
+        cellPadding: 5,
+        valign: 'middle',
+        lineColor: [240, 240, 240], // Light grey borders
+        lineWidth: 0.1,
+      },
+      headStyles: {
+        fillColor: [33, 37, 41], // Dark header
+        textColor: [255, 255, 255],
+        fontStyle: 'bold',
+        halign: 'left'
+      },
+      columnStyles: {
+        0: { fontStyle: 'bold' }, // Country
+        2: { halign: 'center', textColor: [120, 120, 120] }, // QS
+        3: { halign: 'center', textColor: [120, 120, 120] }, // Required
+        4: { halign: 'center', textColor: [120, 120, 120] }, // Match
+        5: { halign: 'center' } // Gap
+      },
+      alternateRowStyles: {
+        fillColor: [252, 252, 252],
+      },
+      margin: { left: margin, right: margin, top: 45, bottom: 25 },
+      didDrawPage: (data: any) => {
+        if (!firstTableDraw) {
+          drawPageHeader('03  •  GAP ANALYSIS', 'University Gap Analysis (Cont.)');
+        }
+        firstTableDraw = false;
+      },
+      didParseCell: (data: any) => {
+        if (data.section === 'body' && data.column.index === 5) {
+          // Hide text by matching row background color
+          data.cell.styles.textColor = data.row.index % 2 === 0 ? [255, 255, 255] : [252, 252, 252];
+        }
+      },
+      didDrawCell: (data: any) => {
+        // Left border logic
+        if (data.section === 'body' && data.column.index === 0) {
+          const gapStr = gapBody[data.row.index][5];
+          const gapVal = parseFloat(gapStr.replace('%', '').replace('+', ''));
+          
+          let borderColor = [180, 20, 30]; // Red default
+          if (gapVal <= 0) borderColor = [100, 100, 200]; // Blueish for safe
+          else if (gapVal < 10) borderColor = [255, 193, 7]; // Yellow for target
+          
+          doc.setFillColor(borderColor[0], borderColor[1], borderColor[2]);
+          // Draw a thick left border on the first cell
+          doc.rect(data.cell.x, data.cell.y, 2, data.cell.height, 'F');
+        }
+        
+        // Gap pill logic
+        if (data.section === 'body' && data.column.index === 5) {
+          const gapStr = gapBody[data.row.index][5];
+          const gapVal = parseFloat(gapStr.replace('%', '').replace('+', ''));
+          
+          let pillBg = [252, 232, 233]; // light red
+          let pillText = [200, 30, 40]; // dark red
+          
+          if (gapVal <= 0) {
+            pillBg = [235, 235, 250]; // light blue
+            pillText = [60, 60, 160]; // dark blue
+          } else if (gapVal < 10) {
+            pillBg = [255, 245, 220]; // light yellow
+            pillText = [180, 130, 20]; // dark yellow
+          }
+          
+          const textW = doc.getTextWidth(gapStr);
+          const cellCx = data.cell.x + data.cell.width / 2;
+          const cellCy = data.cell.y + data.cell.height / 2;
+          
+          const paddingX = 4;
+          const pillW = textW + paddingX * 2;
+          const pillH = 6;
+          
+          doc.setFillColor(pillBg[0], pillBg[1], pillBg[2]);
+          doc.roundedRect(cellCx - pillW/2, cellCy - pillH/2, pillW, pillH, 3, 3, 'F');
+          
+          doc.setTextColor(pillText[0], pillText[1], pillText[2]);
+          doc.setFontSize(8);
+          doc.setFont(fontNormal, 'bold');
+          doc.text(gapStr, cellCx, cellCy + 1.2, { align: 'center', baseline: 'middle' });
+        }
+      }
+    });
+
+    // --- PAGE X: SHORTLIST CARDS ---
+    let finalY = (doc as any).lastAutoTable.finalY || 0;
+    
+    // We add a new page for Shortlist
+    doc.addPage();
+    drawPageHeader('04  •  CURATED SHORTLIST', 'Your Shortlist, Organised by Strategy');
+    doc.setFontSize(10);
+    doc.setTextColor(100, 100, 100);
+    doc.setFont(fontNormal, 'normal');
+    doc.text('A balanced list is the foundation of a strong application strategy. Here\'s how your\nclosest-matched universities break down.', margin, 45);
+
+    let currY = 60;
+    
+    const drawCategoryHeader = (title: string, desc: string, yPos: number, dotColor: number[]) => {
+      doc.setFillColor(dotColor[0], dotColor[1], dotColor[2]);
+      doc.circle(margin + 2, yPos, 2, 'F');
+      
+      doc.setTextColor(33, 37, 41);
+      doc.setFontSize(14);
+      doc.setFont(fontNormal, 'bold');
+      doc.text(title, margin + 6, yPos + 1.5);
+      
+      doc.setTextColor(120, 120, 120);
+      doc.setFontSize(9);
+      doc.setFont(fontNormal, 'normal');
+      doc.text(desc, margin, yPos + 8);
+      
+      return yPos + 18;
+    };
+    
+    const drawCards = (unis: any[], yPos: number, borderColor: number[], pillBg: number[], pillText: number[]) => {
+      const cardW = (pageWidth - 2 * margin - 10) / 3;
+      const cardH = 45;
+      let x = margin;
+      let y = yPos;
+      
+      for (let i = 0; i < Math.min(unis.length, 9); i++) { // Max 9 cards per category for space (3 rows)
+        if (i > 0 && i % 3 === 0) {
+          x = margin;
+          y += cardH + 10;
+        }
+        
+        // Page break check
+        if (y + cardH > pageHeight - 20) {
+          doc.addPage();
+          drawPageHeader('04  •  CURATED SHORTLIST', 'Your Shortlist (Cont.)');
+          y = 45;
+          x = margin;
+        }
+        
+        const uni = unis[i];
+        
+        // Card box
+        doc.setDrawColor(240, 240, 240);
+        doc.setFillColor(255, 255, 255);
+        doc.roundedRect(x, y, cardW, cardH, 3, 3, 'FD');
+        
+        // Top border
+        doc.setFillColor(borderColor[0], borderColor[1], borderColor[2]);
+        doc.setDrawColor(borderColor[0], borderColor[1], borderColor[2]);
+        // jsPDF roundedRect doesn't support only top rounded corners, so we draw a rect over it
+        doc.rect(x, y, cardW, 3, 'F'); 
+        
+        // Country pill
+        doc.setFillColor(pillBg[0], pillBg[1], pillBg[2]);
+        doc.roundedRect(x + 5, y + 6, doc.getTextWidth(uni.Country) + 6, 5, 2.5, 2.5, 'F');
+        doc.setTextColor(pillText[0], pillText[1], pillText[2]);
+        doc.setFontSize(7);
+        doc.setFont(fontNormal, 'bold');
+        doc.text(uni.Country, x + 8, y + 9.5);
+        
+        // QS Rank
+        doc.setTextColor(100, 100, 100);
+        doc.text(`QS #${uni['QS Ranking'] || 'N/A'}`, x + cardW - 5, y + 9.5, { align: 'right' });
+        
+        // Uni Name
+        doc.setTextColor(33, 37, 41);
+        doc.setFontSize(9);
+        doc.setFont(fontNormal, 'bold');
+        const splitName = doc.splitTextToSize(uni.University, cardW - 10);
+        doc.text(splitName, x + 5, y + 18);
+        
+        // Divider
+        doc.setDrawColor(240, 240, 240);
+        doc.setLineWidth(0.2);
+        doc.line(x + 5, y + 30, x + cardW - 5, y + 30);
+        
+        // Stats
+        doc.setFontSize(7);
+        doc.setTextColor(150, 150, 150);
+        doc.setFont(fontNormal, 'normal');
+        doc.text('Required', x + 5, y + 34);
+        doc.text('Your Match', x + cardW/2, y + 34, { align: 'center' });
+        doc.text('Gap', x + cardW - 5, y + 34, { align: 'right' });
+        
+        doc.setTextColor(33, 37, 41);
+        doc.setFont(fontNormal, 'bold');
+        doc.text(`${uni['Required Profile Score']}%`, x + 5, y + 39);
+        doc.text(`${uni['Your Profile %']}%`, x + cardW/2, y + 39, { align: 'center' });
+        doc.setTextColor(pillText[0], pillText[1], pillText[2]);
+        const gapStr2 = uni['Gap %'] > 0 ? `+${uni['Gap %']}%` : `${uni['Gap %']}%`;
+        doc.text(gapStr2, x + cardW - 5, y + 39, { align: 'right' });
+        
+        x += cardW + 5;
+      }
+      
+      const rows = Math.ceil(Math.min(unis.length, 9) / 3);
+      return y + (rows > 0 ? cardH : 0) + 15;
+    };
+
+    if (results.ambitious.length > 0) {
+      currY = drawCategoryHeader('Ambitious Universities', 'Strong picks worth aiming for — your profile is close, with a small gap left to close.', currY, [180, 20, 30]);
+      currY = drawCards(results.ambitious, currY, [180, 20, 30], [252, 232, 233], [180, 20, 30]);
+    }
+    
+    if (results.target.length > 0) {
+      if (currY > pageHeight - 60) { doc.addPage(); drawPageHeader('04  •  CURATED SHORTLIST', 'Your Shortlist (Cont.)'); currY = 45; }
+      currY = drawCategoryHeader('Target Universities', 'Well-matched to your current profile — a realistic core of your application list.', currY, [255, 193, 7]);
+      currY = drawCards(results.target, currY, [255, 193, 7], [255, 245, 220], [180, 130, 20]);
+    }
+    
+    if (results.safe.length > 0) {
+      if (currY > pageHeight - 60) { doc.addPage(); drawPageHeader('04  •  CURATED SHORTLIST', 'Your Shortlist (Cont.)'); currY = 45; }
+      currY = drawCategoryHeader('Safe Universities', 'Your profile already meets or exceeds the benchmark — strong footing for an offer.', currY, [100, 120, 200]);
+      currY = drawCards(results.safe, currY, [100, 120, 200], [235, 235, 250], [60, 60, 160]);
+    }
+
+    // --- PAGE LAST: CTA ---
+    doc.addPage();
+    // No header for CTA maybe, just a dark box
+    doc.setFillColor(40, 44, 52); // Dark slate
+    doc.roundedRect(margin, 30, pageWidth - 2 * margin, 80, 4, 4, 'F');
+    
+    doc.setTextColor(255, 193, 7); // Yellow
+    doc.setFontSize(16);
+    doc.setFont(fontNormal, 'bold');
+    doc.text('Ready to close the gap?', margin + 15, 45);
+    
+    doc.setTextColor(200, 200, 200);
+    doc.setFontSize(10);
+    doc.setFont(fontNormal, 'normal');
+    doc.text('This report is a snapshot, not a ceiling. Strengthening academics, test scores, and extracurriculars\ncan shift your match percentage meaningfully within a single application cycle. Connect with an\nAbroad Simplified counsellor to turn this data into a personalised action plan.', margin + 15, 55);
+    
+    // CTA Button
+    doc.setFillColor(220, 53, 69);
+    doc.roundedRect(margin + 15, 80, 60, 12, 6, 6, 'F');
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(9);
+    doc.setFont(fontNormal, 'bold');
+    doc.text('TALK TO A COUNSELLOR', margin + 45, 87.5, { align: 'center' });
 
     doc.save('Personalised_University_Report.pdf');
   };

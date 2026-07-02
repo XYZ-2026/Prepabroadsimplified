@@ -4,8 +4,7 @@
    Migrated from legacy main.css
    ============================================================ */
 
-/* ── Google Fonts (loaded via next/font in layout.tsx too) ── */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Lexend:wght@400;500;600;700;800&display=swap');
+/* ── Google Fonts (moved to layout.tsx) ── */
 
 /* ── CSS Custom Properties ── */
 :root {
@@ -74,8 +73,8 @@
   --border-light:        var(--color-gray-100);
 
   /* Typography */
-  --font-primary: 'Inter', sans-serif;
-  --font-heading: 'Lexend', sans-serif;
+  --font-primary: var(--next-font-primary), 'Inter', sans-serif;
+  --font-heading: var(--next-font-heading), 'Lexend', sans-serif;
   --font-size-xs:   11px;
   --font-size-sm:   13px;
   --font-size-base: 15px;

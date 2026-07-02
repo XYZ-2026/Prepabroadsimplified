@@ -249,29 +249,42 @@
 
 .uniCard {
   background: #fff;
-  border-radius: 14px;
-  padding: 20px;
-  border: 1px solid var(--border-color, #e5e7eb);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+  border-radius: 16px;
+  padding: 26px;
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.06);
   display: flex;
   flex-direction: column;
   gap: 12px;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
 }
 
 .uniCard:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  transform: translateY(-6px);
+  box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.12);
+  border-color: rgba(0, 0, 0, 0.08);
 }
 
-.uniCard.ambitious { border-top: 5px solid #d22c2c; }
-.uniCard.target { border-top: 5px solid #1E88E5; }
-.uniCard.safe { border-top: 5px solid #10b981; }
+.uniCard.ambitious { 
+  border-top: 4px solid #d22c2c;
+  background: linear-gradient(180deg, rgba(210, 44, 44, 0.08) 0%, rgba(255, 255, 255, 0) 60%), #fff;
+}
+.uniCard.target { 
+  border-top: 4px solid #1E88E5;
+  background: linear-gradient(180deg, rgba(30, 136, 229, 0.08) 0%, rgba(255, 255, 255, 0) 60%), #fff;
+}
+.uniCard.safe { 
+  border-top: 4px solid #10b981;
+  background: linear-gradient(180deg, rgba(16, 185, 129, 0.08) 0%, rgba(255, 255, 255, 0) 60%), #fff;
+}
 
 .uniName {
-  font-size: 18px;
-  font-weight: 700;
+  font-size: 20px;
+  font-weight: 800;
   color: #111827;
+  letter-spacing: -0.02em;
 }
 
 .uniStats {

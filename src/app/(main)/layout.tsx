@@ -8,13 +8,14 @@ export default async function MainLayout({ children }: { children: React.ReactNo
   return (
     <>
       <Topbar />
-      <div className="sidebar-overlay" />
       <Sidebar 
-        userRole={profile?.role || null} 
+        userRole={(profile?.role as 'admin' | 'student') || null} 
         userName={profile?.name || undefined}
         userEmail={profile?.email || undefined}
       />
-      {children}
+      <main className="main-content">
+        {children}
+      </main>
     </>
   );
 }

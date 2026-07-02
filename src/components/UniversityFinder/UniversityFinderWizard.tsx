@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import styles from '@/styles/university-finder.module.css';
 import { predictUniversities, UserProfile, PredictionResult, UniversityResult } from '@/lib/university-predictor';
+import { MapPin, Award } from 'lucide-react';
 
 export default function UniversityFinderWizard() {
   const [step, setStep] = useState<1 | 2 | 3>(1);
@@ -210,8 +211,15 @@ export default function UniversityFinderWizard() {
   const renderCard = (uni: UniversityResult, categoryClass: string) => (
     <div key={uni.University} className={`${styles.uniCard} ${styles[categoryClass]}`}>
       <div className={styles.uniName}>{uni.University}</div>
-      <div style={{ color: '#666', fontSize: '14px', marginBottom: '12px' }}>
-        {uni.Country} · QS #{uni['QS Ranking'] || 'N/A'}
+      <div style={{ display: 'flex', alignItems: 'center', gap: '12px', color: '#666', fontSize: '13px', marginBottom: '12px', flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+          <MapPin size={14} color="#9ca3af" />
+          <span>{uni.Country}</span>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+          <Award size={14} color="#9ca3af" />
+          <span>QS #{uni['QS Ranking'] || 'N/A'}</span>
+        </div>
       </div>
       <div style={{ fontSize: '15px', color: '#111', display: 'flex', flexDirection: 'column', gap: '4px' }}>
         <div><strong>Required:</strong> {uni['Required Profile Score']}</div>

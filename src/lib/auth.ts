@@ -116,4 +116,4 @@ export async function setAdminClaim(uid: string) {
   await adminAuth.setCustomUserClaims(uid, { admin: true, role: 'admin' });
 }
 
-export { SESSION_COOKIE_NAME };
+

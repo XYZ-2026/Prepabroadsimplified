@@ -46,7 +46,9 @@ export default function Sidebar({ userRole, userName, userEmail }: SidebarProps)
   };
 
   return (
-    <aside id="sidebar" className={styles.sidebar}>
+    <>
+      <div className="sidebar-overlay" onClick={closeSidebar} />
+      <aside id="sidebar" className={styles.sidebar}>
       {/* Logo Block */}
       <div className={styles.sidebarLogoBlock}>
         <div className={styles.sidebarLogo}>
@@ -193,5 +195,6 @@ export default function Sidebar({ userRole, userName, userEmail }: SidebarProps)
         </div>
       </nav>
     </aside>
+    </>
   );
 }

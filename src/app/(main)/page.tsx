@@ -7,7 +7,7 @@ import sections from '@/styles/sections.module.css';
 export default async function HomePage() {
   return (
     <>
-      <main className="main-content">
+      <>
         {/* ── HERO SECTION ── */}
         <section className={sections.hero}>
           <div className={sections.heroInner}>
@@ -200,7 +200,7 @@ export default async function HomePage() {
             <NotificationPanel />
           </div>
         </section>
-      </main>
+      </>
 
       <Footer />
     </>

@@ -9,7 +9,7 @@ export default async function UniversityFinderPage() {
 
   if (!claims) {
     return (
-      <main className="main-content" style={{ minHeight: '100vh', padding: 'calc(var(--topbar-height) + 40px) 20px', background: 'var(--page-bg, #f7f8fb)' }}>
+      <main style={{ minHeight: '100vh', padding: 'calc(var(--topbar-height) + 40px) 20px', background: 'var(--page-bg, #f7f8fb)' }}>
         <AccessRestricted />
       </main>
     );
@@ -19,7 +19,7 @@ export default async function UniversityFinderPage() {
 
   return (
     <>
-      <main className="main-content" style={{ minHeight: '80vh', padding: 'calc(var(--topbar-height) + 40px) 20px', background: 'var(--page-bg, #f7f8fb)' }}>
+      <main style={{ minHeight: '80vh', padding: 'calc(var(--topbar-height) + 40px) 20px', background: 'var(--page-bg, #f7f8fb)' }}>
         <div style={{ maxWidth: '900px', margin: '0 auto' }}>
           
           <div className={styles.greetingBox}>

@@ -1,5 +1,9 @@
 import type { Metadata } from 'next';
+import { Inter, Lexend } from 'next/font/google';
 import './globals.css';
+
+const inter = Inter({ subsets: ['latin'], variable: '--next-font-primary', display: 'swap' });
+const lexend = Lexend({ subsets: ['latin'], variable: '--next-font-heading', display: 'swap' });
 
 export const metadata: Metadata = {
   title: 'Abroad Simplified — Your Ultimate Study Abroad Hub',
@@ -22,10 +26,32 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" className={`${inter.variable} ${lexend.variable}`}>
       <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.tailwind = window.tailwind || {};
+              window.tailwind.config = {
+                corePlugins: {
+                  preflight: false,
+                },
+                theme: {
+                  extend: {
+                    colors: {
+                      iqred: '#9C1010',
+                      red: {
+                        500: '#ef4444',
+                        600: '#dc2626',
+                      }
+                    }
+                  }
+                }
+              };
+            `,
+          }}
+        />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{

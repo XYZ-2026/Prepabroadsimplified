@@ -1,18 +1,12 @@
 import Link from 'next/link';
-import Topbar from '@/components/Layout/Topbar';
-import Sidebar from '@/components/Layout/Sidebar';
 import Footer from '@/components/Layout/Footer';
 import NotificationPanel from '@/components/Notifications/NotificationPanel';
 import styles from '@/styles/components.module.css';
 import sections from '@/styles/sections.module.css';
 
-export default function HomePage() {
+export default async function HomePage() {
   return (
     <>
-      <Topbar />
-      <div className="sidebar-overlay" />
-      <Sidebar userRole={null} />
-
       <main className="main-content">
         {/* ── HERO SECTION ── */}
         <section className={sections.hero}>
@@ -30,8 +24,8 @@ export default function HomePage() {
               <Link href="#tools" className={`${styles.btn} ${styles.btnPrimary}`}>
                 Explore All Tools →
               </Link>
-              <Link href="#counselling" className={`${styles.btn} ${styles.btnOutline}`}>
-                Book Free Counselling
+              <Link href="#tools" className={`${styles.btn} ${styles.btnOutline}`}>
+                Study Abroad Tools
               </Link>
             </div>
             <div className={sections.heroStats}>

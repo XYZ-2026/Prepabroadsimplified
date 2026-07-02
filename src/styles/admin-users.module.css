@@ -4,7 +4,7 @@
    ============================================================ */
 
 .adminContent {
-  padding: calc(var(--topbar-height) + 40px) 40px 40px 40px;
+  padding: 40px;
 }
 
 /* Top Stats Cards */

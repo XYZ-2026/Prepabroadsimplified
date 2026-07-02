@@ -51,10 +51,28 @@ export default function UniversityFinderWizard() {
     setStep(3);
   };
 
+  const renderStepper = () => (
+    <div className={styles.stepperContainer}>
+      <div className={`${styles.stepItem} ${step >= 1 ? styles.stepItemActive : ''}`}>
+        <div className={`${styles.stepCircle} ${step > 1 ? styles.stepCircleDone : (step === 1 ? styles.stepCircleActive : '')}`}>1</div>
+        <span className={styles.stepLabel}>DETAILS</span>
+      </div>
+      <div className={`${styles.stepItem} ${step >= 2 ? styles.stepItemActive : ''}`}>
+        <div className={`${styles.stepCircle} ${step > 2 ? styles.stepCircleDone : (step === 2 ? styles.stepCircleActive : '')}`}>2</div>
+        <span className={styles.stepLabel}>PROFILE</span>
+      </div>
+      <div className={`${styles.stepItem} ${step >= 3 ? styles.stepItemActive : ''}`}>
+        <div className={`${styles.stepCircle} ${step === 3 ? styles.stepCircleActive : ''}`}>3</div>
+        <span className={styles.stepLabel}>RESULTS</span>
+      </div>
+    </div>
+  );
+
   // Render Step 1
   if (step === 1) {
     return (
       <div className={styles.wizardCard}>
+        {renderStepper()}
         <h1 className={styles.wizardTitle}>Enter Student Details</h1>
         <form onSubmit={handleSaveDetails}>
           <div className={styles.grid2}>
@@ -91,8 +109,9 @@ export default function UniversityFinderWizard() {
   if (step === 2) {
     return (
       <div className={styles.wizardCard}>
+        {renderStepper()}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <h1 className={styles.wizardTitle}>University Readiness Assessment</h1>
+          <h1 className={styles.wizardTitle} style={{ textAlign: 'left', marginBottom: 0 }}>University Readiness Assessment</h1>
           <button onClick={() => setStep(1)} className={styles.btnSecondary}>Edit Details</button>
         </div>
         
@@ -343,7 +362,8 @@ export default function UniversityFinderWizard() {
   };
 
   return (
-    <div>
+    <div className={styles.wizardCard}>
+      {renderStepper()}
       <div className={styles.resultsHeader}>
         <div>
           <h1 className={styles.wizardTitle} style={{ marginBottom: '4px' }}>Your Results</h1>

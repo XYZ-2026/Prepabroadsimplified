@@ -28,9 +28,6 @@ export default async function DashboardLayout({
 
   return (
     <>
-      <Topbar />
-      <div className="sidebar-overlay" />
-      <Sidebar userRole={role} userName={name} userEmail={email} />
       <main className="main-content">
         {children}
       </main>

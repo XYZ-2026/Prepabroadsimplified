@@ -199,6 +199,41 @@
   box-shadow: 0 0 0 3px var(--accent-light);
 }
 
+.passwordInputWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.passwordInputWrapper input {
+  padding-right: 2.5rem;
+}
+
+/* Hide default browser password reveal button (Edge/IE) */
+.passwordInputWrapper input::-ms-reveal,
+.passwordInputWrapper input::-ms-clear {
+  display: none;
+}
+
+.passwordToggleBtn {
+  position: absolute;
+  right: 0.75rem;
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  transition: color 0.2s ease;
+}
+
+.passwordToggleBtn:hover {
+  color: var(--text-heading);
+}
+
 .termsGroup {
   margin-bottom: 1.5rem;
 }

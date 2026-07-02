@@ -1,11 +1,11 @@
 // ═══════════════════════════════════════════════════════════
 // Auth Utilities — server-side auth helpers
 // ═══════════════════════════════════════════════════════════
-import { adminAuth } from './firebase-admin';
+import { adminAuth, adminDb } from './firebase-admin';
 import { cookies } from 'next/headers';
 
-const SESSION_COOKIE_NAME = '__session';
-const SESSION_EXPIRY = 60 * 60 * 24 * 5 * 1000; // 5 days
+export const SESSION_COOKIE_NAME = '__session';
+export const SESSION_EXPIRY = 60 * 60 * 24 * 5 * 1000; // 5 days
 
 /**
  * Create a session cookie from a Firebase ID token
@@ -36,14 +36,51 @@ export async function verifySessionCookie() {
 }
 
 /**
+ * Get the full user profile including name and email from Firestore
+ */
+export async function getUserProfile() {
+  const claims = await verifySessionCookie();
+  if (!claims) return null;
+
+  // Hardcoded Admin Account
+  if (claims.email === 'admin@admin.com') {
+    return {
+      role: 'admin',
+      name: 'Admin',
+      email: 'admin@admin.com',
+    };
+  }
+
+  try {
+    const userDoc = await adminDb.collection('users').doc(claims.uid).get();
+    if (userDoc.exists) {
+      const data = userDoc.data();
+      return {
+        role: claims.admin === true || claims.role === 'admin' ? 'admin' : 'student',
+        name: data?.name || claims.name || '',
+        email: data?.email || claims.email || '',
+      };
+    }
+  } catch (error) {
+    console.error('Error fetching user profile:', error);
+  }
+
+  return {
+    role: claims.admin === true || claims.role === 'admin' ? 'admin' : 'student',
+    name: claims.name || '',
+    email: claims.email || '',
+  };
+}
+
+/**
  * Get the role of the current user from session cookie
  */
 export async function getUserRole(): Promise<'admin' | 'student' | null> {
   const claims = await verifySessionCookie();
   if (!claims) return null;
   
-  // Check custom claims for admin role
-  if (claims.admin === true || claims.role === 'admin') {
+  // Hardcoded Admin Account or custom claims
+  if (claims.email === 'admin@admin.com' || claims.admin === true || claims.role === 'admin') {
     return 'admin';
   }
   

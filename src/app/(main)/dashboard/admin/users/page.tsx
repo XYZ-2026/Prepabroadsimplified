@@ -34,13 +34,9 @@ export default async function AdminUsersPage() {
     // Continue with empty array if there's an error (e.g., credentials missing during migration)
   }
 
-  // Placeholder data if no users exist or DB connection fails during local dev
-  if (initialUsers.length === 0) {
-    initialUsers = [
-      { id: '1', name: 'John Doe', email: 'john@example.com', mobile: '9876543210', studentType: 'ug', state: 'maharashtra', city: 'Mumbai', createdAtStr: 'Jul 1, 2026' },
-      { id: '2', name: 'Jane Smith', email: 'jane@example.com', mobile: '8765432109', studentType: 'pg', state: 'delhi', city: 'Delhi', createdAtStr: 'Jun 30, 2026' }
-    ];
-  }
+
+
+  const activeStatesCount = new Set(initialUsers.map(u => u.state.toLowerCase()).filter(s => s && s !== 'unknown')).size;
 
   return (
     <div className={styles.adminContent}>
@@ -53,7 +49,7 @@ export default async function AdminUsersPage() {
           <div className={styles.statContent}>
             <h3>{initialUsers.length}</h3>
             <p>Total Registered Users</p>
-            <div className={styles.statTrend} style={{ color: '#4CAF50' }}>+12% this month</div>
+            <div className={styles.statTrend} style={{ color: '#4CAF50' }}>Live Count</div>
           </div>
         </div>
         
@@ -62,7 +58,7 @@ export default async function AdminUsersPage() {
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" /><path d="M2 12h20" /></svg>
           </div>
           <div className={styles.statContent}>
-            <h3>14</h3>
+            <h3>{activeStatesCount}</h3>
             <p>Active States</p>
             <div className={styles.statTrend}>Users from across India</div>
           </div>
@@ -73,7 +69,7 @@ export default async function AdminUsersPage() {
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><polyline points="14 2 14 8 20 8" /><line x1="16" y1="13" x2="8" y2="13" /><line x1="16" y1="17" x2="8" y2="17" /><polyline points="10 9 9 9 8 9" /></svg>
           </div>
           <div className={styles.statContent}>
-            <h3>24</h3>
+            <h3>0</h3>
             <p>New Applications</p>
             <div className={styles.statTrend} style={{ color: '#FF9800' }}>Requires review</div>
           </div>

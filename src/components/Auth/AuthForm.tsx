@@ -38,6 +38,11 @@ export default function AuthForm() {
   // Forgot password form state
   const [forgotEmail, setForgotEmail] = useState('');
 
+  // Password visibility state
+  const [showLoginPassword, setShowLoginPassword] = useState(false);
+  const [showRegPassword, setShowRegPassword] = useState(false);
+  const [showRegConfirmPassword, setShowRegConfirmPassword] = useState(false);
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
@@ -60,15 +65,15 @@ export default function AuthForm() {
         throw new Error('Failed to create session on server');
       }
 
-      // Hardcoded admin login logic (for migration purposes, until custom claims are fully set up)
-      if (loginEmail === 'admin@admin.com') {
-        router.push('/dashboard/admin');
-      } else {
-        router.push('/dashboard/student');
-      }
+      // Redirect to the main homepage, which now serves both roles
+      router.push('/');
     } catch (err: any) {
       console.error(err);
-      setError(err.message || 'Failed to login');
+      if (err.code === 'auth/invalid-credential' || err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password') {
+        setError('Invalid email or password. Please try again.');
+      } else {
+        setError(err.message || 'Failed to login');
+      }
     } finally {
       setLoading(false);
     }
@@ -114,8 +119,8 @@ export default function AuthForm() {
         throw new Error('Failed to create session on server');
       }
 
-      // Redirect to student dashboard
-      router.push('/dashboard/student');
+      // Redirect to the home page (which now serves as the dashboard)
+      router.push('/');
     } catch (err: any) {
       console.error(err);
       setError(err.message || 'Failed to register');
@@ -190,14 +195,29 @@ export default function AuthForm() {
           </div>
           <div className={styles.formGroup}>
             <label htmlFor="login-password">Password</label>
-            <input
-              type="password"
-              id="login-password"
-              required
-              placeholder="••••••••"
-              value={loginPassword}
-              onChange={(e) => setLoginPassword(e.target.value)}
-            />
+            <div className={styles.passwordInputWrapper}>
+              <input
+                type={showLoginPassword ? "text" : "password"}
+                id="login-password"
+                required
+                placeholder="••••••••"
+                value={loginPassword}
+                onChange={(e) => setLoginPassword(e.target.value)}
+              />
+              <button 
+                type="button" 
+                className={styles.passwordToggleBtn} 
+                onClick={() => setShowLoginPassword(!showLoginPassword)}
+                tabIndex={-1}
+                aria-label="Toggle password visibility"
+              >
+                {showLoginPassword ? (
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                ) : (
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                )}
+              </button>
+            </div>
           </div>
           <button
             type="submit"
@@ -284,25 +304,53 @@ export default function AuthForm() {
           <div className={styles.formRow}>
             <div className={styles.formGroup}>
               <label htmlFor="reg-password">Password</label>
-              <input
-                type="password"
-                id="reg-password"
-                required
-                placeholder="min 6 chars"
-                value={regPassword}
-                onChange={(e) => setRegPassword(e.target.value)}
-              />
+              <div className={styles.passwordInputWrapper}>
+                <input
+                  type={showRegPassword ? "text" : "password"}
+                  id="reg-password"
+                  required
+                  placeholder="min 6 chars"
+                  value={regPassword}
+                  onChange={(e) => setRegPassword(e.target.value)}
+                />
+                <button 
+                  type="button" 
+                  className={styles.passwordToggleBtn} 
+                  onClick={() => setShowRegPassword(!showRegPassword)}
+                  tabIndex={-1}
+                >
+                  {showRegPassword ? (
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                  ) : (
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                  )}
+                </button>
+              </div>
             </div>
             <div className={styles.formGroup}>
               <label htmlFor="reg-confirm-password">Confirm Password</label>
-              <input
-                type="password"
-                id="reg-confirm-password"
-                required
-                placeholder="repeat"
-                value={regConfirmPassword}
-                onChange={(e) => setRegConfirmPassword(e.target.value)}
-              />
+              <div className={styles.passwordInputWrapper}>
+                <input
+                  type={showRegConfirmPassword ? "text" : "password"}
+                  id="reg-confirm-password"
+                  required
+                  placeholder="repeat"
+                  value={regConfirmPassword}
+                  onChange={(e) => setRegConfirmPassword(e.target.value)}
+                />
+                <button 
+                  type="button" 
+                  className={styles.passwordToggleBtn} 
+                  onClick={() => setShowRegConfirmPassword(!showRegConfirmPassword)}
+                  tabIndex={-1}
+                >
+                  {showRegConfirmPassword ? (
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                  ) : (
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                  )}
+                </button>
+              </div>
             </div>
           </div>
           <button

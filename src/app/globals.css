@@ -199,6 +199,22 @@ h5, h6 {
   color: var(--color-gold);
 }
 
+/* ── Page Transitions ── */
+.page-transition {
+  animation: pageSlideIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes pageSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .accent {
   color: var(--color-red-deep);
 }

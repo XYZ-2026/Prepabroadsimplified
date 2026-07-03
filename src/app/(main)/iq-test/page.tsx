@@ -128,7 +128,7 @@ export default function LandingPage() {
             className="text-4xl md:text-5xl lg:text-6xl font-display font-extrabold text-black tracking-tight leading-tight mb-6"
           >
             Measure Your Intelligence With{' '}
-            <span className="text-gradient-red">Abroad Simplified's</span> Advanced IQ Assessment
+            <span className="text-[#9C1010]">Abroad Simplified's</span> Advanced IQ Assessment
           </motion.h1>
 
           <motion.p
@@ -260,8 +260,8 @@ export default function LandingPage() {
                   <Icon className="w-6 h-6" />
                 </div>
                 <div className="flex flex-col">
-                  <span className="font-display font-extrabold text-2xl text-white">{stat.value}</span>
-                  <span className="text-xs text-slate-400 font-semibold">{stat.label}</span>
+                  <span className="font-['Lexend',sans-serif] font-extrabold text-2xl text-white">{stat.value}</span>
+                  <span className="text-xs text-slate-400 font-semibold font-['Lexend',sans-serif]">{stat.label}</span>
                 </div>
               </div>
             );
@@ -322,7 +322,7 @@ export default function LandingPage() {
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6">
           {steps.map((st, i) => (
             <div key={i} className="bg-white p-6 rounded-2xl border border-slate-200 hover:border-black hover:shadow-lg transition-all relative flex flex-col shadow-sm">
-              <span className="text-5xl font-display font-black text-black/10 mb-4">{st.step}</span>
+              <span className="text-5xl font-display font-black text-[#9C1010]/30 mb-4">{st.step}</span>
               <h4 className="font-display font-bold text-black mb-2">{st.title}</h4>
               <p className="text-xs text-slate-550 leading-relaxed mt-auto">{st.desc}</p>
             </div>

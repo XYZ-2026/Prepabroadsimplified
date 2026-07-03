@@ -259,20 +259,12 @@ export default function TestPage() {
   return (
     <div className="min-h-screen flex flex-col bg-white text-black font-sans overflow-hidden select-none">
       
-      {/* Test Page Top Header - Clean minimalist header */}
-      <header className="h-16 border-b border-slate-800 bg-black text-white px-6 flex items-center justify-between shrink-0 shadow-md">
-        <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg bg-[#9C1010] flex items-center justify-center">
-            <BrainCircuit className="w-5 h-5 text-white" />
-          </div>
-          <span className="font-display font-extrabold text-sm text-white">COLLEGE SIMPLIFIED</span>
-        </div>
-      </header>      {/* Main Grid: Question Space + Navigation Panel */}
+      {/* Main Grid: Question Space + Navigation Panel */}
       <div className="flex-1 flex overflow-hidden">
         
         {/* Left Side: Question Area */}
         <main className="flex-1 flex flex-col p-6 overflow-y-auto relative">
-          <div className="max-w-3xl w-full mx-auto my-auto flex flex-col justify-between min-h-[70vh]">
+          <div className="max-w-3xl w-full mx-auto mt-4 flex flex-col justify-between min-h-[70vh]">
             
             {/* Header info - Displays Domain, Answer Progress and Timer side-by-side */}
             <div>

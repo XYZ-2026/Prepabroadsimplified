@@ -10,7 +10,10 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json();
-    const { name, mobile, studentType, state, city } = body;
+    const { 
+      name, mobile, studentType, state, city,
+      currentSchool, graduationYear, targetCountries, degreeLevel, fieldOfInterest
+    } = body;
 
     // We do NOT update the email here as it requires Firebase Auth verification
     // and would desync Auth from Firestore if not handled properly.
@@ -21,6 +24,11 @@ export async function POST(request: Request) {
       studentType: studentType || '',
       state: state || '',
       city: city || '',
+      currentSchool: currentSchool || '',
+      graduationYear: graduationYear || '',
+      targetCountries: targetCountries || '',
+      degreeLevel: degreeLevel || '',
+      fieldOfInterest: fieldOfInterest || '',
     }, { merge: true });
 
     return NextResponse.json({ success: true });

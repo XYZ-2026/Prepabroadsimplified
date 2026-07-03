@@ -59,6 +59,9 @@ export async function getUserProfile() {
         role: claims.admin === true || claims.role === 'admin' ? 'admin' : 'student',
         name: data?.name || claims.name || '',
         email: data?.email || claims.email || '',
+        mobile: data?.mobile || '',
+        state: data?.state || '',
+        city: data?.city || '',
       };
     }
   } catch (error) {
@@ -69,6 +72,9 @@ export async function getUserProfile() {
     role: claims.admin === true || claims.role === 'admin' ? 'admin' : 'student',
     name: claims.name || '',
     email: claims.email || '',
+    mobile: '',
+    state: '',
+    city: '',
   };
 }
 

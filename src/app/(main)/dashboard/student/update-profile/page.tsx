@@ -18,6 +18,11 @@ export default async function UpdateProfilePage() {
     studentType: '',
     state: '',
     city: '',
+    currentSchool: '',
+    graduationYear: '',
+    targetCountries: '',
+    degreeLevel: '',
+    fieldOfInterest: '',
   };
 
   try {
@@ -32,6 +37,11 @@ export default async function UpdateProfilePage() {
           studentType: data.studentType || '',
           state: data.state || '',
           city: data.city || '',
+          currentSchool: data.currentSchool || '',
+          graduationYear: data.graduationYear || '',
+          targetCountries: data.targetCountries || '',
+          degreeLevel: data.degreeLevel || '',
+          fieldOfInterest: data.fieldOfInterest || '',
         };
       }
     }

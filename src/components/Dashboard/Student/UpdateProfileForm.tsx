@@ -12,6 +12,11 @@ export interface ProfileData {
   studentType: string;
   state: string;
   city: string;
+  currentSchool: string;
+  graduationYear: string;
+  targetCountries: string;
+  degreeLevel: string;
+  fieldOfInterest: string;
 }
 
 export default function UpdateProfileForm({ initialData }: { initialData: ProfileData }) {
@@ -162,6 +167,82 @@ export default function UpdateProfileForm({ initialData }: { initialData: Profil
                 required
                 value={formData.city}
                 onChange={handleChange}
+              />
+            </div>
+          </div>
+
+          <div style={{ marginTop: '32px', marginBottom: '24px', paddingBottom: '12px', borderBottom: '1px solid #e5e7eb' }}>
+            <h3 style={{ fontSize: '18px', fontWeight: 'bold', color: '#111827' }}>Academic Background</h3>
+          </div>
+
+          <div className={styles.formRow}>
+            <div className={styles.formGroup}>
+              <label htmlFor="currentSchool">Current School / College Name</label>
+              <input
+                type="text"
+                id="currentSchool"
+                name="currentSchool"
+                value={formData.currentSchool}
+                onChange={handleChange}
+                placeholder="e.g. Delhi Public School"
+              />
+            </div>
+            <div className={styles.formGroup}>
+              <label htmlFor="graduationYear">Expected Graduation Year</label>
+              <input
+                type="number"
+                id="graduationYear"
+                name="graduationYear"
+                value={formData.graduationYear}
+                onChange={handleChange}
+                placeholder="e.g. 2026"
+              />
+            </div>
+          </div>
+
+          <div style={{ marginTop: '32px', marginBottom: '24px', paddingBottom: '12px', borderBottom: '1px solid #e5e7eb' }}>
+            <h3 style={{ fontSize: '18px', fontWeight: 'bold', color: '#111827' }}>Study Abroad Preferences</h3>
+          </div>
+
+          <div className={styles.formRow}>
+            <div className={styles.formGroup}>
+              <label htmlFor="targetCountries">Target Countries</label>
+              <input
+                type="text"
+                id="targetCountries"
+                name="targetCountries"
+                value={formData.targetCountries}
+                onChange={handleChange}
+                placeholder="e.g. USA, UK, Canada"
+              />
+            </div>
+            <div className={styles.formGroup}>
+              <label htmlFor="degreeLevel">Degree Level Sought</label>
+              <select
+                id="degreeLevel"
+                name="degreeLevel"
+                value={formData.degreeLevel}
+                onChange={handleChange}
+              >
+                <option value="" disabled>Select Level</option>
+                <option value="bachelors">Bachelors</option>
+                <option value="masters">Masters</option>
+                <option value="phd">PhD</option>
+                <option value="diploma">Diploma / Certificate</option>
+              </select>
+            </div>
+          </div>
+
+          <div className={styles.formRow}>
+            <div className={styles.formGroup} style={{ width: '100%' }}>
+              <label htmlFor="fieldOfInterest">Field of Interest / Major</label>
+              <input
+                type="text"
+                id="fieldOfInterest"
+                name="fieldOfInterest"
+                value={formData.fieldOfInterest}
+                onChange={handleChange}
+                placeholder="e.g. Computer Science, Business Administration"
               />
             </div>
           </div>

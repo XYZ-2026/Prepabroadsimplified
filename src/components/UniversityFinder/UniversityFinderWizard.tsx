@@ -3,11 +3,19 @@
 import { useState, useEffect } from 'react';
 import styles from '@/styles/university-finder.module.css';
 import { predictUniversities, UserProfile, PredictionResult, UniversityResult } from '@/lib/university-predictor';
-import { MapPin, Award } from 'lucide-react';
+import { MapPin, Award, Search } from 'lucide-react';
 
-export default function UniversityFinderWizard() {
+export interface InitialDetails {
+  name: string;
+  email: string;
+  mobile: string;
+  state: string;
+  city: string;
+}
+
+export default function UniversityFinderWizard({ initialDetails }: { initialDetails?: InitialDetails }) {
   const [step, setStep] = useState<1 | 2 | 3>(1);
-  const [details, setDetails] = useState({ name: '', email: '', mobile: '', state: '', city: '' });
+  const [details, setDetails] = useState(initialDetails || { name: '', email: '', mobile: '', state: '', city: '' });
   const [profile, setProfile] = useState<UserProfile>({
     c9: 0, c10: 0, c11: 0, c12: 0, sat: 0, avg_ap: 0, cc: 0, ec: 0, intr: 0,
     community: false, research: false, n_lor: 0, countries: ['All']
@@ -23,9 +31,11 @@ export default function UniversityFinderWizard() {
       if (savedDetails) {
         setDetails(JSON.parse(savedDetails));
         setStep(2); // Skip step 1 if details exist
+      } else if (initialDetails?.name && initialDetails?.email && initialDetails?.mobile && initialDetails?.state && initialDetails?.city) {
+        setStep(2); // Skip step 1 if profile is already complete
       }
     } catch (e) { }
-  }, []);
+  }, [initialDetails]);
 
   const handleSaveDetails = (e: React.FormEvent) => {
     e.preventDefault();
@@ -113,7 +123,10 @@ export default function UniversityFinderWizard() {
         {renderStepper()}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <h1 className={styles.wizardTitle} style={{ textAlign: 'left', marginBottom: 0 }}>University Readiness Assessment</h1>
-          <button onClick={() => setStep(1)} className={styles.btnSecondary}>Edit Details</button>
+          <button onClick={() => setStep(1)} className={styles.btnSecondary} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
+            Edit Details
+          </button>
         </div>
         
         <p style={{ marginBottom: '20px', color: '#666' }}>Hi {details.name}! We'll personalise suggestions for {details.city}, {details.state}.</p>
@@ -184,7 +197,7 @@ export default function UniversityFinderWizard() {
               setApScores(Array(val).fill(0));
             }} />
           </div>
-          <button onClick={handlePredict} className={styles.btnPrimary}>🔍 Find My Universities</button>
+          <button onClick={handlePredict} className={styles.btnPrimary} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><Search className="w-4 h-4" /> Find My Universities</button>
         </div>
         
         {n_ap > 0 && (
@@ -279,9 +292,16 @@ export default function UniversityFinderWizard() {
 
     // --- PAGE 1: COVER PAGE ---
     // Dark background with gradient vibe
-    doc.setFillColor(40, 44, 52); // Dark slate
-    doc.rect(0, 0, pageWidth, pageHeight, 'F');
-    // Top right glow effect simulation (optional, just stick to solid for reliability)
+    const step = 2;
+    for (let y = 0; y <= pageHeight; y += step) {
+      const ratio = y / pageHeight;
+      // Premium dark gradient: Slate blue to dark crimson
+      const r = Math.round(30 + (60 - 30) * ratio);
+      const g = Math.round(35 + (20 - 35) * ratio);
+      const b = Math.round(45 + (30 - 45) * ratio);
+      doc.setFillColor(r, g, b);
+      doc.rect(0, y, pageWidth, step + 0.5, 'F');
+    }
     
     // Logo square
     doc.setFillColor(220, 53, 69); // Red
@@ -556,7 +576,7 @@ export default function UniversityFinderWizard() {
           doc.setTextColor(pillText[0], pillText[1], pillText[2]);
           doc.setFontSize(8);
           doc.setFont(fontNormal, 'bold');
-          doc.text(gapStr, cellCx, cellCy + 1.2, { align: 'center', baseline: 'middle' });
+          doc.text(gapStr, cellCx, cellCy, { align: 'center', baseline: 'middle' });
         }
       }
     });
@@ -593,7 +613,7 @@ export default function UniversityFinderWizard() {
     
     const drawCards = (unis: any[], yPos: number, borderColor: number[], pillBg: number[], pillText: number[]) => {
       const cardW = (pageWidth - 2 * margin - 10) / 3;
-      const cardH = 45;
+      const cardH = 55; // Increased card height for breathing room
       let x = margin;
       let y = yPos;
       
@@ -614,55 +634,57 @@ export default function UniversityFinderWizard() {
         const uni = unis[i];
         
         // Card box
-        doc.setDrawColor(240, 240, 240);
+        doc.setDrawColor(230, 230, 230);
         doc.setFillColor(255, 255, 255);
         doc.roundedRect(x, y, cardW, cardH, 3, 3, 'FD');
         
-        // Top border
+        // Top border (Thin line to match web UI)
         doc.setFillColor(borderColor[0], borderColor[1], borderColor[2]);
-        doc.setDrawColor(borderColor[0], borderColor[1], borderColor[2]);
-        // jsPDF roundedRect doesn't support only top rounded corners, so we draw a rect over it
-        doc.rect(x, y, cardW, 3, 'F'); 
+        // Draw a thin rectangle just inside the rounded corners
+        doc.rect(x + 1, y, cardW - 2, 1.2, 'F'); 
         
         // Country pill
-        doc.setFillColor(pillBg[0], pillBg[1], pillBg[2]);
-        doc.roundedRect(x + 5, y + 6, doc.getTextWidth(uni.Country) + 6, 5, 2.5, 2.5, 'F');
-        doc.setTextColor(pillText[0], pillText[1], pillText[2]);
         doc.setFontSize(7);
         doc.setFont(fontNormal, 'bold');
-        doc.text(uni.Country, x + 8, y + 9.5);
+        const countryW = doc.getTextWidth(uni.Country);
+        const pillW = countryW + 10;
+        const pillH = 5;
+        doc.setFillColor(pillBg[0], pillBg[1], pillBg[2]);
+        doc.roundedRect(x + 5, y + 6, pillW, pillH, 2.5, 2.5, 'F');
+        doc.setTextColor(pillText[0], pillText[1], pillText[2]);
+        doc.text(uni.Country, x + 5 + pillW / 2, y + 6 + pillH / 2, { align: 'center', baseline: 'middle' });
         
         // QS Rank
         doc.setTextColor(100, 100, 100);
-        doc.text(`QS #${uni['QS Ranking'] || 'N/A'}`, x + cardW - 5, y + 9.5, { align: 'right' });
+        doc.text(`QS #${uni['QS Ranking'] || 'N/A'}`, x + cardW - 5, y + 6 + pillH / 2, { align: 'right', baseline: 'middle' });
         
         // Uni Name
         doc.setTextColor(33, 37, 41);
         doc.setFontSize(9);
         doc.setFont(fontNormal, 'bold');
         const splitName = doc.splitTextToSize(uni.University, cardW - 10);
-        doc.text(splitName, x + 5, y + 18);
+        doc.text(splitName, x + 5, y + 20);
         
         // Divider
         doc.setDrawColor(240, 240, 240);
         doc.setLineWidth(0.2);
-        doc.line(x + 5, y + 30, x + cardW - 5, y + 30);
+        doc.line(x + 5, y + 38, x + cardW - 5, y + 38);
         
         // Stats
         doc.setFontSize(7);
         doc.setTextColor(150, 150, 150);
         doc.setFont(fontNormal, 'normal');
-        doc.text('Required', x + 5, y + 34);
-        doc.text('Your Match', x + cardW/2, y + 34, { align: 'center' });
-        doc.text('Gap', x + cardW - 5, y + 34, { align: 'right' });
+        doc.text('Required', x + 5, y + 44);
+        doc.text('Your Match', x + cardW/2, y + 44, { align: 'center' });
+        doc.text('Gap', x + cardW - 5, y + 44, { align: 'right' });
         
         doc.setTextColor(33, 37, 41);
         doc.setFont(fontNormal, 'bold');
-        doc.text(`${uni['Required Profile Score']}%`, x + 5, y + 39);
-        doc.text(`${uni['Your Profile %']}%`, x + cardW/2, y + 39, { align: 'center' });
+        doc.text(`${uni['Required Profile Score']}%`, x + 5, y + 50);
+        doc.text(`${uni['Your Profile %']}%`, x + cardW/2, y + 50, { align: 'center' });
         doc.setTextColor(pillText[0], pillText[1], pillText[2]);
         const gapStr2 = uni['Gap %'] > 0 ? `+${uni['Gap %']}%` : `${uni['Gap %']}%`;
-        doc.text(gapStr2, x + cardW - 5, y + 39, { align: 'right' });
+        doc.text(gapStr2, x + cardW - 5, y + 50, { align: 'right' });
         
         x += cardW + 5;
       }

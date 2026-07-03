@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
 import { adminDb } from '@/lib/firebase-admin';
 import ResultDashboardClient from './ResultDashboardClient';
+import { getUserProfile } from '@/lib/auth';
 
 export const revalidate = 0; // Dynamic rendering
 
@@ -15,12 +16,15 @@ export default async function ResultPage({ params }: { params: Promise<{ resultI
     }
 
     const data = docSnap.data();
+    const userProfile = await getUserProfile();
+    const userName = userProfile?.name || '';
     
     // We pass the serialized data down to the client component
     return (
       <ResultDashboardClient 
         resultData={JSON.parse(JSON.stringify(data))} 
-        resultId={resultId} 
+        resultId={resultId}
+        userName={userName}
       />
     );
   } catch (error) {

@@ -2,6 +2,7 @@ import UniversityFinderWizard from '@/components/UniversityFinder/UniversityFind
 import { verifySessionCookie, getUserProfile } from '@/lib/auth';
 import AccessRestricted from '@/components/Auth/AccessRestricted';
 import styles from '@/styles/university-finder.module.css';
+import { Megaphone } from 'lucide-react';
 
 export default async function UniversityFinderPage() {
   const claims = await verifySessionCookie();
@@ -23,7 +24,8 @@ export default async function UniversityFinderPage() {
         <div style={{ maxWidth: '900px', margin: '0 auto' }}>
           
           <div className={styles.greetingBox}>
-            📣 Hi <span className={styles.greetingName}>{firstName}</span>, ready to find your ideal university?
+            <Megaphone className="w-5 h-5 text-[#9C1010]" />
+            <span>Hi <span className={styles.greetingName}>{firstName}</span>, ready to find your ideal university?</span>
           </div>
 
           <div className={styles.heroCard}>
@@ -34,7 +36,15 @@ export default async function UniversityFinderPage() {
             </p>
           </div>
 
-          <UniversityFinderWizard />
+          <UniversityFinderWizard 
+            initialDetails={profile ? {
+              name: profile.name || '',
+              email: profile.email || '',
+              mobile: profile.mobile || '',
+              state: profile.state || '',
+              city: profile.city || '',
+            } : undefined} 
+          />
         </div>
       </main>
     </>

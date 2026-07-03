@@ -1,7 +1,5 @@
 import { redirect } from 'next/navigation';
 import { verifySessionCookie } from '@/lib/auth';
-import Topbar from '@/components/Layout/Topbar';
-import Sidebar from '@/components/Layout/Sidebar';
 
 export default async function DashboardLayout({
   children,
@@ -28,9 +26,7 @@ export default async function DashboardLayout({
 
   return (
     <>
-      <main className="main-content">
-        {children}
-      </main>
+      {children}
     </>
   );
 }

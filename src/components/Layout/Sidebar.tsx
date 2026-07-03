@@ -36,6 +36,18 @@ export default function Sidebar({ userRole, userName, userEmail }: SidebarProps)
     }
   }, [pathname]);
 
+  // Sync DOM state on mount and clean up on unmount
+  useEffect(() => {
+    if (document.body.classList.contains('sidebar-open')) {
+      const sidebar = document.getElementById('sidebar');
+      sidebar?.classList.add(styles.sidebarOpen);
+    }
+
+    return () => {
+      document.body.classList.remove('sidebar-open');
+    };
+  }, []);
+
   const handleLogout = async () => {
     try {
       await fetch('/api/auth/logout', { method: 'POST' });
@@ -89,6 +101,22 @@ export default function Sidebar({ userRole, userName, userEmail }: SidebarProps)
         </Link>
       )}
 
+      {/* Student Profile Button */}
+      {userRole && (
+        <Link href="/dashboard/student/profile" className={styles.sidebarActionBtn}>
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+          My Profile
+        </Link>
+      )}
+
+      {/* Update Profile Button */}
+      {userRole && (
+        <Link href="/dashboard/student/update-profile" className={styles.sidebarActionBtn}>
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"></path></svg>
+          Update Profile
+        </Link>
+      )}
+
       {/* Logout Button */}
       {userRole && (
         <button onClick={handleLogout} className={`${styles.sidebarActionBtn} ${styles.sidebarActionBtnLogout}`}>
@@ -135,6 +163,7 @@ export default function Sidebar({ userRole, userName, userEmail }: SidebarProps)
           </Link>
         </div>
       </nav>
+
 
       {/* Study Abroad Tools */}
       <nav className={styles.sidebarNavSection}>

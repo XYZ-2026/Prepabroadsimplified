@@ -128,7 +128,7 @@ export default function LandingPage() {
             className="text-4xl md:text-5xl lg:text-6xl font-display font-extrabold text-black tracking-tight leading-tight mb-6"
           >
             Measure Your Intelligence With{' '}
-            <span className="text-gradient-red">College Simplified's</span> Advanced IQ Assessment
+            <span className="text-gradient-red">Abroad Simplified's</span> Advanced IQ Assessment
           </motion.h1>
 
           <motion.p
@@ -436,20 +436,6 @@ export default function LandingPage() {
           </div>
         </div>
       </section>
-
-      {/* Footer */}
-      <footer className="mt-auto border-t border-slate-800 bg-black text-slate-400 py-12 text-sm shadow-inner">
-        <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="flex flex-col items-center md:items-start">
-            <span className="font-display font-extrabold text-white text-base tracking-tight">COLLEGE SIMPLIFIED</span>
-            <span className="text-[9px] tracking-widest text-[#9C1010] font-bold">COGNITIVE TESTING AGENCY</span>
-          </div>
-          <p className="text-center md:text-right text-xs text-slate-500 font-medium">
-            &copy; {new Date().getFullYear()} College Simplified. All rights reserved. 
-            Designed for student profile acceleration and cognitive validation.
-          </p>
-        </div>
-      </footer>
 
     </div>
   );

@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation';
 
 export default function StudentDashboardRedirect() {
-  redirect('/');
+  redirect('/dashboard/student/profile');
 }

@@ -150,8 +150,7 @@
   background: var(--bg-sidebar);
   border-right: 1px solid var(--border-light);
   z-index: 1002;
-  overflow-y: auto;
-  overflow-x: hidden;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   transition: transform 0.3s ease;
@@ -163,21 +162,39 @@
   transform: translateX(0);
 }
 
-.sidebar::-webkit-scrollbar {
+.sidebarScrollable {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-bottom: 24px;
+  margin-right: 8px;
+}
+
+.sidebarScrollable .navItem {
+  margin-right: 8px;
+}
+
+.sidebarScrollable .navLabel {
+  padding-right: 12px;
+}
+
+.sidebarScrollable::-webkit-scrollbar {
   width: 6px;
 }
 
-.sidebar::-webkit-scrollbar-track {
+.sidebarScrollable::-webkit-scrollbar-track {
   background: transparent;
 }
 
-.sidebar::-webkit-scrollbar-thumb {
+.sidebarScrollable::-webkit-scrollbar-thumb {
   background: var(--color-gray-400);
   border-radius: 10px;
 }
 
+
+
 .sidebarLogoBlock {
-  padding: 16px 20px 16px;
+  padding: 16px 20px 32px;
   position: relative;
   display: flex;
   align-items: center;
@@ -218,18 +235,19 @@
 
 /* Sidebar: User block */
 .sidebarUser {
-  margin: 0 16px 12px;
+  margin: 0 24px 12px;
   padding: 12px;
   border-radius: 16px;
   background-color: var(--color-red-tint-warm);
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 12px;
 }
 
 .userAvatar {
-  width: 36px;
-  height: 36px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
   background: var(--color-red-deep);
   color: var(--color-white);
@@ -237,17 +255,16 @@
   align-items: center;
   justify-content: center;
   font-weight: 700;
-  font-size: 15px;
+  font-size: 18px;
   flex-shrink: 0;
 }
 
 .userInfo {
-  flex: 1;
   min-width: 0;
 }
 
 .userName {
-  font-size: var(--font-size-sm);
+  font-size: 15px;
   font-weight: 700;
   color: var(--text-heading);
   display: flex;
@@ -256,7 +273,7 @@
 }
 
 .userBadge {
-  font-size: 8px;
+  font-size: 9px;
   border: 1px solid var(--color-red-deep);
   color: var(--color-red-deep);
   background: var(--color-white);
@@ -269,7 +286,7 @@
 }
 
 .userEmail {
-  font-size: 11px;
+  font-size: 12.5px;
   color: var(--text-muted);
   margin-top: 2px;
   overflow: hidden;
@@ -282,7 +299,7 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  margin: 0 16px 8px;
+  margin: 0 24px 8px;
   padding: 10px 14px;
   border-radius: 12px;
   font-size: var(--font-size-sm);
@@ -292,7 +309,7 @@
   border: 1px solid transparent;
   transition: all var(--transition);
   background: none;
-  width: calc(100% - 32px);
+  width: calc(100% - 48px);
   text-align: left;
 }
 
@@ -463,8 +480,8 @@
 .navSubLink {
   display: block;
   padding: 8px 16px 8px 46px;
-  color: var(--text-muted);
-  font-size: var(--font-size-xs);
+  color: var(--text-body);
+  font-size: var(--font-size-sm);
   font-weight: 600;
   transition: all var(--transition);
   text-decoration: none;

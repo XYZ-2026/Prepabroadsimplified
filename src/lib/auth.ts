@@ -43,11 +43,11 @@ export async function getUserProfile() {
   if (!claims) return null;
 
   // Hardcoded Admin Account
-  if (claims.email === 'admin@admin.com') {
+  if (claims.email === 'admin@as.com') {
     return {
       role: 'admin',
       name: 'Admin',
-      email: 'admin@admin.com',
+      email: 'admin@as.com',
     };
   }
 
@@ -86,7 +86,7 @@ export async function getUserRole(): Promise<'admin' | 'student' | null> {
   if (!claims) return null;
   
   // Hardcoded Admin Account or custom claims
-  if (claims.email === 'admin@admin.com' || claims.admin === true || claims.role === 'admin') {
+  if (claims.email === 'admin@as.com' || claims.admin === true || claims.role === 'admin') {
     return 'admin';
   }
   

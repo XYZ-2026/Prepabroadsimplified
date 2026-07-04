@@ -2,33 +2,39 @@ import { NextResponse } from 'next/server';
 import { getAllQuestions } from '@/lib/iq-questions';
 import { processIQTest } from '@/lib/iq-scoring';
 import { adminDb } from '@/lib/firebase-admin';
+import { verifySessionCookie } from '@/lib/auth';
 
 export async function POST(request: Request) {
   try {
     const { answers } = await request.json(); // Array of { question: string, answer: string }
     const allQuestions = getAllQuestions();
     
-    // Create a map of question text to correct answer and category for fast lookup
-    const qMap = new Map(allQuestions.map(q => [q.question, { correct: q.correctAnswer, category: q.category }]));
+    const qMap = new Map(allQuestions.map(q => [q.question, { correct: q.correctAnswer, category: q.category, difficulty: q.difficulty }]));
 
     const evaluated = answers.map((ans: any) => {
-      const mapped = qMap.get(ans.question) || { correct: null, category: 'Unknown' };
+      const mapped = qMap.get(ans.question) || { correct: null, category: 'Unknown', difficulty: 'medium' };
       const isCorrect = mapped.correct === ans.answer;
       return {
         question: ans.question,
         userAnswer: ans.answer,
         correctAnswer: mapped.correct,
         category: mapped.category,
+        difficulty: mapped.difficulty,
         isCorrect
       };
     });
 
     // Run the Python-equivalent scoring engine
     const result = processIQTest(evaluated);
+    
+    // Check if the user is logged in
+    const claims = await verifySessionCookie();
 
     // Prepare full document
     const finalDocument = {
       ...result,
+      testName: 'Advanced IQ Assessment',
+      userId: claims ? claims.uid : null, // Attach userId if available
       createdAt: new Date().toISOString(),
       evaluatedAnswers: evaluated // store the raw answers if needed
     };

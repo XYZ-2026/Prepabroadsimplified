@@ -24,7 +24,10 @@ export default function ResultDashboardClient({ resultData, resultId, userName =
     careers,
     totalEarned,
     totalMax,
-    evaluatedAnswers
+    evaluatedAnswers,
+    cognitivePersona,
+    consistencyScore,
+    difficultyBreakdown
   } = resultData;
 
   const attemptedCount = evaluatedAnswers
@@ -91,9 +94,9 @@ export default function ResultDashboardClient({ resultData, resultId, userName =
     doc.setFontSize(12);
     doc.setTextColor(150, 150, 150);
     doc.text(`UUID: ${resultId}`, 148, 180, { align: 'center' });
-    doc.text("College Simplified Assessment Matrix", 148, 190, { align: 'center' });
+    doc.text("Abroad Simplified Assessment Matrix", 148, 190, { align: 'center' });
 
-    doc.save(`College-Simplified-IQ-${finalName.replace(/\s+/g, '-')}.pdf`);
+    doc.save(`Abroad-Simplified-IQ-${finalName.replace(/\s+/g, '-')}.pdf`);
   };
 
   return (
@@ -128,9 +131,17 @@ export default function ResultDashboardClient({ resultData, resultId, userName =
 
               {/* Blueprint Details */}
               <div className="flex-1 w-full text-center md:text-left">
-                <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#9C1010]/5 text-[#9C1010] rounded-lg text-[10px] font-bold uppercase tracking-wider mb-4 border border-[#9C1010]/10">
-                  <Activity className="w-3.5 h-3.5" />
-                  National Percentile: {percentile}th Percentile
+                <div className="flex flex-wrap items-center justify-center md:justify-start gap-2 mb-4">
+                  {cognitivePersona && (
+                    <div className="inline-flex items-center gap-2 px-3 py-1 bg-amber-50 text-amber-700 rounded-lg text-[10px] font-bold uppercase tracking-wider border border-amber-200">
+                      <Sparkles className="w-3.5 h-3.5" />
+                      Persona: {cognitivePersona}
+                    </div>
+                  )}
+                  <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#9C1010]/5 text-[#9C1010] rounded-lg text-[10px] font-bold uppercase tracking-wider border border-[#9C1010]/10">
+                    <Activity className="w-3.5 h-3.5" />
+                    National Percentile: {percentile}th Percentile
+                  </div>
                 </div>
                 <h1 className="text-3xl md:text-4xl font-display font-extrabold text-slate-900 mb-3 tracking-tight">Your Cognitive Blueprint</h1>
                 <p className="text-slate-500 mb-8 max-w-2xl text-sm md:text-base leading-relaxed">
@@ -138,7 +149,11 @@ export default function ResultDashboardClient({ resultData, resultId, userName =
                 </p>
 
                 {/* Stats Grid */}
-                <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 mt-2">
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mt-2">
+                  <div className="bg-slate-50 border border-slate-200/60 rounded-xl p-3 flex flex-col items-center justify-center text-center transition-all hover:shadow-md hover:border-slate-300">
+                    <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Consistency Score</span>
+                    <div className="text-2xl font-display font-black text-slate-800">{consistencyScore !== undefined ? consistencyScore : '--'}</div>
+                  </div>
                   <div className="bg-slate-50 border border-slate-200/60 rounded-xl p-3 flex flex-col items-center justify-center text-center transition-all hover:shadow-md hover:border-slate-300">
                     <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Attempted</span>
                     <div className="text-2xl font-display font-black text-slate-800"><span className="text-slate-900">{attemptedCount}</span><span className="text-sm text-slate-400 ml-1">/ 60</span></div>
@@ -208,6 +223,31 @@ export default function ResultDashboardClient({ resultData, resultId, userName =
           </div>
         </div>
 
+        {/* Section 2.5: Complexity Analysis */}
+        {difficultyBreakdown && (
+          <div className="bg-white rounded-[2rem] border border-white/40 p-1 shadow-[0_15px_35px_-15px_rgba(0,0,0,0.05)] backdrop-blur-xl">
+             <div className="rounded-[1.75rem] border border-slate-100 bg-white/60 p-8">
+               <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-6 flex items-center gap-2">
+                 <BrainCircuit className="w-3.5 h-3.5 text-[#9C1010]" />
+                 Complexity Analysis
+               </h3>
+               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                 {[
+                   { label: 'Easy', data: difficultyBreakdown.easy, bg: 'bg-emerald-50/50 hover:border-emerald-200 hover:shadow-emerald-900/5 border-slate-100' },
+                   { label: 'Medium', data: difficultyBreakdown.medium, bg: 'bg-amber-50/50 hover:border-amber-200 hover:shadow-amber-900/5 border-slate-100' },
+                   { label: 'Advanced', data: difficultyBreakdown.advanced, bg: 'bg-red-50/50 hover:border-red-200 hover:shadow-red-900/5 border-slate-100' }
+                 ].map((diff) => (
+                   <div key={diff.label} className={`p-6 rounded-2xl border transition-all duration-300 ${diff.bg} flex flex-col justify-center items-center text-center shadow-sm`}>
+                     <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2">{diff.label} Questions</span>
+                     <div className="text-3xl font-display font-black text-slate-800 mb-1">{diff.data.percentage}%</div>
+                     <span className="text-xs font-semibold text-slate-400">{diff.data.earned} / {diff.data.max} Points</span>
+                   </div>
+                 ))}
+               </div>
+             </div>
+          </div>
+        )}
+
         {/* Section 3: AI Diagnostic */}
         <div className="bg-slate-900 rounded-[2rem] p-1 shadow-[0_30px_60px_-15px_rgba(0,0,0,0.2)] relative text-white">
           <div className="rounded-[1.75rem] bg-slate-900/90 border border-slate-800 p-8 md:p-12 relative overflow-hidden">
@@ -257,7 +297,7 @@ export default function ResultDashboardClient({ resultData, resultId, userName =
               <h3 className="text-[10px] font-bold uppercase tracking-widest">Official Validation Diploma</h3>
             </div>
             <h2 className="text-3xl font-display font-black text-slate-900 mb-3 tracking-tight">Certificate of Cognitive Achievement</h2>
-            <p className="text-sm font-medium text-slate-500 mb-10 max-w-xl">Download a verified PDF documenting your cognitive profile. Includes verified Certificate UUID, scores, and the College Simplified official watermark.</p>
+            <p className="text-sm font-medium text-slate-500 mb-10 max-w-xl">Download a verified PDF documenting your cognitive profile. Includes verified Certificate UUID, scores, and the Abroad Simplified official watermark.</p>
 
             <div className="flex flex-col md:flex-row gap-4 items-start md:items-end">
               <button 

@@ -133,3 +133,123 @@
     padding: 20px;
   }
 }
+
+/* Premium Assessment Cards */
+.assessmentGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 24px;
+}
+
+.premiumCard {
+  background: var(--color-white);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-xl, 16px);
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.premiumCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+  border-color: var(--color-red-primary, #e11d48);
+}
+
+.premiumCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--color-red-primary, #e11d48), #fb7185);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.premiumCard:hover::before {
+  opacity: 1;
+}
+
+.cardHeaderTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+}
+
+.cardTitlePremium {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-heading);
+  margin-bottom: 6px;
+  letter-spacing: -0.02em;
+}
+
+.cardDate {
+  font-size: 13px;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.badgePremium {
+  background: rgba(225, 29, 72, 0.1);
+  color: var(--color-red-primary, #e11d48);
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.metricsGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 28px;
+  flex-grow: 1;
+}
+
+.metricRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 12px;
+  border-bottom: 1px dashed var(--border-light);
+}
+
+.metricRow:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.metricLabel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-body);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.metricIcon {
+  color: var(--color-red-primary, #e11d48);
+  opacity: 0.8;
+  display: flex;
+}
+
+.metricValue {
+  font-weight: 700;
+  color: var(--text-heading);
+  font-size: 15px;
+}
+
+.cardAction {
+  width: 100%;
+}

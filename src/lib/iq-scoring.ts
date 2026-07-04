@@ -16,6 +16,13 @@ export interface IQResult {
   weakness: string;
   careers: string[];
   insights: string;
+  difficultyBreakdown: {
+    easy: { earned: number; max: number; percentage: number };
+    medium: { earned: number; max: number; percentage: number };
+    advanced: { earned: number; max: number; percentage: number };
+  };
+  consistencyScore: number;
+  cognitivePersona: string;
 }
 
 // Error function math for percentile calculation
@@ -62,8 +69,17 @@ const CAREER_MAP: Record<string, string[]> = {
   "Problem Solving": ["Product Management", "Cybersecurity", "Mechanical Engineering"]
 };
 
+const PERSONA_MAP: Record<string, string> = {
+  "Logical Reasoning": "The Architect",
+  "Pattern Recognition": "The Visionary",
+  "Numerical Intelligence": "The Analyst",
+  "Verbal Reasoning": "The Communicator",
+  "Analytical Thinking": "The Strategist",
+  "Problem Solving": "The Fixer"
+};
+
 function generateInsights(strength: string, weakness: string, tier: string, iq: number): string {
-  return `Dear Guest Candidate, based on your performance on the College Simplified Advanced IQ Assessment, you have achieved an overall IQ score of ${iq}, placing you in the '${tier}' cognitive category. This score indicates a strong command of cognitive processing and problem-solving relative to the general student population. Your cognitive blueprint reveals a highly structured approach to parsing complex scenarios, translating raw inputs into logical frameworks, and identifying critical dependencies under temporal constraints.
+  return `Dear Guest Candidate, based on your performance on the Abroad Simplified Advanced IQ Assessment, you have achieved an overall IQ score of ${iq}, placing you in the '${tier}' cognitive category. This score indicates a strong command of cognitive processing and problem-solving relative to the general student population. Your cognitive blueprint reveals a highly structured approach to parsing complex scenarios, translating raw inputs into logical frameworks, and identifying critical dependencies under temporal constraints.
 
 Your primary cognitive strength is ${strength}, where you demonstrated an outstanding ability to excel. This means that in environments requiring rapid processing of ${strength.toLowerCase()} assets, you possess a distinct competitive advantage. You should rely on this capability when leading teams through complex brainstorming sessions or resolving analytical bottlenecks.
 
@@ -74,6 +90,11 @@ In terms of operational and decision-making style, your results indicate that yo
 
 export function processIQTest(evaluatedAnswers: any[]): IQResult {
   const domainsMap: Record<string, { earned: number, max: number }> = {};
+  const diffMap = {
+    easy: { earned: 0, max: 0 },
+    medium: { earned: 0, max: 0 },
+    advanced: { earned: 0, max: 0 }
+  };
   
   let totalEarned = 0;
   let totalMax = 0;
@@ -95,9 +116,17 @@ export function processIQTest(evaluatedAnswers: any[]): IQResult {
     domainsMap[category].max += weight;
     totalMax += weight;
 
+    const diff = (ans.difficulty === 'hard' ? 'advanced' : ans.difficulty) || 'medium';
+    if (diffMap[diff as keyof typeof diffMap]) {
+      diffMap[diff as keyof typeof diffMap].max += weight;
+    }
+
     if (ans.isCorrect) {
       domainsMap[category].earned += weight;
       totalEarned += weight;
+      if (diffMap[diff as keyof typeof diffMap]) {
+        diffMap[diff as keyof typeof diffMap].earned += weight;
+      }
     }
   });
 
@@ -130,6 +159,24 @@ export function processIQTest(evaluatedAnswers: any[]): IQResult {
   
   const careers = CAREER_MAP[strength] || ["Research", "Academia", "Strategic Planning"];
   const insights = generateInsights(strength, weakness, tier, iqScore);
+  const cognitivePersona = PERSONA_MAP[strength] || "The Thinker";
+
+  const difficultyBreakdown = {
+    easy: { ...diffMap.easy, percentage: diffMap.easy.max > 0 ? Math.round((diffMap.easy.earned / diffMap.easy.max) * 100) : 0 },
+    medium: { ...diffMap.medium, percentage: diffMap.medium.max > 0 ? Math.round((diffMap.medium.earned / diffMap.medium.max) * 100) : 0 },
+    advanced: { ...diffMap.advanced, percentage: diffMap.advanced.max > 0 ? Math.round((diffMap.advanced.earned / diffMap.advanced.max) * 100) : 0 },
+  };
+
+  const percentages = domains.map(d => d.percentage);
+  const meanPercentage = percentages.reduce((a, b) => a + b, 0) / (percentages.length || 1);
+  const variance = percentages.reduce((a, b) => a + Math.pow(b - meanPercentage, 2), 0) / (percentages.length || 1);
+  const stdDevPercentage = Math.sqrt(variance);
+  let consistencyScore = Math.round(100 - (stdDevPercentage * 2));
+  if (meanPercentage === 0) {
+    consistencyScore = 0; // Prevent 100% consistency for getting everything wrong/unattempted
+  } else {
+    consistencyScore = Math.max(0, Math.min(100, consistencyScore));
+  }
 
   return {
     iqScore,
@@ -141,6 +188,9 @@ export function processIQTest(evaluatedAnswers: any[]): IQResult {
     strength,
     weakness,
     careers,
-    insights
+    insights,
+    difficultyBreakdown,
+    consistencyScore,
+    cognitivePersona
   };
 }

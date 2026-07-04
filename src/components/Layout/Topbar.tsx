@@ -1,10 +1,12 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import styles from '@/styles/components.module.css';
 
 export default function Topbar() {
+  const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
@@ -17,6 +19,8 @@ export default function Topbar() {
 
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  const isTestPage = pathname === '/iq-test/test';
 
   const toggleSidebar = () => {
     const sidebar = document.getElementById('sidebar');
@@ -39,17 +43,19 @@ export default function Topbar() {
   return (
     <header className={`topbar ${styles.topbar} ${scrolled ? styles.topbarScrolled : ''}`}>
       <div className={styles.topbarLeft}>
-        <button
-          className={styles.hamburgerBtn}
-          onClick={toggleSidebar}
-          aria-label="Open sidebar menu"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <line x1="3" y1="12" x2="21" y2="12" />
-            <line x1="3" y1="6" x2="21" y2="6" />
-            <line x1="3" y1="18" x2="21" y2="18" />
-          </svg>
-        </button>
+        {!isTestPage && (
+          <button
+            className={styles.hamburgerBtn}
+            onClick={toggleSidebar}
+            aria-label="Open sidebar menu"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="3" y1="12" x2="21" y2="12" />
+              <line x1="3" y1="6" x2="21" y2="6" />
+              <line x1="3" y1="18" x2="21" y2="18" />
+            </svg>
+          </button>
+        )}
         <Link href="/" className={styles.topbarLogo}>
           <span className="brand-red">Abroad</span>{' '}
           <span>Simplified</span>

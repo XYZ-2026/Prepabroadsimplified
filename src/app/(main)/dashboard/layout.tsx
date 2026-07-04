@@ -13,10 +13,10 @@ export default async function DashboardLayout({
   }
 
   // Very basic role resolution: 
-  // If their email is admin@admin.com or they have the admin custom claim, treat as admin.
+  // If their email is admin@as.com or they have the admin custom claim, treat as admin.
   // In a real app, the custom claim logic in /lib/auth.ts would be strictly used.
   let role: 'admin' | 'student' = 'student';
-  if (claims.email === 'admin@admin.com' || claims.admin === true || claims.role === 'admin') {
+  if (claims.email === 'admin@as.com' || claims.admin === true || claims.role === 'admin') {
     role = 'admin';
   }
 

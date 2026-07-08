@@ -78,17 +78,17 @@ const PERSONA_MAP: Record<string, string> = {
   "Problem Solving": "The Fixer"
 };
 
-function generateInsights(strength: string, weakness: string, tier: string, iq: number): string {
-  return `Dear Guest Candidate, based on your performance on the Abroad Simplified Advanced IQ Assessment, you have achieved an overall IQ score of ${iq}, placing you in the '${tier}' cognitive category. This score indicates a strong command of cognitive processing and problem-solving relative to the general student population. Your cognitive blueprint reveals a highly structured approach to parsing complex scenarios, translating raw inputs into logical frameworks, and identifying critical dependencies under temporal constraints.
+function generateInsights(userName: string, strength: string, weakness: string, tier: string, iq: number): string {
+  return `Dear ${userName}, based on your performance on the Abroad Simplified Advanced IQ Assessment, you have achieved an overall IQ score of ${iq}, placing you in the '${tier}' cognitive category.
 
-Your primary cognitive strength is ${strength}, where you demonstrated an outstanding ability to excel. This means that in environments requiring rapid processing of ${strength.toLowerCase()} assets, you possess a distinct competitive advantage. You should rely on this capability when leading teams through complex brainstorming sessions or resolving analytical bottlenecks.
+Your primary cognitive strength is ${strength}. In environments requiring rapid processing of ${strength.toLowerCase()} assets, you possess a distinct competitive advantage.
 
-While your profile is well-rounded, your lowest relative score was in ${weakness}. To maximize your cognitive efficiency, we recommend studying algorithmic designs and logic puzzles to train systemic optimization thinking. Slight adjustments in how you approach problem-solving tasks—such as breaking down instructions into modular micro-steps—will bridge this gap and help you unlock your full intellectual capacity.
+Your lowest relative score was in ${weakness}. To maximize your cognitive efficiency, we recommend studying algorithmic designs and logic puzzles. 
 
-In terms of operational and decision-making style, your results indicate that you are flexible and heuristically agile. You process visual patterns and relational indicators quickly, enabling swift intuitive choices. This cognitive style is highly effective in team environments, acting as a reliable anchor during volatile situations. Moving forward, we recommend aligning your career objectives with fields that heavily leverage ${strength.toLowerCase()}, while actively training your ${weakness.toLowerCase()} to ensure balanced cognitive performance.`;
+Moving forward, we recommend aligning your career objectives with fields that heavily leverage ${strength.toLowerCase()}, while actively training your ${weakness.toLowerCase()} to ensure balanced cognitive performance.`;
 }
 
-export function processIQTest(evaluatedAnswers: any[]): IQResult {
+export function processIQTest(evaluatedAnswers: any[], userName: string = 'Candidate'): IQResult {
   const domainsMap: Record<string, { earned: number, max: number }> = {};
   const diffMap = {
     easy: { earned: 0, max: 0 },
@@ -158,7 +158,7 @@ export function processIQTest(evaluatedAnswers: any[]): IQResult {
   const tier = getTier(iqScore);
   
   const careers = CAREER_MAP[strength] || ["Research", "Academia", "Strategic Planning"];
-  const insights = generateInsights(strength, weakness, tier, iqScore);
+  const insights = generateInsights(userName, strength, weakness, tier, iqScore);
   const cognitivePersona = PERSONA_MAP[strength] || "The Thinker";
 
   const difficultyBreakdown = {

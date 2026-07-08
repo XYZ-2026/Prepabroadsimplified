@@ -37,3 +37,23 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: error.message || 'Failed to update profile' }, { status: 500 });
   }
 }
+
+export async function GET() {
+  try {
+    const claims = await verifySessionCookie();
+    if (!claims) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const userDoc = await adminDb.collection('users').doc(claims.uid).get();
+    if (!userDoc.exists) {
+      return NextResponse.json({ success: true, user: { name: claims.name || '' } });
+    }
+
+    return NextResponse.json({ success: true, user: { ...userDoc.data(), name: userDoc.data()?.name || claims.name || '' } });
+  } catch (error: any) {
+    console.error('Error fetching profile:', error);
+    return NextResponse.json({ error: error.message || 'Failed to fetch profile' }, { status: 500 });
+  }
+}
+

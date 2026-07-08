@@ -1,9 +1,12 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 /* ============================================================
    globals.css — Global Styles, Variables, Typography, Layout
    Abroad Simplified — Light theme with deep red/maroon accents
    Migrated from legacy main.css
    ============================================================ */
-
 /* ── Google Fonts (moved to layout.tsx) ── */
 
 /* ── CSS Custom Properties ── */
@@ -183,6 +186,10 @@ h5, h6 {
     margin-left: var(--sidebar-width) !important;
   }
   body.sidebar-open .topbar {
+    left: var(--sidebar-width) !important;
+    width: calc(100% - var(--sidebar-width)) !important;
+  }
+  body.sidebar-open .research-popup-overlay {
     left: var(--sidebar-width) !important;
     width: calc(100% - var(--sidebar-width)) !important;
   }

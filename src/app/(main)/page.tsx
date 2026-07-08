@@ -1,6 +1,6 @@
 import Link from 'next/link';
-import Footer from '@/components/Layout/Footer';
 import NotificationPanel from '@/components/Notifications/NotificationPanel';
+import PremiumToolsCards from '@/components/PremiumToolsCards';
 import styles from '@/styles/components.module.css';
 import sections from '@/styles/sections.module.css';
 
@@ -76,115 +76,33 @@ export default async function HomePage() {
               </div>
             </Link>
 
-            {/* Card 2: Destination Guides */}
-            <Link className={styles.toolCard} href="#">
+            {/* Card 2: IQ Test */}
+            <Link className={styles.toolCard} href="/iq-test">
               <div className={styles.cardIcon}>
-                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><line x1="2" y1="12" x2="22" y2="12" /><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" /></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 1.98-3A2.5 2.5 0 0 1 9.5 2Z"/><path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-1.98-3A2.5 2.5 0 0 0 14.5 2Z"/></svg>
               </div>
               <div>
-                <div className={styles.cardTag}>Country Guides</div>
-                <h3 className={styles.cardTitle}>→ Destination Guides</h3>
+                <div className={styles.cardTag}>Assessment</div>
+                <h3 className={styles.cardTitle}>→ IQ Test</h3>
                 <p className={styles.cardDesc}>
-                  In-depth guides for USA, UK, Germany, Canada, Australia, and more.
-                  Know before you go.
+                  Test your cognitive abilities and see how you stack up with our comprehensive IQ assessment.
                 </p>
-                <span className={styles.cardCta}>Read Country Guides →</span>
+                <span className={styles.cardCta}>Take the Test →</span>
               </div>
             </Link>
 
-            {/* Card 3: SOP & Application Builder */}
+            {/* Card 3: Psychometric Tests */}
             <Link className={styles.toolCard} href="#">
               <div className={styles.cardIcon}>
-                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><polyline points="14 2 14 8 20 8" /><line x1="16" y1="13" x2="8" y2="13" /><line x1="16" y1="17" x2="8" y2="17" /><polyline points="10 9 9 9 8 9" /></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
               </div>
               <div>
-                <div className={styles.cardTag}>Application Suite</div>
-                <h3 className={styles.cardTitle}>→ SOP &amp; Application Builder</h3>
+                <div className={styles.cardTag}>Career Guidance</div>
+                <h3 className={styles.cardTitle}>→ Psychometric Tests</h3>
                 <p className={styles.cardDesc}>
-                  AI-powered SOP generator, LOR tracker, and step-by-step
-                  application checklist.
+                  Discover your ideal career path and personality traits with our advanced psychometric evaluations.
                 </p>
-                <span className={styles.cardCta}>Start Your Application →</span>
-              </div>
-            </Link>
-
-            {/* Card 4: Scholarship Finder */}
-            <Link className={styles.toolCard} href="#">
-              <div className={styles.cardIcon}>
-                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><line x1="12" y1="8" x2="12" y2="16" /><line x1="9" y1="10" x2="15" y2="10" /><line x1="9" y1="14" x2="15" y2="14" /></svg>
-              </div>
-              <div>
-                <div className={styles.cardTag}>Funding</div>
-                <h3 className={styles.cardTitle}>→ Scholarship Finder</h3>
-                <p className={styles.cardDesc}>
-                  Discover scholarships worth millions. Filter by country,
-                  degree, and eligibility.
-                </p>
-                <span className={styles.cardCta}>Find Scholarships →</span>
-              </div>
-            </Link>
-
-            {/* Card 5: Test Prep Hub */}
-            <Link className={styles.toolCard} href="#">
-              <div className={styles.cardIcon}>
-                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M10 2v7.31" /><path d="M14 9.3V1.99" /><path d="M8.5 2h7" /><path d="M14 9.3a6.5 6.5 0 1 1-4 0" /><path d="M5.52 16h12.96" /></svg>
-              </div>
-              <div>
-                <div className={styles.cardTag}>Test Prep</div>
-                <h3 className={styles.cardTitle}>→ IELTS / TOEFL / GRE Hub</h3>
-                <p className={styles.cardDesc}>
-                  Practice tests, score predictors, and prep resources for all
-                  major standardized tests.
-                </p>
-                <span className={styles.cardCta}>Start Preparing →</span>
-              </div>
-            </Link>
-
-            {/* Card 6: Application Calendar */}
-            <Link className={styles.toolCard} href="#">
-              <div className={styles.cardIcon}>
-                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2" /><line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" /></svg>
-              </div>
-              <div>
-                <div className={styles.cardTag}>Deadlines</div>
-                <h3 className={styles.cardTitle}>→ Application Calendar</h3>
-                <p className={styles.cardDesc}>
-                  Stay on track with all important university deadlines,
-                  intake dates, and exam schedules.
-                </p>
-                <span className={styles.cardCta}>View Calendar →</span>
-              </div>
-            </Link>
-
-            {/* Card 7: Visa Guidance Hub */}
-            <Link className={styles.toolCard} href="#">
-              <div className={styles.cardIcon}>
-                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="4" width="18" height="16" rx="2" ry="2" /><line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><path d="M12 14h.01" /><path d="M8 14h.01" /><path d="M16 14h.01" /></svg>
-              </div>
-              <div>
-                <div className={styles.cardTag}>Visa Support</div>
-                <h3 className={styles.cardTitle}>→ Visa Guidance Hub</h3>
-                <p className={styles.cardDesc}>
-                  Step-by-step visa guides, document checklists, and appointment
-                  trackers by country.
-                </p>
-                <span className={styles.cardCta}>Get Visa Help →</span>
-              </div>
-            </Link>
-
-            {/* Card 8: Chat With Alumni */}
-            <Link className={styles.toolCard} href="#">
-              <div className={styles.cardIcon}>
-                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /></svg>
-              </div>
-              <div>
-                <div className={styles.cardTag}>Community</div>
-                <h3 className={styles.cardTitle}>→ Chat With Alumni</h3>
-                <p className={styles.cardDesc}>
-                  Connect with real students studying at your target universities.
-                  Get honest advice.
-                </p>
-                <span className={styles.cardCta}>Connect Now →</span>
+                <span className={styles.cardCta}>Start Assessment →</span>
               </div>
             </Link>
           </div>
@@ -200,9 +118,20 @@ export default async function HomePage() {
             <NotificationPanel />
           </div>
         </section>
-      </>
 
-      <Footer />
+        {/* ── PREMIUM TOOLS CTA SECTION ── */}
+        <section className="my-16 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-10 mt-4 md:mt-0">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 tracking-tight leading-tight">
+              Accelerate Your <span className="text-[#65151E]">Study Abroad</span> Journey
+            </h2>
+            <p className="mt-3 text-gray-600 max-w-2xl mx-auto">
+              Explore our premium platforms designed to help ambitious students build their legacy and reach top global universities.
+            </p>
+          </div>
+          <PremiumToolsCards />
+        </section>
+      </>
     </>
   );
 }

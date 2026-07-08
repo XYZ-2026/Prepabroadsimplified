@@ -1,7 +1,16 @@
+'use client';
+
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import styles from '@/styles/components.module.css';
 
 export default function Footer() {
+  const pathname = usePathname();
+
+  if (pathname?.startsWith('/iq-test') || pathname?.startsWith('/university-finder')) {
+    return null;
+  }
+
   return (
     <footer className={`footer ${styles.footer}`}>
       <div className={styles.footerGrid}>

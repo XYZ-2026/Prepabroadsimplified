@@ -271,6 +271,49 @@ export default function TestPage() {
         <main className="flex-1 flex flex-col p-4 md:p-6 overflow-y-auto relative z-10">
           <div className="max-w-4xl w-full mx-auto flex flex-col justify-between min-h-full">
             
+            {/* Mobile Question Map & Submit */}
+            <div className="flex lg:hidden flex-col gap-3 mb-4 shrink-0 relative z-10">
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] uppercase font-bold text-slate-400 tracking-widest">Questions Map</span>
+                <button
+                  onClick={handleManualSubmitClick}
+                  disabled={submitting}
+                  className="px-4 py-1.5 rounded-lg bg-[#9C1010] text-white text-xs font-bold shadow-sm shadow-[#9C1010]/20"
+                >
+                  {submitting ? 'Submitting...' : 'Submit Assessment'}
+                </button>
+              </div>
+              <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide w-full">
+                {questions.map((q, idx) => {
+                  if (selectedFilter !== 'all' && q.category !== selectedFilter) {
+                    return null;
+                  }
+                  const isCurrent = idx === currentIndex;
+                  const isAnswered = q.selected_option !== null;
+
+                  let baseClass = "w-8 h-8 shrink-0 rounded-full flex items-center justify-center text-[10px] font-bold transition-all cursor-pointer border shadow-sm ";
+                  
+                  if (isCurrent) {
+                    baseClass += "border-[#9C1010] bg-[#9C1010] text-white ring-2 ring-[#9C1010]/20 shadow-md ";
+                  } else if (isAnswered) {
+                    baseClass += "border-emerald-200 bg-emerald-50 text-emerald-700 ";
+                  } else {
+                    baseClass += "border-slate-200 bg-white text-slate-400 ";
+                  }
+
+                  return (
+                    <button
+                      key={`mob-${q.id}`}
+                      onClick={() => { if (!submitting) setCurrentIndex(idx); }}
+                      className={baseClass}
+                    >
+                      {idx + 1}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
             {/* Elevated Card */}
             <div className="bg-white rounded-[2rem] border border-white/40 p-1 shadow-[0_30px_60px_-15px_rgba(0,0,0,0.1)] backdrop-blur-xl flex-1 flex flex-col">
               <div className="rounded-[1.75rem] border border-slate-100 bg-white/80 p-5 md:p-8 flex-1 flex flex-col relative overflow-hidden">

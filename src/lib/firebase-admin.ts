@@ -12,11 +12,17 @@ let adminDb: Firestore;
 
 try {
   if (!getApps().length) {
+    let rawKey = process.env.FIREBASE_ADMIN_PRIVATE_KEY || '';
+    if (rawKey.startsWith('"') && rawKey.endsWith('"')) {
+      rawKey = rawKey.slice(1, -1);
+    }
+    const privateKey = rawKey.replace(/\\n/g, '\n');
+
     adminApp = initializeApp({
       credential: cert({
         projectId: process.env.FIREBASE_ADMIN_PROJECT_ID,
         clientEmail: process.env.FIREBASE_ADMIN_CLIENT_EMAIL,
-        privateKey: process.env.FIREBASE_ADMIN_PRIVATE_KEY?.replace(/\\n/g, '\n'),
+        privateKey,
       }),
     });
   } else {

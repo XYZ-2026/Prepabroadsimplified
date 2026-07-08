@@ -8,8 +8,18 @@ export default async function AdminAssessmentsPage() {
   try {
     if (process.env.FIREBASE_ADMIN_PROJECT_ID) {
       // 1. Fetch assessments
-      const resultsSnapshot = await adminDb.collection('iq_results').orderBy('createdAt', 'desc').limit(100).get();
+      const [iqSnapshot, psychoSnapshot] = await Promise.all([
+        adminDb.collection('iq_results').orderBy('createdAt', 'desc').limit(100).get(),
+        adminDb.collection('psychometric_results').orderBy('createdAt', 'desc').limit(100).get()
+      ]);
       
+      // Combine them and sort by date descending
+      const combinedDocs = [...iqSnapshot.docs, ...psychoSnapshot.docs].sort((a, b) => {
+        const da = a.data().createdAt ? new Date(a.data().createdAt).getTime() : 0;
+        const db = b.data().createdAt ? new Date(b.data().createdAt).getTime() : 0;
+        return db - da;
+      }).slice(0, 200);
+
       // 2. Fetch users to map user details
       const usersSnapshot = await adminDb.collection('users').get();
       const userMap = new Map();
@@ -21,8 +31,9 @@ export default async function AdminAssessmentsPage() {
         });
       });
 
-      initialAssessments = resultsSnapshot.docs.map(doc => {
+      initialAssessments = combinedDocs.map(doc => {
         const data = doc.data();
+        const type = data.type === 'psychometric' ? 'psychometric' : 'iq';
         
         let createdAtStr = 'Unknown';
         if (data.createdAt) {
@@ -31,6 +42,22 @@ export default async function AdminAssessmentsPage() {
         }
         
         const userInfo = userMap.get(data.userId) || { name: 'Anonymous', email: 'No Email' };
+
+        if (type === 'psychometric') {
+          const riasec = data.scores?.topRiasec || [];
+          return {
+            id: doc.id,
+            userId: data.userId || 'unknown',
+            userName: userInfo.name,
+            userEmail: userInfo.email,
+            iqScore: data.scores?.aptitude?.overall || 0,
+            percentile: 0,
+            tier: data.testName || 'Psychometric Test',
+            strength: riasec.length > 0 ? riasec.join('-') : 'N/A',
+            createdAtStr,
+            type,
+          };
+        }
 
         return {
           id: doc.id,
@@ -42,6 +69,7 @@ export default async function AdminAssessmentsPage() {
           tier: data.tier || 'Unknown',
           strength: data.strength || 'Unknown',
           createdAtStr,
+          type,
         };
       });
     }
@@ -51,8 +79,9 @@ export default async function AdminAssessmentsPage() {
 
   // Generate top level stats
   const totalAssessments = initialAssessments.length;
-  const exceptionalCount = initialAssessments.filter(a => a.tier === 'Exceptional' || a.iqScore >= 130).length;
-  const avgScore = totalAssessments > 0 ? Math.round(initialAssessments.reduce((acc, curr) => acc + curr.iqScore, 0) / totalAssessments) : 0;
+  const iqAssessments = initialAssessments.filter(a => a.type === 'iq');
+  const exceptionalCount = iqAssessments.filter(a => a.tier === 'Exceptional' || a.iqScore >= 130).length;
+  const avgScore = iqAssessments.length > 0 ? Math.round(iqAssessments.reduce((acc, curr) => acc + curr.iqScore, 0) / iqAssessments.length) : 0;
 
   return (
     <div className={styles.adminContent}>

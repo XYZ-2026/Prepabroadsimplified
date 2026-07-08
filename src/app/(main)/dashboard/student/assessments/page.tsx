@@ -12,7 +12,7 @@ export default async function AssessmentsPage() {
     redirect('/auth');
   }
 
-  let assessments: Array<Record<string, unknown>> = [];
+  let assessments: Array<any> = [];
 
   try {
     const assessmentsSnapshot = await adminDb
@@ -20,10 +20,21 @@ export default async function AssessmentsPage() {
       .where('userId', '==', claims.uid)
       .get();
       
-    assessments = assessmentsSnapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data()
-    }));
+    const psychometricSnapshot = await adminDb
+      .collection('psychometric_results')
+      .where('userId', '==', claims.uid)
+      .get();
+      
+    assessments = [
+      ...assessmentsSnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      })),
+      ...psychometricSnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }))
+    ];
     
     // Sort in memory to avoid requiring a composite index in Firestore
     assessments.sort((a, b) => {
@@ -73,16 +84,45 @@ export default async function AssessmentsPage() {
                   day: 'numeric'
                 });
 
-                // Format strength nicely (e.g. "problem_solving" -> "Problem Solving")
-                const rawStrength = (assessment.strength as string) || 'N/A';
-                const formattedStrength = rawStrength.includes('_') 
-                  ? rawStrength.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')
-                  : rawStrength;
+                // Format strength nicely
+                let formattedStrength = 'N/A';
+                if (assessment.type === 'psychometric') {
+                  const riasec = assessment.scores?.topRiasec || [];
+                  formattedStrength = riasec.length > 0 ? riasec.join('-') : 'N/A';
+                } else {
+                  const rawStrength = (assessment.strength as string) || 'N/A';
+                  formattedStrength = rawStrength.includes('_') 
+                    ? rawStrength.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')
+                    : rawStrength;
+                }
+
+                // Determine Score and Percentile
+                const scoreValue = assessment.type === 'psychometric'
+                  ? `${assessment.scores?.aptitude?.overall || 0}%`
+                  : assessment.iqScore || 'N/A';
+                  
+                const scoreLabel = assessment.type === 'psychometric' ? 'Aptitude Score' : 'IQ Score';
+                
+                const percentileValue = assessment.type === 'psychometric' 
+                  ? (assessment.scores?.careerFitment?.[0]?.name?.split(' ')?.[0] || 'N/A') // Best fit career
+                  : (assessment.percentile ? `${assessment.percentile}th` : 'N/A');
+                  
+                const percentileLabel = assessment.type === 'psychometric' ? 'Best Fit' : 'Percentile';
+                const strengthLabel = assessment.type === 'psychometric' ? 'Top Interest (RIASEC)' : 'Top Strength';
+
+                const resultLink = assessment.type === 'psychometric'
+                  ? `/psychometric-test/result/${assessment.id as string}?source=my-assessments`
+                  : `/iq-test/result/${assessment.id as string}?source=my-assessments`;
 
                 return (
-                  <div key={assessment.id} className={styles.premiumCard}>
+                  <div key={assessment.id as string} className={styles.premiumCard}>
                     <div className={styles.cardHeaderTop}>
                       <div>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
+                          <span style={{ fontSize: '11px', fontWeight: 700, padding: '3px 8px', borderRadius: '10px', background: assessment.type === 'psychometric' ? 'var(--color-gold-light, #f4b400)' : 'var(--color-red-tint, #ffe5e5)', color: assessment.type === 'psychometric' ? '#000' : 'var(--color-red-deep, #9c1010)' }}>
+                            {assessment.type === 'psychometric' ? 'Psychometric' : 'IQ Test'}
+                          </span>
+                        </div>
                         <h3 className={styles.cardTitlePremium}>
                           {assessment.testName || 'IQ Assessment'}
                         </h3>
@@ -101,9 +141,9 @@ export default async function AssessmentsPage() {
                           <span className={styles.metricIcon}>
                             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
                           </span>
-                          Score
+                          {scoreLabel}
                         </div>
-                        <span className={styles.metricValue}>{assessment.iqScore || 'N/A'}</span>
+                        <span className={styles.metricValue}>{scoreValue}</span>
                       </div>
                       
                       <div className={styles.metricRow}>
@@ -111,9 +151,9 @@ export default async function AssessmentsPage() {
                           <span className={styles.metricIcon}>
                             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
                           </span>
-                          Percentile
+                          {percentileLabel}
                         </div>
-                        <span className={styles.metricValue}>{assessment.percentile ? `${assessment.percentile}th` : 'N/A'}</span>
+                        <span className={styles.metricValue}>{percentileValue}</span>
                       </div>
 
                       <div className={styles.metricRow}>
@@ -121,7 +161,7 @@ export default async function AssessmentsPage() {
                           <span className={styles.metricIcon}>
                             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
                           </span>
-                          Top Strength
+                          {strengthLabel}
                         </div>
                         <span className={styles.metricValue}>{formattedStrength}</span>
                       </div>
@@ -129,7 +169,7 @@ export default async function AssessmentsPage() {
                     
                     <div className={styles.cardAction}>
                       <Link 
-                        href={`/iq-test/result/${assessment.id}`}
+                        href={resultLink}
                         className={`${componentsStyles.btn} ${componentsStyles.btnOutline}`}
                         style={{ width: '100%', textAlign: 'center', justifyContent: 'center' }}
                       >

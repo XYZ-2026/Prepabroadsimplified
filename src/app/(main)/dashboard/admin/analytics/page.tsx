@@ -13,24 +13,44 @@ export default async function AdminAnalyticsPage() {
 
   try {
     if (process.env.FIREBASE_ADMIN_PROJECT_ID) {
-      const resultsSnapshot = await adminDb.collection('iq_results').get();
-      totalAssessments = resultsSnapshot.size;
+      const [iqSnapshot, psychoSnapshot] = await Promise.all([
+        adminDb.collection('iq_results').get(),
+        adminDb.collection('psychometric_results').get()
+      ]);
+      
+      const combinedDocs = [
+        ...iqSnapshot.docs.map(doc => ({ ...doc.data(), _type: 'iq' } as any)),
+        ...psychoSnapshot.docs.map(doc => ({ ...doc.data(), _type: 'psychometric' } as any))
+      ];
+      
+      totalAssessments = combinedDocs.length;
 
       const tierCounts: Record<string, number> = {};
       const strengthCounts: Record<string, number> = {};
       const dateStats: Record<string, { totalScore: number; count: number }> = {};
       
       let scoreSum = 0;
+      let iqCount = 0;
 
-      resultsSnapshot.docs.forEach(doc => {
-        const data = doc.data();
-        const score = data.iqScore || 0;
-        const tier = data.tier || 'Unknown';
-        const strength = data.strength || 'Unknown';
-        
-        scoreSum += score;
-        if (score >= 130 || tier === 'Exceptional') {
-          exceptionalCount++;
+      combinedDocs.forEach(data => {
+        let score = 0;
+        let tier = 'Unknown';
+        let strength = 'Unknown';
+
+        if (data._type === 'psychometric') {
+          score = data.scores?.aptitude?.overall || 0;
+          tier = data.testName || 'Psychometric Test';
+          strength = (data.scores?.topRiasec || []).join('-') || 'N/A';
+        } else {
+          score = data.iqScore || 0;
+          tier = data.tier || 'Unknown';
+          strength = data.strength || 'Unknown';
+          
+          scoreSum += score;
+          iqCount++;
+          if (score >= 130 || tier === 'Exceptional') {
+            exceptionalCount++;
+          }
         }
 
         // Tier data
@@ -45,13 +65,15 @@ export default async function AdminAnalyticsPage() {
           if (!dateStats[dateStr]) {
             dateStats[dateStr] = { totalScore: 0, count: 0 };
           }
-          dateStats[dateStr].totalScore += score;
-          dateStats[dateStr].count += 1;
+          if (data._type === 'iq') {
+            dateStats[dateStr].totalScore += score;
+            dateStats[dateStr].count += 1;
+          }
         }
       });
 
-      if (totalAssessments > 0) {
-        avgScore = Math.round(scoreSum / totalAssessments);
+      if (iqCount > 0) {
+        avgScore = Math.round(scoreSum / iqCount);
       }
 
       tierData = Object.keys(tierCounts).map(k => ({ name: k, count: tierCounts[k] })).sort((a, b) => b.count - a.count);
@@ -61,7 +83,7 @@ export default async function AdminAnalyticsPage() {
       // We'll just grab the keys as is for the chart
       timelineData = Object.keys(dateStats).map(k => ({
         date: k,
-        avgScore: Math.round(dateStats[k].totalScore / dateStats[k].count),
+        avgScore: dateStats[k].count > 0 ? Math.round(dateStats[k].totalScore / dateStats[k].count) : 0,
         count: dateStats[k].count
       }));
     }

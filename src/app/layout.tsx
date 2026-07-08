@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { Inter, Lexend } from 'next/font/google';
+import Script from 'next/script';
 import './globals.css';
 
 const inter = Inter({ subsets: ['latin'], variable: '--next-font-primary', display: 'swap' });
@@ -28,30 +29,6 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${lexend.variable}`} suppressHydrationWarning>
       <head>
-        <script src="https://cdn.tailwindcss.com"></script>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              window.tailwind = window.tailwind || {};
-              window.tailwind.config = {
-                corePlugins: {
-                  preflight: false,
-                },
-                theme: {
-                  extend: {
-                    colors: {
-                      iqred: '#9C1010',
-                      red: {
-                        500: '#ef4444',
-                        600: '#dc2626',
-                      }
-                    }
-                  }
-                }
-              };
-            `,
-          }}
-        />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{

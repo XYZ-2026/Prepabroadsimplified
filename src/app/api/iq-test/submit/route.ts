@@ -24,11 +24,27 @@ export async function POST(request: Request) {
       };
     });
 
-    // Run the Python-equivalent scoring engine
-    const result = processIQTest(evaluated);
-    
     // Check if the user is logged in
     const claims = await verifySessionCookie();
+    
+    let userName = 'Candidate';
+    if (claims) {
+      try {
+        const userDoc = await adminDb.collection('users').doc(claims.uid).get();
+        if (userDoc.exists) {
+          userName = userDoc.data()?.name || claims.name || 'Candidate';
+        } else {
+          userName = claims.name || 'Candidate';
+        }
+        // Extract first name
+        userName = userName.split(' ')[0];
+      } catch (error) {
+        console.warn('Error fetching user name for IQ test:', error);
+      }
+    }
+
+    // Run the Python-equivalent scoring engine
+    const result = processIQTest(evaluated, userName);
 
     // Prepare full document
     const finalDocument = {

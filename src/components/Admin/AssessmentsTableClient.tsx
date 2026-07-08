@@ -14,6 +14,7 @@ export interface AssessmentData {
   tier: string;
   strength: string;
   createdAtStr: string;
+  type?: 'iq' | 'psychometric';
 }
 
 export default function AssessmentsTableClient({ initialAssessments }: { initialAssessments: AssessmentData[] }) {
@@ -93,8 +94,8 @@ export default function AssessmentsTableClient({ initialAssessments }: { initial
           <thead>
             <tr>
               <th>Student</th>
-              <th>IQ Score &amp; Tier</th>
-              <th>Top Strength</th>
+              <th>Score &amp; Tier / Test Name</th>
+              <th>Top Strength / Interest</th>
               <th>Date Taken</th>
               <th>Actions</th>
             </tr>
@@ -121,8 +122,12 @@ export default function AssessmentsTableClient({ initialAssessments }: { initial
                     </div>
                   </td>
                   <td>
-                    <span style={{ display: 'block', color: 'var(--text-heading)', fontWeight: 600, fontSize: '1.1rem' }}>{assessment.iqScore}</span>
-                    <span className={styles.userSubtext}>{assessment.tier} (Top {assessment.percentile}%)</span>
+                    <span style={{ display: 'block', color: 'var(--text-heading)', fontWeight: 600, fontSize: '1.1rem' }}>
+                      {assessment.iqScore}{assessment.type === 'psychometric' ? '%' : ''}
+                    </span>
+                    <span className={styles.userSubtext}>
+                      {assessment.tier} {assessment.type !== 'psychometric' && `(Top ${assessment.percentile}%)`}
+                    </span>
                   </td>
                   <td>
                     <span style={{ display: 'block', color: 'var(--text-heading)', fontWeight: 500 }}>{assessment.strength}</span>
@@ -131,7 +136,7 @@ export default function AssessmentsTableClient({ initialAssessments }: { initial
                     <span className={styles.userSubtext}>{assessment.createdAtStr}</span>
                   </td>
                   <td>
-                    <Link href={`/iq-test/result/${assessment.id}`} target="_blank" className={styles.btnEdit}>
+                    <Link href={assessment.type === 'psychometric' ? `/psychometric-test/result/${assessment.id}` : `/iq-test/result/${assessment.id}`} target="_blank" className={styles.btnEdit}>
                       View Full Report
                     </Link>
                   </td>

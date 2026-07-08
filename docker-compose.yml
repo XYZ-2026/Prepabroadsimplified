@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  abroad-simplified-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: abroad-simplified-container
+    # Mapping external port 4000 to internal port 3000 (since 3000 and 8000 are taken)
+    ports:
+      - "4000:3000"
+    restart: unless-stopped
+    env_file:
+      - .env

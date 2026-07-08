@@ -31,7 +31,7 @@ fi
 # 4. Run the new container
 echo "Starting new container on port $PORT..."
 docker run -d --name $CONTAINER_NAME -p $PORT:3000 --restart unless-stopped \
-  --env-file .env.local \
+  --env-file .env \
   $IMAGE_NAME
 
 # Optional: Clean up dangling images to save space on the VPS

@@ -119,7 +119,7 @@ export default async function AssessmentsPage() {
                     <div className={styles.cardHeaderTop}>
                       <div>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
-                          <span style={{ fontSize: '11px', fontWeight: 700, padding: '3px 8px', borderRadius: '10px', background: assessment.type === 'psychometric' ? 'var(--color-gold-light, #f4b400)' : 'var(--color-red-tint, #ffe5e5)', color: assessment.type === 'psychometric' ? '#000' : 'var(--color-red-deep, #9c1010)' }}>
+                          <span style={{ fontSize: '11px', fontWeight: 700, padding: '3px 8px', borderRadius: '10px', background: assessment.type === 'psychometric' ? 'var(--color-gold-light, #f4b400)' : 'var(--color-red-tint, #ffe5e5)', color: assessment.type === 'psychometric' ? '#000' : 'var(--color-red-deep, #690b1b)' }}>
                             {assessment.type === 'psychometric' ? 'Psychometric' : 'IQ Test'}
                           </span>
                         </div>

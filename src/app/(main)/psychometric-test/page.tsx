@@ -1,6 +1,6 @@
 "use client";
 
-import { Brain, Star, Target, BookOpen, Briefcase, Zap, Dumbbell, TrendingUp, ClipboardList, BarChart2, Calculator, Microscope, Calendar, PenTool } from 'lucide-react';
+import { Brain, Star, Target, BookOpen, Briefcase, Zap, Dumbbell, TrendingUp, ClipboardList, BarChart2, Calculator, Microscope, Calendar, PenTool, X, GraduationCap, ChevronRight } from 'lucide-react';
 import React, { useState, useEffect, useRef, useCallback, Suspense } from "react";
 import Script from "next/script";
 import { useSearchParams } from "next/navigation";
@@ -23,6 +23,7 @@ import {
   JUNIOR_PLAN_7_8,
   JUNIOR_MATRIX_9,
 } from "./data";
+import { LOGO_BASE64 } from '@/lib/logo-base64';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 type Screen = "landing" | "details" | "loading-q" | "questions" | "loading-r" | "report" | "fetching";
@@ -66,7 +67,10 @@ function esc(s: string) {
   return String(s || "")
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;");
+    .replace(/>/g, "&gt;")
+    .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
+    .replace(/\*(.*?)\*/g, "<em>$1</em>")
+    .replace(/\n/g, "<br/>");
 }
 
 function safeList(arr: any): string[] {
@@ -797,6 +801,16 @@ function AssessmentPageContent() {
   const [juniorGradeSelectorOpen, setJuniorGradeSelectorOpen] = useState(false);
   const [activeJuniorMonth, setActiveJuniorMonth] = useState(1);
   const [active9YearTab, setActive9YearTab] = useState<'matrix' | 1 | 2 | 3 | 4>('matrix');
+  const advancingRef = useRef(false);
+
+  useEffect(() => {
+    if (screen === "questions" || screen === "loading-r") {
+      document.body.classList.add("test-active");
+    } else {
+      document.body.classList.remove("test-active");
+    }
+    return () => document.body.classList.remove("test-active");
+  }, [screen]);
 
   useEffect(() => {
     const resultId = searchParams.get("resultId");
@@ -808,6 +822,8 @@ function AssessmentPageContent() {
             setScores(data.result.scores);
             setReportData(data.result.narrative);
             setStudent(data.result.student);
+            if (data.result.questions) setQuestions(data.result.questions);
+            if (data.result.answers) setAnswers(data.result.answers);
             setScreen("report");
           }
         })
@@ -889,7 +905,24 @@ Return ONLY valid JSON with this exact structure (do NOT include any markdown co
     }
   }, [reportData, scores]);
 
+  // Track previous assessmentType to detect sidebar grade-level switches
+  const prevAssessmentTypeRef = useRef(assessmentType);
+
   useEffect(() => {
+    // On assessment type change (not initial mount), reset to landing if currently viewing a result
+    if (prevAssessmentTypeRef.current !== assessmentType) {
+      prevAssessmentTypeRef.current = assessmentType;
+      // Reset all result state so the old report doesn't linger with mismatched context
+      if (screen === "report" || screen === "fetching") {
+        setScores(null);
+        setReportData(null);
+        setSelectedCareerIdx(null);
+        setCareerAbroadData({});
+        setCrmData(null);
+        setScreen("landing");
+      }
+    }
+
     if (assessmentType === "junior") {
       setStudent((prev) => ({ ...prev, grade: "", stream: "not-selected" }));
     } else if (assessmentType === "grade10") {
@@ -909,7 +942,7 @@ Return ONLY valid JSON with this exact structure (do NOT include any markdown co
   function startJuniorAssessment(grade: string) {
     setStudent((p) => ({
       ...p,
-      name: "Guest Student",
+      name: p.name || "Guest Student",
       grade: grade,
       stream: "not-selected",
     }));
@@ -925,7 +958,7 @@ Return ONLY valid JSON with this exact structure (do NOT include any markdown co
     } else if (assessmentType === "grade10") {
       setStudent((p) => ({
         ...p,
-        name: "Guest Student",
+        name: p.name || "Guest Student",
         grade: "10",
         stream: "not-selected",
       }));
@@ -941,7 +974,7 @@ Return ONLY valid JSON with this exact structure (do NOT include any markdown co
   function startAssessmentWithStream(stream: string) {
     setStudent((p) => ({
       ...p,
-      name: "Guest Student",
+      name: p.name || "Guest Student",
       grade: "12",
       stream: stream,
     }));
@@ -987,6 +1020,24 @@ Return ONLY valid JSON with this exact structure (do NOT include any markdown co
   // ── Answer handling ────────────────────────────────────────────────────────
   function handleAnswer(qId: number, ansIdx: number) {
     setAnswers((prev) => ({ ...prev, [qId]: ansIdx }));
+    
+    // Guard: if an advance is already scheduled, just update the answer, don't queue another advance
+    if (advancingRef.current) return;
+    advancingRef.current = true;
+    
+    setTimeout(() => {
+      advancingRef.current = false;
+      if (!questions) return;
+      const sec = questions.sections[currentSection];
+      if (currentQIdx < sec.questions.length - 1) {
+        setCurrentQIdx((i) => i + 1);
+      } else if (currentSection < questions.sections.length - 1) {
+        setCurrentSection((s) => s + 1);
+        setCurrentQIdx(0);
+      } else {
+        finishAssessment();
+      }
+    }, 300);
   }
 
   function getCurrentQuestion() {
@@ -1067,16 +1118,15 @@ Return ONLY valid JSON with this exact structure (do NOT include any markdown co
           student,
           scores: computedScores,
           narrative,
-          assessmentType
+          assessmentType,
+          questions,
+          answers
         })
       });
       const data = await res.json();
       if (data.success && data.resultId) {
-        setScreen("landing");
-        // slight delay to allow React state to flush before navigating
-        setTimeout(() => {
-          window.location.href = `/psychometric-test/result/${data.resultId}`;
-        }, 50);
+        // Keep the loading screen visible during navigation (don't switch to "landing")
+        window.location.href = `/psychometric-test/result/${data.resultId}`;
         return;
       }
     } catch (e) {
@@ -1492,10 +1542,42 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
   }
 
   // ── PDF Download ───────────────────────────────────────────────────────────
-  function downloadPDF() {
+  async function downloadPDF() {
     if (!student.name || !scores || !reportData) {
       showToast("Please complete the assessment first");
       return;
+    }
+
+    // Open a dedicated print window IMMEDIATELY to avoid popup blockers
+    const printWin = window.open("", "_blank", "width=900,height=700");
+    if (!printWin) { 
+      showToast("Pop-up blocked — please allow pop-ups for this site"); 
+      return; 
+    }
+    printWin.document.write("<html><head><title>Generating Report...</title></head><body style='font-family:sans-serif;text-align:center;padding:50px;background:#f9fafb;'><h2>Assembling Your Report...</h2><p style='color:#6b7280'>Generating personalized career roadmap data. Please wait a moment.</p></body></html>");
+
+    let pdfCrmData = crmData;
+    if (!pdfCrmData && reportData.topCareers?.[0]) {
+      showToast("Generating detailed career roadmap for your PDF (this takes a moment)...");
+      const career = reportData.topCareers[0];
+      try {
+        const roadmapGradeContext = assessmentType === "junior"
+          ? "Note: The student is in middle school (Grade 7-9). Tailor Stage 1 of the stages array to cover High School Preparation & Stream Selection (Grade 10/11/12)."
+          : assessmentType === "grade10"
+          ? "Note: The student is in Grade 10. Tailor Stage 1 of the stages array to cover stream selection, early profile building, and high school foundation skills."
+          : `Note: The student is in Grade 11 or 12. Tailor Stage 1 to cover Board Exams and Entrance Exams prep tailored to the student's stream: ${student.stream}.`;
+        
+        const prompt = `You are a senior Indian career counsellor. Generate a detailed career roadmap for ${student.name}, Grade ${student.grade}, who wants to pursue "${career.name}". Their profile: Aptitude ${scores?.aptitude.overall}%, RIASEC ${scores?.topRiasec.join("-")}, Top values: ${scores?.topValues.slice(0, 3).join(", ")}, Learning style: ${scores?.topVark}, City: ${student.city || "India"}.
+${roadmapGradeContext}
+Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","duration":"e.g. 4+2 years","avgSalary":"e.g. ₹8–25 LPA","fitScore":"e.g. 92%","stages":[{"stage":"label","icon":"emoji","title":"title","actions":["action 1","action 2","action 3"],"milestone":"milestone","targetColleges":["college 1","college 2"]},{"stage":"Graduation","icon":"🎓","title":"degree","actions":["action 1","action 2"],"milestone":"milestone"},{"stage":"Post-Graduation","icon":"📜","title":"PG path","actions":["action 1","action 2"],"targetPrograms":["programme 1"]},{"stage":"Early Career","icon":"💼","title":"role","actions":["action 1","action 2","action 3"],"milestone":"milestone","salaryTrajectory":["Year 1-2: ₹X LPA","Year 3-5: ₹Y LPA"],"targetCompanies":["company 1","company 2"]}],"keyExams":["exam 1","exam 2","exam 3"],"keySkills":["skill 1","skill 2","skill 3"],"topColleges":["college 1","college 2","college 3"],"scholarships":["scholarship 1","scholarship 2"],"dayInLife":"2-3 sentences about typical day"}`;
+        const raw = await callAPI([{ role: "user", content: prompt }]);
+        const rm = extractJSON(raw);
+        if (rm && rm.stages) {
+          pdfCrmData = { career, roadmap: rm };
+        }
+      } catch (e) {
+        console.error("Failed to generate detailed roadmap for PDF:", e);
+      }
     }
 
     const rid = student.reportId;
@@ -1539,23 +1621,18 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
     const hasQaPages = !!(questions && Object.keys(answers).length > 0);
     const numQaPagesActual = hasQaPages ? 8 : 0;
     
-    // Page numbering and totals with combined sections
-    const aptPageNum = assessmentType === "junior" ? 4 + numQaPagesActual : 5 + numQaPagesActual;
-    const perPageNum = assessmentType === "junior" ? 4 + numQaPagesActual : 5 + numQaPagesActual;
-    const riaPageNum = assessmentType === "junior" ? 5 + numQaPagesActual : 6 + numQaPagesActual;
-    const vkPageNum = assessmentType === "junior" ? 5 + numQaPagesActual : 6 + numQaPagesActual;
-    const valPageNum = assessmentType === "junior" ? 6 + numQaPagesActual : 7 + numQaPagesActual;
-    const powersPageNum = 6 + numQaPagesActual;
-    const pathwaysPageNum = assessmentType === "junior" ? 7 + numQaPagesActual : 4 + numQaPagesActual;
-    const roadmapPageNum = assessmentType === "junior" ? 8 + numQaPagesActual : 7 + numQaPagesActual;
-    const actionPlanPageNum = assessmentType === "junior" ? 9 + numQaPagesActual : 8 + numQaPagesActual;
-    let totalPages = pdfUnlocked ? (assessmentType === "junior" ? 10 : 9) + numQaPagesActual : 3 + numQaPagesActual;
+    // Dynamic page numbering: pgOffset = pages before the exec summary (cover + QA pages)
+    const pgOffset = 1 + numQaPagesActual; // cover is page 1, then QA pages 2..9 (if present)
+    // Exec summary = pgOffset + 1, then each content page increments by 1
+    // Junior has 10 pages total (cover + 8 content + back cover), Senior has 9 (cover + 7 content + back cover)
+    // When locked, only cover + QA + exec summary + locked page = pgOffset + 2
+    let totalPages = pdfUnlocked ? (assessmentType === "junior" ? 10 : 9) + numQaPagesActual + (pdfCrmData ? 1 : 0) : (pgOffset + 2);
 
     // Helper functions for header and footer layout
     const mkHeader = (title: string) => `
       <div class="as-nv-hdr" style="padding-bottom:8px;border-bottom:2px solid #690B1B;display:flex;justify-content:space-between;align-items:center;">
         <div class="as-nv-hdr-left" style="display:flex;align-items:center;gap:10px">
-          <div class="as-nv-hdr-logo" style="width:30px;height:30px;background:#690B1B;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;color:#fff;flex-shrink:0;box-shadow:0 2px 4px rgba(105,11,27,0.2)">AS</div>
+          <img src="${LOGO_BASE64}" alt="AS Logo" style="width:30px;height:30px;border-radius:6px;flex-shrink:0;box-shadow:0 2px 4px rgba(105,11,27,0.2);object-fit:contain" />
           <div>
             <div class="as-nv-hdr-brand" style="font-size:13px;font-weight:800;color:#111;letter-spacing:-.3px">Abroad Simplified</div>
             <div class="as-nv-hdr-eng" style="font-size:7.5px;color:#9CA3AF;font-weight:600;letter-spacing:.4px;text-transform:uppercase;margin-top:1px">Psychometric Intelligence Engine</div>
@@ -1807,6 +1884,7 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
       <div class="as-pg" style="background: linear-gradient(135deg,#4F0813 0%,#1F0104 100%); padding: 0 !important;">
         <div style="position:absolute;top:20px;bottom:20px;left:20px;right:20px;border:1px solid rgba(201,165,93,0.25);border-radius:10px;pointer-events:none"></div>
         <div class="as-pg-content" style="height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 60px; color: #fff; margin-top: 0; position:relative; z-index: 1">
+          <img src="${LOGO_BASE64}" alt="Abroad Simplified" style="width:48px;height:48px;border-radius:10px;box-shadow:0 4px 12px rgba(0,0,0,0.3);margin-bottom:16px;object-fit:contain" />
           <div style="font-size:11px;font-weight:800;letter-spacing:5px;color:rgba(255,255,255,.6);text-transform:uppercase;margin-bottom:44px">ABROAD SIMPLIFIED</div>
           
           <div style="text-align:center">
@@ -1891,7 +1969,7 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
             </div>
           </div>
         </div>
-        ${mkFooter(10)}
+        ${mkFooter(pgOffset + 1)}
       </div>
 
       ${pdfUnlocked ? `
@@ -1964,7 +2042,7 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
               To ensure smooth transition into higher classes, prioritize establishing deep conceptual clarity rather than rote memorization. Solve doubt logs weekly, read books outside the syllabus to expand vocabulary, and practice spatial puzzles to enhance logical deduction skills.
             </div>
           </div>
-          ${mkFooter(11)}
+          ${mkFooter(pgOffset + 2)}
         </div>
       ` : `
         <!-- SENIOR PAGE 11: CAREER CLUSTER FITMENT & TOP CAREERS 1-3 -->
@@ -2031,7 +2109,7 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
               </div>
             </div>
           </div>
-          ${mkFooter(11)}
+          ${mkFooter(pgOffset + 2)}
         </div>
       `}
 
@@ -2117,7 +2195,7 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
               </div>
             </div>
           </div>
-          ${mkFooter(12)}
+          ${mkFooter(pgOffset + 3)}
         </div>
       ` : `
         <!-- SENIOR PAGE 12: CAREERS 4-5 & PATHWAYS -->
@@ -2199,7 +2277,7 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
               </div>
             </div>
           </div>
-          ${mkFooter(12)}
+          ${mkFooter(pgOffset + 3)}
         </div>
       `}
 
@@ -2275,7 +2353,7 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
               </div>
             </div>
           </div>
-          ${mkFooter(13)}
+          ${mkFooter(pgOffset + 4)}
         </div>
       ` : `
         <!-- SENIOR PAGE 13: APTITUDE & PERSONALITY PROFILE -->
@@ -2359,7 +2437,7 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
               </div>
             </div>
           </div>
-          ${mkFooter(13)}
+          ${mkFooter(pgOffset + 4)}
         </div>
       `}
 
@@ -2430,7 +2508,7 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
               </div>
             </div>
           </div>
-          ${mkFooter(14)}
+          ${mkFooter(pgOffset + 5)}
         </div>
       ` : `
         <!-- SENIOR PAGE 14: INTERESTS & LEARNING PREFERENCES (RIASEC & VARK) -->
@@ -2504,7 +2582,7 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
               </div>
             </div>
           </div>
-          ${mkFooter(14)}
+          ${mkFooter(pgOffset + 5)}
         </div>
       `}
 
@@ -2562,7 +2640,7 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
               </div>
             </div>
           </div>
-          ${mkFooter(15)}
+          ${mkFooter(pgOffset + 6)}
         </div>
       ` : `
         <!-- SENIOR PAGE 15: CAREER VALUES & TIMELINE -->
@@ -2614,7 +2692,7 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
               </div>
             </div>
           </div>
-          ${mkFooter(15)}
+          ${mkFooter(pgOffset + 6)}
         </div>
       `}
 
@@ -2634,7 +2712,7 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
               ${renderRoadmapTimeline()}
             `}
           </div>
-          ${mkFooter(16)}
+          ${mkFooter(pgOffset + 7)}
         </div>
       ` : `
         <!-- SENIOR PAGE 16: ACTION PLAN & PSYCHOLOGIST ADVISORY -->
@@ -2691,7 +2769,7 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
               </div>
             </div>
           </div>
-          ${mkFooter(16)}
+          ${mkFooter(pgOffset + 7)}
         </div>
       `}
 
@@ -2750,8 +2828,77 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
               </div>
             </div>
           </div>
-          ${mkFooter(17)}
+          ${mkFooter(pgOffset + 8)}
         </div>
+
+        ${pdfCrmData ? `
+        <!-- DETAILED CAREER ROADMAP -->
+        <div class="as-pg">
+          ${mkHeader("Detailed Career Roadmap")}
+          <div class="as-nv-pg-heading" style="margin-bottom:2px">🚀 ${esc(pdfCrmData.career.name)}</div>
+          <div class="as-nv-pg-sub" style="margin-bottom:10px">${esc(pdfCrmData.roadmap.overview || pdfCrmData.career.description)}</div>
+          
+          <div class="as-pg-content" style="gap:10px">
+            <!-- KPIs -->
+            <div style="display:grid;grid-template-columns:repeat(4, 1fr);gap:8px;margin-bottom:4px">
+              <div style="border:1px solid #E5E7EB;border-radius:8px;padding:8px;text-align:center;background:#fff">
+                <div style="font-size:11px;font-weight:800;color:#690B1B;margin-bottom:2px">${esc(pdfCrmData.roadmap.fitScore || "—")}</div>
+                <div style="font-size:7px;color:#6B7280;text-transform:uppercase;letter-spacing:0.5px">Fit Score</div>
+              </div>
+              <div style="border:1px solid #E5E7EB;border-radius:8px;padding:8px;text-align:center;background:#fff">
+                <div style="font-size:11px;font-weight:800;color:#690B1B;margin-bottom:2px">${esc(pdfCrmData.roadmap.duration || "—")}</div>
+                <div style="font-size:7px;color:#6B7280;text-transform:uppercase;letter-spacing:0.5px">Duration</div>
+              </div>
+              <div style="border:1px solid #E5E7EB;border-radius:8px;padding:8px;text-align:center;background:#fff">
+                <div style="font-size:11px;font-weight:800;color:#690B1B;margin-bottom:2px">${esc(pdfCrmData.roadmap.avgSalary || pdfCrmData.career.salaryRange || "—")}</div>
+                <div style="font-size:7px;color:#6B7280;text-transform:uppercase;letter-spacing:0.5px">Avg Salary</div>
+              </div>
+              <div style="border:1px solid #E5E7EB;border-radius:8px;padding:8px;text-align:center;background:#fff">
+                <div style="font-size:11px;font-weight:800;color:#690B1B;margin-bottom:2px">${(pdfCrmData.roadmap.stages || []).length}</div>
+                <div style="font-size:7px;color:#6B7280;text-transform:uppercase;letter-spacing:0.5px">Stages</div>
+              </div>
+            </div>
+
+            <!-- Stages -->
+            <div style="flex:1;display:flex;flex-direction:column;gap:8px">
+              ${(pdfCrmData.roadmap.stages || []).map((s: any, i: number, arr: any[]) => `
+                <div style="display:flex;gap:12px;position:relative">
+                  ${i !== arr.length - 1 ? `<div style="position:absolute;left:11px;top:24px;bottom:-8px;width:1.5px;background:#E5E7EB;z-index:0"></div>` : ""}
+                  <div style="width:24px;height:24px;border-radius:12px;background:#FFF8F8;border:1.5px solid #690B1B;display:flex;align-items:center;justify-content:center;font-size:11px;position:relative;z-index:1;flex-shrink:0">
+                    ${s.icon || "📍"}
+                  </div>
+                  <div style="flex:1;border:1px solid #E5E7EB;border-radius:8px;padding:8px 10px;background:#fff;margin-bottom:4px">
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+                      <div style="font-size:9.5px;font-weight:800;color:#690B1B">${esc(s.stage)}: ${esc(s.title)}</div>
+                    </div>
+                    ${s.milestone ? `<div style="font-size:8px;font-weight:700;color:#057A55;background:#ECFDF5;display:inline-block;padding:2px 6px;border-radius:4px;margin-bottom:6px">🏁 ${esc(s.milestone)}</div>` : ""}
+                    <ul style="margin:0;padding-left:14px;font-size:8.5px;color:#4B5563;line-height:1.4">
+                      ${(s.actions || []).map((a: string) => `<li style="margin-bottom:2px">${esc(a)}</li>`).join("")}
+                    </ul>
+                  </div>
+                </div>
+              `).join("")}
+            </div>
+
+            <!-- Bottom Data -->
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:auto;border-top:1.5px solid #E5E7EB;padding-top:10px">
+              <div>
+                <div style="font-size:9px;font-weight:800;color:#690B1B;margin-bottom:4px;text-transform:uppercase">🎓 Top Colleges</div>
+                <div style="font-size:8px;color:#4B5563;line-height:1.4">
+                  ${(pdfCrmData.roadmap.topColleges || []).slice(0, 4).map((c: string) => `• ${esc(c)}`).join("<br>")}
+                </div>
+              </div>
+              <div>
+                <div style="font-size:9px;font-weight:800;color:#690B1B;margin-bottom:4px;text-transform:uppercase">📝 Key Exams</div>
+                <div style="font-size:8px;color:#4B5563;line-height:1.4">
+                  ${(pdfCrmData.roadmap.keyExams || []).slice(0, 4).map((e: string) => `• ${esc(e)}`).join("<br>")}
+                </div>
+              </div>
+            </div>
+          </div>
+          ${mkFooter(pgOffset + 9)}
+        </div>
+        ` : ""}
       ` : `
         <!-- SENIOR PAGE 17: BACK COVER / END PAGE -->
         <div class="as-pg" style="background: linear-gradient(135deg,#4F0813 0%,#1F0104 100%); padding: 0 !important;">
@@ -2819,14 +2966,11 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
         <div style="border:1px dashed #690B1B40;background:#fff;border-radius:8px;padding:12px 20px;font-size:12.5px;font-weight:700;color:#690B1B">
           Unlock the complete report on the portal for just ₹49.
         </div>
-        ${mkFooter(11)}
+        ${mkFooter(pgOffset + 2)}
       </div>
     `} `;
 
-    // Open a dedicated print window
-    const printWin = window.open("", "_blank", "width=900,height=700");
-    if (!printWin) { showToast("Pop-up blocked — please allow pop-ups for this site"); return; }
-
+    printWin.document.open();
     printWin.document.write(`<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -2837,7 +2981,7 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet"/>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Poppins', sans-serif; font-size: 11.5px; color: #111; background: #fff; line-height: 1.6; font-weight: 400; -webkit-print-color-adjust: exact; print-color-adjust: exact; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-shadow: 0 0 0 transparent; }
+    body { font-family: Arial, Helvetica, sans-serif; font-size: 11.5px; color: #111; background: #fff; line-height: 1.6; font-weight: normal; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
     @page { margin: 0; size: A4; }
     .as-pg { 
       page-break-after: always; 
@@ -2900,7 +3044,7 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
       page-break-inside: avoid;
       break-inside: avoid;
     }
-    .as-nv-pg-heading { font-family: 'Poppins', sans-serif; font-size: 22px; font-weight: 900; color: #111; letter-spacing: -.5px; margin-bottom: 2px; }
+    .as-nv-pg-heading { font-family: Arial, Helvetica, sans-serif; font-size: 22px; font-weight: 900; color: #111; letter-spacing: -.5px; margin-bottom: 2px; }
     .as-nv-pg-sub { font-size: 11px; color: #9CA3AF; font-weight: 500; margin-bottom: 16px; }
 
     .as-pg-content {
@@ -3243,7 +3387,6 @@ ${bodyHTML}
                 <div key={i} className={`as-lstep${loadSteps[i] === 1 ? " active" : loadSteps[i] === 2 ? " done" : ""}`}>{label}</div>
               ))}
             </div>
-            <div className="as-model-badge">⚡ Powered by Groq · Ultra Fast</div>
           </div>
         </div>
       )}
@@ -3253,11 +3396,14 @@ ${bodyHTML}
         <div className="as-screen" style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
           <div className="as-q-header">
             <div className="as-q-hd-inner">
-              <div className="as-q-sec-info">
-                <div className="as-q-sec-icon">{questions.sections[currentSection].icon}</div>
-                <div>
-                  <div className="as-q-sec-lbl">SECTION {currentSection + 1} OF 5</div>
-                  <div className="as-q-sec-name">{questions.sections[currentSection].name}</div>
+              <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
+                <button onClick={() => setScreen("landing")} className="as-btn-nav" style={{ padding: '8px 16px', fontSize: '13px' }}>← Home</button>
+                <div className="as-q-sec-info">
+                  <div className="as-q-sec-icon">{questions.sections[currentSection].icon}</div>
+                  <div>
+                    <div className="as-q-sec-lbl">SECTION {currentSection + 1} OF 5</div>
+                    <div className="as-q-sec-name">{questions.sections[currentSection].name}</div>
+                  </div>
                 </div>
               </div>
               <div className="as-q-prog-info">Q {answeredQ + 1} / {totalQ}</div>
@@ -3324,11 +3470,8 @@ ${bodyHTML}
                 </div>
               )}
             </div>
-            <div className="as-q-nav">
+            <div className="as-q-nav" style={{ justifyContent: "flex-start" }}>
               <button className="as-btn-nav" onClick={goPrevQ} disabled={currentSection === 0 && currentQIdx === 0}>← Back</button>
-              <button className="as-btn-nav nxt" onClick={goNextQ}>
-                {currentSection === questions.sections.length - 1 && currentQIdx === questions.sections[currentSection].questions.length - 1 ? "Finish & Get Report 🎉" : "Next →"}
-              </button>
             </div>
           </div>
         </div>
@@ -4578,7 +4721,7 @@ ${bodyHTML}
             </div>
 
             <div style={{ textAlign: "center", padding: "32px 0", color: "var(--t4)", fontSize: "13px", borderTop: "1px solid var(--border)", marginTop: "32px" }}>
-              <p><strong>Abroad Simplified</strong> Career Intelligence Platform · Powered by Groq AI · {student.date}</p>
+              <p><strong>Abroad Simplified</strong> Career Intelligence Platform · {student.date}</p>
               <p style={{ marginTop: "4px" }}>This report is based on psychometric data. Please consult a certified career counsellor for comprehensive guidance.</p>
               <p style={{ marginTop: "4px" }}>© {new Date().getFullYear()} Abroad Simplified. All rights reserved. Confidential.</p>
             </div>
@@ -4618,14 +4761,25 @@ ${bodyHTML}
       {/* ── JUNIOR GRADE SELECTOR MODAL ───────────────────────────── */}
       {juniorGradeSelectorOpen && (
         <div className="as-crm-overlay" style={{ zIndex: 1001 }}>
-          <div className="as-crm-modal" style={{ maxWidth: '420px', borderRadius: '16px', overflow: 'hidden', padding: 0 }}>
-            <div style={{ background: '#690B1B', color: '#fff', padding: '20px 24px', position: 'relative' }}>
-              <div style={{ fontSize: '10px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.8px', color: 'rgba(255,255,255,0.7)', marginBottom: '4px' }}>Assessment Preparation</div>
-              <h3 style={{ fontSize: '18px', fontWeight: 700, margin: 0 }}>Select Your Class / Grade</h3>
+          <div className="as-crm-modal" style={{ maxWidth: '420px', borderRadius: '16px', overflow: 'hidden', padding: 0, boxShadow: '0 20px 60px rgba(0,0,0,0.4)', border: '1px solid rgba(255,255,255,0.1)' }}>
+            <div style={{ background: 'linear-gradient(135deg, #690B1B, #690b1b)', color: '#fff', padding: '28px 24px', position: 'relative', textAlign: 'center' }}>
+              <button 
+                onClick={() => setJuniorGradeSelectorOpen(false)}
+                style={{ position: 'absolute', top: '16px', right: '16px', background: 'transparent', border: 'none', color: 'rgba(255,255,255,0.7)', cursor: 'pointer', padding: '4px', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '50%' }}
+                onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.1)'}
+                onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
+              >
+                <X size={20} />
+              </button>
+              <div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: '48px', height: '48px', background: 'rgba(255,255,255,0.15)', borderRadius: '12px', marginBottom: '16px' }}>
+                <GraduationCap size={24} color="#fff" />
+              </div>
+              <div style={{ fontSize: '11px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '1px', color: 'rgba(255,255,255,0.8)', marginBottom: '8px' }}>Assessment Preparation</div>
+              <h3 style={{ fontSize: '22px', fontWeight: 700, margin: 0, letterSpacing: '-0.5px' }}>Select Your Class</h3>
             </div>
             
-            <div style={{ padding: '24px', background: 'var(--card)' }}>
-              <p style={{ fontSize: '13.5px', color: 'var(--t3)', lineHeight: 1.6, marginBottom: '20px' }}>
+            <div style={{ padding: '28px 24px', background: '#fff' }}>
+              <p style={{ fontSize: '14px', color: '#4B5563', lineHeight: 1.6, marginBottom: '24px', textAlign: 'center' }}>
                 We'll tailor your cognitive roadmap and profile building steps according to your current school year.
               </p>
               
@@ -4640,49 +4794,46 @@ ${bodyHTML}
                     onClick={() => startJuniorAssessment(g.val)}
                     style={{
                       display: 'flex',
-                      flexDirection: 'column',
-                      alignItems: 'flex-start',
-                      padding: '16px',
-                      border: '2px solid var(--border)',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      padding: '16px 20px',
+                      border: '1.5px solid #E5E7EB',
                       borderRadius: '12px',
-                      background: 'var(--bg)',
+                      background: '#F9FAFB',
                       cursor: 'pointer',
-                      transition: 'all 0.2s',
+                      transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
                       width: '100%',
-                      textAlign: 'left'
+                      textAlign: 'left',
+                      position: 'relative',
+                      overflow: 'hidden'
                     }}
                     onMouseEnter={(e) => {
-                      e.currentTarget.style.borderColor = '#690B1B';
-                      e.currentTarget.style.transform = 'translateY(-1px)';
+                      e.currentTarget.style.borderColor = '#690b1b';
+                      e.currentTarget.style.background = '#FFF5F5';
+                      e.currentTarget.style.transform = 'translateY(-2px)';
+                      e.currentTarget.style.boxShadow = '0 4px 12px rgba(105, 11, 27, 0.1)';
+                      const arrow = e.currentTarget.querySelector('.arrow-icon');
+                      if (arrow) (arrow as HTMLElement).style.transform = 'translateX(4px)';
                     }}
                     onMouseLeave={(e) => {
-                      e.currentTarget.style.borderColor = 'var(--border)';
+                      e.currentTarget.style.borderColor = '#E5E7EB';
+                      e.currentTarget.style.background = '#F9FAFB';
                       e.currentTarget.style.transform = 'none';
+                      e.currentTarget.style.boxShadow = 'none';
+                      const arrow = e.currentTarget.querySelector('.arrow-icon');
+                      if (arrow) (arrow as HTMLElement).style.transform = 'none';
                     }}
                   >
-                    <div style={{ fontSize: '15px', fontWeight: 800, color: 'var(--t1)' }}>{g.label}</div>
-                    <div style={{ fontSize: '11.5px', color: 'var(--t3)', marginTop: '2px' }}>{g.sub}</div>
+                    <div>
+                      <div style={{ fontSize: '16px', fontWeight: 700, color: '#111827' }}>{g.label}</div>
+                      <div style={{ fontSize: '13px', color: '#6B7280', marginTop: '4px' }}>{g.sub}</div>
+                    </div>
+                    <div className="arrow-icon" style={{ color: '#690b1b', transition: 'transform 0.2s', display: 'flex', alignItems: 'center' }}>
+                      <ChevronRight size={20} />
+                    </div>
                   </button>
                 ))}
               </div>
-              
-              <button 
-                onClick={() => setJuniorGradeSelectorOpen(false)}
-                style={{
-                  background: 'transparent',
-                  color: 'var(--t3)',
-                  width: '100%',
-                  padding: '10px',
-                  borderRadius: '10px',
-                  fontSize: '13px',
-                  fontWeight: 600,
-                  border: '1.5px solid var(--border)',
-                  marginTop: '16px',
-                  cursor: 'pointer'
-                }}
-              >
-                Cancel
-              </button>
             </div>
           </div>
         </div>

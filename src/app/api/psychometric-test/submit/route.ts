@@ -5,7 +5,7 @@ import { verifySessionCookie } from '@/lib/auth';
 export async function POST(request: Request) {
   try {
     const data = await request.json();
-    const { student, scores, narrative, assessmentType } = data;
+    const { student, scores, narrative, assessmentType, questions, answers } = data;
 
     // Check if the user is logged in
     const claims = await verifySessionCookie();
@@ -38,6 +38,8 @@ export async function POST(request: Request) {
       student: { ...student, name: userName },
       scores,
       narrative,
+      questions: questions || null,
+      answers: answers || null,
       tier: 'Premium',
       userId: claims ? claims.uid : null, // Attach userId if available
       createdAt: new Date().toISOString(),

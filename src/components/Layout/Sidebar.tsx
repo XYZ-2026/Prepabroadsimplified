@@ -45,16 +45,15 @@ export default function Sidebar({ userRole, userName, userEmail }: SidebarProps)
       closeSidebar();
     } else if (window.innerWidth <= 1024) {
       closeSidebar();
+    } else {
+      const sidebar = document.getElementById('sidebar');
+      sidebar?.classList.add(styles.sidebarOpen);
+      document.body.classList.add('sidebar-open');
     }
   }, [pathname]);
 
   // Sync DOM state on mount and clean up on unmount
   useEffect(() => {
-    if (document.body.classList.contains('sidebar-open')) {
-      const sidebar = document.getElementById('sidebar');
-      sidebar?.classList.add(styles.sidebarOpen);
-    }
-
     return () => {
       document.body.classList.remove('sidebar-open');
     };
@@ -128,6 +127,9 @@ export default function Sidebar({ userRole, userName, userEmail }: SidebarProps)
           <div className={styles.navSubLinks}>
             <Link href="/dashboard/admin/users" className={`${styles.navSubLink} ${isActive('/dashboard/admin/users') ? styles.navSubLinkActive : ''}`}>
               Users
+            </Link>
+            <Link href="/dashboard/admin/user-analytics" className={`${styles.navSubLink} ${isActive('/dashboard/admin/user-analytics') ? styles.navSubLinkActive : ''}`}>
+              User Analytics
             </Link>
             <Link href="/dashboard/admin/assessments" className={`${styles.navSubLink} ${isActive('/dashboard/admin/assessments') ? styles.navSubLinkActive : ''}`}>
               Assessments

@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import styles from '@/styles/university-finder.module.css';
 import { predictUniversities, UserProfile, PredictionResult, UniversityResult } from '@/lib/university-predictor';
 import { MapPin, Award, Search } from 'lucide-react';
+import { LOGO_BASE64 } from '@/lib/logo-base64';
 
 export interface InitialDetails {
   name: string;
@@ -188,8 +189,8 @@ export default function UniversityFinderWizard({ initialDetails }: { initialDeta
           </div>
         </div>
 
-        <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <div className={styles.inputGroup}>
+        <div style={{ marginTop: '20px', display: 'flex', flexWrap: 'wrap', gap: '16px', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div className={styles.inputGroup} style={{ flex: '1 1 min-content' }}>
             <label>Number of APs (0–5)</label>
             <input type="number" min="0" max="5" value={n_ap} onChange={e => {
               const val = Math.min(5, Math.max(0, Number(e.target.value)));
@@ -303,17 +304,22 @@ export default function UniversityFinderWizard({ initialDetails }: { initialDeta
       doc.rect(0, y, pageWidth, step + 0.5, 'F');
     }
     
-    // Logo square
-    doc.setFillColor(220, 53, 69); // Red
-    doc.roundedRect(margin, 40, 10, 10, 2, 2, 'F');
+    // Logo
+    try {
+      doc.addImage(LOGO_BASE64, 'PNG', margin, 38, 14, 14);
+    } catch (e) {
+      // Fallback: red square if logo fails
+      doc.setFillColor(220, 53, 69);
+      doc.roundedRect(margin, 40, 10, 10, 2, 2, 'F');
+    }
     
     doc.setTextColor(255, 255, 255);
     doc.setFontSize(12);
     doc.setFont(fontNormal, 'bold');
-    doc.text('ABROAD ', margin + 14, 47);
+    doc.text('ABROAD ', margin + 18, 47);
     doc.setTextColor(255, 193, 7); // Yellow
     doc.setFont(fontNormal, 'normal');
-    doc.text('SIMPLIFIED', margin + 35, 47);
+    doc.text('SIMPLIFIED', margin + 39, 47);
     
     doc.setTextColor(255, 193, 7); // Yellow
     doc.setFontSize(10);

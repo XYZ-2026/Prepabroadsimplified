@@ -24,7 +24,7 @@ export default async function UniversityFinderPage() {
         <div style={{ maxWidth: '900px', margin: '0 auto' }}>
           
           <div className={styles.greetingBox}>
-            <Megaphone className="w-5 h-5 text-[#9C1010]" />
+            <Megaphone className="w-5 h-5 text-[#690b1b]" />
             <span>Hi <span className={styles.greetingName}>{firstName}</span>, ready to find your ideal university?</span>
           </div>
 

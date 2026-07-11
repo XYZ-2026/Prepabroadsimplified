@@ -67,7 +67,8 @@ export default function PremiumToolsCards({ onLinkClick }: { onLinkClick?: () =>
           </p>
         </div>
         <Link 
-          href="/university-finder"
+          href="https://www.abroadsimplified.com/"
+          target="_blank"
           onClick={onLinkClick}
           className="w-full inline-flex justify-center items-center text-center px-6 py-2.5 text-sm font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 hover:bg-emerald-600 hover:text-white rounded-xl transition-colors duration-300"
         >

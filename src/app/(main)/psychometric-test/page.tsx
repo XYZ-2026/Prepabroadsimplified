@@ -1,6 +1,6 @@
 "use client";
 
-import { Brain, Star, Target, BookOpen, Briefcase, Zap, Dumbbell, TrendingUp, ClipboardList, BarChart2, Calculator, Microscope, Calendar, PenTool, X, GraduationCap, ChevronRight } from 'lucide-react';
+import { Brain, Star, Target, BookOpen, Briefcase, Zap, Dumbbell, TrendingUp, ClipboardList, BarChart2, Calculator, Microscope, Calendar, PenTool, X, GraduationCap, ChevronRight, Lock, CheckCircle2 } from 'lucide-react';
 import React, { useState, useEffect, useRef, useCallback, Suspense } from "react";
 import Script from "next/script";
 import { useSearchParams } from "next/navigation";
@@ -770,6 +770,7 @@ function AssessmentPageContent() {
   const assessmentType = searchParams.get("type") || "senior";
 
   const [screen, setScreen] = useState<Screen>(searchParams.get("resultId") ? "fetching" : "landing");
+  const [reportMode, setReportMode] = useState<'selection' | 'basic' | 'detailed'>('selection');
   
   const [student, setStudent] = useState<StudentInfo>({
     name: "", grade: "", age: "", school: "", city: "", email: "", phone: "",
@@ -795,7 +796,7 @@ function AssessmentPageContent() {
   const [careerAbroadData, setCareerAbroadData] = useState<Record<string, any>>({});
   const [loadingAbroad, setLoadingAbroad] = useState<boolean>(false);
   const chartInstRef = useRef<Record<string, any>>({});
-  const [pdfUnlocked, setPdfUnlocked] = useState(true);
+  const [pdfUnlocked, setPdfUnlocked] = useState(false);
   const [payModalOpen, setPayModalOpen] = useState(false);
   const [streamStep, setStreamStep] = useState<'main' | 'science'>('main');
   const [juniorGradeSelectorOpen, setJuniorGradeSelectorOpen] = useState(false);
@@ -825,6 +826,14 @@ function AssessmentPageContent() {
             if (data.result.questions) setQuestions(data.result.questions);
             if (data.result.answers) setAnswers(data.result.answers);
             setScreen("report");
+            
+            if (searchParams.get("source") === "admin") {
+              setReportMode("detailed");
+              setPdfUnlocked(true);
+            } else {
+              setReportMode("selection");
+              setPdfUnlocked(false);
+            }
           }
         })
         .catch(err => console.error("Error fetching result:", err));
@@ -913,14 +922,12 @@ Return ONLY valid JSON with this exact structure (do NOT include any markdown co
     if (prevAssessmentTypeRef.current !== assessmentType) {
       prevAssessmentTypeRef.current = assessmentType;
       // Reset all result state so the old report doesn't linger with mismatched context
-      if (screen === "report" || screen === "fetching") {
-        setScores(null);
-        setReportData(null);
-        setSelectedCareerIdx(null);
-        setCareerAbroadData({});
-        setCrmData(null);
-        setScreen("landing");
-      }
+      setScores(null);
+      setReportData(null);
+      setSelectedCareerIdx(null);
+      setCareerAbroadData({});
+      setCrmData(null);
+      setScreen("landing");
     }
 
     if (assessmentType === "junior") {
@@ -1134,6 +1141,7 @@ Return ONLY valid JSON with this exact structure (do NOT include any markdown co
     }
     
     setScreen("report");
+    setReportMode("selection");
   }
 
   async function generateNarrative(sc: Scores): Promise<any> {
@@ -1619,7 +1627,7 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
 
     // Count if QA pages will be added
     const hasQaPages = !!(questions && Object.keys(answers).length > 0);
-    const numQaPagesActual = hasQaPages ? 8 : 0;
+    const numQaPagesActual = hasQaPages ? 10 : 0;
     
     // Dynamic page numbering: pgOffset = pages before the exec summary (cover + QA pages)
     const pgOffset = 1 + numQaPagesActual; // cover is page 1, then QA pages 2..9 (if present)
@@ -1762,8 +1770,8 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
         });
       });
 
-      numQaPages = 8;
-      const chunkSizes = [13, 13, 13, 13, 12, 12, 12, 12];
+      numQaPages = 10;
+      const chunkSizes = [10, 10, 10, 10, 10, 10, 10, 10, 10, 10];
       let currentIdx = 0;
 
       for (let p = 0; p < numQaPages; p++) {
@@ -1881,7 +1889,7 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
 
     const bodyHTML = `
       <!-- PAGE 1: COVER -->
-      <div class="as-pg" style="background: linear-gradient(135deg,#4F0813 0%,#1F0104 100%); padding: 0 !important;">
+      <div class="as-pg cover-pg" style="background: linear-gradient(135deg,#4F0813 0%,#1F0104 100%); padding: 0 !important;">
         <div style="position:absolute;top:20px;bottom:20px;left:20px;right:20px;border:1px solid rgba(201,165,93,0.25);border-radius:10px;pointer-events:none"></div>
         <div class="as-pg-content" style="height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 60px; color: #fff; margin-top: 0; position:relative; z-index: 1">
           <img src="${LOGO_BASE64}" alt="Abroad Simplified" style="width:48px;height:48px;border-radius:10px;box-shadow:0 4px 12px rgba(0,0,0,0.3);margin-bottom:16px;object-fit:contain" />
@@ -2646,7 +2654,7 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
         <!-- SENIOR PAGE 15: CAREER VALUES & TIMELINE -->
         <div class="as-pg">
           ${mkHeader("Career Roadmap")}
-          <div class="as-nv-pg-heading" style="margin-bottom:2px">💼 Values &amp; Career Progression Roadmap</div>
+          <div class="as-nv-pg-heading" style="margin-bottom:2px">🗺️ Academic &amp; Profile Roadmap</div>
           <div class="as-nv-pg-sub" style="margin-bottom:10px">Career drivers and educational progression milestones</div>
           
           <div class="as-pg-content" style="gap:10px">
@@ -2666,8 +2674,9 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
               </div>
               
               <!-- Right: Roadmap Timeline -->
-              <div style="display:flex;flex-direction:column;gap:8px;justify-content:flex-start;position:relative">
-                <div style="position:absolute;left:21px;top:15px;bottom:15px;width:1.5px;border-left:1.5px dashed #690B1B30;z-index:1"></div>
+              <div style="display:flex;flex-direction:column;gap:5px;justify-content:flex-start;position:relative">
+                <div style="font-size:10.5px;font-weight:800;color:#690B1B;border-bottom:1.5px solid #E5E7EB;padding-bottom:5px;margin-bottom:4px;text-transform:uppercase">🗺️ Academic &amp; Profile Roadmap</div>
+                <div style="position:absolute;left:11px;top:40px;bottom:15px;width:1.5px;border-left:1.5px dashed #690B1B30;z-index:1"></div>
                 ${[
                   { key: "grade12", lbl: `Grade ${student.grade}–12`, icon: "📚" },
                   { key: "graduation", lbl: "Graduation", icon: "🎓" },
@@ -2678,13 +2687,18 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
                   const rm = reportData.roadmap?.[s.key];
                   if (!rm) return "";
                   return `
-                    <div style="border:1px solid #E5E7EB;border-radius:8px;padding:8px 12px;background:#fff;display:flex;align-items:center;gap:12px;position:relative;z-index:2;box-shadow:0 1px 2px rgba(0,0,0,0.01)">
-                      <span style="font-size:14px;background:#FFF8F8;border:1.5px solid #690B1B15;border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;flex-shrink:0">${s.icon}</span>
+                    <div style="border:1px solid #E5E7EB;border-radius:6px;padding:6px 8px;background:#fff;display:flex;align-items:flex-start;gap:8px;position:relative;z-index:2;box-shadow:0 1px 2px rgba(0,0,0,0.01)">
+                      <span style="font-size:11px;background:#FFF8F8;border:1.5px solid #690B1B15;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px">${s.icon}</span>
                       <div style="flex-grow:1">
-                        <div style="font-size:10px;font-weight:800;color:#690B1B;text-transform:uppercase;margin-bottom:2px">${s.lbl} · ${esc(rm.title)}</div>
-                        <div style="font-size:8.5px;color:#4B5563;line-height:1.35">
-                          ${(rm.actions || []).slice(0, 3).map((act: string) => `• ${esc(act)}`).join(" ")}
+                        <div style="font-size:9.5px;font-weight:800;color:#690B1B;text-transform:uppercase;margin-bottom:2px">${s.lbl} · ${esc(rm.title)}</div>
+                        <div style="font-size:8px;color:#4B5563;line-height:1.35">
+                          ${(rm.actions || []).slice(0, 2).map((act: string) => `• ${esc(act)}`).join("<br>")}
                         </div>
+                        ${rm.targetDegree ? `<div style="margin-top:3px"><span style="display:inline-block;background:#FFF8F8;border:1px solid rgba(105,11,27,.15);border-radius:4px;padding:2px 4px;font-size:7.5px;font-weight:700;color:#690B1B">🎓 ${esc(rm.targetDegree)}</span></div>` : ""}
+                        ${rm.targetColleges?.length ? `<div style="margin-top:3px"><span style="font-size:7px;font-weight:700;color:#9CA3AF;text-transform:uppercase;margin-right:3px">Target Colleges:</span><span style="line-height:1.4">${rm.targetColleges.slice(0, 2).map((c: string) => `<span style="display:inline-block;background:#F9FAFB;border:1px solid #E5E7EB;padding:1px 3px;border-radius:3px;font-size:7px;font-weight:600;color:#374151;margin-right:2px;margin-bottom:2px">${esc(c)}</span>`).join("")}</span></div>` : ""}
+                        ${rm.salaryTrajectory?.length ? `<div style="margin-top:3px"><span style="font-size:7px;font-weight:700;color:#9CA3AF;text-transform:uppercase;margin-right:3px">Expected Pay:</span><span style="line-height:1.4">${rm.salaryTrajectory.slice(0, 2).map((s: string) => `<span style="display:inline-block;background:#F0FDF4;border:1px solid rgba(5,122,85,.2);color:#057A55;padding:1px 4px;border-radius:10px;font-size:7px;font-weight:700;margin-right:2px;margin-bottom:2px">💰 ${esc(s)}</span>`).join("")}</span></div>` : ""}
+                        ${rm.targetCompanies?.length ? `<div style="margin-top:3px"><span style="font-size:7px;font-weight:700;color:#9CA3AF;text-transform:uppercase;margin-right:3px">Top Companies:</span><span style="line-height:1.4">${rm.targetCompanies.slice(0, 2).map((c: string) => `<span style="display:inline-block;background:#F9FAFB;border:1px solid #E5E7EB;padding:1px 3px;border-radius:3px;font-size:7px;font-weight:600;color:#374151;margin-right:2px;margin-bottom:2px">🏢 ${esc(c)}</span>`).join("")}</span></div>` : ""}
+                        ${rm.targetUniversities?.length ? `<div style="margin-top:3px"><span style="font-size:7px;font-weight:700;color:#9CA3AF;text-transform:uppercase;margin-right:3px">Top Universities:</span><span style="line-height:1.4">${rm.targetUniversities.slice(0, 2).map((u: string) => `<span style="display:inline-block;background:#F9FAFB;border:1px solid #E5E7EB;padding:1px 3px;border-radius:3px;font-size:7px;font-weight:600;color:#374151;margin-right:2px;margin-bottom:2px">🌍 ${esc(u)}</span>`).join("")}</span></div>` : ""}
                       </div>
                     </div>
                   `;
@@ -2986,37 +3000,41 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
     .as-pg { 
       page-break-after: always; 
       break-after: page; 
-      width: 210mm; 
-      height: 296.2mm; 
-      padding: 24mm 16mm 18mm 16mm; 
+      width: 155.555mm; 
+      height: 219.407mm; 
+      padding: 17.777mm 11.851mm 13.333mm 11.851mm; 
       box-sizing: border-box; 
       position: relative; 
       background: #fff;
       overflow: hidden;
       display: flex;
       flex-direction: column;
+      transform: scale(1.35);
+      transform-origin: top left;
+      margin-bottom: 76.792mm;
+      margin-right: 54.444mm;
     }
     .as-pg:last-child { page-break-after: auto; break-after: auto; }
     .as-nv-hdr {
       position: absolute;
-      top: 10mm;
-      left: 16mm;
-      right: 16mm;
-      height: 12mm;
+      top: 7.407mm;
+      left: 11.851mm;
+      right: 11.851mm;
+      height: 8.888mm;
       box-sizing: border-box;
     }
     .as-nv-ftr {
       position: absolute;
-      bottom: 8mm;
-      left: 16mm;
-      right: 16mm;
-      height: 10mm;
+      bottom: 5.925mm;
+      left: 11.851mm;
+      right: 11.851mm;
+      height: 7.407mm;
       box-sizing: border-box;
     }
     .as-nv-cover { 
       background: linear-gradient(135deg,#4F0813 0%,#1F0104 100%); 
       color: #fff; 
-      height: 296.2mm; 
+      height: 219.407mm; 
       display: flex; 
       flex-direction: column; 
       align-items: center; 
@@ -3054,7 +3072,7 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
       justify-content: flex-start;
       gap: 14px;
       width: 100%;
-      height: 242mm;
+      height: 179.25mm;
       box-sizing: border-box;
       margin-top: 10px;
     }
@@ -3179,7 +3197,7 @@ ${bodyHTML}
             </p>
             <div className="as-hero-cta">
               <button className="as-btn-primary" onClick={goToDetails}>Start Your Assessment →</button>
-              <button className="as-btn-secondary" onClick={goToDetails}>See Sample Report</button>
+              <a href={`/psychometric-test/sample-report?type=${assessmentType}`} className="as-btn-secondary" style={{ textDecoration: 'none', textAlign: 'center' }}>See Sample Report</a>
             </div>
             <div className="as-hero-feats">
               {["100 Psychometric Questions", "5 Assessment Dimensions", "AI-Powered Analysis", "Premium PDF Report", "India + Study Abroad"].map((f) => (
@@ -3497,7 +3515,63 @@ ${bodyHTML}
       {screen === "report" && scores && reportData && (
         <div className="as-screen" style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
 
-          <div className="as-report-wrap">
+          {reportMode === "selection" ? (
+            <div className="as-report-wrap" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '60px 20px', gap: '40px', minHeight: '80vh' }}>
+              <div style={{ textAlign: 'center', marginBottom: '10px' }}>
+                <h2 style={{ fontSize: '32px', fontWeight: 800, color: '#111827', marginBottom: '12px' }}>Your Results Are Ready</h2>
+                <p style={{ fontSize: '16px', color: '#6B7280', maxWidth: '600px', margin: '0 auto', lineHeight: 1.6 }}>Choose how you'd like to view your psychometric assessment report. You can always upgrade to the detailed dossier later.</p>
+              </div>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '24px', justifyContent: 'center', width: '100%', maxWidth: '900px' }}>
+                
+                {/* Basic Card */}
+                <div 
+                  onClick={() => setReportMode('basic')}
+                  style={{ flex: '1 1 300px', background: '#fff', borderRadius: '24px', padding: '32px', border: '2px solid #E5E7EB', cursor: 'pointer', transition: 'all 0.3s', display: 'flex', flexDirection: 'column' }}
+                  onMouseEnter={e => { e.currentTarget.style.borderColor = '#9CA3AF'; e.currentTarget.style.transform = 'translateY(-4px)'; }}
+                  onMouseLeave={e => { e.currentTarget.style.borderColor = '#E5E7EB'; e.currentTarget.style.transform = 'none'; }}
+                >
+                  <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: '#F3F4F6', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px' }}>
+                    <BarChart2 size={24} color="#4B5563" />
+                  </div>
+                  <h3 style={{ fontSize: '24px', fontWeight: 700, marginBottom: '12px', color: '#111827' }}>Basic Summary</h3>
+                  <p style={{ color: '#6B7280', fontSize: '15px', lineHeight: 1.6, flexGrow: 1 }}>Get a high-level overview of your top career match, aptitude scores, and basic learning style.</p>
+                  <ul style={{ margin: '24px 0', padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '14px', fontSize: '14px', color: '#4B5563', fontWeight: 500 }}>
+                    <li style={{ display: 'flex', gap: '10px', alignItems: 'center' }}><CheckCircle2 size={18} color="#057A55" /> Top Career Match</li>
+                    <li style={{ display: 'flex', gap: '10px', alignItems: 'center' }}><CheckCircle2 size={18} color="#057A55" /> Aptitude Score Overview</li>
+                    <li style={{ display: 'flex', gap: '10px', alignItems: 'center' }}><CheckCircle2 size={18} color="#057A55" /> Basic Learning Style</li>
+                  </ul>
+                  <div style={{ fontSize: '15px', fontWeight: 700, color: '#4B5563', textAlign: 'center', padding: '14px', background: '#F9FAFB', borderRadius: '12px', marginTop: 'auto' }}>Free</div>
+                </div>
+
+                {/* Premium Card */}
+                <div 
+                  onClick={() => setPayModalOpen(true)}
+                  style={{ flex: '1 1 300px', background: '#fff', borderRadius: '24px', padding: '32px', border: '2px solid #690B1B', cursor: 'pointer', transition: 'all 0.3s', display: 'flex', flexDirection: 'column', position: 'relative', overflow: 'hidden' }}
+                  onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = '0 20px 40px rgba(105, 11, 27, 0.15)'; }}
+                  onMouseLeave={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = 'none'; }}
+                >
+                  <div style={{ position: 'absolute', top: 0, right: 0, background: '#690B1B', color: '#fff', padding: '6px 16px', borderBottomLeftRadius: '16px', fontSize: '11px', fontWeight: 800, letterSpacing: '0.5px' }}>RECOMMENDED</div>
+                  <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: '#FFF5F5', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px' }}>
+                    <Star size={24} color="#690B1B" />
+                  </div>
+                  <h3 style={{ fontSize: '24px', fontWeight: 700, marginBottom: '12px', color: '#111827' }}>Detailed Dossier</h3>
+                  <p style={{ color: '#6B7280', fontSize: '15px', lineHeight: 1.6, flexGrow: 1 }}>Unlock your complete 360° psychological profile, step-by-step career roadmaps, and university finder.</p>
+                  <ul style={{ margin: '24px 0', padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '14px', fontSize: '14px', color: '#4B5563', fontWeight: 500 }}>
+                    <li style={{ display: 'flex', gap: '10px', alignItems: 'center' }}><CheckCircle2 size={18} color="#690B1B" /> Full Big-Five & RIASEC Analysis</li>
+                    <li style={{ display: 'flex', gap: '10px', alignItems: 'center' }}><CheckCircle2 size={18} color="#690B1B" /> Interactive Career Roadmaps</li>
+                    <li style={{ display: 'flex', gap: '10px', alignItems: 'center' }}><CheckCircle2 size={18} color="#690B1B" /> Global Study Abroad Finder</li>
+                    <li style={{ display: 'flex', gap: '10px', alignItems: 'center' }}><CheckCircle2 size={18} color="#690B1B" /> Detailed Action Plans & Milestones</li>
+                  </ul>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', fontSize: '15px', fontWeight: 700, color: '#fff', textAlign: 'center', padding: '14px', background: 'linear-gradient(to right, #690B1B, #8A1226)', borderRadius: '12px', marginTop: 'auto' }}>
+                    <Lock size={18} /> Unlock for ₹49
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          ) : (
+            <>
+            <div className="as-report-wrap">
             {/* Hero */}
             <div className="as-rep-hero">
               <div className="as-rep-hero-top">
@@ -3524,6 +3598,16 @@ ${bodyHTML}
               </div>
             </div>
 
+            {reportMode === 'basic' && (
+              <div style={{ padding: '40px', background: 'linear-gradient(to right, #FFF5F5, #fff)', border: '2px solid #690B1B', borderRadius: '16px', textAlign: 'center', marginTop: '20px' }}>
+                <h3 style={{ fontSize: '24px', fontWeight: 800, color: '#111827', marginBottom: '16px' }}>Want to see the full breakdown?</h3>
+                <p style={{ fontSize: '15px', color: '#4B5563', marginBottom: '24px', maxWidth: '600px', margin: '0 auto 24px auto', lineHeight: 1.6 }}>Unlock your complete 360° psychological profile, step-by-step career roadmaps, university finder, and in-depth aptitude breakdowns.</p>
+                <button onClick={() => setPayModalOpen(true)} style={{ background: '#690B1B', color: '#fff', padding: '14px 28px', borderRadius: '12px', fontSize: '16px', fontWeight: 700, border: 'none', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '8px', boxShadow: '0 4px 12px rgba(105, 11, 27, 0.2)' }}><Lock size={18} /> Unlock Premium for ₹49</button>
+              </div>
+            )}
+            
+            {reportMode === 'detailed' && (
+              <>
             {/* S1: Aptitude */}
             <div className="as-sec-hd"><div className="bar" /><h2><Brain className="as-icon-emoji" size={28} /> Section 1: Aptitude Assessment</h2><span className="pill">Cognitive Ability</span></div>
             {buildSecExplain(0)}
@@ -4727,6 +4811,8 @@ ${bodyHTML}
             </div>
           </>
         )}
+          </>
+        )}
           </div>
 
           {/* PDF Bar */}
@@ -4755,6 +4841,8 @@ ${bodyHTML}
               </button>
             )}
           </div>
+          </>
+          )}
         </div>
       )}
 
@@ -4840,6 +4928,7 @@ ${bodyHTML}
       )}
 
       {/* ── UPI PAYMENT MODAL ─────────────────────────────────────── */}
+
       {payModalOpen && (
         <div className="as-crm-overlay" style={{ zIndex: 1000 }}>
           <div className="as-crm-modal" style={{ maxWidth: '420px', borderRadius: '16px', overflow: 'hidden', padding: 0 }}>
@@ -4895,6 +4984,7 @@ ${bodyHTML}
                   showToast("Processing payment...");
                   await new Promise((r) => setTimeout(r, 1200));
                   setPdfUnlocked(true);
+                  setReportMode('detailed');
                   showToast("🎉 Payment successful! Full dossier unlocked.");
                 }}
                 style={{

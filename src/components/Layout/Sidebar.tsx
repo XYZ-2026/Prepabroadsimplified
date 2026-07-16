@@ -39,6 +39,12 @@ export default function Sidebar({ userRole, userName, userEmail }: SidebarProps)
     overlay?.classList.remove('visible');
   };
 
+  const handleLinkClick = () => {
+    if (window.innerWidth <= 1024) {
+      closeSidebar();
+    }
+  };
+
   useEffect(() => {
     // Close the sidebar automatically when navigating to the test page or on mobile devices
     if (pathname === '/iq-test/test') {
@@ -50,7 +56,7 @@ export default function Sidebar({ userRole, userName, userEmail }: SidebarProps)
       sidebar?.classList.add(styles.sidebarOpen);
       document.body.classList.add('sidebar-open');
     }
-  }, [pathname]);
+  }, [pathname, psychType]);
 
   // Sync DOM state on mount and clean up on unmount
   useEffect(() => {
@@ -125,16 +131,16 @@ export default function Sidebar({ userRole, userName, userEmail }: SidebarProps)
             </svg>
           </button>
           <div className={styles.navSubLinks}>
-            <Link href="/dashboard/admin/users" className={`${styles.navSubLink} ${isActive('/dashboard/admin/users') ? styles.navSubLinkActive : ''}`}>
+            <Link href="/dashboard/admin/users" onClick={handleLinkClick} className={`${styles.navSubLink} ${isActive('/dashboard/admin/users') ? styles.navSubLinkActive : ''}`}>
               Users
             </Link>
-            <Link href="/dashboard/admin/user-analytics" className={`${styles.navSubLink} ${isActive('/dashboard/admin/user-analytics') ? styles.navSubLinkActive : ''}`}>
+            <Link href="/dashboard/admin/user-analytics" onClick={handleLinkClick} className={`${styles.navSubLink} ${isActive('/dashboard/admin/user-analytics') ? styles.navSubLinkActive : ''}`}>
               User Analytics
             </Link>
-            <Link href="/dashboard/admin/assessments" className={`${styles.navSubLink} ${isActive('/dashboard/admin/assessments') ? styles.navSubLinkActive : ''}`}>
+            <Link href="/dashboard/admin/assessments" onClick={handleLinkClick} className={`${styles.navSubLink} ${isActive('/dashboard/admin/assessments') ? styles.navSubLinkActive : ''}`}>
               Assessments
             </Link>
-            <Link href="/dashboard/admin/analytics" className={`${styles.navSubLink} ${isActive('/dashboard/admin/analytics') ? styles.navSubLinkActive : ''}`}>
+            <Link href="/dashboard/admin/analytics" onClick={handleLinkClick} className={`${styles.navSubLink} ${isActive('/dashboard/admin/analytics') ? styles.navSubLinkActive : ''}`}>
               Assessment Analytics
             </Link>
           </div>
@@ -162,13 +168,13 @@ export default function Sidebar({ userRole, userName, userEmail }: SidebarProps)
             </svg>
           </button>
           <div className={styles.navSubLinks}>
-            <Link href="/dashboard/student/profile" className={`${styles.navSubLink} ${isActive('/dashboard/student/profile') ? styles.navSubLinkActive : ''}`}>
+            <Link href="/dashboard/student/profile" onClick={handleLinkClick} className={`${styles.navSubLink} ${isActive('/dashboard/student/profile') ? styles.navSubLinkActive : ''}`}>
               My Profile
             </Link>
-            <Link href="/dashboard/student/update-profile" className={`${styles.navSubLink} ${isActive('/dashboard/student/update-profile') ? styles.navSubLinkActive : ''}`}>
+            <Link href="/dashboard/student/update-profile" onClick={handleLinkClick} className={`${styles.navSubLink} ${isActive('/dashboard/student/update-profile') ? styles.navSubLinkActive : ''}`}>
               Update Profile
             </Link>
-            <Link href="/dashboard/student/assessments" className={`${styles.navSubLink} ${isActive('/dashboard/student/assessments') ? styles.navSubLinkActive : ''}`}>
+            <Link href="/dashboard/student/assessments" onClick={handleLinkClick} className={`${styles.navSubLink} ${isActive('/dashboard/student/assessments') ? styles.navSubLinkActive : ''}`}>
               My Assessments
             </Link>
           </div>
@@ -214,7 +220,7 @@ export default function Sidebar({ userRole, userName, userEmail }: SidebarProps)
         <nav className={styles.sidebarNavSection}>
           <p className={styles.navLabel}>Navigation</p>
           <div className={styles.navItem}>
-            <Link href={userRole ? '/dashboard' : '/'} className={`${styles.navLink} ${isActive(userRole ? '/dashboard' : '/') ? styles.navLinkActive : ''}`}>
+            <Link href={userRole ? '/dashboard' : '/'} onClick={handleLinkClick} className={`${styles.navLink} ${isActive(userRole ? '/dashboard' : '/') ? styles.navLinkActive : ''}`}>
               <span className={styles.navLinkIcon}>
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /><polyline points="9 22 9 12 15 12 15 22" /></svg>
               </span>
@@ -229,7 +235,7 @@ export default function Sidebar({ userRole, userName, userEmail }: SidebarProps)
           <p className={styles.navLabel}>Study Abroad Tools</p>
 
           <div className={styles.navItem}>
-            <Link href="/university-finder" className={`${styles.navLink} ${isActive('/university-finder') ? styles.navLinkActive : ''}`}>
+            <Link href="/university-finder" onClick={handleLinkClick} className={`${styles.navLink} ${isActive('/university-finder') ? styles.navLinkActive : ''}`}>
               <span className={styles.navLinkIcon}>
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
               </span>
@@ -238,7 +244,7 @@ export default function Sidebar({ userRole, userName, userEmail }: SidebarProps)
           </div>
 
           <div className={styles.navItem}>
-            <Link href="/iq-test" className={`${styles.navLink} ${isActive('/iq-test') ? styles.navLinkActive : ''}`}>
+            <Link href="/iq-test" onClick={handleLinkClick} className={`${styles.navLink} ${isActive('/iq-test') ? styles.navLinkActive : ''}`}>
               <span className={styles.navLinkIcon}>
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 1.98-3A2.5 2.5 0 0 1 9.5 2Z"/><path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-1.98-3A2.5 2.5 0 0 0 14.5 2Z"/></svg>
               </span>
@@ -263,13 +269,13 @@ export default function Sidebar({ userRole, userName, userEmail }: SidebarProps)
               </svg>
             </button>
             <div className={styles.navSubLinks}>
-              <Link href="/psychometric-test?type=junior" className={`${styles.navSubLink} ${isActive('/psychometric-test') && psychType === 'junior' ? styles.navSubLinkActive : ''}`}>
+              <Link href="/psychometric-test?type=junior" onClick={handleLinkClick} className={`${styles.navSubLink} ${isActive('/psychometric-test') && psychType === 'junior' ? styles.navSubLinkActive : ''}`}>
                 7th - 9th Grade Test
               </Link>
-              <Link href="/psychometric-test?type=grade10" className={`${styles.navSubLink} ${isActive('/psychometric-test') && psychType === 'grade10' ? styles.navSubLinkActive : ''}`}>
+              <Link href="/psychometric-test?type=grade10" onClick={handleLinkClick} className={`${styles.navSubLink} ${isActive('/psychometric-test') && psychType === 'grade10' ? styles.navSubLinkActive : ''}`}>
                 10th Grade Test
               </Link>
-              <Link href="/psychometric-test?type=senior" className={`${styles.navSubLink} ${isActive('/psychometric-test') && psychType === 'senior' ? styles.navSubLinkActive : ''}`}>
+              <Link href="/psychometric-test?type=senior" onClick={handleLinkClick} className={`${styles.navSubLink} ${isActive('/psychometric-test') && psychType === 'senior' ? styles.navSubLinkActive : ''}`}>
                 11th - 12th Grade Test
               </Link>
             </div>

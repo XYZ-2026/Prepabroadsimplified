@@ -46,8 +46,8 @@ export default function InstructionsPage() {
     <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col justify-center items-center py-6 px-4 relative font-sans">
       {/* Background accents */}
       <div className="absolute top-0 w-full h-[40vh] bg-gradient-to-b from-slate-200/50 to-transparent pointer-events-none" />
-      <div className="absolute top-[-10%] left-[-10%] w-[40vw] h-[40vw] rounded-full bg-[#690b1b]/5 blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-[-10%] right-[-10%] w-[40vw] h-[40vw] rounded-full bg-slate-400/10 blur-[120px] pointer-events-none" />
+      <div className="absolute top-[-10%] left-[-10%] w-[40vw] h-[40vw] rounded-full bg-[#690b1b]/5 blur-[120px] pointer-events-none hidden md:block" />
+      <div className="absolute bottom-[-10%] right-[-10%] w-[40vw] h-[40vw] rounded-full bg-slate-400/10 blur-[120px] pointer-events-none hidden md:block" />
 
       {/* Back to Home Link */}
       <Link href="/iq-test" className="absolute top-8 left-8 text-sm font-semibold text-slate-500 hover:text-black transition-colors flex items-center gap-1.5 z-10">
@@ -59,15 +59,15 @@ export default function InstructionsPage() {
         initial={{ opacity: 0, y: 40, scale: 0.95 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
         transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-        className="w-full max-w-2xl bg-white rounded-[2rem] border border-white/40 p-1 shadow-[0_30px_60px_-15px_rgba(0,0,0,0.1)] relative z-10 backdrop-blur-xl"
+        className="w-full max-w-2xl bg-white rounded-[2rem] border border-white/40 p-1 md:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.1)] relative z-10 backdrop-blur-xl"
       >
         <div className="rounded-[1.75rem] border border-slate-100 bg-white/60 p-6 md:p-8 h-full flex flex-col">
           
           {/* Header */}
-          <div className="flex flex-col md:flex-row md:items-center gap-6 border-b border-slate-100 pb-6 mb-6">
+          <div className="flex flex-col md:flex-row items-center gap-6 border-b border-slate-100 pb-6 mb-6 text-center md:text-left">
             <div className="relative">
-              <div className="absolute inset-0 bg-[#690b1b] blur-lg opacity-30 rounded-full animate-pulse" />
-              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#690b1b] to-[#600505] flex items-center justify-center text-white relative z-10 shadow-lg border border-[#c41616]">
+              <div className="absolute inset-0 bg-[#690b1b] blur-lg opacity-30 rounded-full animate-pulse hidden md:block" />
+              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#690b1b] to-[#600505] flex items-center justify-center text-white relative z-10 md:shadow-lg border border-[#c41616]">
                 <Brain className="w-8 h-8 drop-shadow-md" />
               </div>
             </div>
@@ -115,8 +115,8 @@ export default function InstructionsPage() {
           </div>
 
           {/* Rules */}
-          <div className="bg-slate-900 rounded-[1.5rem] p-6 mb-6 shadow-inner relative overflow-hidden text-white">
-            <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 blur-3xl rounded-full translate-x-1/2 -translate-y-1/2 pointer-events-none" />
+          <div className="bg-slate-900 rounded-[1.5rem] p-6 mb-6 md:shadow-inner relative overflow-hidden text-white">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 blur-3xl rounded-full translate-x-1/2 -translate-y-1/2 pointer-events-none hidden md:block" />
             <h2 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2">
               <AlertTriangle className="w-4 h-4 text-[#690b1b]" />
               Crucial Guidelines
@@ -146,7 +146,7 @@ export default function InstructionsPage() {
             <button
               onClick={handleStartTest}
               disabled={loading}
-              className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-[#690b1b] to-[#7a0c0c] hover:from-[#7a0c0c] hover:to-[#5c0808] text-white font-semibold text-base transition-all duration-300 disabled:opacity-50 flex items-center justify-center gap-3 shadow-[0_10px_20px_rgba(105, 11, 27,0.3)] hover:shadow-[0_15px_30px_rgba(105, 11, 27,0.4)] hover:-translate-y-0.5 group"
+              className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-[#690b1b] to-[#7a0c0c] hover:from-[#7a0c0c] hover:to-[#5c0808] text-white font-semibold text-base transition-all duration-300 disabled:opacity-50 flex items-center justify-center gap-3 md:shadow-[0_10px_20px_rgba(105,11,27,0.3)] md:hover:shadow-[0_15px_30px_rgba(105,11,27,0.4)] hover:-translate-y-0.5 group"
             >
               {loading ? (
                 <span className="flex items-center gap-2">

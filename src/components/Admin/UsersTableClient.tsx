@@ -17,6 +17,7 @@ export interface UserData {
 export default function UsersTableClient({ initialUsers }: { initialUsers: UserData[] }) {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterType, setFilterType] = useState('all');
+  const [selectedUser, setSelectedUser] = useState<UserData | null>(null);
 
   const filteredUsers = initialUsers.filter((user) => {
     const matchesSearch = 
@@ -127,7 +128,7 @@ export default function UsersTableClient({ initialUsers }: { initialUsers: UserD
                     <span className={styles.userSubtext}>{user.createdAtStr}</span>
                   </td>
                   <td>
-                    <button className={styles.btnEdit}>View Details</button>
+                    <button className={styles.btnEdit} onClick={() => setSelectedUser(user)}>View Details</button>
                   </td>
                 </tr>
               ))
@@ -135,6 +136,54 @@ export default function UsersTableClient({ initialUsers }: { initialUsers: UserD
           </tbody>
         </table>
       </div>
+
+      {selectedUser && (
+        <div className={styles.modalOverlay} onClick={() => setSelectedUser(null)}>
+          <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
+            <div className={styles.modalHeader}>
+              <h2>User Details</h2>
+              <button className={styles.btnClose} onClick={() => setSelectedUser(null)}>
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+              </button>
+            </div>
+            <div className={styles.modalBody}>
+              <div className={styles.detailGrid}>
+                <div className={styles.detailGroup}>
+                  <div className={styles.detailLabel}>Name</div>
+                  <div className={styles.detailValue}>{selectedUser.name}</div>
+                </div>
+                <div className={styles.detailGroup}>
+                  <div className={styles.detailLabel}>Email</div>
+                  <div className={styles.detailValue}>{selectedUser.email}</div>
+                </div>
+                <div className={styles.detailGroup}>
+                  <div className={styles.detailLabel}>Mobile</div>
+                  <div className={styles.detailValue}>{selectedUser.mobile}</div>
+                </div>
+                <div className={styles.detailGroup}>
+                  <div className={styles.detailLabel}>Student Type</div>
+                  <div className={styles.detailValue} style={{ textTransform: 'uppercase' }}>{selectedUser.studentType}</div>
+                </div>
+                <div className={styles.detailGroup}>
+                  <div className={styles.detailLabel}>Location</div>
+                  <div className={styles.detailValue}>{selectedUser.city}, {selectedUser.state}</div>
+                </div>
+                <div className={styles.detailGroup}>
+                  <div className={styles.detailLabel}>Joined Date</div>
+                  <div className={styles.detailValue}>{selectedUser.createdAtStr}</div>
+                </div>
+                <div className={styles.detailGroup}>
+                  <div className={styles.detailLabel}>User ID</div>
+                  <div className={styles.detailValue} style={{ fontSize: '13px', wordBreak: 'break-all' }}>{selectedUser.id}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }

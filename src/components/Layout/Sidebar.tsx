@@ -143,6 +143,9 @@ export default function Sidebar({ userRole, userName, userEmail }: SidebarProps)
             <Link href="/dashboard/admin/analytics" onClick={handleLinkClick} className={`${styles.navSubLink} ${isActive('/dashboard/admin/analytics') ? styles.navSubLinkActive : ''}`}>
               Assessment Analytics
             </Link>
+            <Link href="/dashboard/admin/tool-access" onClick={handleLinkClick} className={`${styles.navSubLink} ${isActive('/dashboard/admin/tool-access') ? styles.navSubLinkActive : ''}`}>
+              Tool Access
+            </Link>
           </div>
         </div>
       )}

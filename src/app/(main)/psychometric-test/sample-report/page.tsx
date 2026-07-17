@@ -85,7 +85,6 @@ const REPORT_SECTIONS = [
     color: '#690B1B',
     title: 'Downloadable PDF Dossier',
     desc: 'A comprehensive, beautifully formatted PDF report you can share with parents and counsellors.',
-    tag: 'Premium',
   },
 ];
 
@@ -139,11 +138,6 @@ function SampleReportContent() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
       >
-        <div className="sr-hero-badge">
-          <Crown className="sr-hero-badge-icon" />
-          <span>Premium Feature</span>
-        </div>
-
         <h1 className="sr-hero-title">
           What's Included in Your <span className="sr-hero-accent">Report</span>
         </h1>

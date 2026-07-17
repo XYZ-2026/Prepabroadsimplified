@@ -1,6 +1,7 @@
 import UniversityFinderWizard from '@/components/UniversityFinder/UniversityFinderWizard';
 import { verifySessionCookie, getUserProfile } from '@/lib/auth';
 import AccessRestricted from '@/components/Auth/AccessRestricted';
+import ToolLocked from '@/components/Auth/ToolLocked';
 import styles from '@/styles/university-finder.module.css';
 import { Megaphone } from 'lucide-react';
 
@@ -12,6 +13,14 @@ export default async function UniversityFinderPage() {
     return (
       <main style={{ minHeight: '100vh', padding: 'calc(var(--topbar-height) + 40px) 20px', background: 'var(--page-bg, #f7f8fb)' }}>
         <AccessRestricted />
+      </main>
+    );
+  }
+
+  if (profile?.toolAccess && profile.toolAccess.universityPredictor === false) {
+    return (
+      <main style={{ minHeight: '100vh', padding: 'calc(var(--topbar-height) + 40px) 20px', background: 'var(--page-bg, #f7f8fb)' }}>
+        <ToolLocked toolName="University Predictor" toolId="universityPredictor" />
       </main>
     );
   }

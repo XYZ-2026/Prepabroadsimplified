@@ -69,6 +69,11 @@ export default function AuthForm() {
           state: '',
           city: '',
           role: 'student',
+          toolAccess: {
+            iqTest: true,
+            psychometricTest: false,
+            universityPredictor: true,
+          },
           createdAt: serverTimestamp(),
         });
       } else {
@@ -165,6 +170,11 @@ export default function AuthForm() {
         state: regState,
         city: regCity,
         role: 'student', // default role
+        toolAccess: {
+          iqTest: true,
+          psychometricTest: false,
+          universityPredictor: true,
+        },
         createdAt: serverTimestamp(),
       });
 

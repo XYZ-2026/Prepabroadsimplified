@@ -40,7 +40,6 @@ export async function POST(request: Request) {
       narrative,
       questions: questions || null,
       answers: answers || null,
-      tier: 'Premium',
       userId: claims ? claims.uid : null, // Attach userId if available
       createdAt: new Date().toISOString(),
     };

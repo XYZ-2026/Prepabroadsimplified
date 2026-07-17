@@ -26,6 +26,11 @@ export default async function AdminUsersPage() {
           state: data.state || 'Unknown',
           city: data.city || 'Unknown',
           createdAtStr,
+          toolAccess: data.toolAccess || {
+            iqTest: true,
+            psychometricTest: true,
+            universityPredictor: true,
+          }
         };
       });
     }

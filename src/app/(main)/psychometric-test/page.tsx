@@ -45,6 +45,22 @@ interface StudentInfo {
   reportId: string;
 }
 
+const EMOJI_TO_ICON: Record<string, React.ElementType> = {
+  '🧠': Brain,
+  '🌟': Star,
+  '🎯': Target,
+  '📚': BookOpen,
+  '💼': Briefcase,
+};
+
+function renderIcon(iconString: string, size = 28, className = "as-icon-emoji") {
+  const IconComponent = EMOJI_TO_ICON[iconString] || EMOJI_TO_ICON[iconString.trim()];
+  if (IconComponent) {
+    return <IconComponent size={size} className={className} />;
+  }
+  return iconString;
+}
+
 interface Scores {
   aptitude: { overall: number; verbal: number; numerical: number; reasoning: number; spatial: number };
   personality: { openness: number; conscientiousness: number; extraversion: number; agreeableness: number; emotionalStability: number };
@@ -770,7 +786,7 @@ function AssessmentPageContent() {
   const assessmentType = searchParams.get("type") || "senior";
 
   const [screen, setScreen] = useState<Screen>(searchParams.get("resultId") ? "fetching" : "landing");
-  const [reportMode, setReportMode] = useState<'selection' | 'basic' | 'detailed'>('selection');
+  const [reportMode, setReportMode] = useState<'detailed'>('detailed');
   
   const [student, setStudent] = useState<StudentInfo>({
     name: "", grade: "", age: "", school: "", city: "", email: "", phone: "",
@@ -827,13 +843,8 @@ function AssessmentPageContent() {
             if (data.result.answers) setAnswers(data.result.answers);
             setScreen("report");
             
-            if (searchParams.get("source") === "admin") {
-              setReportMode("detailed");
-              setPdfUnlocked(true);
-            } else {
-              setReportMode("selection");
-              setPdfUnlocked(false);
-            }
+            setReportMode("detailed");
+            setPdfUnlocked(true);
           }
         })
         .catch(err => console.error("Error fetching result:", err));
@@ -1141,7 +1152,8 @@ Return ONLY valid JSON with this exact structure (do NOT include any markdown co
     }
     
     setScreen("report");
-    setReportMode("selection");
+    setReportMode("detailed");
+    setPdfUnlocked(true);
   }
 
   async function generateNarrative(sc: Scores): Promise<any> {
@@ -3119,7 +3131,7 @@ ${bodyHTML}
     return (
       <div className="as-sec-explain">
         <div className="as-sec-explain-head">
-          <div className="as-sec-explain-icon">{meta.icon}</div>
+          <div className="as-sec-explain-icon">{renderIcon(meta.icon, 48, "")}</div>
           <div className="as-sec-explain-title">
             <h3>{meta.name}</h3>
             <p>{meta.desc}</p>
@@ -3200,7 +3212,7 @@ ${bodyHTML}
               <a href={`/psychometric-test/sample-report?type=${assessmentType}`} className="as-btn-secondary" style={{ textDecoration: 'none', textAlign: 'center' }}>See Sample Report</a>
             </div>
             <div className="as-hero-feats">
-              {["100 Psychometric Questions", "5 Assessment Dimensions", "AI-Powered Analysis", "Premium PDF Report", "India + Study Abroad"].map((f) => (
+              {["100 Psychometric Questions", "5 Assessment Dimensions", "AI-Powered Analysis", "Detailed PDF Report", "India + Study Abroad"].map((f) => (
                 <div className="as-hero-feat" key={f}><span className="dot" />{f}</div>
               ))}
             </div>
@@ -3211,10 +3223,7 @@ ${bodyHTML}
             </div>
           </div>
 
-          {/* Premium Tools CTA Section */}
-          <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 bg-white z-10 relative mt-auto border-t border-slate-100">
-            <PremiumToolsCards />
-          </div>
+
         </div>
       )}
 
@@ -3515,7 +3524,7 @@ ${bodyHTML}
       {screen === "report" && scores && reportData && (
         <div className="as-screen" style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
 
-          {reportMode === "selection" ? (
+          {false ? (
             <div className="as-report-wrap" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '60px 20px', gap: '40px', minHeight: '80vh' }}>
               <div style={{ textAlign: 'center', marginBottom: '10px' }}>
                 <h2 style={{ fontSize: '32px', fontWeight: 800, color: '#111827', marginBottom: '12px' }}>Your Results Are Ready</h2>
@@ -3598,13 +3607,7 @@ ${bodyHTML}
               </div>
             </div>
 
-            {reportMode === 'basic' && (
-              <div style={{ padding: '40px', background: 'linear-gradient(to right, #FFF5F5, #fff)', border: '2px solid #690B1B', borderRadius: '16px', textAlign: 'center', marginTop: '20px' }}>
-                <h3 style={{ fontSize: '24px', fontWeight: 800, color: '#111827', marginBottom: '16px' }}>Want to see the full breakdown?</h3>
-                <p style={{ fontSize: '15px', color: '#4B5563', marginBottom: '24px', maxWidth: '600px', margin: '0 auto 24px auto', lineHeight: 1.6 }}>Unlock your complete 360° psychological profile, step-by-step career roadmaps, university finder, and in-depth aptitude breakdowns.</p>
-                <button onClick={() => setPayModalOpen(true)} style={{ background: '#690B1B', color: '#fff', padding: '14px 28px', borderRadius: '12px', fontSize: '16px', fontWeight: 700, border: 'none', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '8px', boxShadow: '0 4px 12px rgba(105, 11, 27, 0.2)' }}><Lock size={18} /> Unlock Premium for ₹49</button>
-              </div>
-            )}
+
             
             {reportMode === 'detailed' && (
               <>
@@ -4286,8 +4289,8 @@ ${bodyHTML}
 
                 {/* Indian Roadmap */}
                 <div className="as-sec-hd"><div className="bar" /><h2>Indian Academic Roadmap</h2><span className="pill">Stream &amp; Colleges</span></div>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '14px', marginBottom: '8px' }}>
-                  <div style={{ gridColumn: '1 / -1', background: 'var(--card)', border: '1px solid var(--brd)', borderRadius: '12px', padding: '22px 24px' }}>
+                <div className="as-indian-rm-grid" style={{ marginBottom: '8px' }}>
+                  <div className="as-indian-rm-card-full" style={{ background: 'var(--card)', border: '1px solid var(--brd)', borderRadius: '12px', padding: '22px 24px' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '12px' }}>
                       <div style={{ width: '3px', height: '16px', background: '#690B1B', borderRadius: '2px', flexShrink: 0 }} />
                       <div style={{ fontSize: '12px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.7px' }}>Stream Recommendation</div>
@@ -4304,7 +4307,7 @@ ${bodyHTML}
                     )}
                   </div>
 
-                  <div style={{ background: 'var(--card)', border: '1px solid var(--brd)', borderRadius: '12px', padding: '22px 24px' }}>
+                  <div className="as-indian-rm-card" style={{ background: 'var(--card)', border: '1px solid var(--brd)', borderRadius: '12px', padding: '22px 24px' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '14px' }}>
                       <div style={{ width: '3px', height: '16px', background: '#690B1B', borderRadius: '2px', flexShrink: 0 }} />
                       <div style={{ fontSize: '12px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.7px' }}>Entrance Exams</div>
@@ -4319,12 +4322,12 @@ ${bodyHTML}
                     </div>
                   </div>
 
-                  <div style={{ gridColumn: '2 / -1', background: 'var(--card)', border: '1px solid var(--brd)', borderRadius: '12px', padding: '22px 24px' }}>
+                  <div className="as-indian-rm-card-2" style={{ background: 'var(--card)', border: '1px solid var(--brd)', borderRadius: '12px', padding: '22px 24px' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '14px' }}>
                       <div style={{ width: '3px', height: '16px', background: '#690B1B', borderRadius: '2px', flexShrink: 0 }} />
                       <div style={{ fontSize: '12px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.7px' }}>Colleges to Target</div>
                     </div>
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '7px' }}>
+                    <div className="as-colleges-inner-grid" style={{ gap: '7px' }}>
                       {safeList(reportData.indianCounselling?.topColleges).map((c: string, i: number) => (
                         <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 11px', background: 'var(--bg)', borderRadius: '8px', border: '1px solid var(--brd)' }}>
                           <div style={{ width: '5px', height: '5px', borderRadius: '50%', background: '#690B1B', flexShrink: 0 }} />
@@ -4751,12 +4754,12 @@ ${bodyHTML}
                           <div className="as-rm-lbl">{s.lbl.toUpperCase()}</div>
                           <div className="as-rm-title">{rm.title || s.lbl}</div>
                           <div className="as-rm-acts">{(rm.actions || []).map((a: string, j: number) => <div className="as-rm-act" key={j}>{a}</div>)}</div>
-                          {rm.targetDegree && <div style={{ marginTop: "8px", background: "var(--red-l)", border: "1px solid rgba(105,11,27,.15)", borderRadius: "8px", padding: "8px 12px", fontSize: "12px", fontWeight: 700, color: "var(--red)" }}>🎓 {rm.targetDegree}</div>}
-                          {rm.targetColleges?.length && <div style={{ marginTop: "8px" }}><span style={{ fontSize: "11px", fontWeight: 700, color: "var(--t4)", textTransform: "uppercase", letterSpacing: ".4px" }}>Target Colleges</span><div style={{ display: "flex", flexWrap: "wrap", gap: "5px", marginTop: "5px" }}>{rm.targetColleges.map((c: string, j: number) => <span key={j} style={{ background: "var(--bg)", border: "1px solid var(--border)", padding: "3px 10px", borderRadius: "6px", fontSize: "11.5px", fontWeight: 600 }}>{c}</span>)}</div></div>}
+                          {rm.targetDegree && <div style={{ marginTop: "8px", background: "var(--red-l)", border: "1px solid rgba(105,11,27,.15)", borderRadius: "8px", padding: "8px 12px", fontSize: "12px", fontWeight: 700, color: "var(--red)", wordBreak: "break-word" }}>🎓 {rm.targetDegree}</div>}
+                          {rm.targetColleges?.length && <div style={{ marginTop: "8px" }}><span style={{ fontSize: "11px", fontWeight: 700, color: "var(--t4)", textTransform: "uppercase", letterSpacing: ".4px" }}>Target Colleges</span><div style={{ display: "flex", flexWrap: "wrap", gap: "5px", marginTop: "5px" }}>{rm.targetColleges.map((c: string, j: number) => <span key={j} style={{ background: "var(--bg)", border: "1px solid var(--border)", padding: "3px 10px", borderRadius: "6px", fontSize: "11.5px", fontWeight: 600, maxWidth: "100%", wordBreak: "break-word" }}>{c}</span>)}</div></div>}
                           {rm.salaryTrajectory?.length && <div style={{ marginTop: "8px", display: "flex", gap: "8px", flexWrap: "wrap" }}>{rm.salaryTrajectory.map((s: string, j: number) => <span key={j} style={{ background: "var(--green-l)", border: "1px solid rgba(5,122,85,.2)", color: "var(--green)", padding: "4px 12px", borderRadius: "100px", fontSize: "11.5px", fontWeight: 700 }}>💰 {s}</span>)}</div>}
-                          {rm.targetCompanies?.length && <div style={{ marginTop: "8px" }}><span style={{ fontSize: "11px", fontWeight: 700, color: "var(--t4)", textTransform: "uppercase", letterSpacing: ".4px" }}>Target Companies</span><div style={{ display: "flex", flexWrap: "wrap", gap: "5px", marginTop: "5px" }}>{rm.targetCompanies.map((c: string, j: number) => <span key={j} style={{ background: "var(--bg)", border: "1px solid var(--border)", padding: "3px 10px", borderRadius: "6px", fontSize: "11.5px", fontWeight: 600 }}>🏢 {c}</span>)}</div></div>}
-                          {rm.targetUniversities?.length && <div style={{ marginTop: "8px" }}><span style={{ fontSize: "11px", fontWeight: 700, color: "var(--t4)", textTransform: "uppercase", letterSpacing: ".4px" }}>Target Universities</span><div style={{ display: "flex", flexDirection: "column", gap: "4px", marginTop: "5px" }}>{rm.targetUniversities.map((u: string, j: number) => <span key={j} style={{ fontSize: "12px", color: "var(--t2)" }}>🌍 {u}</span>)}</div></div>}
-                          {rm.milestone && <div style={{ marginTop: "8px", display: "flex", alignItems: "center", gap: "6px" }}><span style={{ fontSize: "10px", fontWeight: 800, color: "var(--amber)", textTransform: "uppercase", letterSpacing: ".4px" }}>🎯 Milestone:</span><span style={{ fontSize: "12px", fontWeight: 700, color: "var(--t1)" }}>{rm.milestone}</span></div>}
+                          {rm.targetCompanies?.length && <div style={{ marginTop: "8px" }}><span style={{ fontSize: "11px", fontWeight: 700, color: "var(--t4)", textTransform: "uppercase", letterSpacing: ".4px" }}>Target Companies</span><div style={{ display: "flex", flexWrap: "wrap", gap: "5px", marginTop: "5px" }}>{rm.targetCompanies.map((c: string, j: number) => <span key={j} style={{ background: "var(--bg)", border: "1px solid var(--border)", padding: "3px 10px", borderRadius: "6px", fontSize: "11.5px", fontWeight: 600, maxWidth: "100%", wordBreak: "break-word" }}>🏢 {c}</span>)}</div></div>}
+                          {rm.targetUniversities?.length && <div style={{ marginTop: "8px" }}><span style={{ fontSize: "11px", fontWeight: 700, color: "var(--t4)", textTransform: "uppercase", letterSpacing: ".4px" }}>Target Universities</span><div style={{ display: "flex", flexDirection: "column", gap: "4px", marginTop: "5px" }}>{rm.targetUniversities.map((u: string, j: number) => <span key={j} style={{ fontSize: "12px", color: "var(--t2)", wordBreak: "break-word" }}>🌍 {u}</span>)}</div></div>}
+                          {rm.milestone && <div style={{ marginTop: "8px", display: "flex", alignItems: "flex-start", gap: "6px" }}><span style={{ fontSize: "10px", fontWeight: 800, color: "var(--amber)", textTransform: "uppercase", letterSpacing: ".4px", flexShrink: 0, marginTop: "2px" }}>🎯 Milestone:</span><span style={{ fontSize: "12px", fontWeight: 700, color: "var(--t1)" }}>{rm.milestone}</span></div>}
                         </div>
                       </div>
                     );

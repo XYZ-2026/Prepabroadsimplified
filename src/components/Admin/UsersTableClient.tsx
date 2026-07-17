@@ -12,12 +12,20 @@ export interface UserData {
   state: string;
   city: string;
   createdAtStr: string;
+  toolAccess?: {
+    iqTest: boolean;
+    psychometricTest: boolean;
+    universityPredictor: boolean;
+  };
 }
 
 export default function UsersTableClient({ initialUsers }: { initialUsers: UserData[] }) {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterType, setFilterType] = useState('all');
   const [selectedUser, setSelectedUser] = useState<UserData | null>(null);
+  const handleSelectUser = (user: UserData) => {
+    setSelectedUser(user);
+  };
 
   const filteredUsers = initialUsers.filter((user) => {
     const matchesSearch = 
@@ -128,7 +136,7 @@ export default function UsersTableClient({ initialUsers }: { initialUsers: UserD
                     <span className={styles.userSubtext}>{user.createdAtStr}</span>
                   </td>
                   <td>
-                    <button className={styles.btnEdit} onClick={() => setSelectedUser(user)}>View Details</button>
+                    <button className={styles.btnEdit} onClick={() => handleSelectUser(user)}>View Details</button>
                   </td>
                 </tr>
               ))

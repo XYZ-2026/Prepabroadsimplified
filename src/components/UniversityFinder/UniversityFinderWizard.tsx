@@ -132,89 +132,91 @@ export default function UniversityFinderWizard({ initialDetails }: { initialDeta
         
         <p style={{ marginBottom: '20px', color: '#666' }}>Hi {details.name}! We'll personalise suggestions for {details.city}, {details.state}.</p>
 
-        <div className={styles.grid2}>
-          <div>
-            <div className={styles.inputGroup}>
-              <label>Class 9 %</label>
-              <input type="number" min="0" max="100" value={profile.c9 || ''} onChange={e => setProfile({...profile, c9: Number(e.target.value)})} />
-            </div>
-            <div className={styles.inputGroup} style={{ marginTop: '12px' }}>
-              <label>Class 10 %</label>
-              <input type="number" min="0" max="100" value={profile.c10 || ''} onChange={e => setProfile({...profile, c10: Number(e.target.value)})} />
-            </div>
-            <div className={styles.inputGroup} style={{ marginTop: '12px' }}>
-              <label>Class 11 %</label>
-              <input type="number" min="0" max="100" value={profile.c11 || ''} onChange={e => setProfile({...profile, c11: Number(e.target.value)})} />
-            </div>
-            <div className={styles.inputGroup} style={{ marginTop: '12px' }}>
-              <label>Class 12 %</label>
-              <input type="number" min="0" max="100" value={profile.c12 || ''} onChange={e => setProfile({...profile, c12: Number(e.target.value)})} />
-            </div>
-            <div className={styles.inputGroup} style={{ marginTop: '12px' }}>
-              <label>SAT/ACT (400-1600)</label>
-              <input type="number" min="400" max="1600" value={profile.sat || ''} onChange={e => setProfile({...profile, sat: Number(e.target.value)})} />
-            </div>
-          </div>
-          <div>
-            <div className={styles.inputGroup}>
-              <label>Co-curricular (0-3)</label>
-              <input type="number" min="0" max="3" value={profile.cc || ''} onChange={e => setProfile({...profile, cc: Number(e.target.value)})} />
-            </div>
-            <div className={styles.inputGroup} style={{ marginTop: '12px' }}>
-              <label>Extra-curricular (0-3)</label>
-              <input type="number" min="0" max="3" value={profile.ec || ''} onChange={e => setProfile({...profile, ec: Number(e.target.value)})} />
-            </div>
-            <div className={styles.inputGroup} style={{ marginTop: '12px' }}>
-              <label>Internships (0-2)</label>
-              <select value={profile.intr} onChange={e => setProfile({...profile, intr: Number(e.target.value)})}>
-                <option value="0">0</option><option value="1">1</option><option value="2">2</option>
-              </select>
-            </div>
-            <div style={{ marginTop: '20px' }}>
-              <label className={styles.checkboxLabel}>
-                <input type="checkbox" checked={profile.community} onChange={e => setProfile({...profile, community: e.target.checked})} />
-                Community Service
-              </label>
-              <label className={styles.checkboxLabel}>
-                <input type="checkbox" checked={profile.research} onChange={e => setProfile({...profile, research: e.target.checked})} />
-                Research Project
-              </label>
-            </div>
-            <div className={styles.inputGroup} style={{ marginTop: '12px' }}>
-              <label>Number of LORs (0-3)</label>
-              <select value={profile.n_lor} onChange={e => setProfile({...profile, n_lor: Number(e.target.value)})}>
-                <option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option>
-              </select>
-            </div>
-          </div>
-        </div>
-
-        <div style={{ marginTop: '20px', display: 'flex', flexWrap: 'wrap', gap: '16px', justifyContent: 'space-between', alignItems: 'center' }}>
-          <div className={styles.inputGroup} style={{ flex: '1 1 min-content' }}>
-            <label>Number of APs (0–5)</label>
-            <input type="number" min="0" max="5" value={n_ap} onChange={e => {
-              const val = Math.min(5, Math.max(0, Number(e.target.value)));
-              setNAp(val);
-              setApScores(Array(val).fill(0));
-            }} />
-          </div>
-          <button onClick={handlePredict} className={styles.btnPrimary} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><Search className="w-4 h-4" /> Find My Universities</button>
-        </div>
-        
-        {n_ap > 0 && (
-          <div style={{ marginTop: '20px' }}>
-            {Array.from({ length: n_ap }).map((_, i) => (
-              <div key={i} className={styles.inputGroup} style={{ marginBottom: '8px' }}>
-                <label>AP {i+1} score (0.0 - 5.0)</label>
-                <input type="number" step="0.1" min="0" max="5" value={apScores[i] || ''} onChange={e => {
-                  const newScores = [...apScores];
-                  newScores[i] = Number(e.target.value);
-                  setApScores(newScores);
-                }} />
+        <form onSubmit={(e) => { e.preventDefault(); handlePredict(); }}>
+          <div className={styles.grid2}>
+            <div>
+              <div className={styles.inputGroup}>
+                <label>Class 9 % *</label>
+                <input type="number" step="any" min="0" max="100" value={profile.c9 || ''} onChange={e => setProfile({...profile, c9: Number(e.target.value)})} required />
               </div>
-            ))}
+              <div className={styles.inputGroup} style={{ marginTop: '12px' }}>
+                <label>Class 10 % *</label>
+                <input type="number" step="any" min="0" max="100" value={profile.c10 || ''} onChange={e => setProfile({...profile, c10: Number(e.target.value)})} required />
+              </div>
+              <div className={styles.inputGroup} style={{ marginTop: '12px' }}>
+                <label>Class 11 % *</label>
+                <input type="number" step="any" min="0" max="100" value={profile.c11 || ''} onChange={e => setProfile({...profile, c11: Number(e.target.value)})} required />
+              </div>
+              <div className={styles.inputGroup} style={{ marginTop: '12px' }}>
+                <label>Class 12 % *</label>
+                <input type="number" step="any" min="0" max="100" value={profile.c12 || ''} onChange={e => setProfile({...profile, c12: Number(e.target.value)})} required />
+              </div>
+              <div className={styles.inputGroup} style={{ marginTop: '12px' }}>
+                <label>SAT/ACT (400-1600) *</label>
+                <input type="number" min="400" max="1600" value={profile.sat || ''} onChange={e => setProfile({...profile, sat: Number(e.target.value)})} required />
+              </div>
+            </div>
+            <div>
+              <div className={styles.inputGroup}>
+                <label>Co-curricular (0-3) *</label>
+                <input type="number" min="0" max="3" value={profile.cc === 0 && !String(profile.cc) ? '' : profile.cc} onChange={e => setProfile({...profile, cc: e.target.value === '' ? 0 : Number(e.target.value)})} required />
+              </div>
+              <div className={styles.inputGroup} style={{ marginTop: '12px' }}>
+                <label>Extra-curricular (0-3) *</label>
+                <input type="number" min="0" max="3" value={profile.ec === 0 && !String(profile.ec) ? '' : profile.ec} onChange={e => setProfile({...profile, ec: e.target.value === '' ? 0 : Number(e.target.value)})} required />
+              </div>
+              <div className={styles.inputGroup} style={{ marginTop: '12px' }}>
+                <label>Internships (0-2) *</label>
+                <select value={profile.intr} onChange={e => setProfile({...profile, intr: Number(e.target.value)})} required>
+                  <option value="0">0</option><option value="1">1</option><option value="2">2</option>
+                </select>
+              </div>
+              <div style={{ marginTop: '20px' }}>
+                <label className={styles.checkboxLabel}>
+                  <input type="checkbox" checked={profile.community} onChange={e => setProfile({...profile, community: e.target.checked})} />
+                  Community Service
+                </label>
+                <label className={styles.checkboxLabel}>
+                  <input type="checkbox" checked={profile.research} onChange={e => setProfile({...profile, research: e.target.checked})} />
+                  Research Project
+                </label>
+              </div>
+              <div className={styles.inputGroup} style={{ marginTop: '12px' }}>
+                <label>Number of LORs (0-3) *</label>
+                <select value={profile.n_lor} onChange={e => setProfile({...profile, n_lor: Number(e.target.value)})} required>
+                  <option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option>
+                </select>
+              </div>
+            </div>
           </div>
-        )}
+
+          <div style={{ marginTop: '20px', display: 'flex', flexWrap: 'wrap', gap: '16px', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div className={styles.inputGroup} style={{ flex: '1 1 min-content' }}>
+              <label>Number of APs (0–5)</label>
+              <input type="number" min="0" max="5" value={n_ap} onChange={e => {
+                const val = Math.min(5, Math.max(0, Number(e.target.value)));
+                setNAp(val);
+                setApScores(Array(val).fill(0));
+              }} required />
+            </div>
+            <button type="submit" className={styles.btnPrimary} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><Search className="w-4 h-4" /> Find My Universities</button>
+          </div>
+          
+          {n_ap > 0 && (
+            <div style={{ marginTop: '20px' }}>
+              {Array.from({ length: n_ap }).map((_, i) => (
+                <div key={i} className={styles.inputGroup} style={{ marginBottom: '8px' }}>
+                  <label>AP {i+1} score (0.0 - 5.0) *</label>
+                  <input type="number" step="0.1" min="0" max="5" value={apScores[i] || ''} onChange={e => {
+                    const newScores = [...apScores];
+                    newScores[i] = Number(e.target.value);
+                    setApScores(newScores);
+                  }} required />
+                </div>
+              ))}
+            </div>
+          )}
+        </form>
       </div>
     );
   }

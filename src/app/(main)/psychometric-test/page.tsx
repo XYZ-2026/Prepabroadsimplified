@@ -5,6 +5,7 @@ import React, { useState, useEffect, useRef, useCallback, Suspense } from "react
 import Script from "next/script";
 import { useSearchParams } from "next/navigation";
 import PremiumToolsCards from "@/components/PremiumToolsCards";
+import TermsPopup from "@/components/TermsPopup";
 import "./assessment.css";
 import {
   FBQ,
@@ -786,7 +787,8 @@ function AssessmentPageContent() {
   const assessmentType = searchParams.get("type") || "senior";
 
   const [screen, setScreen] = useState<Screen>(searchParams.get("resultId") ? "fetching" : "landing");
-  const [reportMode, setReportMode] = useState<'detailed'>('detailed');
+  const [showTerms, setShowTerms] = useState(false);
+  const [reportMode, setReportMode] = useState<'detailed' | 'basic'>('detailed');
   
   const [student, setStudent] = useState<StudentInfo>({
     name: "", grade: "", age: "", school: "", city: "", email: "", phone: "",
@@ -3208,7 +3210,7 @@ ${bodyHTML}
               )}
             </p>
             <div className="as-hero-cta">
-              <button className="as-btn-primary" onClick={goToDetails}>Start Your Assessment →</button>
+              <button className="as-btn-primary" onClick={() => setShowTerms(true)}>Start Your Assessment →</button>
               <a href={`/psychometric-test/sample-report?type=${assessmentType}`} className="as-btn-secondary" style={{ textDecoration: 'none', textAlign: 'center' }}>See Sample Report</a>
             </div>
             <div className="as-hero-feats">
@@ -5088,6 +5090,15 @@ ${bodyHTML}
 
       {/* Toast */}
       <div className={`as-toast${toastVisible ? " show" : ""}`}>{toastMsg}</div>
+      
+      <TermsPopup
+        isOpen={showTerms}
+        onClose={() => setShowTerms(false)}
+        onProceed={() => {
+          setShowTerms(false);
+          goToDetails();
+        }}
+      />
     </div>
   );
 }

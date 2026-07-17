@@ -14,6 +14,7 @@ import {
   AlertTriangle,
   ChevronLeft
 } from 'lucide-react';
+import TermsPopup from '@/components/TermsPopup';
 
 const rules = [
   { text: 'Complete the assessment in one sitting.', icon: CheckCircle2 },
@@ -28,6 +29,7 @@ export default function InstructionsPage() {
   const router = useRouter();
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState('');
+  const [showTerms, setShowTerms] = React.useState(false);
 
   const handleStartTest = async () => {
     setLoading(true);
@@ -144,7 +146,7 @@ export default function InstructionsPage() {
 
           <div className="mt-auto">
             <button
-              onClick={handleStartTest}
+              onClick={() => setShowTerms(true)}
               disabled={loading}
               className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-[#690b1b] to-[#7a0c0c] hover:from-[#7a0c0c] hover:to-[#5c0808] text-white font-semibold text-base transition-all duration-300 disabled:opacity-50 flex items-center justify-center gap-3 md:shadow-[0_10px_20px_rgba(105,11,27,0.3)] md:hover:shadow-[0_15px_30px_rgba(105,11,27,0.4)] hover:-translate-y-0.5 group"
             >
@@ -170,6 +172,15 @@ export default function InstructionsPage() {
 
         </div>
       </motion.div>
+
+      <TermsPopup
+        isOpen={showTerms}
+        onClose={() => setShowTerms(false)}
+        onProceed={() => {
+          setShowTerms(false);
+          handleStartTest();
+        }}
+      />
     </div>
   );
 }

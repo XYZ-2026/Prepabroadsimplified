@@ -847,6 +847,12 @@ function AssessmentPageContent() {
             setStudent(data.result.student);
             if (data.result.questions) setQuestions(data.result.questions);
             if (data.result.answers) setAnswers(data.result.answers);
+            if (data.result.careerAbroadData) setCareerAbroadData(data.result.careerAbroadData);
+            if (data.result.allCrmData) {
+              setAllCrmData(data.result.allCrmData);
+              if (data.result.allCrmData.length > 0) setCrmData(data.result.allCrmData[0]);
+              allCrmGeneratedRef.current = true;
+            }
             setScreen("report");
             
             setReportMode("detailed");
@@ -898,26 +904,45 @@ Return ONLY valid JSON with this exact structure (do NOT include any markdown co
         const raw = await callAPI([{ role: "user", content: prompt }]);
         const parsed = extractJSON(raw);
         if (parsed && parsed.countries?.length) {
-          setCareerAbroadData(prev => ({
-            ...prev,
-            [activeCareerName]: parsed
-          }));
+          setCareerAbroadData(prev => {
+            const next = { ...prev, [activeCareerName]: parsed };
+            const resultId = searchParams.get("resultId");
+            if (resultId) {
+              fetch(`/api/psychometric-test/${resultId}/update-generated`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ careerAbroadData: next }),
+              }).catch(e => console.error("Failed to save abroad data", e));
+            }
+            return next;
+          });
         } else throw new Error("invalid");
       } catch (err) {
         console.warn("API failed in fetchAbroadData, using fallback data:", err);
-        setCareerAbroadData(prev => ({
-          ...prev,
-          [activeCareerName]: {
-            rationale: "This career has a strong global demand, offering excellent opportunities for international exposure, cutting-edge research, and cross-cultural networking.",
-            countries: [
-              { flag: "🇺🇸", name: "United States", reason: "Home to top-tier universities and a massive industry presence with high earning potential." },
-              { flag: "🇬🇧", name: "United Kingdom", reason: "Offers globally recognized accelerated programs and strong industry links." },
-              { flag: "🇨🇦", name: "Canada", reason: "Known for excellent education quality, high quality of life, and welcoming post-study work opportunities." }
-            ],
-            scholarships: ["Global Excellence Scholarship", "Chevening Scholarship", "Fulbright Foreign Student Program"],
-            programs: ["BSc/MSc in relevant field from top global institutions"]
+        setCareerAbroadData(prev => {
+          const next = {
+            ...prev,
+            [activeCareerName]: {
+              rationale: "This career has a strong global demand, offering excellent opportunities for international exposure, cutting-edge research, and cross-cultural networking.",
+              countries: [
+                { flag: "🇺🇸", name: "United States", reason: "Home to top-tier universities and a massive industry presence with high earning potential." },
+                { flag: "🇬🇧", name: "United Kingdom", reason: "Offers globally recognized accelerated programs and strong industry links." },
+                { flag: "🇨🇦", name: "Canada", reason: "Known for excellent education quality, high quality of life, and welcoming post-study work opportunities." }
+              ],
+              scholarships: ["Global Excellence Scholarship", "Chevening Scholarship", "Fulbright Foreign Student Program"],
+              programs: ["BSc/MSc in relevant field from top global institutions"]
+            }
+          };
+          const resultId = searchParams.get("resultId");
+          if (resultId) {
+            fetch(`/api/psychometric-test/${resultId}/update-generated`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ careerAbroadData: next }),
+            }).catch(e => console.error("Failed to save fallback abroad data", e));
           }
-        }));
+          return next;
+        });
       } finally {
         setLoadingAbroad(false);
       }
@@ -1020,6 +1045,16 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
       }
 
       setAllCrmLoading(false);
+
+      const resultId = searchParams.get("resultId");
+      if (resultId) {
+        fetch(`/api/psychometric-test/${resultId}/update-generated`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ allCrmData: roadmapResults }),
+        }).catch(e => console.error("Failed to save all CRM data", e));
+      }
+
       return roadmapResults;
     }
 
@@ -1504,6 +1539,12 @@ Return ONLY valid JSON with this exact structure (no markdown):
     const career = reportData.topCareers?.[idx];
     if (!career) { setCrmOpen(false); return; }
 
+    if (allCrmData[idx]) {
+      setCrmData(allCrmData[idx]);
+      setCrmLoading(false);
+      return;
+    }
+
     try {
       const roadmapGradeContext = assessmentType === "junior"
         ? "Note: The student is in middle school (Grade 7-9). Tailor Stage 1 of the stages array to cover High School Preparation & Stream Selection (Grade 10/11/12), recommending actions to prepare for the appropriate stream choice."
@@ -1700,6 +1741,15 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
       pdfCrmDataList.push(crmData);
     }
 
+    // Sort roadmaps by fitScore descending
+    pdfCrmDataList.sort((a, b) => {
+      const getScore = (s: any) => {
+        const match = String(s || "").match(/(\d+)/);
+        return match ? parseInt(match[1], 10) : 0;
+      };
+      return getScore(b.roadmap?.fitScore) - getScore(a.roadmap?.fitScore);
+    });
+
     const rid = student.reportId;
     const vn: Record<string, string> = { V: "Visual", A: "Auditory", R: "Reading/Writing", K: "Kinesthetic" };
     const rn: Record<string, string> = { R: "Realistic", I: "Investigative", A: "Artistic", S: "Social", E: "Enterprising", C: "Conventional" };
@@ -1746,7 +1796,8 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
     // Exec summary = pgOffset + 1, then each content page increments by 1
     // Junior has 10 pages total (cover + 8 content + back cover), Senior has 9 (cover + 7 content + back cover)
     // When locked, only cover + QA + exec summary + locked page = pgOffset + 2
-    let totalPages = pdfUnlocked ? (assessmentType === "junior" ? 10 : 9) + numQaPagesActual + pdfCrmDataList.length : (pgOffset + 2);
+    const roadmapPagesCount = pdfUnlocked ? pdfCrmDataList.length * 2 : 0;
+    let totalPages = pdfUnlocked ? (assessmentType === "junior" ? 10 : 9) + numQaPagesActual + roadmapPagesCount : (pgOffset + 2);
 
     // Helper functions for header and footer layout
     const mkHeader = (title: string) => `
@@ -1999,6 +2050,88 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
       }
     }
 
+
+    const rmL = pdfCrmDataList.length;
+
+    const renderRoadmaps = (startPage: number) => {
+      if (rmL === 0) return "";
+      return pdfCrmDataList.map((pdfCrmItem: CareerRoadmapData, crmIdx: number) => {
+        const degreeText = pdfCrmItem.career?.education || pdfCrmItem.roadmap?.targetDegree || pdfCrmItem.roadmap?.degree || pdfCrmItem.roadmap?.stages?.find((s: any) => s.stage === "Graduation")?.title || "";
+        const bestFitBadge = crmIdx === 0 ? '<div style="display:inline-block;background:#057A55;color:#fff;font-size:8px;font-weight:800;padding:3px 8px;border-radius:4px;margin-bottom:4px;text-transform:uppercase;letter-spacing:0.5px">⭐ Best Fit Pathway</div>' : "";
+        const degreeDisplay = (crmIdx === 0 && degreeText) ? ' <span style="font-size:12px;color:#6B7280;font-weight:600">(' + esc(degreeText) + ')</span>' : "";
+
+        return `
+      <!-- DETAILED CAREER ROADMAP ${crmIdx + 1} - PAGE 1 -->
+      <div class="as-pg">
+        ${mkHeader(`Career Roadmap ${crmIdx + 1} of ${rmL} (Part 1)`)}
+        ${bestFitBadge}
+        <div class="as-nv-pg-heading" style="margin-bottom:1px;font-size:18px">🎓 ${esc(pdfCrmItem.career.name)}${degreeDisplay}</div>
+        <div class="as-nv-pg-sub" style="margin-bottom:6px;font-size:9px;line-height:1.35">${esc((pdfCrmItem.roadmap.overview || pdfCrmItem.career.description || '').substring(0, 200))}</div>
+        
+        <div class="as-pg-content" style="gap:5px;padding-bottom:30px">
+          <!-- KPIs -->
+          <div style="display:grid;grid-template-columns:repeat(4, 1fr);gap:6px;margin-bottom:4px;align-items:stretch">
+            <div style="border:1px solid #E5E7EB;border-radius:6px;padding:5px;text-align:center;background:#fff;display:flex;flex-direction:column;align-items:center;height:100%;box-sizing:border-box">
+              <div style="font-size:10px;font-weight:800;color:#690B1B;margin-bottom:4px;width:100%;display:flex;align-items:center;justify-content:center;flex:1">${esc(pdfCrmItem.roadmap.fitScore || "-")}</div>
+              <div style="font-size:6px;color:#6B7280;text-transform:uppercase;letter-spacing:0.4px;margin-top:auto">Fit Score</div>
+            </div>
+            <div style="border:1px solid #E5E7EB;border-radius:6px;padding:5px;text-align:center;background:#fff;display:flex;flex-direction:column;align-items:center;height:100%;box-sizing:border-box">
+              <div style="font-size:10px;font-weight:800;color:#690B1B;margin-bottom:4px;width:100%;display:flex;align-items:center;justify-content:center;flex:1;line-height:1.2">${esc(pdfCrmItem.roadmap.duration || "-")}</div>
+              <div style="font-size:6px;color:#6B7280;text-transform:uppercase;letter-spacing:0.4px;margin-top:auto">Duration</div>
+            </div>
+            <div style="border:1px solid #E5E7EB;border-radius:6px;padding:5px;text-align:center;background:#fff;display:flex;flex-direction:column;align-items:center;height:100%;box-sizing:border-box">
+              <div style="font-size:10px;font-weight:800;color:#690B1B;margin-bottom:4px;width:100%;display:flex;align-items:center;justify-content:center;flex:1;line-height:1.2">${esc(pdfCrmItem.roadmap.avgSalary || pdfCrmItem.career.salaryRange || "-")}</div>
+              <div style="font-size:6px;color:#6B7280;text-transform:uppercase;letter-spacing:0.4px;margin-top:auto">Avg Salary</div>
+            </div>
+            <div style="border:1px solid #E5E7EB;border-radius:6px;padding:5px;text-align:center;background:#fff;display:flex;flex-direction:column;align-items:center;height:100%;box-sizing:border-box">
+              <div style="font-size:10px;font-weight:800;color:#690B1B;margin-bottom:4px;width:100%;display:flex;align-items:center;justify-content:center;flex:1">${(pdfCrmItem.roadmap.stages || []).length}</div>
+              <div style="font-size:6px;color:#6B7280;text-transform:uppercase;letter-spacing:0.4px;margin-top:auto">Stages</div>
+            </div>
+          </div>
+
+          <!-- Stages -->
+          <div style="flex:1;display:flex;flex-direction:column;gap:4px;overflow:hidden">
+            ${(pdfCrmItem.roadmap.stages || []).slice(0, 4).map((s: any, i: number, arr: any[]) => `
+              <div style="display:flex;gap:8px;position:relative">
+                ${i !== arr.length - 1 ? `<div style="position:absolute;left:9px;top:20px;bottom:-4px;width:1.5px;background:#E5E7EB;z-index:0"></div>` : ""}
+                <div style="width:20px;height:20px;border-radius:10px;background:#FFF8F8;border:1.5px solid #690B1B;display:flex;align-items:center;justify-content:center;font-size:9px;position:relative;z-index:1;flex-shrink:0">
+                  ${s.icon || "📍"}
+                </div>
+                <div style="flex:1;border:1px solid #E5E7EB;border-radius:6px;padding:5px 8px;background:#fff;margin-bottom:2px">
+                  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2px">
+                    <div style="font-size:8.5px;font-weight:800;color:#690B1B">${esc(s.stage)}: ${esc(s.title)}</div>
+                  </div>
+                  ${s.milestone ? `<div style="font-size:7px;font-weight:700;color:#057A55;background:#ECFDF5;display:inline-block;padding:1px 5px;border-radius:3px;margin-bottom:3px">🏁 ${esc(s.milestone)}</div>` : ""}
+                  <ul style="margin:0;padding-left:12px;font-size:7.5px;color:#4B5563;line-height:1.35">
+                    ${(s.actions || []).slice(0, 3).map((a: string) => `<li style="margin-bottom:1px">${esc(a)}</li>`).join("")}
+                  </ul>
+                </div>
+              </div>
+            `).join("")}
+          </div>
+
+          <!-- Bottom Data -->
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;border-top:1.5px solid #E5E7EB;padding-top:6px;margin-top:auto">
+            <div>
+              <div style="font-size:8px;font-weight:800;color:#690B1B;margin-bottom:3px;text-transform:uppercase">🎓 Top Colleges</div>
+              <div style="font-size:7.5px;color:#4B5563;line-height:1.35">
+                ${(pdfCrmItem.roadmap.topColleges || []).slice(0, 3).map((c: string) => `• ${esc(c)}`).join("<br>")}
+              </div>
+            </div>
+            <div>
+              <div style="font-size:8px;font-weight:800;color:#690B1B;margin-bottom:3px;text-transform:uppercase">📝 Key Exams</div>
+              <div style="font-size:7.5px;color:#4B5563;line-height:1.35">
+                ${(pdfCrmItem.roadmap.keyExams || []).slice(0, 3).map((e: string) => `• ${esc(e)}`).join("<br>")}
+              </div>
+            </div>
+          </div>
+        </div>
+        ${mkFooter(startPage + crmIdx * 2 + 1)}
+      </div>
+      `;
+      }).join("");
+    };
+
     const bodyHTML = `
       <!-- PAGE 1: COVER -->
       <div class="as-pg cover-pg" style="background: linear-gradient(135deg,#4F0813 0%,#1F0104 100%); padding: 0 !important;">
@@ -2044,17 +2177,19 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
         
         <div class="as-pg-content">
           <!-- Top score summary boxes -->
-          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px">
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;align-items:stretch">
             ${[
               ["🧠", sc.aptitude.overall + "%", "Overall Aptitude", "Cognitive Capacity"],
               ["🎯", rn[topR] || topR, "Top Interest", "RIASEC Vocational"],
               ["📚", vn[sc.topVark] || "Visual", "Learning Style", "VARK Modality"],
               ["💼", sc.careerFitment[0]?.name.split(" &")[0].split(" Stream")[0] || "—", "Best Fit Cluster", "Career Dimension"]
             ].map(([icon, val, label, subDesc]) => `
-              <div style="border:1.5px solid #690B1B15;border-radius:10px;padding:12px 6px;text-align:center;background:#FFFDFD;box-shadow:0 2px 4px rgba(105,11,27,0.015)">
-                <div style="font-size:16px;font-weight:900;color:#690B1B;margin-bottom:4px">${icon} ${val}</div>
-                <div style="font-size:9.5px;font-weight:800;color:#111;text-transform:uppercase;letter-spacing:.2px">${label}</div>
-                <div style="font-size:7.5px;color:#9CA3AF;font-weight:600;margin-top:2px">${subDesc}</div>
+              <div style="border:1.5px solid #690B1B15;border-radius:10px;padding:12px 6px;text-align:center;background:#FFFDFD;box-shadow:0 2px 4px rgba(105,11,27,0.015);display:flex;flex-direction:column;align-items:center;height:100%;box-sizing:border-box">
+                <div style="display:flex;align-items:center;justify-content:center;gap:4px;font-size:15px;font-weight:900;color:#690B1B;margin-bottom:6px;width:100%">
+                  <span style="flex-shrink:0">${icon}</span> <span style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${val}</span>
+                </div>
+                <div style="font-size:9px;font-weight:800;color:#111;text-transform:uppercase;letter-spacing:.2px;line-height:1.3;margin-bottom:6px">${label}</div>
+                <div style="font-size:7.5px;color:#9CA3AF;font-weight:600;margin-top:auto">${subDesc}</div>
               </div>
             `).join("")}
           </div>
@@ -2399,6 +2534,7 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
           </div>
           ${mkFooter(pgOffset + 3)}
         </div>
+        ${renderRoadmaps(pgOffset + 4)}
       `}
 
       <!-- PAGE 13 (JUNIOR: RIASEC & VARK / SENIOR: Aptitude & Personality) -->
@@ -2557,7 +2693,7 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
               </div>
             </div>
           </div>
-          ${mkFooter(pgOffset + 4)}
+          ${mkFooter(pgOffset + 4 + roadmapPagesCount)}
         </div>
       `}
 
@@ -2702,7 +2838,7 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
               </div>
             </div>
           </div>
-          ${mkFooter(pgOffset + 5)}
+          ${mkFooter(pgOffset + 5 + roadmapPagesCount)}
         </div>
       `}
 
@@ -2762,6 +2898,7 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
           </div>
           ${mkFooter(pgOffset + 6)}
         </div>
+        ${renderRoadmaps(pgOffset + 7)}
       ` : `
         <!-- SENIOR PAGE 15: CAREER VALUES & TIMELINE -->
         <div class="as-pg">
@@ -2818,7 +2955,7 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
               </div>
             </div>
           </div>
-          ${mkFooter(pgOffset + 6)}
+          ${mkFooter(pgOffset + 6 + roadmapPagesCount)}
         </div>
       `}
 
@@ -2838,7 +2975,7 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
               ${renderRoadmapTimeline()}
             `}
           </div>
-          ${mkFooter(pgOffset + 7)}
+          ${mkFooter(pgOffset + 7 + roadmapPagesCount)}
         </div>
       ` : `
         <!-- SENIOR PAGE 16: ACTION PLAN & PSYCHOLOGIST ADVISORY -->
@@ -2895,7 +3032,7 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
               </div>
             </div>
           </div>
-          ${mkFooter(pgOffset + 7)}
+          ${mkFooter(pgOffset + 7 + roadmapPagesCount)}
         </div>
       `}
 
@@ -2954,79 +3091,12 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
               </div>
             </div>
           </div>
-          ${mkFooter(pgOffset + 8)}
+          ${mkFooter(pgOffset + 8 + roadmapPagesCount)}
         </div>
       ` : ""}
 
       <!-- CAREER ROADMAP PAGES (for both junior and senior) -->
-      ${pdfCrmDataList.length > 0 ? pdfCrmDataList.map((pdfCrmItem: CareerRoadmapData, crmIdx: number) => `
-      <!-- DETAILED CAREER ROADMAP ${crmIdx + 1} -->
-      <div class="as-pg">
-        ${mkHeader(`Career Roadmap ${crmIdx + 1} of ${pdfCrmDataList.length}`)}
-        <div class="as-nv-pg-heading" style="margin-bottom:1px;font-size:18px">🚀 ${esc(pdfCrmItem.career.name)}</div>
-        <div class="as-nv-pg-sub" style="margin-bottom:6px;font-size:9px;line-height:1.35">${esc((pdfCrmItem.roadmap.overview || pdfCrmItem.career.description || '').substring(0, 200))}</div>
-        
-        <div class="as-pg-content" style="gap:5px">
-          <!-- KPIs -->
-          <div style="display:grid;grid-template-columns:repeat(4, 1fr);gap:6px;margin-bottom:2px">
-            <div style="border:1px solid #E5E7EB;border-radius:6px;padding:5px;text-align:center;background:#fff">
-              <div style="font-size:10px;font-weight:800;color:#690B1B;margin-bottom:1px">${esc(pdfCrmItem.roadmap.fitScore || "—")}</div>
-              <div style="font-size:6px;color:#6B7280;text-transform:uppercase;letter-spacing:0.4px">Fit Score</div>
-            </div>
-            <div style="border:1px solid #E5E7EB;border-radius:6px;padding:5px;text-align:center;background:#fff">
-              <div style="font-size:10px;font-weight:800;color:#690B1B;margin-bottom:1px">${esc(pdfCrmItem.roadmap.duration || "—")}</div>
-              <div style="font-size:6px;color:#6B7280;text-transform:uppercase;letter-spacing:0.4px">Duration</div>
-            </div>
-            <div style="border:1px solid #E5E7EB;border-radius:6px;padding:5px;text-align:center;background:#fff">
-              <div style="font-size:10px;font-weight:800;color:#690B1B;margin-bottom:1px">${esc(pdfCrmItem.roadmap.avgSalary || pdfCrmItem.career.salaryRange || "—")}</div>
-              <div style="font-size:6px;color:#6B7280;text-transform:uppercase;letter-spacing:0.4px">Avg Salary</div>
-            </div>
-            <div style="border:1px solid #E5E7EB;border-radius:6px;padding:5px;text-align:center;background:#fff">
-              <div style="font-size:10px;font-weight:800;color:#690B1B;margin-bottom:1px">${(pdfCrmItem.roadmap.stages || []).length}</div>
-              <div style="font-size:6px;color:#6B7280;text-transform:uppercase;letter-spacing:0.4px">Stages</div>
-            </div>
-          </div>
-
-          <!-- Stages -->
-          <div style="flex:1;display:flex;flex-direction:column;gap:4px;overflow:hidden">
-            ${(pdfCrmItem.roadmap.stages || []).slice(0, 4).map((s: any, i: number, arr: any[]) => `
-              <div style="display:flex;gap:8px;position:relative">
-                ${i !== arr.length - 1 ? `<div style="position:absolute;left:9px;top:20px;bottom:-4px;width:1.5px;background:#E5E7EB;z-index:0"></div>` : ""}
-                <div style="width:20px;height:20px;border-radius:10px;background:#FFF8F8;border:1.5px solid #690B1B;display:flex;align-items:center;justify-content:center;font-size:9px;position:relative;z-index:1;flex-shrink:0">
-                  ${s.icon || "📍"}
-                </div>
-                <div style="flex:1;border:1px solid #E5E7EB;border-radius:6px;padding:5px 8px;background:#fff;margin-bottom:2px">
-                  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2px">
-                    <div style="font-size:8.5px;font-weight:800;color:#690B1B">${esc(s.stage)}: ${esc(s.title)}</div>
-                  </div>
-                  ${s.milestone ? `<div style="font-size:7px;font-weight:700;color:#057A55;background:#ECFDF5;display:inline-block;padding:1px 5px;border-radius:3px;margin-bottom:3px">🏁 ${esc(s.milestone)}</div>` : ""}
-                  <ul style="margin:0;padding-left:12px;font-size:7.5px;color:#4B5563;line-height:1.35">
-                    ${(s.actions || []).slice(0, 3).map((a: string) => `<li style="margin-bottom:1px">${esc(a)}</li>`).join("")}
-                  </ul>
-                </div>
-              </div>
-            `).join("")}
-          </div>
-
-          <!-- Bottom Data -->
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;border-top:1.5px solid #E5E7EB;padding-top:6px;margin-top:auto">
-            <div>
-              <div style="font-size:8px;font-weight:800;color:#690B1B;margin-bottom:3px;text-transform:uppercase">🎓 Top Colleges</div>
-              <div style="font-size:7.5px;color:#4B5563;line-height:1.35">
-                ${(pdfCrmItem.roadmap.topColleges || []).slice(0, 3).map((c: string) => `• ${esc(c)}`).join("<br>")}
-              </div>
-            </div>
-            <div>
-              <div style="font-size:8px;font-weight:800;color:#690B1B;margin-bottom:3px;text-transform:uppercase">📝 Key Exams</div>
-              <div style="font-size:7.5px;color:#4B5563;line-height:1.35">
-                ${(pdfCrmItem.roadmap.keyExams || []).slice(0, 3).map((e: string) => `• ${esc(e)}`).join("<br>")}
-              </div>
-            </div>
-          </div>
-        </div>
-        ${mkFooter(pgOffset + (assessmentType === "junior" ? 9 : 8) + crmIdx)}
-      </div>
-      `).join("") : ""}
+      
 
       <!-- BACK COVER -->
       <div class="as-pg" style="background: linear-gradient(135deg,#4F0813 0%,#1F0104 100%); padding: 0 !important;">

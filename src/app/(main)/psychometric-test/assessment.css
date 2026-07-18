@@ -1183,18 +1183,25 @@ body.test-active .main-content {
 
 .as-career-card {
   background: var(--card);
-  border: 1px solid var(--border);
+  border: 2px solid var(--border);
   border-radius: var(--rl);
   padding: 24px;
-  box-shadow: var(--sh);
+  box-shadow: 0 4px 12px rgba(0,0,0,.08);
   position: relative;
   overflow: hidden;
   transition: all var(--tr);
   cursor: pointer;
 }
 
-.as-career-card:hover { box-shadow: var(--sh-lg); transform: translateY(-2px); border-color: var(--red); }
-.as-career-card.selected { border-color: var(--red); box-shadow: 0 0 0 2px rgba(105,11,27,.2), var(--sh-lg); }
+.as-career-card:hover { 
+  box-shadow: 0 8px 24px rgba(0,0,0,.15); 
+  transform: translateY(-2px); 
+  border-color: var(--red); 
+}
+.as-career-card.selected { 
+  border-color: var(--red); 
+  box-shadow: 0 0 0 2px rgba(105,11,27,.2), 0 8px 24px rgba(0,0,0,.15); 
+}
 
 .as-cc-rank {
   position: absolute;

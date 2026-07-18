@@ -811,6 +811,10 @@ function AssessmentPageContent() {
   const [crmLoading, setCrmLoading] = useState(false);
   const [crmData, setCrmData] = useState<CareerRoadmapData | null>(null);
   const [selectedCareerIdx, setSelectedCareerIdx] = useState<number | null>(null);
+  const [allCrmData, setAllCrmData] = useState<(CareerRoadmapData | null)[]>([]);
+  const [allCrmLoading, setAllCrmLoading] = useState(false);
+  const allCrmGeneratedRef = useRef(false);
+  const allCrmPromiseRef = useRef<Promise<any> | null>(null);
   const [careerAbroadData, setCareerAbroadData] = useState<Record<string, any>>({});
   const [loadingAbroad, setLoadingAbroad] = useState<boolean>(false);
   const chartInstRef = useRef<Record<string, any>>({});
@@ -875,7 +879,7 @@ function AssessmentPageContent() {
       setLoadingAbroad(true);
       try {
         const prompt = `You are a senior study abroad career counsellor. Recommend the top 3 most suitable countries globally for a student named "${student.name}" to pursue higher education in the career "${activeCareerName}".
-Aptitude overall score: ${scores.aptitude.overall}%, dominant Holland RIASEC code: ${scores.topRiasec.join("-")}.
+Aptitude overall score: ${scores?.aptitude?.overall || 'N/A'}%, dominant Holland RIASEC code: ${scores?.topRiasec?.join("-") || 'N/A'}.
 
 Select the 3 most suitable countries globally for this field (e.g., Germany, Singapore, Japan, Australia, France, Switzerland, United States, United Kingdom, Canada, etc. depending on what is the actual global hub/expert destination for "${activeCareerName}").
 
@@ -898,9 +902,22 @@ Return ONLY valid JSON with this exact structure (do NOT include any markdown co
             ...prev,
             [activeCareerName]: parsed
           }));
-        }
+        } else throw new Error("invalid");
       } catch (err) {
-        console.error("Error fetching study abroad data:", err);
+        console.warn("API failed in fetchAbroadData, using fallback data:", err);
+        setCareerAbroadData(prev => ({
+          ...prev,
+          [activeCareerName]: {
+            rationale: "This career has a strong global demand, offering excellent opportunities for international exposure, cutting-edge research, and cross-cultural networking.",
+            countries: [
+              { flag: "🇺🇸", name: "United States", reason: "Home to top-tier universities and a massive industry presence with high earning potential." },
+              { flag: "🇬🇧", name: "United Kingdom", reason: "Offers globally recognized accelerated programs and strong industry links." },
+              { flag: "🇨🇦", name: "Canada", reason: "Known for excellent education quality, high quality of life, and welcoming post-study work opportunities." }
+            ],
+            scholarships: ["Global Excellence Scholarship", "Chevening Scholarship", "Fulbright Foreign Student Program"],
+            programs: ["BSc/MSc in relevant field from top global institutions"]
+          }
+        }));
       } finally {
         setLoadingAbroad(false);
       }
@@ -927,6 +944,88 @@ Return ONLY valid JSON with this exact structure (do NOT include any markdown co
     }
   }, [reportData, scores]);
 
+  // Auto-generate roadmaps for ALL top careers when results are ready
+  useEffect(() => {
+    if (!reportData?.topCareers?.length || !scores || allCrmGeneratedRef.current) return;
+    allCrmGeneratedRef.current = true;
+    const careers = reportData.topCareers.slice(0, 5);
+    setAllCrmLoading(true);
+    setAllCrmData(careers.map(() => null));
+
+    async function generateAllRoadmaps() {
+      const roadmapResults: (CareerRoadmapData | null)[] = [];
+      
+      for (let idx = 0; idx < careers.length; idx++) {
+        const career = careers[idx];
+        const roadmapGradeContext = assessmentType === "junior"
+          ? "Note: The student is in middle school (Grade 7-9). Tailor Stage 1 of the stages array to cover High School Preparation & Stream Selection (Grade 10/11/12), recommending actions to prepare for the appropriate stream choice."
+          : assessmentType === "grade10"
+          ? "Note: The student is in Grade 10. Tailor Stage 1 of the stages array to cover stream selection, early profile building, and high school foundation skills."
+          : `Note: The student is in Grade 11 or 12. Tailor Stage 1 of the stages array to cover Board Exams and Entrance Exams prep tailored to the student's stream: ${student.stream}.`;
+
+        const prompt = `You are a senior Indian career counsellor. Generate a detailed career roadmap for ${student.name}, Grade ${student.grade}, who wants to pursue "${career.name}". Their profile: Aptitude ${scores?.aptitude?.overall || 'N/A'}%, RIASEC ${scores?.topRiasec?.join("-") || 'N/A'}, Top values: ${scores?.topValues?.slice(0, 3).join(", ") || 'N/A'}, Learning style: ${scores?.topVark || 'N/A'}, City: ${student.city || "India"}.
+${roadmapGradeContext}
+Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","duration":"e.g. 4+2 years","avgSalary":"e.g. ₹8–25 LPA","fitScore":"e.g. 92%","stages":[{"stage":"label","icon":"emoji","title":"title","actions":["action 1","action 2","action 3"],"milestone":"milestone","targetColleges":["college 1","college 2"]},{"stage":"Graduation","icon":"🎓","title":"degree","actions":["action 1","action 2"],"milestone":"milestone"},{"stage":"Post-Graduation","icon":"📜","title":"PG path","actions":["action 1","action 2"],"targetPrograms":["programme 1"]},{"stage":"Early Career","icon":"💼","title":"role","actions":["action 1","action 2","action 3"],"milestone":"milestone","salaryTrajectory":["Year 1-2: ₹X LPA","Year 3-5: ₹Y LPA"],"targetCompanies":["company 1","company 2"]}],"keyExams":["exam 1","exam 2","exam 3"],"keySkills":["skill 1","skill 2","skill 3"],"topColleges":["college 1","college 2","college 3"],"scholarships":["scholarship 1","scholarship 2"],"dayInLife":"2-3 sentences about typical day"}`;
+
+        let finalData: CareerRoadmapData | null = null;
+        try {
+          const raw = await callAPI([{ role: "user", content: prompt }]);
+          const rm = extractJSON(raw);
+          if (rm && rm.stages) {
+            finalData = { career, roadmap: rm } as CareerRoadmapData;
+          }
+        } catch (e) {
+          console.error(`Failed to generate roadmap for career ${idx + 1}:`, e);
+        }
+
+        if (!finalData) {
+          // Fallback
+          finalData = {
+            career,
+            roadmap: {
+              overview: `${career?.description || ''} With your aptitude of ${scores?.aptitude?.overall || '80'}% and ${career?.name || 'this'} aligned profile, this is one of your strongest career fits.`,
+              duration: "4–6 years", avgSalary: career?.salaryRange || "Competitive", fitScore: Math.min(99, (scores?.careerFitment?.[0]?.score || 85)) + "%",
+              stages: [
+                { stage: `Grade ${student?.grade || '11'}–12`, icon: "📚", title: "Build Foundations", actions: [`Focus on subjects relevant to ${career?.name || 'this field'}`, "Explore related extracurriculars", `Research entrance exam: ${career?.indianExam || 'Relevant Exams'}`], milestone: "Score 85%+ in boards" },
+                { stage: "Graduation", icon: "🎓", title: career?.education || "Undergrad Degree", actions: [`Enrol in ${career?.education || 'a relevant degree'}`, "Intern from Year 2", "Build portfolio"], milestone: "Graduate with internship", targetColleges: [`Top colleges for ${career?.name || 'this field'} in India`] },
+                { stage: "Post-Graduation", icon: "📜", title: "Specialisation", actions: ["Pursue relevant Masters", "Clear advanced exams", "Build expertise"], milestone: "Land mid-level role" },
+                { stage: "Early Career", icon: "💼", title: "Launch Career", actions: [`Start in ${career?.name || 'this field'}`, "Build domain experience", "Target senior role"], milestone: "₹15-20 LPA by Year 5", salaryTrajectory: ["Year 1-2: Entry level", "Year 3-5: Mid-level"], targetCompanies: [`Top firms in ${career?.name || 'this field'}`] },
+              ],
+              keyExams: [career?.indianExam || 'Relevant Exams', "CUET", "IELTS/TOEFL for abroad"],
+              keySkills: ["Communication", "Critical Thinking", "Domain Knowledge", "Networking"],
+              topColleges: [`Top colleges for ${career?.education || 'this field'}`],
+              scholarships: ["National Merit Scholarship", "Chevening (UK)", "Fulbright (US)"],
+              dayInLife: `Professionals in ${career?.name || 'this field'} work on a mix of strategic and hands-on tasks involving ${career?.description?.split(".")?.[0]?.toLowerCase() || 'their domain'}.`,
+            }
+          } as CareerRoadmapData;
+        }
+
+        roadmapResults.push(finalData);
+
+        // Progressively update state so user can view already generated roadmaps
+        setAllCrmData((prev) => {
+          const next = [...prev];
+          next[idx] = finalData;
+          return next;
+        });
+
+        if (idx === 0) {
+          setCrmData(finalData); // For backward compatibility
+        }
+
+        // Slight delay to respect rate limits between generating next roadmap
+        if (idx < careers.length - 1) {
+          await new Promise(resolve => setTimeout(resolve, 1500));
+        }
+      }
+
+      setAllCrmLoading(false);
+      return roadmapResults;
+    }
+
+    allCrmPromiseRef.current = generateAllRoadmaps();
+  }, [reportData, scores]);
+
   // Track previous assessmentType to detect sidebar grade-level switches
   const prevAssessmentTypeRef = useRef(assessmentType);
 
@@ -940,6 +1039,9 @@ Return ONLY valid JSON with this exact structure (do NOT include any markdown co
       setSelectedCareerIdx(null);
       setCareerAbroadData({});
       setCrmData(null);
+      setAllCrmData([]);
+      setAllCrmLoading(false);
+      allCrmGeneratedRef.current = false;
       setScreen("landing");
     }
 
@@ -1409,7 +1511,7 @@ Return ONLY valid JSON with this exact structure (no markdown):
         ? "Note: The student is in Grade 10. Tailor Stage 1 of the stages array to cover stream selection, early profile building, and high school foundation skills."
         : `Note: The student is in Grade 11 or 12. Tailor Stage 1 of the stages array to cover Board Exams and Entrance Exams prep tailored to the student's stream: ${student.stream}.`;
 
-      const prompt = `You are a senior Indian career counsellor. Generate a detailed career roadmap for ${student.name}, Grade ${student.grade}, who wants to pursue "${career.name}". Their profile: Aptitude ${scores?.aptitude.overall}%, RIASEC ${scores?.topRiasec.join("-")}, Top values: ${scores?.topValues.slice(0, 3).join(", ")}, Learning style: ${scores?.topVark}, City: ${student.city || "India"}.
+      const prompt = `You are a senior Indian career counsellor. Generate a detailed career roadmap for ${student.name}, Grade ${student.grade}, who wants to pursue "${career.name}". Their profile: Aptitude ${scores?.aptitude?.overall || 'N/A'}%, RIASEC ${scores?.topRiasec?.join("-") || 'N/A'}, Top values: ${scores?.topValues?.slice(0, 3).join(", ") || 'N/A'}, Learning style: ${scores?.topVark || 'N/A'}, City: ${student.city || "India"}.
 ${roadmapGradeContext}
 Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","duration":"e.g. 4+2 years","avgSalary":"e.g. ₹8–25 LPA","fitScore":"e.g. 92%","stages":[{"stage":"label","icon":"emoji","title":"title","actions":["action 1","action 2","action 3"],"milestone":"milestone","targetColleges":["college 1","college 2"]},{"stage":"Graduation","icon":"🎓","title":"degree","actions":["action 1","action 2"],"milestone":"milestone"},{"stage":"Post-Graduation","icon":"📜","title":"PG path","actions":["action 1","action 2"],"targetPrograms":["programme 1"]},{"stage":"Early Career","icon":"💼","title":"role","actions":["action 1","action 2","action 3"],"milestone":"milestone","salaryTrajectory":["Year 1-2: ₹X LPA","Year 3-5: ₹Y LPA"],"targetCompanies":["company 1","company 2"]}],"keyExams":["exam 1","exam 2","exam 3"],"keySkills":["skill 1","skill 2","skill 3"],"topColleges":["college 1","college 2","college 3"],"scholarships":["scholarship 1","scholarship 2"],"dayInLife":"2-3 sentences about typical day"}`;
 
@@ -1421,19 +1523,19 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
     } catch {
       // Fallback
       const rm = {
-        overview: `${career.description} With your aptitude of ${scores?.aptitude.overall}% and ${career.name} aligned profile, this is one of your strongest career fits.`,
-        duration: "4–6 years", avgSalary: career.salaryRange, fitScore: Math.min(99, (scores?.careerFitment[0]?.score || 85)) + "%",
+        overview: `${career?.description || ''} With your aptitude of ${scores?.aptitude?.overall || '80'}% and ${career?.name || 'this'} aligned profile, this is one of your strongest career fits.`,
+        duration: "4–6 years", avgSalary: career?.salaryRange || "Competitive", fitScore: Math.min(99, (scores?.careerFitment?.[0]?.score || 85)) + "%",
         stages: [
-          { stage: `Grade ${student.grade}–12`, icon: "📚", title: "Build Foundations", actions: [`Focus on subjects relevant to ${career.name}`, "Explore related extracurriculars", `Research entrance exam: ${career.indianExam}`], milestone: "Score 85%+ in boards" },
-          { stage: "Graduation", icon: "🎓", title: career.education, actions: [`Enrol in ${career.education}`, "Intern from Year 2", "Build portfolio"], milestone: "Graduate with internship", targetColleges: [`Top colleges for ${career.name} in India`] },
+          { stage: `Grade ${student?.grade || '11'}–12`, icon: "📚", title: "Build Foundations", actions: [`Focus on subjects relevant to ${career?.name || 'this field'}`, "Explore related extracurriculars", `Research entrance exam: ${career?.indianExam || 'Relevant Exams'}`], milestone: "Score 85%+ in boards" },
+          { stage: "Graduation", icon: "🎓", title: career?.education || "Undergrad Degree", actions: [`Enrol in ${career?.education || 'a relevant degree'}`, "Intern from Year 2", "Build portfolio"], milestone: "Graduate with internship", targetColleges: [`Top colleges for ${career?.name || 'this field'} in India`] },
           { stage: "Post-Graduation", icon: "📜", title: "Specialisation", actions: ["Pursue relevant Masters", "Clear advanced exams", "Build expertise"], milestone: "Land mid-level role" },
-          { stage: "Early Career", icon: "💼", title: "Launch Career", actions: [`Start in ${career.name}`, "Build domain experience", "Target senior role"], milestone: "₹15-20 LPA by Year 5", salaryTrajectory: ["Year 1-2: Entry level", "Year 3-5: Mid-level"], targetCompanies: [`Top firms in ${career.name}`] },
+          { stage: "Early Career", icon: "💼", title: "Launch Career", actions: [`Start in ${career?.name || 'this field'}`, "Build domain experience", "Target senior role"], milestone: "₹15-20 LPA by Year 5", salaryTrajectory: ["Year 1-2: Entry level", "Year 3-5: Mid-level"], targetCompanies: [`Top firms in ${career?.name || 'this field'}`] },
         ],
-        keyExams: [career.indianExam, "CUET", "IELTS/TOEFL for abroad"],
+        keyExams: [career?.indianExam || 'Relevant Exams', "CUET", "IELTS/TOEFL for abroad"],
         keySkills: ["Communication", "Critical Thinking", "Domain Knowledge", "Networking"],
-        topColleges: [`Top colleges for ${career.education}`],
+        topColleges: [`Top colleges for ${career?.education || 'this field'}`],
         scholarships: ["National Merit Scholarship", "Chevening (UK)", "Fulbright (US)"],
-        dayInLife: `Professionals in ${career.name} work on a mix of strategic and hands-on tasks involving ${career.description.split(".")[0].toLowerCase()}.`,
+        dayInLife: `Professionals in ${career?.name || 'this field'} work on a mix of strategic and hands-on tasks involving ${career?.description?.split(".")?.[0]?.toLowerCase() || 'their domain'}.`,
       };
       setCrmData({ career, roadmap: rm });
     }
@@ -1576,30 +1678,26 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
       showToast("Pop-up blocked — please allow pop-ups for this site"); 
       return; 
     }
-    printWin.document.write("<html><head><title>Generating Report...</title></head><body style='font-family:sans-serif;text-align:center;padding:50px;background:#f9fafb;'><h2>Assembling Your Report...</h2><p style='color:#6b7280'>Generating personalized career roadmap data. Please wait a moment.</p></body></html>");
+    printWin.document.write("<html><head><title>Generating Report...</title></head><body style='font-family:sans-serif;text-align:center;padding:50px;background:#f9fafb;'><h2>Assembling Your Report...</h2><p style='color:#6b7280'>Preparing your personalised career assessment report. Please wait a moment.</p></body></html>");
 
-    let pdfCrmData = crmData;
-    if (!pdfCrmData && reportData.topCareers?.[0]) {
-      showToast("Generating detailed career roadmap for your PDF (this takes a moment)...");
-      const career = reportData.topCareers[0];
+    // Use pre-generated roadmaps from allCrmData (generated on result load)
+    let pdfCrmDataList: CareerRoadmapData[] = allCrmData.filter((d): d is CareerRoadmapData => d !== null);
+    
+    // If roadmaps are still generating, wait for them to finish before building the PDF
+    if (allCrmLoading && allCrmPromiseRef.current) {
       try {
-        const roadmapGradeContext = assessmentType === "junior"
-          ? "Note: The student is in middle school (Grade 7-9). Tailor Stage 1 of the stages array to cover High School Preparation & Stream Selection (Grade 10/11/12)."
-          : assessmentType === "grade10"
-          ? "Note: The student is in Grade 10. Tailor Stage 1 of the stages array to cover stream selection, early profile building, and high school foundation skills."
-          : `Note: The student is in Grade 11 or 12. Tailor Stage 1 to cover Board Exams and Entrance Exams prep tailored to the student's stream: ${student.stream}.`;
-        
-        const prompt = `You are a senior Indian career counsellor. Generate a detailed career roadmap for ${student.name}, Grade ${student.grade}, who wants to pursue "${career.name}". Their profile: Aptitude ${scores?.aptitude.overall}%, RIASEC ${scores?.topRiasec.join("-")}, Top values: ${scores?.topValues.slice(0, 3).join(", ")}, Learning style: ${scores?.topVark}, City: ${student.city || "India"}.
-${roadmapGradeContext}
-Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","duration":"e.g. 4+2 years","avgSalary":"e.g. ₹8–25 LPA","fitScore":"e.g. 92%","stages":[{"stage":"label","icon":"emoji","title":"title","actions":["action 1","action 2","action 3"],"milestone":"milestone","targetColleges":["college 1","college 2"]},{"stage":"Graduation","icon":"🎓","title":"degree","actions":["action 1","action 2"],"milestone":"milestone"},{"stage":"Post-Graduation","icon":"📜","title":"PG path","actions":["action 1","action 2"],"targetPrograms":["programme 1"]},{"stage":"Early Career","icon":"💼","title":"role","actions":["action 1","action 2","action 3"],"milestone":"milestone","salaryTrajectory":["Year 1-2: ₹X LPA","Year 3-5: ₹Y LPA"],"targetCompanies":["company 1","company 2"]}],"keyExams":["exam 1","exam 2","exam 3"],"keySkills":["skill 1","skill 2","skill 3"],"topColleges":["college 1","college 2","college 3"],"scholarships":["scholarship 1","scholarship 2"],"dayInLife":"2-3 sentences about typical day"}`;
-        const raw = await callAPI([{ role: "user", content: prompt }]);
-        const rm = extractJSON(raw);
-        if (rm && rm.stages) {
-          pdfCrmData = { career, roadmap: rm };
+        const awaitedData = await allCrmPromiseRef.current;
+        if (awaitedData && awaitedData.length) {
+          pdfCrmDataList = awaitedData.filter((d: any): d is CareerRoadmapData => d !== null);
         }
       } catch (e) {
-        console.error("Failed to generate detailed roadmap for PDF:", e);
+        console.error("Error waiting for roadmaps in downloadPDF:", e);
       }
+    }
+
+    // Fallback: use single crmData if allCrmData is empty
+    if (pdfCrmDataList.length === 0 && crmData) {
+      pdfCrmDataList.push(crmData);
     }
 
     const rid = student.reportId;
@@ -1648,7 +1746,7 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
     // Exec summary = pgOffset + 1, then each content page increments by 1
     // Junior has 10 pages total (cover + 8 content + back cover), Senior has 9 (cover + 7 content + back cover)
     // When locked, only cover + QA + exec summary + locked page = pgOffset + 2
-    let totalPages = pdfUnlocked ? (assessmentType === "junior" ? 10 : 9) + numQaPagesActual + (pdfCrmData ? 1 : 0) : (pgOffset + 2);
+    let totalPages = pdfUnlocked ? (assessmentType === "junior" ? 10 : 9) + numQaPagesActual + pdfCrmDataList.length : (pgOffset + 2);
 
     // Helper functions for header and footer layout
     const mkHeader = (title: string) => `
@@ -1694,7 +1792,7 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
       let html = `<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">`;
       months.forEach((row, idx) => {
         html += `
-          <div style="border:1px solid #E5E7EB;border-radius:6px;padding:6px 10px;background:${idx % 2 === 0 ? '#fff' : '#FFFDFD'};font-size:8.5px;page-break-inside:avoid;break-inside:avoid;box-shadow:0 1px 2px rgba(0,0,0,0.01)">
+          <div style="border:1px solid #E5E7EB;border-radius:6px;padding:6px 10px;background:${idx % 2 === 0 ? '#fff' : '#FFFDFD'};font-size:8.5px;box-shadow:0 1px 2px rgba(0,0,0,0.01)">
             <div style="font-weight:800;color:#690B1B;margin-bottom:2px;font-size:9px;border-bottom:1px solid #690B1B15;padding-bottom:1px">${row.m}</div>
             <div style="margin-bottom:2px;color:#374151"><strong>Study:</strong> ${esc(row.ac)}</div>
             <div style="margin-bottom:2px;color:#374151"><strong>Activities:</strong> ${esc(row.pr)}</div>
@@ -1870,7 +1968,7 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
           }
 
           return `
-            <div style="border:1px solid #E5E7EB;border-radius:8px;padding:9px 12px;background:#fff;font-size:9.5px;line-height:1.5;box-shadow:0 1px 2.5px rgba(0,0,0,0.015);page-break-inside:avoid;break-inside:avoid;margin-bottom:8px">
+            <div style="border:1px solid #E5E7EB;border-radius:8px;padding:9px 12px;background:#fff;font-size:9.5px;line-height:1.5;box-shadow:0 1px 2.5px rgba(0,0,0,0.015);margin-bottom:8px">
               <div style="font-weight:800;color:#111;margin-bottom:4px">Q${q.id}. ${esc(q.text)}</div>
               ${detailsHTML}
             </div>
@@ -2147,7 +2245,7 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
             <div style="border-bottom:1.5px solid #E5E7EB;padding-bottom:12px;display:grid;grid-template-columns:1.2fr 1fr 1.4fr;gap:16px;align-items:center">
               <div>
                 <div style="font-size:10.5px;font-weight:800;color:#690B1B;margin-bottom:6px">🧠 COGNITIVE APTITUDE (Overall: ${sc.aptitude.overall}%)</div>
-                <p style="font-size:9px;color:#4B5563;line-height:1.55;text-align:justify;margin-bottom:6px">${esc(narrative.psychologicalSummary?.cognitiveProfile)}</p>
+                <p style="font-size:9px;color:#4B5563;line-height:1.55;text-align:justify;margin-bottom:6px;max-height:81px;overflow:hidden;display:block">${esc(narrative.psychologicalSummary?.cognitiveProfile)}</p>
                 <div style="font-size:7.5px;color:#4B5563;line-height:1.35;background:#F9FAFB;border:1px solid #E5E7EB;border-radius:6px;padding:6px 10px">
                   <strong>🧠 Cognitive Development Plan:</strong> 
                   • <em>Verbal:</em> Engage in daily structured reading and analytical debates.
@@ -2183,7 +2281,7 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
             <div style="display:grid;grid-template-columns:1.2fr 1fr 1.4fr;gap:16px;align-items:center;padding-top:8px">
               <div>
                 <div style="font-size:10.5px;font-weight:800;color:#690B1B;margin-bottom:6px">🌟 BIG FIVE PERSONALITY PROFILE</div>
-                <p style="font-size:9px;color:#4B5563;line-height:1.55;text-align:justify;margin-bottom:6px">${esc(narrative.psychologicalSummary?.personalityProfile)}</p>
+                <p style="font-size:9px;color:#4B5563;line-height:1.55;text-align:justify;margin-bottom:6px;max-height:81px;overflow:hidden;display:block">${esc(narrative.psychologicalSummary?.personalityProfile)}</p>
                 <div style="font-size:7.5px;color:#4B5563;line-height:1.35;background:#F9FAFB;border:1px solid #E5E7EB;border-radius:6px;padding:6px 10px">
                   <strong>🌟 Personality Success Strategy:</strong> 
                   • <em>Openness:</em> Seek interdisciplinary courses and artistic electives.
@@ -2315,7 +2413,7 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
             <div style="border-bottom:1.5px solid #E5E7EB;padding-bottom:12px;display:grid;grid-template-columns:1.2fr 1fr 1.4fr;gap:16px;align-items:center">
               <div>
                 <div style="font-size:10.5px;font-weight:800;color:#690B1B;margin-bottom:6px">🎯 OCCUPATIONAL INTERESTS (Holland Code)</div>
-                <p style="font-size:9px;color:#4B5563;line-height:1.55;text-align:justify;margin-bottom:6px">${esc(narrative.psychologicalSummary?.interestProfile)}</p>
+                <p style="font-size:9px;color:#4B5563;line-height:1.55;text-align:justify;margin-bottom:6px;max-height:81px;overflow:hidden;display:block">${esc(narrative.psychologicalSummary?.interestProfile)}</p>
                 <div style="font-size:7.5px;color:#4B5563;line-height:1.35;background:#F9FAFB;border:1px solid #E5E7EB;border-radius:6px;padding:6px 10px">
                   <strong>🎯 Vocational Theme Application:</strong> Apply Holland Code strengths by selecting relevant electives. Focus on scientific fairs (Investigative), creative writing (Artistic), and leadership models (Enterprising).
                 </div>
@@ -2343,7 +2441,7 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
             <div style="display:grid;grid-template-columns:1.2fr 1fr 1.4fr;gap:16px;align-items:center;padding-top:8px">
               <div>
                 <div style="font-size:10.5px;font-weight:800;color:#690B1B;margin-bottom:6px">📚 VARK LEARNING MODALITIES</div>
-                <p style="font-size:9px;color:#4B5563;line-height:1.55;text-align:justify;margin-bottom:6px">${esc(narrative.psychologicalSummary?.learningProfile)}</p>
+                <p style="font-size:9px;color:#4B5563;line-height:1.55;text-align:justify;margin-bottom:6px;max-height:81px;overflow:hidden;display:block">${esc(narrative.psychologicalSummary?.learningProfile)}</p>
                 <div style="font-size:7.5px;color:#4B5563;line-height:1.35;background:#F9FAFB;border:1px solid #E5E7EB;border-radius:6px;padding:6px 10px">
                   <strong>📚 VARK Study Techniques:</strong>
                   • <em>Visual:</em> Concept maps &amp; color notes.
@@ -2389,7 +2487,7 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
             <div style="border-bottom:1.5px solid #E5E7EB;padding-bottom:12px;display:grid;grid-template-columns:1.2fr 1fr 1.4fr;gap:16px;align-items:center">
               <div>
                 <div style="font-size:10.5px;font-weight:800;color:#690B1B;margin-bottom:6px">🧠 COGNITIVE APTITUDE (Overall: ${sc.aptitude.overall}%)</div>
-                <p style="font-size:9px;color:#4B5563;line-height:1.55;text-align:justify;margin-bottom:6px">${esc(narrative.psychologicalSummary?.cognitiveProfile)}</p>
+                <p style="font-size:9px;color:#4B5563;line-height:1.55;text-align:justify;margin-bottom:6px;max-height:81px;overflow:hidden;display:block">${esc(narrative.psychologicalSummary?.cognitiveProfile)}</p>
                 <div style="font-size:7.5px;color:#4B5563;line-height:1.35;background:#F9FAFB;border:1px solid #E5E7EB;border-radius:6px;padding:6px 10px">
                   <strong>🧠 Cognitive Development Plan:</strong> 
                   • <em>Verbal:</em> Engage in daily structured reading and analytical debates.
@@ -2425,7 +2523,7 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
             <div style="display:grid;grid-template-columns:1.2fr 1fr 1.4fr;gap:16px;align-items:center;padding-top:8px">
               <div>
                 <div style="font-size:10.5px;font-weight:800;color:#690B1B;margin-bottom:6px">🌟 BIG FIVE PERSONALITY PROFILE</div>
-                <p style="font-size:9px;color:#4B5563;line-height:1.55;text-align:justify;margin-bottom:6px">${esc(narrative.psychologicalSummary?.personalityProfile)}</p>
+                <p style="font-size:9px;color:#4B5563;line-height:1.55;text-align:justify;margin-bottom:6px;max-height:81px;overflow:hidden;display:block">${esc(narrative.psychologicalSummary?.personalityProfile)}</p>
                 <div style="font-size:7.5px;color:#4B5563;line-height:1.35;background:#F9FAFB;border:1px solid #E5E7EB;border-radius:6px;padding:6px 10px">
                   <strong>🌟 Personality Success Strategy:</strong> 
                   • <em>Openness:</em> Seek interdisciplinary courses and artistic electives.
@@ -2544,7 +2642,7 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
             <div style="border-bottom:1.5px solid #E5E7EB;padding-bottom:12px;display:grid;grid-template-columns:1.2fr 1fr 1.4fr;gap:16px;align-items:center">
               <div>
                 <div style="font-size:10.5px;font-weight:800;color:#690B1B;margin-bottom:6px">🎯 OCCUPATIONAL INTERESTS (Holland Code)</div>
-                <p style="font-size:9px;color:#4B5563;line-height:1.55;text-align:justify;margin-bottom:6px">${esc(narrative.psychologicalSummary?.interestProfile)}</p>
+                <p style="font-size:9px;color:#4B5563;line-height:1.55;text-align:justify;margin-bottom:6px;max-height:81px;overflow:hidden;display:block">${esc(narrative.psychologicalSummary?.interestProfile)}</p>
                 <div style="font-size:7.5px;color:#4B5563;line-height:1.35;background:#F9FAFB;border:1px solid #E5E7EB;border-radius:6px;padding:6px 10px">
                   <strong>🎯 Vocational Theme Application:</strong> Apply Holland Code strengths by selecting relevant electives. Focus on scientific fairs (Investigative), creative writing (Artistic), and leadership models (Enterprising).
                 </div>
@@ -2572,7 +2670,7 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
             <div style="display:grid;grid-template-columns:1.2fr 1fr 1.4fr;gap:16px;align-items:center;padding-top:8px">
               <div>
                 <div style="font-size:10.5px;font-weight:800;color:#690B1B;margin-bottom:6px">📚 VARK LEARNING MODALITIES</div>
-                <p style="font-size:9px;color:#4B5563;line-height:1.55;text-align:justify;margin-bottom:6px">${esc(narrative.psychologicalSummary?.learningProfile)}</p>
+                <p style="font-size:9px;color:#4B5563;line-height:1.55;text-align:justify;margin-bottom:6px;max-height:81px;overflow:hidden;display:block">${esc(narrative.psychologicalSummary?.learningProfile)}</p>
                 <div style="font-size:7.5px;color:#4B5563;line-height:1.35;background:#F9FAFB;border:1px solid #E5E7EB;border-radius:6px;padding:6px 10px">
                   <strong>📚 VARK Study Techniques:</strong>
                   • <em>Visual:</em> Concept maps &amp; color notes.
@@ -2680,7 +2778,7 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
                   <div style="text-align:center;margin:10px 0">
                     ${valChartImg ? `<img src="${valChartImg}" style="height:110px;object-fit:contain" />` : ""}
                   </div>
-                  <p style="font-size:9px;color:#4B5563;line-height:1.5;text-align:justify;margin-bottom:6px">${esc(narrative.psychologicalSummary?.valuesProfile)}</p>
+                  <p style="font-size:9px;color:#4B5563;line-height:1.5;text-align:justify;margin-bottom:6px;max-height:81px;overflow:hidden;display:block">${esc(narrative.psychologicalSummary?.valuesProfile)}</p>
                   <div style="font-size:7.5px;color:#4B5563;line-height:1.35;background:#F9FAFB;border:1px solid #E5E7EB;border-radius:6px;padding:6px 10px">
                     <strong>💼 Core Work Values:</strong> Align your focus with career paths matching your motivators (e.g. autonomy, financial security, or social impact).
                   </div>
@@ -2688,7 +2786,7 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
               </div>
               
               <!-- Right: Roadmap Timeline -->
-              <div style="display:flex;flex-direction:column;gap:5px;justify-content:flex-start;position:relative">
+              <div style="display:flex;flex-direction:column;gap:3px;justify-content:flex-start;position:relative">
                 <div style="font-size:10.5px;font-weight:800;color:#690B1B;border-bottom:1.5px solid #E5E7EB;padding-bottom:5px;margin-bottom:4px;text-transform:uppercase">🗺️ Academic &amp; Profile Roadmap</div>
                 <div style="position:absolute;left:11px;top:40px;bottom:15px;width:1.5px;border-left:1.5px dashed #690B1B30;z-index:1"></div>
                 ${[
@@ -2701,12 +2799,12 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
                   const rm = reportData.roadmap?.[s.key];
                   if (!rm) return "";
                   return `
-                    <div style="border:1px solid #E5E7EB;border-radius:6px;padding:6px 8px;background:#fff;display:flex;align-items:flex-start;gap:8px;position:relative;z-index:2;box-shadow:0 1px 2px rgba(0,0,0,0.01)">
+                    <div style="border:1px solid #E5E7EB;border-radius:6px;padding:4px 6px;background:#fff;display:flex;align-items:flex-start;gap:6px;position:relative;z-index:2;box-shadow:0 1px 2px rgba(0,0,0,0.01)">
                       <span style="font-size:11px;background:#FFF8F8;border:1.5px solid #690B1B15;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px">${s.icon}</span>
                       <div style="flex-grow:1">
                         <div style="font-size:9.5px;font-weight:800;color:#690B1B;text-transform:uppercase;margin-bottom:2px">${s.lbl} · ${esc(rm.title)}</div>
                         <div style="font-size:8px;color:#4B5563;line-height:1.35">
-                          ${(rm.actions || []).slice(0, 2).map((act: string) => `• ${esc(act)}`).join("<br>")}
+                          ${(rm.actions || []).slice(0, 1).map((act: string) => `• ${esc(act)}`).join("<br>")}
                         </div>
                         ${rm.targetDegree ? `<div style="margin-top:3px"><span style="display:inline-block;background:#FFF8F8;border:1px solid rgba(105,11,27,.15);border-radius:4px;padding:2px 4px;font-size:7.5px;font-weight:700;color:#690B1B">🎓 ${esc(rm.targetDegree)}</span></div>` : ""}
                         ${rm.targetColleges?.length ? `<div style="margin-top:3px"><span style="font-size:7px;font-weight:700;color:#9CA3AF;text-transform:uppercase;margin-right:3px">Target Colleges:</span><span style="line-height:1.4">${rm.targetColleges.slice(0, 2).map((c: string) => `<span style="display:inline-block;background:#F9FAFB;border:1px solid #E5E7EB;padding:1px 3px;border-radius:3px;font-size:7px;font-weight:600;color:#374151;margin-right:2px;margin-bottom:2px">${esc(c)}</span>`).join("")}</span></div>` : ""}
@@ -2777,7 +2875,7 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
               <!-- Right: Psychological profile advisory -->
               <div style="border:1px solid #E5E7EB;border-radius:10px;padding:12px;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,0.01)">
                 <div style="font-size:10px;font-weight:800;color:#690B1B;border-bottom:1.5px solid #E5E7EB;padding-bottom:4px;margin-bottom:8px;text-transform:uppercase">🧠 PSYCHOLOGIST ADVISORY PROFILE</div>
-                <p style="font-size:8.5px;color:#374151;line-height:1.55;text-align:justify">
+                <p style="font-size:7.5px;color:#374151;line-height:1.45;text-align:justify;max-height:165px;overflow:hidden;display:block">
                   ${esc(narrative.psychologicalSummary?.overallPsychProfile || "")}
                 </p>
               </div>
@@ -2801,7 +2899,7 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
         </div>
       `}
 
-      <!-- PAGE 17 (JUNIOR: Action Plan & Psychologist Advisory / SENIOR: Back Cover) -->
+      <!-- PAGE 17 (JUNIOR: Action Plan & Psychologist Advisory / SENIOR: skipped) -->
       ${(assessmentType === "junior") ? `
         <div class="as-pg">
           ${mkHeader("Execution Plan")}
@@ -2836,7 +2934,7 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
               <!-- Right: Psychological profile advisory -->
               <div style="border:1px solid #E5E7EB;border-radius:10px;padding:12px;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,0.01)">
                 <div style="font-size:10px;font-weight:800;color:#690B1B;border-bottom:1.5px solid #E5E7EB;padding-bottom:4px;margin-bottom:8px;text-transform:uppercase">🧠 PSYCHOLOGIST ADVISORY PROFILE</div>
-                <p style="font-size:8.5px;color:#374151;line-height:1.55;text-align:justify">
+                <p style="font-size:7.5px;color:#374151;line-height:1.45;text-align:justify;max-height:165px;overflow:hidden;display:block">
                   ${esc(narrative.psychologicalSummary?.overallPsychProfile || "")}
                 </p>
               </div>
@@ -2858,120 +2956,98 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
           </div>
           ${mkFooter(pgOffset + 8)}
         </div>
-
-        ${pdfCrmData ? `
-        <!-- DETAILED CAREER ROADMAP -->
-        <div class="as-pg">
-          ${mkHeader("Detailed Career Roadmap")}
-          <div class="as-nv-pg-heading" style="margin-bottom:2px">🚀 ${esc(pdfCrmData.career.name)}</div>
-          <div class="as-nv-pg-sub" style="margin-bottom:10px">${esc(pdfCrmData.roadmap.overview || pdfCrmData.career.description)}</div>
-          
-          <div class="as-pg-content" style="gap:10px">
-            <!-- KPIs -->
-            <div style="display:grid;grid-template-columns:repeat(4, 1fr);gap:8px;margin-bottom:4px">
-              <div style="border:1px solid #E5E7EB;border-radius:8px;padding:8px;text-align:center;background:#fff">
-                <div style="font-size:11px;font-weight:800;color:#690B1B;margin-bottom:2px">${esc(pdfCrmData.roadmap.fitScore || "—")}</div>
-                <div style="font-size:7px;color:#6B7280;text-transform:uppercase;letter-spacing:0.5px">Fit Score</div>
-              </div>
-              <div style="border:1px solid #E5E7EB;border-radius:8px;padding:8px;text-align:center;background:#fff">
-                <div style="font-size:11px;font-weight:800;color:#690B1B;margin-bottom:2px">${esc(pdfCrmData.roadmap.duration || "—")}</div>
-                <div style="font-size:7px;color:#6B7280;text-transform:uppercase;letter-spacing:0.5px">Duration</div>
-              </div>
-              <div style="border:1px solid #E5E7EB;border-radius:8px;padding:8px;text-align:center;background:#fff">
-                <div style="font-size:11px;font-weight:800;color:#690B1B;margin-bottom:2px">${esc(pdfCrmData.roadmap.avgSalary || pdfCrmData.career.salaryRange || "—")}</div>
-                <div style="font-size:7px;color:#6B7280;text-transform:uppercase;letter-spacing:0.5px">Avg Salary</div>
-              </div>
-              <div style="border:1px solid #E5E7EB;border-radius:8px;padding:8px;text-align:center;background:#fff">
-                <div style="font-size:11px;font-weight:800;color:#690B1B;margin-bottom:2px">${(pdfCrmData.roadmap.stages || []).length}</div>
-                <div style="font-size:7px;color:#6B7280;text-transform:uppercase;letter-spacing:0.5px">Stages</div>
-              </div>
-            </div>
-
-            <!-- Stages -->
-            <div style="flex:1;display:flex;flex-direction:column;gap:8px">
-              ${(pdfCrmData.roadmap.stages || []).map((s: any, i: number, arr: any[]) => `
-                <div style="display:flex;gap:12px;position:relative">
-                  ${i !== arr.length - 1 ? `<div style="position:absolute;left:11px;top:24px;bottom:-8px;width:1.5px;background:#E5E7EB;z-index:0"></div>` : ""}
-                  <div style="width:24px;height:24px;border-radius:12px;background:#FFF8F8;border:1.5px solid #690B1B;display:flex;align-items:center;justify-content:center;font-size:11px;position:relative;z-index:1;flex-shrink:0">
-                    ${s.icon || "📍"}
-                  </div>
-                  <div style="flex:1;border:1px solid #E5E7EB;border-radius:8px;padding:8px 10px;background:#fff;margin-bottom:4px">
-                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
-                      <div style="font-size:9.5px;font-weight:800;color:#690B1B">${esc(s.stage)}: ${esc(s.title)}</div>
-                    </div>
-                    ${s.milestone ? `<div style="font-size:8px;font-weight:700;color:#057A55;background:#ECFDF5;display:inline-block;padding:2px 6px;border-radius:4px;margin-bottom:6px">🏁 ${esc(s.milestone)}</div>` : ""}
-                    <ul style="margin:0;padding-left:14px;font-size:8.5px;color:#4B5563;line-height:1.4">
-                      ${(s.actions || []).map((a: string) => `<li style="margin-bottom:2px">${esc(a)}</li>`).join("")}
-                    </ul>
-                  </div>
-                </div>
-              `).join("")}
-            </div>
-
-            <!-- Bottom Data -->
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:auto;border-top:1.5px solid #E5E7EB;padding-top:10px">
-              <div>
-                <div style="font-size:9px;font-weight:800;color:#690B1B;margin-bottom:4px;text-transform:uppercase">🎓 Top Colleges</div>
-                <div style="font-size:8px;color:#4B5563;line-height:1.4">
-                  ${(pdfCrmData.roadmap.topColleges || []).slice(0, 4).map((c: string) => `• ${esc(c)}`).join("<br>")}
-                </div>
-              </div>
-              <div>
-                <div style="font-size:9px;font-weight:800;color:#690B1B;margin-bottom:4px;text-transform:uppercase">📝 Key Exams</div>
-                <div style="font-size:8px;color:#4B5563;line-height:1.4">
-                  ${(pdfCrmData.roadmap.keyExams || []).slice(0, 4).map((e: string) => `• ${esc(e)}`).join("<br>")}
-                </div>
-              </div>
-            </div>
-          </div>
-          ${mkFooter(pgOffset + 9)}
-        </div>
-        ` : ""}
-      ` : `
-        <!-- SENIOR PAGE 17: BACK COVER / END PAGE -->
-        <div class="as-pg" style="background: linear-gradient(135deg,#4F0813 0%,#1F0104 100%); padding: 0 !important;">
-          <div style="position:absolute;top:20px;bottom:20px;left:20px;right:20px;border:1px solid rgba(201,165,93,0.25);border-radius:10px;pointer-events:none"></div>
-          <div class="as-pg-content" style="height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: space-between; padding: 60px 60px 40px; color: #fff; margin-top: 0; position:relative; z-index: 1">
-            <div style="margin-top: auto; margin-bottom: auto; text-align: center;">
-              <div style="font-size:13px;font-weight:800;letter-spacing:6px;color:#C9A55D;text-transform:uppercase;margin-bottom:28px">ABROAD SIMPLIFIED</div>
-              <div style="font-family:'Playfair Display',Georgia,serif;font-size:38px;font-weight:900;line-height:1.25;margin-bottom:20px;letter-spacing:-1px">Begin Your Future Today</div>
-              <div style="width:60px;height:2.5px;background:#C9A55D;margin:0 auto 28px"></div>
-              <div style="font-size:13.5px;color:rgba(255,255,255,.8);max-width:440px;line-height:1.85;margin:0 auto;text-align:center">
-                "The best way to predict the future is to create it." This report is your strategic roadmap. Reflect on these insights, consult with mentors, and take bold steps towards your academic and global career goals.
-              </div>
-            </div>
-            
-            <div style="width: 100%; border-top: 1px solid rgba(255,255,255,.12); padding-top: 24px; text-align: center;">
-              <div style="font-size:11px;color:rgba(255,255,255,.6);margin-bottom:8px">Have questions about your pathway? Connect with our expert advisors.</div>
-              <div style="font-size:11.5px;font-weight:800;color:#C9A55D">www.abroadsimplified.com · support@abroadsimplified.com</div>
-              <div style="font-size:8.5px;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:2px;margin-top:24px">© 2026 ABROAD SIMPLIFIED · ALL RIGHTS RESERVED</div>
-            </div>
-          </div>
-        </div>
-      `}
-
-      <!-- PAGE 18 (JUNIOR ONLY: Back Cover) -->
-      ${(assessmentType === "junior") ? `
-        <div class="as-pg" style="background: linear-gradient(135deg,#4F0813 0%,#1F0104 100%); padding: 0 !important;">
-          <div style="position:absolute;top:20px;bottom:20px;left:20px;right:20px;border:1px solid rgba(201,165,93,0.25);border-radius:10px;pointer-events:none"></div>
-          <div class="as-pg-content" style="height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: space-between; padding: 60px 60px 40px; color: #fff; margin-top: 0; position:relative; z-index: 1">
-            <div style="margin-top: auto; margin-bottom: auto; text-align: center;">
-              <div style="font-size:13px;font-weight:800;letter-spacing:6px;color:#C9A55D;text-transform:uppercase;margin-bottom:28px">ABROAD SIMPLIFIED</div>
-              <div style="font-family:'Playfair Display',Georgia,serif;font-size:38px;font-weight:900;line-height:1.25;margin-bottom:20px;letter-spacing:-1px">Begin Your Future Today</div>
-              <div style="width:60px;height:2.5px;background:#C9A55D;margin:0 auto 28px"></div>
-              <div style="font-size:13.5px;color:rgba(255,255,255,.8);max-width:440px;line-height:1.85;margin:0 auto;text-align:center">
-                "The best way to predict the future is to create it." This report is your strategic roadmap. Reflect on these insights, consult with mentors, and take bold steps towards your academic and global career goals.
-              </div>
-            </div>
-            
-            <div style="width: 100%; border-top: 1px solid rgba(255,255,255,.12); padding-top: 24px; text-align: center;">
-              <div style="font-size:11px;color:rgba(255,255,255,.6);margin-bottom:8px">Have questions about your pathway? Connect with our expert advisors.</div>
-              <div style="font-size:11.5px;font-weight:800;color:#C9A55D">www.abroadsimplified.com · support@abroadsimplified.com</div>
-              <div style="font-size:8.5px;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:2px;margin-top:24px">© 2026 ABROAD SIMPLIFIED · ALL RIGHTS RESERVED</div>
-            </div>
-          </div>
-        </div>
       ` : ""}
+
+      <!-- CAREER ROADMAP PAGES (for both junior and senior) -->
+      ${pdfCrmDataList.length > 0 ? pdfCrmDataList.map((pdfCrmItem: CareerRoadmapData, crmIdx: number) => `
+      <!-- DETAILED CAREER ROADMAP ${crmIdx + 1} -->
+      <div class="as-pg">
+        ${mkHeader(`Career Roadmap ${crmIdx + 1} of ${pdfCrmDataList.length}`)}
+        <div class="as-nv-pg-heading" style="margin-bottom:1px;font-size:18px">🚀 ${esc(pdfCrmItem.career.name)}</div>
+        <div class="as-nv-pg-sub" style="margin-bottom:6px;font-size:9px;line-height:1.35">${esc((pdfCrmItem.roadmap.overview || pdfCrmItem.career.description || '').substring(0, 200))}</div>
+        
+        <div class="as-pg-content" style="gap:5px">
+          <!-- KPIs -->
+          <div style="display:grid;grid-template-columns:repeat(4, 1fr);gap:6px;margin-bottom:2px">
+            <div style="border:1px solid #E5E7EB;border-radius:6px;padding:5px;text-align:center;background:#fff">
+              <div style="font-size:10px;font-weight:800;color:#690B1B;margin-bottom:1px">${esc(pdfCrmItem.roadmap.fitScore || "—")}</div>
+              <div style="font-size:6px;color:#6B7280;text-transform:uppercase;letter-spacing:0.4px">Fit Score</div>
+            </div>
+            <div style="border:1px solid #E5E7EB;border-radius:6px;padding:5px;text-align:center;background:#fff">
+              <div style="font-size:10px;font-weight:800;color:#690B1B;margin-bottom:1px">${esc(pdfCrmItem.roadmap.duration || "—")}</div>
+              <div style="font-size:6px;color:#6B7280;text-transform:uppercase;letter-spacing:0.4px">Duration</div>
+            </div>
+            <div style="border:1px solid #E5E7EB;border-radius:6px;padding:5px;text-align:center;background:#fff">
+              <div style="font-size:10px;font-weight:800;color:#690B1B;margin-bottom:1px">${esc(pdfCrmItem.roadmap.avgSalary || pdfCrmItem.career.salaryRange || "—")}</div>
+              <div style="font-size:6px;color:#6B7280;text-transform:uppercase;letter-spacing:0.4px">Avg Salary</div>
+            </div>
+            <div style="border:1px solid #E5E7EB;border-radius:6px;padding:5px;text-align:center;background:#fff">
+              <div style="font-size:10px;font-weight:800;color:#690B1B;margin-bottom:1px">${(pdfCrmItem.roadmap.stages || []).length}</div>
+              <div style="font-size:6px;color:#6B7280;text-transform:uppercase;letter-spacing:0.4px">Stages</div>
+            </div>
+          </div>
+
+          <!-- Stages -->
+          <div style="flex:1;display:flex;flex-direction:column;gap:4px;overflow:hidden">
+            ${(pdfCrmItem.roadmap.stages || []).slice(0, 4).map((s: any, i: number, arr: any[]) => `
+              <div style="display:flex;gap:8px;position:relative">
+                ${i !== arr.length - 1 ? `<div style="position:absolute;left:9px;top:20px;bottom:-4px;width:1.5px;background:#E5E7EB;z-index:0"></div>` : ""}
+                <div style="width:20px;height:20px;border-radius:10px;background:#FFF8F8;border:1.5px solid #690B1B;display:flex;align-items:center;justify-content:center;font-size:9px;position:relative;z-index:1;flex-shrink:0">
+                  ${s.icon || "📍"}
+                </div>
+                <div style="flex:1;border:1px solid #E5E7EB;border-radius:6px;padding:5px 8px;background:#fff;margin-bottom:2px">
+                  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2px">
+                    <div style="font-size:8.5px;font-weight:800;color:#690B1B">${esc(s.stage)}: ${esc(s.title)}</div>
+                  </div>
+                  ${s.milestone ? `<div style="font-size:7px;font-weight:700;color:#057A55;background:#ECFDF5;display:inline-block;padding:1px 5px;border-radius:3px;margin-bottom:3px">🏁 ${esc(s.milestone)}</div>` : ""}
+                  <ul style="margin:0;padding-left:12px;font-size:7.5px;color:#4B5563;line-height:1.35">
+                    ${(s.actions || []).slice(0, 3).map((a: string) => `<li style="margin-bottom:1px">${esc(a)}</li>`).join("")}
+                  </ul>
+                </div>
+              </div>
+            `).join("")}
+          </div>
+
+          <!-- Bottom Data -->
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;border-top:1.5px solid #E5E7EB;padding-top:6px;margin-top:auto">
+            <div>
+              <div style="font-size:8px;font-weight:800;color:#690B1B;margin-bottom:3px;text-transform:uppercase">🎓 Top Colleges</div>
+              <div style="font-size:7.5px;color:#4B5563;line-height:1.35">
+                ${(pdfCrmItem.roadmap.topColleges || []).slice(0, 3).map((c: string) => `• ${esc(c)}`).join("<br>")}
+              </div>
+            </div>
+            <div>
+              <div style="font-size:8px;font-weight:800;color:#690B1B;margin-bottom:3px;text-transform:uppercase">📝 Key Exams</div>
+              <div style="font-size:7.5px;color:#4B5563;line-height:1.35">
+                ${(pdfCrmItem.roadmap.keyExams || []).slice(0, 3).map((e: string) => `• ${esc(e)}`).join("<br>")}
+              </div>
+            </div>
+          </div>
+        </div>
+        ${mkFooter(pgOffset + (assessmentType === "junior" ? 9 : 8) + crmIdx)}
+      </div>
+      `).join("") : ""}
+
+      <!-- BACK COVER -->
+      <div class="as-pg" style="background: linear-gradient(135deg,#4F0813 0%,#1F0104 100%); padding: 0 !important;">
+        <div style="position:absolute;top:20px;bottom:20px;left:20px;right:20px;border:1px solid rgba(201,165,93,0.25);border-radius:10px;pointer-events:none"></div>
+        <div class="as-pg-content" style="height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: space-between; padding: 60px 60px 40px; color: #fff; margin-top: 0; position:relative; z-index: 1">
+          <div style="margin-top: auto; margin-bottom: auto; text-align: center;">
+            <div style="font-size:13px;font-weight:800;letter-spacing:6px;color:#C9A55D;text-transform:uppercase;margin-bottom:28px">ABROAD SIMPLIFIED</div>
+            <div style="font-family:'Playfair Display',Georgia,serif;font-size:38px;font-weight:900;line-height:1.25;margin-bottom:20px;letter-spacing:-1px">Begin Your Future Today</div>
+            <div style="width:60px;height:2.5px;background:#C9A55D;margin:0 auto 28px"></div>
+            <div style="font-size:13.5px;color:rgba(255,255,255,.8);max-width:440px;line-height:1.85;margin:0 auto;text-align:center">
+              "The best way to predict the future is to create it." This report is your strategic roadmap. Reflect on these insights, consult with mentors, and take bold steps towards your academic and global career goals.
+            </div>
+          </div>
+          
+          <div style="width: 100%; border-top: 1px solid rgba(255,255,255,.12); padding-top: 24px; text-align: center;">
+            <div style="font-size:11px;color:rgba(255,255,255,.6);margin-bottom:8px">Have questions about your pathway? Connect with our expert advisors.</div>
+            <div style="font-size:11.5px;font-weight:800;color:#C9A55D">www.abroadsimplified.com · support@abroadsimplified.com</div>
+            <div style="font-size:8.5px;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:2px;margin-top:24px">© 2026 ABROAD SIMPLIFIED · ALL RIGHTS RESERVED</div>
+          </div>
+        </div>
+      </div>
     `
     : `
       <!-- PAGE 11: LOCKED VIEW -->
@@ -3024,9 +3100,12 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
       display: flex;
       flex-direction: column;
       transform: scale(1.35);
-      transform-origin: top left;
-      margin-bottom: 76.792mm;
-      margin-right: 54.444mm;
+transform-origin: top left;
+margin-bottom: 76.792mm;
+margin-right: 54.444mm;
+      
+      
+      
     }
     .as-pg:last-child { page-break-after: auto; break-after: auto; }
     .as-nv-hdr {
@@ -3072,10 +3151,7 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
     }
     .as-nv-hdr-brand { font-size: 13px; font-weight: 800; color: #111; letter-spacing: -.3px; }
     .as-nv-hdr-eng { font-size: 8px; color: #9CA3AF; font-weight: 600; letter-spacing: .4px; text-transform: uppercase; margin-top: 1px; }
-    .as-nv-career-item, .as-nv-score-desc-box, .as-nv-resp-table tr, .as-timeline-card {
-      page-break-inside: avoid;
-      break-inside: avoid;
-    }
+    .as-nv-career-item, .as-nv-score-desc-box, .as-nv-resp-table tr, .as-timeline-card { page-break-inside: avoid; break-inside: avoid; }
     .as-nv-pg-heading { font-family: Arial, Helvetica, sans-serif; font-size: 22px; font-weight: 900; color: #111; letter-spacing: -.5px; margin-bottom: 2px; }
     .as-nv-pg-sub { font-size: 11px; color: #9CA3AF; font-weight: 500; margin-bottom: 16px; }
 
@@ -3096,7 +3172,7 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
 ${bodyHTML}
 <script>
   window.onload = function() {
-    setTimeout(function() { window.print(); }, 400);
+    setTimeout(function() { window.focus(); window.print(); }, 400);
   };
 </script>
 </body>
@@ -4280,10 +4356,51 @@ ${bodyHTML}
                           </div>
                         </div>
 
-                        {/* CTA */}
-                        <div className="as-cc-cta" style={{ borderTop: `2px solid ${color}20`, paddingTop: '10px', marginTop: '4px' }}>
-                          🗺️ Generate full personalised roadmap →
-                        </div>
+                        {/* INLINE ROADMAP - auto-generated for all careers */}
+                        {allCrmLoading && !allCrmData[i] ? (
+                          <div style={{ marginTop: '20px', padding: '30px', background: 'var(--bg)', borderRadius: '12px', textAlign: 'center' }}>
+                            <div className="as-crm-spinner" style={{ margin: '0 auto 12px auto' }} />
+                            <p style={{ fontSize: '13px', color: 'var(--t3)', fontWeight: 600 }}>Generating your personalised roadmap...</p>
+                          </div>
+                        ) : (allCrmData[i] || (selectedCareerIdx === i && crmData)) ? (() => {
+                          const thisRoadmap = allCrmData[i] || crmData!;
+                          return (
+                          <div style={{ marginTop: '20px', paddingTop: '20px', borderTop: `2px solid ${color}20`, cursor: 'default' }} onClick={(e) => e.stopPropagation()}>
+                            <div className="as-crm-sec">
+                              <div className="as-crm-sec-hd">Your Step-by-Step Roadmap</div>
+                              <div className="as-crm-timeline">
+                                {(thisRoadmap.roadmap.stages || []).map((s: any, j: number, arr: any[]) => {
+                                  const isLast = j === arr.length - 1;
+                                  return (
+                                    <div className="as-crm-stage" key={j}>
+                                      <div className="as-crm-stage-left"><div className="as-crm-stage-dot" style={{ background: color, boxShadow: `0 4px 12px ${color}40`, border: 'none', color: '#fff' }}>{s.icon || j + 1}</div>{!isLast && <div className="as-crm-stage-line" />}</div>
+                                      <div className="as-crm-stage-content">
+                                        <div className="as-crm-stage-label" style={{ color }}>{s.stage || ""}</div>
+                                        <div className="as-crm-stage-title">{s.title || ""}</div>
+                                        <div className="as-crm-stage-acts">{(s.actions || []).map((a: string, k: number) => <div className="as-crm-stage-act" key={k} style={{ color: 'var(--t2)' }}><span style={{ color }}>✦</span> {a}</div>)}</div>
+                                        {s.targetColleges?.length && <div style={{ marginTop: "10px" }}><div style={{ fontSize: "10px", fontWeight: 800, color: "var(--t4)", textTransform: "uppercase", letterSpacing: ".4px", marginBottom: "6px" }}>Target Colleges</div><div style={{ display: "flex", flexWrap: "wrap", gap: "5px" }}>{s.targetColleges.map((c: string, k: number) => <span key={k} style={{ background: "var(--bg)", border: "1px solid var(--border)", padding: "3px 10px", borderRadius: "6px", fontSize: "11.5px", fontWeight: 600 }}>🏛 {c}</span>)}</div></div>}
+                                        {s.salaryTrajectory?.length && <div style={{ marginTop: "10px", display: "flex", gap: "8px", flexWrap: "wrap" }}>{s.salaryTrajectory.map((x: string, k: number) => <span key={k} style={{ background: "var(--green-l)", border: "1px solid rgba(5,122,85,.2)", color: "var(--green)", padding: "4px 12px", borderRadius: "100px", fontSize: "11.5px", fontWeight: 700 }}>💰 {x}</span>)}</div>}
+                                        {s.targetCompanies?.length && <div style={{ marginTop: "10px" }}><div style={{ fontSize: "10px", fontWeight: 800, color: "var(--t4)", textTransform: "uppercase", letterSpacing: ".4px", marginBottom: "6px" }}>Target Companies</div><div style={{ display: "flex", flexWrap: "wrap", gap: "5px" }}>{s.targetCompanies.map((c: string, k: number) => <span key={k} style={{ background: "var(--bg)", border: "1px solid var(--border)", padding: "3px 10px", borderRadius: "6px", fontSize: "11.5px", fontWeight: 600 }}>🏢 {c}</span>)}</div></div>}
+                                        {s.milestone && <div style={{ marginTop: "8px", display: "flex", alignItems: "center", gap: "6px" }}><span style={{ fontSize: "10px", fontWeight: 800, color: "var(--amber)", textTransform: "uppercase", letterSpacing: ".4px" }}>🎯 Milestone:</span><span style={{ fontSize: "12px", fontWeight: 700, color: "var(--t1)" }}>{s.milestone}</span></div>}
+                                      </div>
+                                    </div>
+                                  );
+                                })}
+                              </div>
+                            </div>
+                            
+                            <div className="as-crm-cards" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginTop: '16px' }}>
+                              <div className="as-crm-card"><h4>🎓 Top Colleges</h4><ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '6px' }}>{(thisRoadmap.roadmap.topColleges || []).slice(0, 4).map((c: string, j: number) => <li key={j} style={{ fontSize: '12px', color: 'var(--t2)', display: 'flex', gap: '6px' }}><span style={{ color }}>▹</span>{c}</li>)}</ul></div>
+                              <div className="as-crm-card"><h4>📝 Key Exams</h4><ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '6px' }}>{(thisRoadmap.roadmap.keyExams || []).slice(0, 4).map((e: string, j: number) => <li key={j} style={{ fontSize: '12px', color: 'var(--t2)', display: 'flex', gap: '6px' }}><span style={{ color }}>▹</span>{e}</li>)}</ul></div>
+                              <div className="as-crm-card" style={{ gridColumn: '1 / -1' }}><h4>🛠 Key Skills</h4><ul style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', gap: '8px', listStyle: 'none', padding: 0, margin: 0 }}>{(thisRoadmap.roadmap.keySkills || []).slice(0, 5).map((s: string, j: number) => <li key={j} style={{ background: 'var(--bg)', padding: '4px 10px', borderRadius: '6px', border: '1px solid var(--border)', fontSize: '12px' }}>{s}</li>)}</ul></div>
+                            </div>
+                          </div>
+                          );
+                        })() : (
+                          <div className="as-cc-cta" style={{ borderTop: `2px solid ${color}20`, paddingTop: '10px', marginTop: '4px' }} onClick={() => openCareerRoadmap(i)}>
+                            🗺️ Generate full personalised roadmap →
+                          </div>
+                        )}
                       </div>
                     );
                   })}
@@ -5017,73 +5134,7 @@ ${bodyHTML}
       )}
 
       {/* ── CAREER ROADMAP MODAL ───────────────────────────────────── */}
-      {crmOpen && (
-        <div className="as-crm-overlay" onClick={(e) => { if (e.target === e.currentTarget) setCrmOpen(false); }}>
-          <div className="as-crm-modal">
-            {crmLoading || !crmData ? (
-              <div className="as-crm-loading"><div className="as-crm-spinner" /><p>Generating your personalised roadmap…</p></div>
-            ) : (
-              <>
-                <div className="as-crm-head">
-                  <div className="as-crm-head-top">
-                    <div>
-                      <div style={{ fontSize: "10px", fontWeight: 800, color: "rgba(105,11,27,.8)", textTransform: "uppercase", letterSpacing: ".8px", marginBottom: "8px" }}>Your Personalised Career Roadmap</div>
-                      <div className="as-crm-title">{crmData.career.name}</div>
-                      <div className="as-crm-why">{crmData.roadmap.overview || crmData.career.description}</div>
-                    </div>
-                    <button className="as-crm-close" onClick={() => setCrmOpen(false)}>✕</button>
-                  </div>
-                  <div className="as-crm-kpis">
-                    <div className="as-crm-kpi"><div className="as-crm-kpi-v">{crmData.roadmap.fitScore || "—"}</div><div className="as-crm-kpi-l">Fit Score</div></div>
-                    <div className="as-crm-kpi"><div className="as-crm-kpi-v">{crmData.roadmap.duration || "—"}</div><div className="as-crm-kpi-l">Duration</div></div>
-                    <div className="as-crm-kpi"><div className="as-crm-kpi-v">{crmData.roadmap.avgSalary || crmData.career.salaryRange || "—"}</div><div className="as-crm-kpi-l">Avg Salary</div></div>
-                    <div className="as-crm-kpi"><div className="as-crm-kpi-v">{(crmData.roadmap.stages || []).length}</div><div className="as-crm-kpi-l">Stages</div></div>
-                  </div>
-                </div>
-                <div className="as-crm-body">
-                  <div className="as-crm-sec">
-                    <div className="as-crm-sec-hd">Your Step-by-Step Roadmap</div>
-                    <div className="as-crm-timeline">
-                      {(crmData.roadmap.stages || []).map((s: any, i: number, arr: any[]) => {
-                        const isLast = i === arr.length - 1;
-                        return (
-                          <div className="as-crm-stage" key={i}>
-                            <div className="as-crm-stage-left"><div className="as-crm-stage-dot">{s.icon || i + 1}</div>{!isLast && <div className="as-crm-stage-line" />}</div>
-                            <div className="as-crm-stage-content">
-                              <div className="as-crm-stage-label">{s.stage || ""}</div>
-                              <div className="as-crm-stage-title">{s.title || ""}</div>
-                              <div className="as-crm-stage-acts">{(s.actions || []).map((a: string, j: number) => <div className="as-crm-stage-act" key={j}>{a}</div>)}</div>
-                              {s.targetColleges?.length && <div style={{ marginTop: "10px" }}><div style={{ fontSize: "10px", fontWeight: 800, color: "var(--t4)", textTransform: "uppercase", letterSpacing: ".4px", marginBottom: "6px" }}>Target Colleges</div><div style={{ display: "flex", flexWrap: "wrap", gap: "5px" }}>{s.targetColleges.map((c: string, j: number) => <span key={j} style={{ background: "var(--bg)", border: "1px solid var(--border)", padding: "3px 10px", borderRadius: "6px", fontSize: "11.5px", fontWeight: 600 }}>🏛 {c}</span>)}</div></div>}
-                              {s.salaryTrajectory?.length && <div style={{ marginTop: "10px", display: "flex", gap: "8px", flexWrap: "wrap" }}>{s.salaryTrajectory.map((x: string, j: number) => <span key={j} style={{ background: "var(--green-l)", border: "1px solid rgba(5,122,85,.2)", color: "var(--green)", padding: "4px 12px", borderRadius: "100px", fontSize: "11.5px", fontWeight: 700 }}>💰 {x}</span>)}</div>}
-                              {s.targetCompanies?.length && <div style={{ marginTop: "10px" }}><div style={{ fontSize: "10px", fontWeight: 800, color: "var(--t4)", textTransform: "uppercase", letterSpacing: ".4px", marginBottom: "6px" }}>Target Companies</div><div style={{ display: "flex", flexWrap: "wrap", gap: "5px" }}>{s.targetCompanies.map((c: string, j: number) => <span key={j} style={{ background: "var(--bg)", border: "1px solid var(--border)", padding: "3px 10px", borderRadius: "6px", fontSize: "11.5px", fontWeight: 600 }}>🏢 {c}</span>)}</div></div>}
-                              {s.milestone && <div style={{ marginTop: "8px", display: "flex", alignItems: "center", gap: "6px" }}><span style={{ fontSize: "10px", fontWeight: 800, color: "var(--amber)", textTransform: "uppercase", letterSpacing: ".4px" }}>🎯 Milestone:</span><span style={{ fontSize: "12px", fontWeight: 700, color: "var(--t1)" }}>{s.milestone}</span></div>}
-                            </div>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </div>
-                  <div className="as-crm-cards">
-                    <div className="as-crm-card"><h4>🎓 Top Colleges</h4><ul>{(crmData.roadmap.topColleges || []).slice(0, 4).map((c: string, i: number) => <li key={i}>{c}</li>)}</ul></div>
-                    <div className="as-crm-card"><h4>📝 Key Exams</h4><ul>{(crmData.roadmap.keyExams || []).slice(0, 4).map((e: string, i: number) => <li key={i}>{e}</li>)}</ul></div>
-                    <div className="as-crm-card"><h4>🛠 Key Skills</h4><ul>{(crmData.roadmap.keySkills || []).slice(0, 5).map((s: string, i: number) => <li key={i}>{s}</li>)}</ul></div>
-                  </div>
-                  {crmData.roadmap.dayInLife && (
-                    <div className="as-crm-sec" style={{ marginTop: "20px" }}>
-                      <div className="as-crm-sec-hd">A Day in the Life</div>
-                      <div style={{ background: "var(--bg)", border: "1px solid var(--border)", borderRadius: "12px", padding: "16px", fontSize: "13px", color: "var(--t2)", lineHeight: 1.7 }}>{crmData.roadmap.dayInLife}</div>
-                    </div>
-                  )}
-                  <div style={{ marginTop: "20px", padding: "16px", background: "var(--red-l)", borderRadius: "12px", border: "1px solid rgba(105,11,27,.15)", display: "flex", justifyContent: "space-between", alignItems: "center", gap: "16px" }}>
-                    <div style={{ fontSize: "13px", color: "var(--t2)" }}>This roadmap is included in your PDF report when you download it.</div>
-                    <button onClick={() => { setCrmOpen(false); downloadPDF(); }} style={{ background: "var(--red)", color: "#fff", border: "none", padding: "10px 20px", borderRadius: "8px", fontSize: "13px", fontWeight: 700, whiteSpace: "nowrap", cursor: "pointer", fontFamily: "var(--font)" }}>⬇ Download PDF with Roadmap</button>
-                  </div>
-                </div>
-              </>
-            )}
-          </div>
-        </div>
-      )}
+      {/* Replaced with inline roadmap */}
 
       {/* Print doc (hidden on screen, shown during print) */}
       <div id="as-print-doc" />

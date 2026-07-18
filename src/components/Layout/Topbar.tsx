@@ -23,21 +23,7 @@ export default function Topbar() {
   const isTestPage = pathname === '/iq-test/test';
 
   const toggleSidebar = () => {
-    const sidebar = document.getElementById('sidebar');
-    const overlay = document.querySelector(`.sidebar-overlay`);
-    const body = document.body;
-
-    if (sidebar?.classList.contains(styles.sidebarOpen)) {
-      sidebar.classList.remove(styles.sidebarOpen);
-      body.classList.remove('sidebar-open');
-      overlay?.classList.remove('visible');
-    } else {
-      sidebar?.classList.add(styles.sidebarOpen);
-      body.classList.add('sidebar-open');
-      if (window.innerWidth <= 1024) {
-        overlay?.classList.add('visible');
-      }
-    }
+    window.dispatchEvent(new Event('toggle-sidebar'));
   };
 
   return (

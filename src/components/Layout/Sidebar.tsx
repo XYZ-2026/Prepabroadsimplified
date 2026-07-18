@@ -15,6 +15,8 @@ export default function Sidebar({ userRole, userName, userEmail }: SidebarProps)
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const [openAccordion, setOpenAccordion] = useState<string | null>(null);
+  const [isOpen, setIsOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(true);
   
   const psychType = searchParams.get('type') || 'senior';
 
@@ -32,11 +34,8 @@ export default function Sidebar({ userRole, userName, userEmail }: SidebarProps)
   };
 
   const closeSidebar = () => {
-    const sidebar = document.getElementById('sidebar');
-    const overlay = document.querySelector('.sidebar-overlay');
-    sidebar?.classList.remove(styles.sidebarOpen);
+    setIsOpen(false);
     document.body.classList.remove('sidebar-open');
-    overlay?.classList.remove('visible');
   };
 
   const handleLinkClick = () => {
@@ -46,21 +45,37 @@ export default function Sidebar({ userRole, userName, userEmail }: SidebarProps)
   };
 
   useEffect(() => {
-    // Close the sidebar automatically when navigating to the test page or on mobile devices
+    const handleResize = () => setIsMobile(window.innerWidth <= 1024);
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  useEffect(() => {
     if (pathname === '/iq-test/test') {
-      closeSidebar();
+      setIsOpen(false);
+      document.body.classList.remove('sidebar-open');
     } else if (window.innerWidth <= 1024) {
-      closeSidebar();
+      setIsOpen(false);
+      document.body.classList.remove('sidebar-open');
     } else {
-      const sidebar = document.getElementById('sidebar');
-      sidebar?.classList.add(styles.sidebarOpen);
+      setIsOpen(true);
       document.body.classList.add('sidebar-open');
     }
   }, [pathname, psychType]);
 
-  // Sync DOM state on mount and clean up on unmount
   useEffect(() => {
+    const handleToggle = () => {
+      setIsOpen(prev => {
+        const next = !prev;
+        if (next) document.body.classList.add('sidebar-open');
+        else document.body.classList.remove('sidebar-open');
+        return next;
+      });
+    };
+    window.addEventListener('toggle-sidebar', handleToggle);
     return () => {
+      window.removeEventListener('toggle-sidebar', handleToggle);
       document.body.classList.remove('sidebar-open');
     };
   }, []);
@@ -80,8 +95,8 @@ export default function Sidebar({ userRole, userName, userEmail }: SidebarProps)
 
   return (
     <>
-      <div className="sidebar-overlay" onClick={closeSidebar} />
-      <aside id="sidebar" className={styles.sidebar}>
+      <div className={`sidebar-overlay ${isOpen && isMobile ? 'visible' : ''}`} onClick={closeSidebar} />
+      <aside id="sidebar" className={`${styles.sidebar} ${isOpen ? styles.sidebarOpen : ''}`}>
       {/* Logo Block */}
       <div className={styles.sidebarLogoBlock}>
         <div className={styles.sidebarLogo}>

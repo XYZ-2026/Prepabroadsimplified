@@ -136,7 +136,7 @@ export default function AssessmentsTableClient({ initialAssessments }: { initial
                     <span className={styles.userSubtext}>{assessment.createdAtStr}</span>
                   </td>
                   <td>
-                    <Link href={assessment.type === 'psychometric' ? `/psychometric-test/result/${assessment.id}?source=admin` : `/iq-test/result/${assessment.id}?source=admin`} target="_blank" className={styles.btnEdit}>
+                    <Link href={assessment.type === 'psychometric' ? `/psychometric-test/result/${assessment.id}?source=admin` : `/iq-test/result/${assessment.id}?source=admin`} target="_blank" className={styles.btnEdit} style={{ whiteSpace: 'nowrap' }}>
                       View Full Report
                     </Link>
                   </td>

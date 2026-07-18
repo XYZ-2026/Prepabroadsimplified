@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, CheckCircle2, ShieldCheck, ChevronLeft, FileText } from 'lucide-react';
+import { X, Check, ShieldCheck, ChevronLeft, FileText } from 'lucide-react';
 
 interface TermsPopupProps {
   isOpen: boolean;
@@ -93,16 +93,22 @@ export default function TermsPopup({ isOpen, onClose, onProceed }: TermsPopupPro
                         <div className="relative flex items-start justify-center pt-0.5">
                           <input 
                             type="checkbox"
-                            className="peer sr-only"
+                            className="sr-only"
                             checked={tcAccepted}
                             onChange={(e) => setTcAccepted(e.target.checked)}
                           />
-                          <div className="w-5 h-5 rounded border border-slate-300 peer-checked:border-[#690b1b] peer-checked:bg-[#690b1b] transition-all flex items-center justify-center group-hover:border-[#690b1b]/50 shadow-sm">
-                            <CheckCircle2 className="w-3.5 h-3.5 text-white opacity-0 peer-checked:opacity-100" />
+                          <div 
+                            className={`w-5 h-5 rounded transition-all flex items-center justify-center ${tcAccepted ? 'bg-[#690b1b]' : 'bg-white'}`}
+                            style={{ 
+                              border: tcAccepted ? '3px solid #690b1b' : '3px solid #1e293b',
+                              boxShadow: '0 2px 6px rgba(0,0,0,0.15)'
+                            }}
+                          >
+                            {tcAccepted && <Check className="w-4 h-4 text-white stroke-[4]" />}
                           </div>
                         </div>
                         <div className="text-sm text-slate-700 font-medium leading-tight select-none">
-                          I agree to the <button type="button" className="text-[#690b1b] hover:underline" onClick={(e) => { e.preventDefault(); e.stopPropagation(); setViewMode('terms'); }}>Terms and Conditions</button>
+                          I agree to the <button type="button" className="text-[#690b1b] hover:underline !border-none !bg-transparent !p-0 !m-0 !shadow-none !outline-none inline-block h-auto" onClick={(e) => { e.preventDefault(); e.stopPropagation(); setViewMode('terms'); }}>Terms and Conditions</button>
                         </div>
                       </label>
 
@@ -111,16 +117,22 @@ export default function TermsPopup({ isOpen, onClose, onProceed }: TermsPopupPro
                         <div className="relative flex items-start justify-center pt-0.5">
                           <input 
                             type="checkbox"
-                            className="peer sr-only"
+                            className="sr-only"
                             checked={privacyAccepted}
                             onChange={(e) => setPrivacyAccepted(e.target.checked)}
                           />
-                          <div className="w-5 h-5 rounded border border-slate-300 peer-checked:border-[#690b1b] peer-checked:bg-[#690b1b] transition-all flex items-center justify-center group-hover:border-[#690b1b]/50 shadow-sm">
-                            <CheckCircle2 className="w-3.5 h-3.5 text-white opacity-0 peer-checked:opacity-100" />
+                          <div 
+                            className={`w-5 h-5 rounded transition-all flex items-center justify-center ${privacyAccepted ? 'bg-[#690b1b]' : 'bg-white'}`}
+                            style={{ 
+                              border: privacyAccepted ? '3px solid #690b1b' : '3px solid #1e293b',
+                              boxShadow: '0 2px 6px rgba(0,0,0,0.15)'
+                            }}
+                          >
+                            {privacyAccepted && <Check className="w-4 h-4 text-white stroke-[4]" />}
                           </div>
                         </div>
                         <div className="text-sm text-slate-700 font-medium leading-tight select-none">
-                          I acknowledge and agree to the <button type="button" className="text-[#690b1b] hover:underline" onClick={(e) => { e.preventDefault(); e.stopPropagation(); setViewMode('privacy'); }}>Privacy Policy</button>
+                          I acknowledge and agree to the <button type="button" className="text-[#690b1b] hover:underline !border-none !bg-transparent !p-0 !m-0 !shadow-none !outline-none inline-block h-auto" onClick={(e) => { e.preventDefault(); e.stopPropagation(); setViewMode('privacy'); }}>Privacy Policy</button>
                         </div>
                       </label>
                     </div>

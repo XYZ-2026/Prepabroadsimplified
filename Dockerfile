@@ -19,8 +19,9 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-# Disable Next.js telemetry during build
+# Disable Next.js telemetry during build & set memory limit to prevent build OOM
 ENV NEXT_TELEMETRY_DISABLED=1
+ENV NODE_OPTIONS="--max-old-space-size=4096"
 
 # Build the Next.js application (standalone output)
 RUN npm run build

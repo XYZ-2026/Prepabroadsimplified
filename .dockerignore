@@ -1,0 +1,78 @@
+# ============================================================
+# .dockerignore — Keep Docker build context lean
+# ============================================================
+
+# Version control
+.git
+.gitignore
+
+# Docker files (prevent recursive context)
+Dockerfile
+.dockerignore
+docker-compose.yml
+
+# Dependencies (rebuilt inside container)
+node_modules
+
+# Build output (rebuilt inside container)
+.next
+out
+
+# IDE / editor
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# Environment (injected at runtime, never baked into image)
+.env
+.env.*
+
+# Documentation & non-essential files
+README.md
+CLAUDE.md
+AGENTS.md
+*.md
+!next-env.d.ts
+
+# Large binary assets that should NOT be in the Docker image
+*.pdf
+*.docx
+*.doc
+*.xlsx
+*.pptx
+pdf_pages_preview/
+pdf_headers_summary.png
+
+# Python scripts (dev tooling, not needed in production)
+*.py
+*.pyc
+__pycache__/
+
+# Dev data / test files
+*.txt
+!src/**/*.txt
+150_questions.txt
+static_data.txt
+fbq_grade10_generated.json
+fbq_grade10_ts.txt
+static\ data*.docx
+
+# Test files
+tests/
+
+# Logs
+npm-debug.log*
+yarn-error.log*
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Gemini / AI tooling
+.gemini/
+
+# TypeScript build info (not needed in prod image)
+tsconfig.tsbuildinfo

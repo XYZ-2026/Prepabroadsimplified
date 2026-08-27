@@ -1,0 +1,657 @@
+/* ============================================================
+   auth.module.css — Auth page styles (Split Screen with Bento Box)
+   Fully Mobile Responsive (iOS & Android Optimized)
+   ============================================================ */
+
+.authTopbar {
+  display: flex;
+  justify-content: flex-start;
+  padding: 0 5%;
+  align-items: center;
+  height: 60px;
+  background: var(--bg-card);
+  border-bottom: 1px solid var(--border-color);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.authTopbarBrand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+}
+
+.authTopbarLogoIcon {
+  width: 34px;
+  height: 34px;
+  background-color: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.authTopbarText {
+  display: flex;
+  flex-direction: column;
+}
+
+.authTopbarTitle {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--text-dark);
+  line-height: 1.2;
+}
+
+.authTopbarSubtitle {
+  font-size: 0.62rem;
+  font-weight: 600;
+  color: var(--text-light);
+  letter-spacing: 0.5px;
+}
+
+/* ── Split Screen Wrapper ── */
+.authMain {
+  min-height: calc(100vh - 60px);
+  background: radial-gradient(circle at top left, rgba(105, 11, 27, 0.06) 0%, var(--color-section-alt) 40%, var(--bg-card-alt) 100%);
+  padding: 1.75rem 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+.authLayoutGrid {
+  display: grid;
+  grid-template-columns: minmax(400px, 490px) minmax(440px, 1fr);
+  gap: 3.5rem;
+  width: 100%;
+  max-width: 1320px;
+  margin: 0 auto;
+  align-items: center;
+}
+
+/* ── Left Side: Auth Section Card ── */
+.authSection {
+  width: 100%;
+}
+
+.authContainer {
+  background: var(--bg-card);
+  border-radius: 18px;
+  padding: 1.75rem 2rem;
+  box-shadow: 0 20px 45px rgba(0,0,0,0.08), 0 4px 14px rgba(0,0,0,0.03);
+  border: 1px solid var(--border-color);
+  animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Tabs */
+.authTabs {
+  display: flex;
+  margin-bottom: 1.25rem;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 0;
+}
+
+.authTab {
+  flex: 1;
+  padding: 0.6rem 0.5rem;
+  text-align: center;
+  background: transparent;
+  border: 1px solid transparent;
+  border-bottom: none;
+  color: var(--text-muted);
+  font-family: var(--font-primary);
+  font-weight: 600;
+  font-size: 0.88rem;
+  cursor: pointer;
+  transition: var(--transition);
+  margin-bottom: -1px;
+}
+
+.authTab:hover {
+  color: var(--text-heading);
+}
+
+.authTabActive {
+  color: var(--accent);
+  border: 1px solid var(--border-color);
+  border-bottom: 2px solid var(--accent);
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+  background: var(--bg-card);
+}
+
+/* Forms */
+.authFormContainer {
+  display: none;
+  animation: fadeIn 0.25s ease forwards;
+}
+
+.authFormContainerActive {
+  display: block;
+}
+
+.formGroup {
+  margin-bottom: 0.9rem;
+  text-align: left;
+}
+
+.formRow {
+  display: flex;
+  gap: 0.85rem;
+}
+
+.formRow .formGroup {
+  flex: 1;
+}
+
+.formGroup label {
+  display: block;
+  font-family: var(--font-primary);
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+  color: var(--text-heading);
+}
+
+.formGroup input,
+.formGroup select {
+  width: 100%;
+  padding: 0.65rem 0.85rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  color: var(--text-heading);
+  font-family: var(--font-primary);
+  font-size: 0.85rem;
+  transition: var(--transition);
+}
+
+.formGroup input:focus,
+.formGroup select:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-light);
+}
+
+.passwordInputWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.passwordInputWrapper input {
+  padding-right: 2.4rem;
+}
+
+.passwordInputWrapper input::-ms-reveal,
+.passwordInputWrapper input::-ms-clear {
+  display: none;
+}
+
+.passwordToggleBtn {
+  position: absolute;
+  right: 0.75rem;
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  transition: color 0.2s ease;
+}
+
+.passwordToggleBtn:hover {
+  color: var(--text-heading);
+}
+
+.authFooterLink {
+  text-align: center;
+  margin-top: 0.85rem;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.authFooterLink a {
+  color: var(--accent);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.authFooterLink a:hover {
+  text-decoration: underline;
+}
+
+.btnBlock {
+  width: 100%;
+  margin-top: 0.5rem;
+  padding: 0.72rem;
+  font-size: 0.92rem;
+}
+
+.authError {
+  color: #ff4d4d;
+  font-size: 0.82rem;
+  margin-top: 0.35rem;
+  margin-bottom: 0.75rem;
+  display: none;
+}
+
+.authErrorVisible {
+  display: block;
+}
+
+.authMessage {
+  color: #2e7d32;
+  font-size: 0.82rem;
+  margin-bottom: 0.75rem;
+  display: none;
+}
+
+.authMessageVisible {
+  display: block;
+}
+
+
+/* ── Right Side: Bento Box Architecture ── */
+.bentoContainer {
+  width: 100%;
+  animation: fadeIn 0.4s ease forwards;
+}
+
+.bentoGrid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 0.85rem;
+  align-items: stretch;
+}
+
+/* Base Bento Card */
+.bentoCard {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  overflow: hidden;
+}
+
+.bentoCard:hover {
+  transform: translateY(-2px);
+  border-color: rgba(105, 11, 27, 0.25);
+  box-shadow: 0 8px 22px rgba(105, 11, 27, 0.06);
+}
+
+/* 1. Hero Bento Card (Span 7) */
+.bentoHeroCard {
+  grid-column: span 7;
+  padding: 1.25rem 1.4rem;
+  background: linear-gradient(135deg, #FFFFFF 0%, #FDF8F8 100%);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.4rem;
+}
+
+.infoBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.6px;
+  color: var(--accent);
+  background: var(--accent-light);
+  padding: 3px 10px;
+  border-radius: 16px;
+  width: fit-content;
+}
+
+.infoBadgeDot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background-color: var(--accent);
+  display: inline-block;
+  animation: pulse 2s infinite;
+}
+
+.infoTitle {
+  font-family: var(--font-heading);
+  font-size: 1.45rem;
+  font-weight: 800;
+  line-height: 1.25;
+  color: var(--text-heading);
+  letter-spacing: -0.02em;
+}
+
+.infoTitleHighlight {
+  color: var(--accent);
+  position: relative;
+  display: inline-block;
+}
+
+.infoSubtitle {
+  font-size: 0.82rem;
+  color: var(--text-body);
+  line-height: 1.4;
+}
+
+/* 2. Square Image Bento Frame (Span 5, 1:1 Square Ratio) */
+.bentoSquareImageCard {
+  grid-column: span 5;
+  aspect-ratio: 1 / 1;
+  max-height: 190px;
+  padding: 0.5rem;
+  background: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bentoSquareImg {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 12px;
+  display: block;
+}
+
+/* 3. Stat Bento Cards (3 cards, each spans 4 columns) */
+.bentoStatCard {
+  grid-column: span 4;
+  padding: 0.75rem 0.8rem;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.infoStatTopRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.infoStatIcon {
+  font-size: 1.15rem;
+}
+
+.infoStatValue {
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.infoStatLabel {
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  line-height: 1.1;
+  white-space: nowrap;
+}
+
+/* 4. Feature Bento Cards (3 cards, each spans 4 columns) */
+.bentoFeatureCard {
+  grid-column: span 4;
+  padding: 0.85rem 0.9rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.infoFeatureIconBox {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  background: var(--accent-light);
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.infoFeatureContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.infoFeatureHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.4rem;
+}
+
+.infoFeatureTitle {
+  font-family: var(--font-heading);
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-heading);
+}
+
+.infoFeatureBadge {
+  font-size: 0.6rem;
+  font-weight: 700;
+  color: #65151e;
+  background: #fdf4f4;
+  border: 1px solid #f8d7da;
+  padding: 1px 5px;
+  border-radius: 8px;
+  white-space: nowrap;
+}
+
+.infoFeatureDesc {
+  font-size: 0.75rem;
+  color: var(--text-body);
+  line-height: 1.35;
+}
+
+/* 5. Destinations Bento Card (Spans 12 columns) */
+.bentoDestinationsCard {
+  grid-column: span 12;
+  padding: 0.65rem 1rem;
+  background: rgba(255, 255, 255, 0.85);
+  border-style: dashed;
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.infoDestinationsTitle {
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.6px;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.infoDestinationsGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.infoDestinationChip {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  padding: 3px 10px;
+  border-radius: 16px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-heading);
+}
+
+.infoFlag {
+  font-size: 0.95rem;
+}
+
+/* Keyframes */
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.4; }
+  100% { opacity: 1; }
+}
+
+
+/* ============================================================
+   RESPONSIVE BREAKPOINTS (Mobile & Tablet Optimization)
+   ============================================================ */
+
+/* Laptop / Small Desktop (< 1200px) */
+@media (max-width: 1200px) {
+  .authLayoutGrid {
+    grid-template-columns: minmax(380px, 450px) minmax(380px, 1fr);
+    gap: 2rem;
+  }
+}
+
+/* Tablet (< 1024px) — Stack Left Card on top of Right Bento Grid */
+@media (max-width: 1024px) {
+  .authMain {
+    min-height: calc(100vh - 60px);
+    padding: 1.75rem 1.25rem;
+    overflow-y: auto;
+  }
+
+  .authLayoutGrid {
+    grid-template-columns: 1fr;
+    max-width: 520px;
+    gap: 2.25rem;
+  }
+
+  .bentoHeroCard {
+    grid-column: span 12;
+  }
+
+  .bentoSquareImageCard {
+    grid-column: span 12;
+    aspect-ratio: auto;
+    height: 180px;
+    max-height: 200px;
+  }
+
+  .bentoStatCard {
+    grid-column: span 4;
+  }
+
+  .bentoFeatureCard {
+    grid-column: span 12;
+  }
+}
+
+/* Mobile Phones (< 640px) */
+@media (max-width: 640px) {
+  .authTopbar {
+    padding: 0 1rem;
+  }
+
+  .authMain {
+    padding: 1.25rem 0.85rem;
+  }
+
+  .authContainer {
+    padding: 1.35rem 1.15rem;
+    border-radius: 14px;
+  }
+
+  .authTabs {
+    margin-bottom: 1rem;
+  }
+
+  .authTab {
+    padding: 0.5rem 0.25rem;
+    font-size: 0.8rem;
+  }
+
+  /* Form row stacks vertically on mobile phones for comfortable touch targets */
+  .formRow {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  /* Set input font-size to 16px to prevent iOS Safari auto-zoom on input focus */
+  .formGroup input,
+  .formGroup select {
+    font-size: 16px !important;
+    padding: 0.7rem 0.85rem;
+  }
+
+  .bentoGrid {
+    gap: 0.65rem;
+  }
+
+  .bentoHeroCard {
+    padding: 1rem 1.15rem;
+  }
+
+  .infoTitle {
+    font-size: 1.3rem;
+  }
+
+  .bentoSquareImageCard {
+    height: 160px;
+  }
+
+  .bentoStatCard {
+    grid-column: span 12;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 1rem;
+  }
+
+  .infoStatLabel {
+    font-size: 0.75rem;
+  }
+
+  .bentoFeatureCard {
+    grid-column: span 12;
+    padding: 0.75rem 0.85rem;
+  }
+
+  .bentoDestinationsCard {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+  }
+
+  .infoDestinationsGrid {
+    gap: 0.35rem;
+  }
+
+  .infoDestinationChip {
+    padding: 3px 8px;
+    font-size: 0.75rem;
+  }
+}

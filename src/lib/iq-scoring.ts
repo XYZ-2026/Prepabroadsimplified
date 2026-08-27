@@ -1,0 +1,196 @@
+export interface QuestionDomainScore {
+  category: string;
+  earned: number;
+  max: number;
+  percentage: number;
+}
+
+export interface IQResult {
+  iqScore: number;
+  percentile: number;
+  tier: string;
+  totalEarned: number;
+  totalMax: number;
+  domains: QuestionDomainScore[];
+  strength: string;
+  weakness: string;
+  careers: string[];
+  insights: string;
+  difficultyBreakdown: {
+    easy: { earned: number; max: number; percentage: number };
+    medium: { earned: number; max: number; percentage: number };
+    advanced: { earned: number; max: number; percentage: number };
+  };
+  consistencyScore: number;
+  cognitivePersona: string;
+}
+
+// Error function math for percentile calculation
+function erf(x: number): number {
+  // Save the sign of x
+  const sign = (x >= 0) ? 1 : -1;
+  x = Math.abs(x);
+
+  // A&S formula 7.1.26
+  const a1 = 0.254829592;
+  const a2 = -0.284496736;
+  const a3 = 1.421413741;
+  const a4 = -1.453152027;
+  const a5 = 1.061405429;
+  const p = 0.3275911;
+
+  const t = 1.0 / (1.0 + p * x);
+  const y = 1.0 - (((((a5 * t + a4) * t) + a3) * t + a2) * t + a1) * t * Math.exp(-x * x);
+
+  return sign * y;
+}
+
+function calculatePercentile(zScore: number): number {
+  // CDF of standard normal distribution: 0.5 * (1 + erf(z / sqrt(2)))
+  const cdf = 0.5 * (1 + erf(zScore / Math.sqrt(2)));
+  return Math.max(0.1, Math.min(99.9, cdf * 100)); // Cap between 0.1 and 99.9
+}
+
+function getTier(iq: number): string {
+  if (iq < 80) return "Borderline";
+  if (iq < 90) return "Low Average";
+  if (iq < 110) return "Average";
+  if (iq < 120) return "High Average";
+  if (iq < 135) return "Highly Intelligent";
+  return "Exceptional";
+}
+
+const CAREER_MAP: Record<string, string[]> = {
+  "Logical Reasoning": ["Software Engineering", "Law", "Philosophy"],
+  "Pattern Recognition": ["Data Science", "Artificial Intelligence", "Cryptography"],
+  "Numerical Intelligence": ["Finance", "Quantitative Analysis", "Business Analytics"],
+  "Verbal Reasoning": ["Journalism", "Public Relations", "Creative Writing"],
+  "Analytical Thinking": ["Management Consulting", "Operations Research", "Systems Engineering"],
+  "Problem Solving": ["Product Management", "Cybersecurity", "Mechanical Engineering"]
+};
+
+const PERSONA_MAP: Record<string, string> = {
+  "Logical Reasoning": "The Architect",
+  "Pattern Recognition": "The Visionary",
+  "Numerical Intelligence": "The Analyst",
+  "Verbal Reasoning": "The Communicator",
+  "Analytical Thinking": "The Strategist",
+  "Problem Solving": "The Fixer"
+};
+
+function generateInsights(userName: string, strength: string, weakness: string, tier: string, iq: number): string {
+  return `Dear ${userName}, based on your performance on the Abroad Simplified Advanced IQ Assessment, you have achieved an overall IQ score of ${iq}, placing you in the '${tier}' cognitive category.
+
+Your primary cognitive strength is ${strength}. In environments requiring rapid processing of ${strength.toLowerCase()} assets, you possess a distinct competitive advantage.
+
+Your lowest relative score was in ${weakness}. To maximize your cognitive efficiency, we recommend studying algorithmic designs and logic puzzles. 
+
+Moving forward, we recommend aligning your career objectives with fields that heavily leverage ${strength.toLowerCase()}, while actively training your ${weakness.toLowerCase()} to ensure balanced cognitive performance.`;
+}
+
+export function processIQTest(evaluatedAnswers: any[], userName: string = 'Candidate'): IQResult {
+  const domainsMap: Record<string, { earned: number, max: number }> = {};
+  const diffMap = {
+    easy: { earned: 0, max: 0 },
+    medium: { earned: 0, max: 0 },
+    advanced: { earned: 0, max: 0 }
+  };
+  
+  let totalEarned = 0;
+  let totalMax = 0;
+
+  evaluatedAnswers.forEach(ans => {
+    const category = ans.category || 'General';
+    // Difficulty weighting (mock mapping if difficulty doesn't exist, normally we'd pull from question DB)
+    // We will assume 1.0 for all if difficulty is missing, but wait, in the new DB we don't have difficulty easily exposed?
+    // Let's check ans.difficulty if it was passed, if not default to 1.5
+    let weight = 1.5;
+    if (ans.difficulty === 'easy') weight = 1.0;
+    else if (ans.difficulty === 'medium') weight = 1.5;
+    else if (ans.difficulty === 'hard' || ans.difficulty === 'advanced') weight = 2.0;
+
+    if (!domainsMap[category]) {
+      domainsMap[category] = { earned: 0, max: 0 };
+    }
+
+    domainsMap[category].max += weight;
+    totalMax += weight;
+
+    const diff = (ans.difficulty === 'hard' ? 'advanced' : ans.difficulty) || 'medium';
+    if (diffMap[diff as keyof typeof diffMap]) {
+      diffMap[diff as keyof typeof diffMap].max += weight;
+    }
+
+    if (ans.isCorrect) {
+      domainsMap[category].earned += weight;
+      totalEarned += weight;
+      if (diffMap[diff as keyof typeof diffMap]) {
+        diffMap[diff as keyof typeof diffMap].earned += weight;
+      }
+    }
+  });
+
+  const domains: QuestionDomainScore[] = Object.keys(domainsMap).map(cat => ({
+    category: cat,
+    earned: domainsMap[cat].earned,
+    max: domainsMap[cat].max,
+    percentage: Math.round((domainsMap[cat].earned / domainsMap[cat].max) * 100) || 0
+  }));
+
+  // Identify strength and weakness
+  domains.sort((a, b) => b.percentage - a.percentage);
+  const strength = domains[0]?.category || 'General Aptitude';
+  const weakness = domains[domains.length - 1]?.category || 'General Aptitude';
+
+  // Math: 
+  // Let's assume an average total score is 60% of totalMax, standard dev is 15% of totalMax
+  // z = (earned - mean) / stdDev
+  const mean = totalMax * 0.55; // Expected mean 55%
+  const stdDev = totalMax * 0.15; // 15% standard deviation
+  
+  const zScore = (totalEarned - mean) / stdDev;
+  
+  // Standard IQ: Mean 100, SD 15
+  let iqScore = Math.round(100 + (zScore * 15));
+  iqScore = Math.max(70, Math.min(160, iqScore)); // Cap between 70 and 160
+
+  const percentile = Number(calculatePercentile(zScore).toFixed(1));
+  const tier = getTier(iqScore);
+  
+  const careers = CAREER_MAP[strength] || ["Research", "Academia", "Strategic Planning"];
+  const insights = generateInsights(userName, strength, weakness, tier, iqScore);
+  const cognitivePersona = PERSONA_MAP[strength] || "The Thinker";
+
+  const difficultyBreakdown = {
+    easy: { ...diffMap.easy, percentage: diffMap.easy.max > 0 ? Math.round((diffMap.easy.earned / diffMap.easy.max) * 100) : 0 },
+    medium: { ...diffMap.medium, percentage: diffMap.medium.max > 0 ? Math.round((diffMap.medium.earned / diffMap.medium.max) * 100) : 0 },
+    advanced: { ...diffMap.advanced, percentage: diffMap.advanced.max > 0 ? Math.round((diffMap.advanced.earned / diffMap.advanced.max) * 100) : 0 },
+  };
+
+  const percentages = domains.map(d => d.percentage);
+  const meanPercentage = percentages.reduce((a, b) => a + b, 0) / (percentages.length || 1);
+  const variance = percentages.reduce((a, b) => a + Math.pow(b - meanPercentage, 2), 0) / (percentages.length || 1);
+  const stdDevPercentage = Math.sqrt(variance);
+  let consistencyScore = Math.round(100 - (stdDevPercentage * 2));
+  if (meanPercentage === 0) {
+    consistencyScore = 0; // Prevent 100% consistency for getting everything wrong/unattempted
+  } else {
+    consistencyScore = Math.max(0, Math.min(100, consistencyScore));
+  }
+
+  return {
+    iqScore,
+    percentile,
+    tier,
+    totalEarned,
+    totalMax,
+    domains,
+    strength,
+    weakness,
+    careers,
+    insights,
+    difficultyBreakdown,
+    consistencyScore,
+    cognitivePersona
+  };
+}

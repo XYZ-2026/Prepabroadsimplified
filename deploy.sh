@@ -70,9 +70,9 @@ do_deploy() {
   log "  Abroad Simplified — VPS Deployment"
   log "=========================================="
 
-  # 1. Pull latest code
-  log "Pulling latest code from '${BRANCH}'..."
-  git pull origin "$BRANCH" || warn "Git pull failed — deploying from current working tree."
+  # 1. Fetch and override local changes with latest remote code
+  log "Fetching and overriding local branch with latest code from 'origin/${BRANCH}'..."
+  git fetch origin "$BRANCH" && git reset --hard "origin/$BRANCH" || warn "Git fetch/reset failed — deploying from current working tree."
 
   # 2. Tag current image for rollback (if exists)
   if docker image inspect "${APP_NAME}:latest" > /dev/null 2>&1; then

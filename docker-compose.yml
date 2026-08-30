@@ -7,16 +7,35 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      args:
+        # ----------------------------------------------------
+        # Firebase Client SDK
+        # These are needed during `npm run build`
+        # ----------------------------------------------------
+        NEXT_PUBLIC_FIREBASE_API_KEY: ${NEXT_PUBLIC_FIREBASE_API_KEY}
+        NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN: ${NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN}
+        NEXT_PUBLIC_FIREBASE_PROJECT_ID: ${NEXT_PUBLIC_FIREBASE_PROJECT_ID}
+        NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET: ${NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET}
+        NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID: ${NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID}
+        NEXT_PUBLIC_FIREBASE_APP_ID: ${NEXT_PUBLIC_FIREBASE_APP_ID}
+
     container_name: abroad-simplified
+
     ports:
       - "${APP_PORT:-4000}:3000"
+
     restart: unless-stopped
+
+    # Runtime environment variables
+    # .env is NOT copied into the Docker image.
     env_file:
       - .env
+
     environment:
       - NODE_ENV=production
       - PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
       - PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser
+
     # Resource limits to prevent OOM on VPS
     deploy:
       resources:
@@ -26,16 +45,28 @@ services:
         reservations:
           memory: 512M
           cpus: "0.5"
+
     # Logging — keep logs bounded so they don't fill VPS disk
     logging:
       driver: "json-file"
       options:
         max-size: "20m"
         max-file: "5"
-    # Chromium in containers needs /dev/shm or --disable-dev-shm-usage
+
+    # Chromium in containers needs /dev/shm
     shm_size: "256mb"
+
+    # Health check
     healthcheck:
-      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:3000/"]
+      test:
+        [
+          "CMD",
+          "wget",
+          "--no-verbose",
+          "--tries=1",
+          "--spider",
+          "http://127.0.0.1:3000/"
+        ]
       interval: 30s
       timeout: 10s
       start_period: 40s

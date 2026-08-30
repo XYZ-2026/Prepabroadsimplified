@@ -523,7 +523,7 @@ export default function IQAssessmentLandingPage() {
               </div>
               <div>
                 <h3 className="font-display font-bold text-base text-slate-900 mb-1">Official PDF Certificate</h3>
-                <p className="text-xs text-slate-500 font-medium leading-relaxed">Direct downloadable PDF certificate issued by the Simplified School of Education with verification ID.</p>
+                <p className="text-xs text-slate-500 font-medium leading-relaxed">Direct downloadable PDF certificate issued by the Simplified Center for Cognitive Sciences with verification ID.</p>
               </div>
             </div>
 
@@ -703,7 +703,7 @@ export default function IQAssessmentLandingPage() {
                   Official PDF Certificate
                 </span>
                 <div className="aspect-video bg-amber-50/60 rounded-2xl border border-amber-200 p-4 flex flex-col justify-between mb-3 text-center">
-                  <div className="text-[9px] font-extrabold text-[#690b1b] uppercase tracking-widest">SIMPLIFIED SCHOOL OF EDUCATION</div>
+                  <div className="text-[8.5px] font-extrabold text-[#690b1b] uppercase tracking-widest whitespace-nowrap overflow-hidden">SIMPLIFIED CENTER FOR COGNITIVE SCIENCES</div>
                   <div className="text-xs font-display font-extrabold text-slate-900">Cognitive Assessment Certificate</div>
                   <div className="text-[10px] font-mono text-amber-800 font-bold">Estimated IQ: 124 • 95th Percentile</div>
                 </div>
@@ -846,7 +846,7 @@ export default function IQAssessmentLandingPage() {
               ABROAD SIMPLIFIED
             </div>
             <p className="text-slate-400 leading-relaxed font-medium">
-              Standardized Cognitive Assessment Division. Supporting holistic student profiling and academic guidance.
+              Simplified Center for Cognitive Sciences — Cognitive Assessment & Research Division. Supporting holistic student profiling and academic guidance.
             </p>
           </div>
 
@@ -876,7 +876,7 @@ export default function IQAssessmentLandingPage() {
               <li><a href="#faq" className="hover:text-amber-400 transition-colors">FAQ</a></li>
               <li><span className="text-slate-500">Privacy Policy</span></li>
               <li><span className="text-slate-500">Terms of Service</span></li>
-              <li><span className="text-slate-500">Simplified School of Education</span></li>
+              <li><span className="text-slate-500">Simplified Center for Cognitive Sciences</span></li>
             </ul>
           </div>
 

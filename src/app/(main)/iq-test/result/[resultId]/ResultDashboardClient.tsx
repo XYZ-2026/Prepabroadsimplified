@@ -12,6 +12,7 @@ import {
   ResponsiveContainer 
 } from 'recharts';
 import { Download, Sparkles, BrainCircuit, ChevronLeft, Award, RefreshCw, BarChart2, ShieldCheck } from 'lucide-react';
+import { IQ_ASSESSMENT_CONFIG } from '@/config/iq-assessment.config';
 
 export default function ResultDashboardClient({ 
   resultData, 
@@ -211,7 +212,7 @@ export default function ResultDashboardClient({
           <div>
             <span className="text-[10px] font-extrabold tracking-widest uppercase text-purple-300 block mb-1">Official Document</span>
             <h4 className="text-2xl font-display font-extrabold mb-1">Cognitive Assessment Certificate</h4>
-            <p className="text-xs text-purple-200 font-medium">Verification ID: {certificateId} • Issued by Simplified School of Education</p>
+            <p className="text-xs text-purple-200 font-medium">Verification ID: {certificateId} • Issued by {IQ_ASSESSMENT_CONFIG.issuingOrganization}</p>
           </div>
 
           <button

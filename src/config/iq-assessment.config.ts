@@ -20,6 +20,12 @@ export interface IQConfigFAQ {
   answer: string;
 }
 
+export const IQ_CERTIFICATE_CONFIG = {
+  issuerName: 'SIMPLIFIED CENTER FOR COGNITIVE SCIENCES',
+  issuerDivision: 'COGNITIVE ASSESSMENT & RESEARCH DIVISION',
+  certificateTitle: 'Cognitive Assessment Certificate',
+};
+
 export const IQ_ASSESSMENT_CONFIG = {
   brandName: 'Abroad Simplified',
   assessmentTitle: 'Standardized 45-Item Cognitive Assessment',
@@ -27,8 +33,9 @@ export const IQ_ASSESSMENT_CONFIG = {
   estimatedDuration: '15 Minutes',
   sectionCount: 5,
   resultLabel: 'Estimated IQ Score',
-  certificateTitle: 'Cognitive Assessment Certificate',
-  issuingOrganization: 'Simplified School of Education',
+  certificateTitle: IQ_CERTIFICATE_CONFIG.certificateTitle,
+  issuingOrganization: 'Simplified Center for Cognitive Sciences',
+  issuerDivision: 'Cognitive Assessment & Research Division',
   scoringFramework: 'Mean = 100, SD = 15 Standardized Normal Distribution',
 
   trustMetrics: [
@@ -134,7 +141,7 @@ export const IQ_ASSESSMENT_CONFIG = {
     },
     {
       question: 'What do I receive after completion?',
-      answer: 'Upon completion, you receive an instant Estimated IQ Score, percentile rank, 5-domain performance breakdown, cognitive persona analysis, and a downloadable PDF certificate issued by the Simplified School of Education.'
+      answer: 'Upon completion, you receive an instant Estimated IQ Score, percentile rank, 5-domain performance breakdown, cognitive persona analysis, and a downloadable PDF certificate issued by the Simplified Center for Cognitive Sciences.'
     },
     {
       question: 'How is the estimated score calculated?',

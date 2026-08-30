@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { adminDb } from '@/lib/firebase-admin';
 import puppeteer from 'puppeteer';
+import { IQ_CERTIFICATE_CONFIG } from '@/config/iq-assessment.config';
 
 export async function GET(request: Request) {
   try {
@@ -89,11 +90,12 @@ export async function GET(request: Request) {
     
     .org-title {
       font-family: 'Cinzel', serif;
-      font-size: 20px;
+      font-size: 18.5px;
       font-weight: 800;
       color: #690b1b;
-      letter-spacing: 3px;
+      letter-spacing: 2px;
       text-transform: uppercase;
+      white-space: nowrap;
     }
     
     .subtitle {
@@ -230,8 +232,8 @@ export async function GET(request: Request) {
     <div class="corner-decor bottom-right"></div>
     
     <div class="header">
-      <div class="org-title">SIMPLIFIED SCHOOL OF EDUCATION</div>
-      <div class="subtitle">Standardized Cognitive Assessment Division</div>
+      <div class="org-title">${IQ_CERTIFICATE_CONFIG.issuerName}</div>
+      <div class="subtitle">${IQ_CERTIFICATE_CONFIG.issuerDivision}</div>
     </div>
     
     <div class="cert-title-box">

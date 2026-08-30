@@ -22,13 +22,16 @@ export interface StudentData extends StudentProfileData {
 export interface IQResult {
   id: string;
   userId: string;
-  iqScore: number;
-  percentile: number;
-  tier: string;
-  strength: string;
-  cognitivePersona: string;
-  domains: { category: string; correct: number; total: number; percentage: number }[];
-  createdAt: string;
+  estimatedIQ?: number;
+  iqScore?: number;
+  percentile?: number;
+  cognitiveBand?: string;
+  tier?: string;
+  strongestDomain?: string;
+  strength?: string;
+  cognitivePersona?: string;
+  domains?: { category: string; correct: number; total: number; percentage: number }[];
+  createdAt?: string;
   type: 'iq';
 }
 
@@ -392,7 +395,7 @@ export default function StudentWorkspace({
         <div style={{ background: '#fff', padding: '16px 20px', borderRadius: '14px', border: '1px solid #e2e8f0' }}>
           <span style={{ fontSize: '11px', color: '#64748b', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.5px' }}>IQ Assessment</span>
           <div style={{ fontSize: '15px', fontWeight: 800, color: studentIQ.length > 0 ? '#2563eb' : '#64748b', marginTop: '4px' }}>
-            {studentIQ.length > 0 ? `✓ Attempted (${studentIQ[0].iqScore} IQ)` : 'Not Taken'}
+            {studentIQ.length > 0 ? `✓ Attempted (${studentIQ[0].estimatedIQ ?? studentIQ[0].iqScore ?? 'N/A'} IQ)` : 'Not Taken'}
           </div>
         </div>
 
@@ -593,7 +596,7 @@ export default function StudentWorkspace({
                 <div key={res.id} style={{ padding: '20px', background: '#f8fafc', borderRadius: '12px', border: '1px solid #e2e8f0', marginBottom: '16px' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <h4 style={{ margin: 0, fontSize: '16px', fontWeight: 700 }}>IQ Attempt #{i + 1}</h4>
-                    <span style={{ fontSize: '24px', fontWeight: 800, color: '#2563eb' }}>{res.iqScore} IQ</span>
+                    <span style={{ fontSize: '24px', fontWeight: 800, color: '#2563eb' }}>{res.estimatedIQ ?? res.iqScore ?? 'N/A'} IQ</span>
                   </div>
                 </div>
               ))

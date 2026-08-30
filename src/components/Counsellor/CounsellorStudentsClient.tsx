@@ -19,13 +19,16 @@ export interface StudentData extends StudentProfileData {
 interface IQResult {
   id: string;
   userId: string;
-  iqScore: number;
-  percentile: number;
-  tier: string;
-  strength: string;
-  cognitivePersona: string;
-  domains: { category: string; correct: number; total: number; percentage: number }[];
-  createdAt: string;
+  estimatedIQ?: number;
+  iqScore?: number;
+  percentile?: number;
+  cognitiveBand?: string;
+  tier?: string;
+  strongestDomain?: string;
+  strength?: string;
+  cognitivePersona?: string;
+  domains?: { category: string; correct: number; total: number; percentage: number }[];
+  createdAt?: string;
   type: 'iq';
 }
 

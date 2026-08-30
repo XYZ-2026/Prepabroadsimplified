@@ -7,11 +7,13 @@ import { verifySessionCookie } from '@/lib/auth';
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { answers, distractionReported, elapsedTime } = body; // Array of { questionId: number, userOption: 'A'|'B'|'C'|'D'|null }
+    const { answers, distractionReported, elapsedTime } = body;
 
     if (!Array.isArray(answers)) {
       return NextResponse.json({ success: false, message: 'Invalid answers payload' }, { status: 400 });
     }
+
+    const answeredCount = answers.filter(a => a.userOption !== null && a.userOption !== undefined).length;
 
     // Map user answers against authoritative question bank
     const qMap = new Map(QUESTION_BANK_45.map(q => [q.id, q]));
@@ -54,7 +56,7 @@ export async function POST(request: Request) {
       }
     }
 
-    // Run scoring engine
+    // Run deterministic scoring engine (No LLM calls)
     const evaluation = evaluate45IQTest(
       evaluatedAnswers,
       userName,
@@ -62,26 +64,62 @@ export async function POST(request: Request) {
       `SIMP-IQ-${Date.now().toString(36).toUpperCase()}-${Math.floor(1000 + Math.random() * 9000)}`
     );
 
-    const finalDocument = {
+    console.log(`[IQ RESULT] status=CALCULATED rawScore=${evaluation.rawScore} estimatedIQ=${evaluation.estimatedIQ} percentile=${evaluation.percentile} strongestDomain=${evaluation.strongestDomain}`);
+
+    // Strict Result Field Validation before writing status = COMPLETED
+    const isValidResult = 
+      typeof evaluation.estimatedIQ === 'number' && !isNaN(evaluation.estimatedIQ) &&
+      typeof evaluation.percentile === 'number' && !isNaN(evaluation.percentile) &&
+      Boolean(evaluation.cognitiveBand) &&
+      Boolean(evaluation.strongestDomain) &&
+      typeof evaluation.rawScore === 'number';
+
+    if (!isValidResult) {
+      console.error('[IQ Submit API Error] Validation failed for evaluated result object:', evaluation);
+      return NextResponse.json(
+        { success: false, message: 'Cognitive score calculation failed strict field validation.' },
+        { status: 500 }
+      );
+    }
+
+    // Authoritative Canonical Result Schema with backward compatibility aliases
+    const canonicalDocument = {
       ...evaluation,
+
+      // Schema and Question Bank Versioning
+      questionBankVersion: 1,
+      scoringVersion: 1,
+      resultVersion: 1,
+
+      status: 'COMPLETED',
+      type: 'iq',
       testName: '45-Item Cognitive Assessment',
       userId,
       userEmail,
       userName,
+      answeredQuestions: answeredCount,
+
+      // Aliased fields for legacy & multi-component compatibility
+      iqScore: evaluation.estimatedIQ,         // Alias for legacy components
+      strength: evaluation.strongestDomain,    // Alias for legacy components
+
       elapsedTime: elapsedTime || 0,
       evaluatedAnswers,
       createdAt: new Date().toISOString()
     };
 
-    // Save to Firestore
-    const docRef = await adminDb.collection('iq_results').add(finalDocument);
+    // Save to Firestore transactionally
+    const docRef = await adminDb.collection('iq_results').add(canonicalDocument);
+
+    console.log(`[IQ RESULT PERSIST] status=SUCCESS docId=${docRef.id}`);
 
     return NextResponse.json({
       success: true,
       resultId: docRef.id,
       estimatedIQ: evaluation.estimatedIQ,
       percentile: evaluation.percentile,
-      cognitiveBand: evaluation.cognitiveBand
+      cognitiveBand: evaluation.cognitiveBand,
+      strongestDomain: evaluation.strongestDomain
     });
   } catch (error: any) {
     console.error('[IQ Submit API Error]:', error);

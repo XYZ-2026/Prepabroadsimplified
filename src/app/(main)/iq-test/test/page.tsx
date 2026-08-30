@@ -12,7 +12,8 @@ import {
   ChevronLeft,
   ChevronRight,
   Sparkles,
-  HelpCircle
+  HelpCircle,
+  RefreshCw
 } from 'lucide-react';
 
 interface QuestionOption {
@@ -47,22 +48,50 @@ export default function IQTestRunnerPage() {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>('');
   
+  // Prep State Machine: INITIALIZING -> VALIDATING -> READY / FAILED
+  const [prepStatus, setPrepStatus] = useState<'INITIALIZING' | 'VALIDATING' | 'READY' | 'FAILED'>('INITIALIZING');
+  
   // Stages: 'prep' -> 'testing' -> 'distraction_check' -> 'calculating'
   const [stage, setStage] = useState<'prep' | 'testing' | 'distraction_check' | 'calculating'>('prep');
   const [calcProgress, setCalcProgress] = useState<number>(0);
   const [distractionReported, setDistractionReported] = useState<'Yes' | 'No' | null>(null);
   const [submitting, setSubmitting] = useState<boolean>(false);
+  const [showIncompleteModal, setShowIncompleteModal] = useState<boolean>(false);
   const advancingRef = useRef(false);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Load 45 Questions
+  // Load 45 Questions & Run State Machine
   useEffect(() => {
     const fetchQuestions = async () => {
       try {
+        console.log('[IQ PREPARATION] status=INITIALIZING');
+        setPrepStatus('INITIALIZING');
+
         const res = await fetch('/api/iq-test/questions');
         const data = await res.json();
 
         if (data.success && Array.isArray(data.questions) && data.questions.length === 45) {
+          console.log('[IQ PREPARATION] status=VALIDATING');
+          setPrepStatus('VALIDATING');
+
+          // Client preflight check
+          const invalidItems = data.questions.filter((q: any) => {
+            if (!q.id || !q.prompt || !Array.isArray(q.options) || q.options.length !== 4) return true;
+            if (['svg_matrix', 'svg_spatial', 'svg_analogy', 'svg_sequence'].includes(q.questionType)) {
+              if (!q.svgData || (!q.svgData.gridCells && !q.svgData.options)) return true;
+            }
+            return false;
+          });
+
+          console.log(`[IQ QUESTION VALIDATION] total=${data.questions.length} valid=${data.questions.length - invalidItems.length} invalid=${invalidItems.length}`);
+
+          if (invalidItems.length > 0) {
+            setPrepStatus('FAILED');
+            setError(`Question bank contained ${invalidItems.length} invalid items.`);
+            setLoading(false);
+            return;
+          }
+
           // Restore saved progress if available
           const savedAnswersJson = localStorage.getItem('iq45_answers');
           let savedAnswers: Record<number, string> = {};
@@ -84,19 +113,21 @@ export default function IQTestRunnerPage() {
             if (!isNaN(parsed) && parsed > 0) setTimeLeft(parsed);
           }
 
+          console.log('[IQ PREPARATION] status=READY');
+          setPrepStatus('READY');
           setLoading(false);
 
-          // Pre-test prep animation timer (1.5 seconds)
-          setTimeout(() => {
-            setStage('testing');
-          }, 1500);
+          // Instant transition once ready
+          setStage('testing');
 
         } else {
+          setPrepStatus('FAILED');
           setError(data.message || 'Failed to initialize the 45-question cognitive bank.');
           setLoading(false);
         }
       } catch (err: any) {
         console.error('[Load IQ Questions Error]:', err);
+        setPrepStatus('FAILED');
         setError(err.message || 'Error loading cognitive test session.');
         setLoading(false);
       }
@@ -179,8 +210,13 @@ export default function IQTestRunnerPage() {
     }
   }, [currentIndex]);
 
-  const handleFinishTestSequence = () => {
-    setStage('distraction_check');
+  const handleFinishAttemptClick = () => {
+    const answeredCount = questions.filter(q => q.userOption !== null).length;
+    if (answeredCount < 45) {
+      setShowIncompleteModal(true);
+    } else {
+      setStage('distraction_check');
+    }
   };
 
   const handleTimeExpired = () => {
@@ -208,6 +244,8 @@ export default function IQTestRunnerPage() {
 
       const elapsedTime = (15 * 60) - timeLeft;
 
+      console.log('[IQ RESULT] Submitting assessment payload...');
+
       const res = await fetch('/api/iq-test/submit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -220,11 +258,12 @@ export default function IQTestRunnerPage() {
 
       const data = await res.json();
 
-      // Clear local storage test progress
-      localStorage.removeItem('iq45_answers');
-      localStorage.removeItem('iq45_time_left');
-
       if (data.success && data.resultId) {
+        console.log('[IQ RESULT PERSIST] status=SUCCESS resultId=', data.resultId);
+        // Clear local storage test progress
+        localStorage.removeItem('iq45_answers');
+        localStorage.removeItem('iq45_time_left');
+
         setTimeout(() => {
           router.replace(`/iq-test/result/${data.resultId}`);
         }, 1800);
@@ -233,7 +272,7 @@ export default function IQTestRunnerPage() {
       }
     } catch (err: any) {
       console.error('[Submit Error]:', err);
-      alert(err.message || 'Failed to submit cognitive test. Please retry.');
+      alert(err.message || 'Your answers were saved, but the cognitive result could not be finalized. Please retry submission.');
       setSubmitting(false);
       setStage('testing');
     }
@@ -252,27 +291,27 @@ export default function IQTestRunnerPage() {
         <div className="flex flex-col gap-2 max-w-sm w-full text-xs font-semibold text-slate-500">
           <div className="flex items-center justify-between p-2.5 bg-white rounded-xl border border-slate-200/60 shadow-sm">
             <span>Assessment structure (45 items)</span>
-            <Check className="w-4 h-4 text-emerald-600" />
+            {prepStatus === 'INITIALIZING' ? <Loader2 className="w-4 h-4 text-purple-600 animate-spin" /> : <Check className="w-4 h-4 text-emerald-600" />}
           </div>
           <div className="flex items-center justify-between p-2.5 bg-white rounded-xl border border-slate-200/60 shadow-sm">
             <span>Visual Matrix & Spatial Engines</span>
-            <Check className="w-4 h-4 text-emerald-600" />
+            {['INITIALIZING'].includes(prepStatus) ? <Loader2 className="w-4 h-4 text-purple-600 animate-spin" /> : <Check className="w-4 h-4 text-emerald-600" />}
           </div>
           <div className="flex items-center justify-between p-2.5 bg-white rounded-xl border border-slate-200/60 shadow-sm">
             <span>Standardized Scoring Model</span>
-            <Check className="w-4 h-4 text-emerald-600" />
+            {prepStatus === 'READY' ? <Check className="w-4 h-4 text-emerald-600" /> : <Loader2 className="w-4 h-4 text-purple-600 animate-spin" />}
           </div>
         </div>
       </div>
     );
   }
 
-  if (error) {
+  if (error || prepStatus === 'FAILED') {
     return (
       <div className="min-h-screen bg-slate-50 flex flex-col justify-center items-center gap-4 px-6 text-center">
         <AlertCircle className="w-12 h-12 text-[#690b1b]" />
         <h1 className="text-xl font-bold text-slate-900">Session Initialization Error</h1>
-        <p className="text-sm text-slate-500 max-w-md">{error}</p>
+        <p className="text-sm text-slate-500 max-w-md">{error || 'Failed to initialize cognitive assessment.'}</p>
         <button onClick={() => window.location.reload()} className="px-6 py-2.5 bg-[#690b1b] text-white rounded-xl text-xs font-bold shadow-md">
           Retry Session
         </button>
@@ -281,7 +320,8 @@ export default function IQTestRunnerPage() {
   }
 
   const currentQ = questions[currentIndex];
-  const answeredCount = questions.filter(q => q.userOption !== null).length;
+  // Calculate answered count based on valid user options
+  const answeredCount = questions.filter(q => q.userOption !== null && q.userOption !== undefined).length;
 
   return (
     <div className="min-h-screen bg-[#f8f6fb] text-slate-900 font-sans flex flex-col select-none relative overflow-x-hidden">
@@ -343,10 +383,12 @@ export default function IQTestRunnerPage() {
               <span className="text-[#690b1b] mr-2">Q{currentIndex + 1}.</span> {currentQ.prompt}
             </h2>
 
-            {/* SVG Visual Puzzle Frame (if applicable) */}
+            {/* SVG Visual Puzzle Frame (Comprehensive for ALL visual types including Q15 svg_analogy) */}
             {currentQ.svgData && (
               <div className="mb-8 p-6 bg-purple-50/40 rounded-2xl border border-purple-100/80 flex items-center justify-center">
-                {currentQ.svgData.matrixType === '2x2' && (
+                
+                {/* 2x2 Matrix */}
+                {(currentQ.svgData.matrixType === '2x2' || (currentQ.questionType === 'svg_matrix' && currentQ.svgData.gridCells?.length === 4)) && (
                   <div className="grid grid-cols-2 gap-3 max-w-[260px] w-full">
                     {currentQ.svgData.gridCells?.map((cellSvg, idx) => (
                       <div key={idx} className="w-full aspect-square bg-white rounded-xl border border-purple-200/80 flex items-center justify-center p-2 shadow-sm">
@@ -360,7 +402,8 @@ export default function IQTestRunnerPage() {
                   </div>
                 )}
 
-                {currentQ.svgData.matrixType === '3x3' && (
+                {/* 3x3 Matrix */}
+                {(currentQ.svgData.matrixType === '3x3' || (currentQ.questionType === 'svg_matrix' && currentQ.svgData.gridCells?.length === 9)) && (
                   <div className="grid grid-cols-3 gap-2 max-w-[320px] w-full">
                     {currentQ.svgData.gridCells?.map((cellSvg, idx) => (
                       <div key={idx} className="w-full aspect-square bg-white rounded-lg border border-purple-200/80 flex items-center justify-center p-1.5 shadow-sm">
@@ -374,9 +417,67 @@ export default function IQTestRunnerPage() {
                   </div>
                 )}
 
-                {currentQ.questionType === 'svg_spatial' && currentQ.svgData?.gridCells && (
+                {/* Figure Analogy (Q15 and Analogy items: 4 cells [A, B, C, ?]) */}
+                {currentQ.questionType === 'svg_analogy' && currentQ.svgData.gridCells && (
+                  <div className="flex flex-col gap-3 max-w-[320px] w-full">
+                    <div className="flex items-center justify-center gap-3">
+                      <div className="w-1/2 aspect-square bg-white rounded-xl border border-purple-200 p-2 flex flex-col items-center justify-center shadow-sm relative">
+                        <span className="absolute top-1 left-2 text-[9px] font-bold text-slate-400">Fig A</span>
+                        <svg viewBox="0 0 100 100" className="w-full h-full" dangerouslySetInnerHTML={{ __html: currentQ.svgData.gridCells[0] || '' }} />
+                      </div>
+                      <span className="text-xs font-bold text-purple-600">IS TO</span>
+                      <div className="w-1/2 aspect-square bg-white rounded-xl border border-purple-200 p-2 flex flex-col items-center justify-center shadow-sm relative">
+                        <span className="absolute top-1 left-2 text-[9px] font-bold text-slate-400">Fig B</span>
+                        <svg viewBox="0 0 100 100" className="w-full h-full" dangerouslySetInnerHTML={{ __html: currentQ.svgData.gridCells[1] || '' }} />
+                      </div>
+                    </div>
+
+                    <div className="text-center text-[10px] font-extrabold tracking-widest text-purple-400 uppercase">AS</div>
+
+                    <div className="flex items-center justify-center gap-3">
+                      <div className="w-1/2 aspect-square bg-white rounded-xl border border-purple-200 p-2 flex flex-col items-center justify-center shadow-sm relative">
+                        <span className="absolute top-1 left-2 text-[9px] font-bold text-slate-400">Fig C</span>
+                        <svg viewBox="0 0 100 100" className="w-full h-full" dangerouslySetInnerHTML={{ __html: currentQ.svgData.gridCells[2] || '' }} />
+                      </div>
+                      <span className="text-xs font-bold text-purple-600">IS TO</span>
+                      <div className="w-1/2 aspect-square bg-white rounded-xl border border-purple-200 p-2 flex flex-col items-center justify-center shadow-sm relative">
+                        <span className="absolute top-1 left-2 text-[9px] font-bold text-slate-400">?</span>
+                        <div className="text-2xl font-bold text-[#690b1b] animate-bounce">?</div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Spatial Figure */}
+                {currentQ.questionType === 'svg_spatial' && currentQ.svgData.gridCells && (
                   <div className="w-full max-w-[200px] aspect-square bg-white rounded-2xl border border-purple-200 p-3 flex items-center justify-center shadow-sm">
-                    <svg viewBox="0 0 100 100" className="w-full h-full" dangerouslySetInnerHTML={{ __html: currentQ.svgData.gridCells[0] }} />
+                    <svg viewBox="0 0 100 100" className="w-full h-full" dangerouslySetInnerHTML={{ __html: currentQ.svgData.gridCells[0] || '' }} />
+                  </div>
+                )}
+
+                {/* Sequence Abstract */}
+                {currentQ.questionType === 'svg_sequence' && currentQ.svgData.gridCells && (
+                  <div className="flex items-center justify-center gap-2 max-w-[340px] w-full overflow-x-auto p-1">
+                    {currentQ.svgData.gridCells.map((cellSvg, idx) => (
+                      <div key={idx} className="w-16 h-16 aspect-square bg-white rounded-xl border border-purple-200 flex items-center justify-center p-1 shadow-sm shrink-0">
+                        {cellSvg === '?' ? (
+                          <div className="text-xl font-bold text-[#690b1b] animate-bounce">?</div>
+                        ) : (
+                          <svg viewBox="0 0 100 100" className="w-full h-full" dangerouslySetInnerHTML={{ __html: cellSvg }} />
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {/* Fail-safe Fallback if gridCells is empty or invalid */}
+                {(!currentQ.svgData.gridCells || currentQ.svgData.gridCells.length === 0) && (
+                  <div className="p-4 bg-amber-50 rounded-xl border border-amber-200 text-center flex flex-col items-center gap-2">
+                    <AlertCircle className="w-5 h-5 text-amber-600" />
+                    <span className="text-xs font-semibold text-amber-900">Question visual asset could not be loaded.</span>
+                    <button onClick={() => window.location.reload()} className="px-3 py-1 bg-amber-600 text-white rounded-lg text-xs font-bold">
+                      Retry Asset Load
+                    </button>
                   </div>
                 )}
               </div>
@@ -405,132 +506,158 @@ export default function IQTestRunnerPage() {
                       {isSelected && <Check className="w-4 h-4 text-[#690b1b]" />}
                     </div>
 
+                    {/* Option SVG (if option has SVG diagram) */}
                     {opt.svgContent ? (
-                      <div className="w-full aspect-square bg-white rounded-xl border border-slate-100 p-2 flex items-center justify-center">
+                      <div className="w-full aspect-square bg-slate-50/80 rounded-xl p-2 flex items-center justify-center border border-slate-100 my-1">
                         <svg viewBox="0 0 100 100" className="w-full h-full" dangerouslySetInnerHTML={{ __html: opt.svgContent }} />
                       </div>
-                    ) : (
-                      <span className={`text-sm font-medium leading-normal ${isSelected ? 'text-[#690b1b] font-bold' : 'text-slate-700'}`}>
-                        {opt.text}
-                      </span>
-                    )}
+                    ) : null}
+
+                    <span className="text-xs font-semibold text-slate-800 leading-tight">
+                      {opt.text}
+                    </span>
                   </button>
                 );
               })}
             </div>
+
           </div>
+
+          {/* Navigation Control Bar */}
+          <div className="mt-8 pt-6 border-t border-slate-100 flex items-center justify-between">
+            <button
+              onClick={goPrev}
+              disabled={currentIndex === 0}
+              className="px-4 py-2.5 rounded-xl border border-slate-200 text-xs font-bold text-slate-700 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-1.5 transition-colors"
+            >
+              <ChevronLeft className="w-4 h-4" />
+              Previous
+            </button>
+
+            <div className="flex items-center gap-2">
+              {currentIndex < questions.length - 1 ? (
+                <button
+                  onClick={goNext}
+                  className="px-5 py-2.5 rounded-xl bg-purple-50 text-[#690b1b] hover:bg-purple-100 text-xs font-bold flex items-center gap-1.5 transition-colors"
+                >
+                  Next Question
+                  <ChevronRight className="w-4 h-4" />
+                </button>
+              ) : null}
+
+              <button
+                onClick={handleFinishAttemptClick}
+                className="px-6 py-2.5 rounded-xl bg-[#690b1b] text-white hover:bg-[#520815] text-xs font-bold shadow-md transition-colors flex items-center gap-1.5"
+              >
+                <span>Finish & Calculate Result</span>
+                <Sparkles className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+
         </div>
 
-        {/* Bottom Actions Bar */}
-        <div className="flex items-center justify-between pt-2">
-          <button
-            onClick={goPrev}
-            disabled={currentIndex === 0}
-            className="px-4 py-2.5 rounded-xl border border-slate-200 bg-white text-slate-600 font-bold text-xs flex items-center gap-1 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed shadow-sm"
-          >
-            <ChevronLeft className="w-4 h-4" /> Previous
-          </button>
-
-          {currentIndex === 44 ? (
-            <button
-              onClick={handleFinishTestSequence}
-              className="px-6 py-3 rounded-xl bg-[#690b1b] hover:bg-[#830e22] text-white font-extrabold text-xs shadow-lg shadow-[#690b1b]/20 flex items-center gap-2 cursor-pointer"
-            >
-              Finish Assessment <Sparkles className="w-4 h-4" />
-            </button>
-          ) : (
-            <button
-              onClick={goNext}
-              className="px-5 py-2.5 rounded-xl bg-[#690b1b] hover:bg-[#830e22] text-white font-bold text-xs flex items-center gap-1 shadow-md shadow-[#690b1b]/15 cursor-pointer"
-            >
-              Next <ChevronRight className="w-4 h-4" />
-            </button>
-          )}
-        </div>
       </main>
 
-      {/* ── DISTRACTION METADATA CHECK MODAL ── */}
-      <AnimatePresence>
-        {stage === 'distraction_check' && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-slate-900/60 backdrop-blur-sm">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              className="w-full max-w-md bg-white border border-purple-100 rounded-3xl p-8 shadow-2xl text-center"
-            >
-              <div className="w-14 h-14 rounded-2xl bg-purple-100 text-[#690b1b] flex items-center justify-center mx-auto mb-4">
-                <HelpCircle className="w-8 h-8" />
+      {/* ── INCOMPLETE ANSWERS WARNING MODAL ── */}
+      {showIncompleteModal && (
+        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-100 flex flex-col gap-4 animate-in fade-in zoom-in-95">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-2xl bg-amber-100 text-amber-700 flex items-center justify-center shrink-0">
+                <AlertCircle className="w-5 h-5" />
               </div>
-              <h3 className="text-xl font-display font-extrabold text-slate-900 mb-2">Test Environment Check</h3>
-              <p className="text-xs text-slate-500 leading-relaxed mb-6">
-                Did you experience any major distractions while taking the test? 
-                <br /><span className="text-[10px] text-slate-400 font-normal">(This metadata evaluates test conditions and does not alter your IQ score calculation).</span>
+              <div>
+                <h3 className="text-base font-bold text-slate-900">Unanswered Questions Remaining</h3>
+                <p className="text-xs text-slate-500">You have completed {answeredCount} of 45 questions.</p>
+              </div>
+            </div>
+
+            <p className="text-xs text-slate-600 leading-relaxed font-medium">
+              You still have <strong className="text-[#690b1b]">{45 - answeredCount} unanswered questions</strong>. We recommend attempting all questions for the most accurate cognitive evaluation.
+            </p>
+
+            <div className="flex items-center justify-end gap-3 pt-2">
+              <button
+                onClick={() => setShowIncompleteModal(false)}
+                className="px-4 py-2.5 rounded-xl border border-slate-200 text-xs font-bold text-slate-700 hover:bg-slate-50"
+              >
+                Continue Testing
+              </button>
+              <button
+                onClick={() => {
+                  setShowIncompleteModal(false);
+                  setStage('distraction_check');
+                }}
+                className="px-4 py-2.5 rounded-xl bg-[#690b1b] text-white text-xs font-bold shadow-md hover:bg-[#520815]"
+              >
+                Submit Anyway
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ── DISTRACTION CHECK MODAL ── */}
+      {stage === 'distraction_check' && (
+        <div className="fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-md flex items-center justify-center p-4">
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="bg-white rounded-3xl max-w-lg w-full p-8 shadow-2xl border border-purple-100 text-center flex flex-col items-center gap-6"
+          >
+            <div className="w-16 h-16 rounded-2xl bg-[#690b1b]/10 text-[#690b1b] flex items-center justify-center">
+              <HelpCircle className="w-8 h-8" />
+            </div>
+
+            <div>
+              <span className="text-[10px] font-extrabold tracking-widest text-purple-600 uppercase mb-1 block">Test Environment Check</span>
+              <h3 className="text-xl font-display font-extrabold text-slate-900">Did you experience significant external distractions?</h3>
+              <p className="text-xs text-slate-500 mt-2 max-w-sm mx-auto leading-relaxed">
+                External interruptions during a timed cognitive assessment may impact focus and accuracy. This helps calibrate environmental test reliability.
               </p>
+            </div>
 
-              <div className="flex items-center gap-3">
-                <button
-                  onClick={() => submitFinalAssessment('No')}
-                  disabled={submitting}
-                  className="flex-1 py-3.5 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-700 font-bold text-xs transition-colors cursor-pointer"
-                >
-                  No, I was focused
-                </button>
-                <button
-                  onClick={() => submitFinalAssessment('Yes')}
-                  disabled={submitting}
-                  className="flex-1 py-3.5 rounded-xl bg-[#690b1b] hover:bg-[#830e22] text-white font-bold text-xs shadow-md transition-colors cursor-pointer"
-                >
-                  Yes, I got distracted
-                </button>
-              </div>
-            </motion.div>
+            <div className="flex flex-col sm:flex-row gap-3 w-full max-w-xs">
+              <button
+                onClick={() => submitFinalAssessment('No')}
+                className="flex-1 py-3 px-4 rounded-xl bg-[#690b1b] text-white font-bold text-xs shadow-md hover:bg-[#520815] transition-colors"
+              >
+                No, Test Was Distraction-Free
+              </button>
+              <button
+                onClick={() => submitFinalAssessment('Yes')}
+                className="flex-1 py-3 px-4 rounded-xl border border-slate-200 text-slate-700 font-bold text-xs hover:bg-slate-50 transition-colors"
+              >
+                Yes, Experienced Distractions
+              </button>
+            </div>
+          </motion.div>
+        </div>
+      )}
+
+      {/* ── CALCULATING / SCORING STAGE ── */}
+      {stage === 'calculating' && (
+        <div className="fixed inset-0 z-50 bg-[#FAF8FC] flex flex-col items-center justify-center p-6 text-center">
+          <div className="relative mb-6">
+            <div className="w-24 h-24 rounded-3xl bg-[#690b1b]/10 flex items-center justify-center text-[#690b1b] animate-pulse">
+              <BrainCircuit className="w-12 h-12" />
+            </div>
+            <Loader2 className="w-10 h-10 text-[#690b1b] animate-spin absolute -top-3 -right-3" />
           </div>
-        )}
-      </AnimatePresence>
 
-      {/* ── CALCULATION TRANSITION OVERLAY ── */}
-      <AnimatePresence>
-        {stage === 'calculating' && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-white/95 backdrop-blur-md">
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="w-full max-w-md text-center flex flex-col items-center"
-            >
-              <div className="w-20 h-20 rounded-3xl bg-[#690b1b]/10 text-[#690b1b] flex items-center justify-center mb-6 animate-pulse">
-                <BrainCircuit className="w-10 h-10" />
-              </div>
-              <h2 className="text-2xl font-display font-extrabold text-slate-900 mb-2">Calculating Your Cognitive Score...</h2>
-              <p className="text-xs text-slate-500 mb-6">Evaluating 45 standardized visual and logical reasoning items.</p>
+          <span className="text-xs font-extrabold tracking-widest text-[#690b1b] uppercase mb-1">Standardized Psychometric Processing</span>
+          <h2 className="text-2xl font-display font-extrabold text-slate-900 mb-2">Calculating Your Cognitive Profile</h2>
+          <p className="text-xs text-slate-500 max-w-sm mb-6">
+            Evaluating 45 item responses across 5 cognitive domains using standardized normal distribution metrics.
+          </p>
 
-              {/* Progress Bar */}
-              <div className="w-full h-3 bg-purple-100 rounded-full overflow-hidden mb-6 relative">
-                <motion.div 
-                  className="h-full bg-gradient-to-r from-[#690b1b] to-purple-600 rounded-full"
-                  animate={{ width: `${calcProgress}%` }}
-                  transition={{ duration: 0.3 }}
-                />
-              </div>
-
-              <div className="flex flex-col gap-2 w-full text-xs font-semibold text-slate-600 text-left">
-                <div className="flex items-center justify-between p-3 bg-purple-50/50 rounded-xl border border-purple-100">
-                  <span>Analyzing item responses</span>
-                  {calcProgress >= 30 ? <Check className="w-4 h-4 text-emerald-600" /> : <Loader2 className="w-4 h-4 animate-spin text-purple-600" />}
-                </div>
-                <div className="flex items-center justify-between p-3 bg-purple-50/50 rounded-xl border border-purple-100">
-                  <span>Calculating domain percentile scores</span>
-                  {calcProgress >= 70 ? <Check className="w-4 h-4 text-emerald-600" /> : null}
-                </div>
-                <div className="flex items-center justify-between p-3 bg-purple-50/50 rounded-xl border border-purple-100">
-                  <span>Generating cognitive classification report</span>
-                  {calcProgress >= 100 ? <Check className="w-4 h-4 text-emerald-600" /> : null}
-                </div>
-              </div>
-            </motion.div>
+          <div className="w-full max-w-xs h-2 bg-slate-200 rounded-full overflow-hidden mb-2">
+            <div className="h-full bg-[#690b1b] transition-all duration-300 rounded-full" style={{ width: `${calcProgress}%` }} />
           </div>
-        )}
-      </AnimatePresence>
+          <span className="text-xs font-bold text-slate-400">{calcProgress}% Complete</span>
+        </div>
+      )}
 
     </div>
   );

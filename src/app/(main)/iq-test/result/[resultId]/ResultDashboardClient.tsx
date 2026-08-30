@@ -27,18 +27,18 @@ export default function ResultDashboardClient({
   const [downloading, setDownloading] = useState(false);
 
   const {
-    estimatedIQ = resultData.iqScore || 100,
+    estimatedIQ = resultData.estimatedIQ ?? resultData.iqScore ?? 100,
     percentile = resultData.percentile || 50,
-    cognitiveBand = resultData.tier || 'Average Cognitive Ability',
+    cognitiveBand = resultData.cognitiveBand || resultData.tier || 'Average Cognitive Ability',
     rawScore = resultData.rawScore || 0,
     totalQuestions = 45,
-    sectionScores = resultData.domains || [],
-    strongestDomain = resultData.strength || 'Visual Pattern & Matrix Reasoning',
-    developmentalDomain = resultData.weakness || 'Abstract Reasoning',
+    sectionScores = resultData.sectionScores || resultData.domains || [],
+    strongestDomain = resultData.strongestDomain ?? resultData.strength ?? 'Visual Pattern & Matrix Reasoning',
+    developmentalDomain = resultData.developmentalDomain ?? resultData.weakness ?? 'Abstract Reasoning',
     cognitivePersona = resultData.cognitivePersona || 'The Strategic Thinker',
-    insightsNarrative = resultData.insights || '',
+    insightsNarrative = resultData.insightsNarrative || resultData.insights || '',
     certificateId = resultData.certificateId || `SIMP-IQ-${resultId.toUpperCase().slice(0, 8)}`,
-    completedAt = resultData.createdAt || new Date().toISOString()
+    completedAt = resultData.completedAt || resultData.createdAt || new Date().toISOString()
   } = resultData;
 
   const candidateName = userName || resultData.userName || 'Candidate';

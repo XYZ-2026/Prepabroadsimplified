@@ -101,7 +101,7 @@ export default async function AssessmentsPage() {
                   const riasec = assessment.scores?.topRiasec || [];
                   formattedStrength = riasec.length > 0 ? riasec.join('-') : 'N/A';
                 } else {
-                  const rawStrength = (assessment.strength as string) || 'N/A';
+                  const rawStrength = (assessment.strongestDomain as string) || (assessment.strength as string) || 'N/A';
                   formattedStrength = rawStrength.includes('_') 
                     ? rawStrength.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')
                     : rawStrength;
@@ -110,7 +110,7 @@ export default async function AssessmentsPage() {
                 // Determine Score and Percentile
                 const scoreValue = assessment.type === 'psychometric'
                   ? `${assessment.scores?.aptitude?.overall || 0}%`
-                  : assessment.iqScore || 'N/A';
+                  : (assessment.estimatedIQ ?? assessment.iqScore ?? 'N/A');
                   
                 const scoreLabel = assessment.type === 'psychometric' ? 'Aptitude Score' : 'IQ Score';
                 

@@ -93,6 +93,9 @@ export async function getUserProfile() {
         toolAccess: data?.toolAccess || {
           iqTest: true,
           psychometricTest: true,
+          grade7_9: true,
+          grade10: true,
+          grade12: true,
           universityPredictor: true,
         },
       };
@@ -111,6 +114,9 @@ export async function getUserProfile() {
     toolAccess: {
       iqTest: true,
       psychometricTest: true,
+      grade7_9: true,
+      grade10: true,
+      grade12: true,
       universityPredictor: true,
     },
   };

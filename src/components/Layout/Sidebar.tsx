@@ -140,48 +140,7 @@ export default function Sidebar({ userRole, userName, userEmail }: SidebarProps)
         </div>
       )}
 
-      {/* Admin Panel Dropdown */}
-      {userRole === 'admin' && (
-        <div className={openAccordion === 'admin_dash' ? styles.navItemOpen : ''}>
-          <button 
-            onClick={() => toggleAccordion('admin_dash')}
-            className={`${styles.sidebarActionBtn} ${styles.sidebarActionBtnAdmin}`}
-            style={{ justifyContent: 'space-between' }}
-          >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
-                <line x1="3" y1="9" x2="21" y2="9"/>
-                <line x1="9" y1="21" x2="9" y2="9"/>
-              </svg>
-              Admin Panel
-            </div>
-            <svg className={styles.navArrow} xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <polyline points="6 9 12 15 18 9"></polyline>
-            </svg>
-          </button>
-          <div className={styles.navSubLinks}>
-            <Link href="/dashboard/admin/users" onClick={handleLinkClick} className={`${styles.navSubLink} ${isActive('/dashboard/admin/users') ? styles.navSubLinkActive : ''}`}>
-              Users
-            </Link>
-            <Link href="/dashboard/admin/user-analytics" onClick={handleLinkClick} className={`${styles.navSubLink} ${isActive('/dashboard/admin/user-analytics') ? styles.navSubLinkActive : ''}`}>
-              User Analytics
-            </Link>
-            <Link href="/dashboard/admin/counsellors" onClick={handleLinkClick} className={`${styles.navSubLink} ${isActive('/dashboard/admin/counsellors') ? styles.navSubLinkActive : ''}`}>
-              Counsellors
-            </Link>
-            <Link href="/dashboard/admin/assessments" onClick={handleLinkClick} className={`${styles.navSubLink} ${isActive('/dashboard/admin/assessments') ? styles.navSubLinkActive : ''}`}>
-              Assessments
-            </Link>
-            <Link href="/dashboard/admin/analytics" onClick={handleLinkClick} className={`${styles.navSubLink} ${isActive('/dashboard/admin/analytics') ? styles.navSubLinkActive : ''}`}>
-              Assessment Analytics
-            </Link>
-            <Link href="/dashboard/admin/tool-access" onClick={handleLinkClick} className={`${styles.navSubLink} ${isActive('/dashboard/admin/tool-access') ? styles.navSubLinkActive : ''}`}>
-              Tool Access
-            </Link>
-          </div>
-        </div>
-      )}
+
 
       {/* ────────────────────────────────────────────────────────────
          COUNSELLOR ROLE SIDEBAR (Case-Management & Advisory Workspace)

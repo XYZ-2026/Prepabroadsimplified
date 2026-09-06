@@ -45,6 +45,7 @@ export interface VariantConfig {
   heroSubtitle: string;
   primaryCtaText: string;
   secondaryCtaText: string;
+  sampleReportHref: string;
   microStats: MicroStatItem[];
   problemHeadline: string;
   problemSub: string;
@@ -73,7 +74,8 @@ export const PSYCHOMETRIC_LANDING_CONFIG: Record<VariantId, VariantConfig> = {
     heroHeadlineLine3: 'Thinks, Learns & Grows.',
     heroSubtitle: 'A multidimensional assessment designed to uncover cognitive strengths, interests, learning preferences, and early career directions — with a parent perspective included.',
     primaryCtaText: 'START THE ASSESSMENT →',
-    secondaryCtaText: 'SEE WHAT\'S INSIDE →',
+    secondaryCtaText: "VIEW SAMPLE REPORT →",
+    sampleReportHref: '/psychometric-test/sample-report?type=junior',
     microStats: [
       { value: '30 MODULES', label: 'Multi-Dimensional Evaluation', subtitle: 'Cognitive & Psychometric Scope' },
       { value: 'STUDENT + PARENT', label: 'Family Perspective Included', subtitle: 'Side-by-Side Expectation Alignment' },
@@ -133,7 +135,8 @@ export const PSYCHOMETRIC_LANDING_CONFIG: Record<VariantId, VariantConfig> = {
     heroHeadlineLine3: 'The Student.',
     heroSubtitle: 'Go beyond marks. Understand cognitive strengths, personality traits, career interests, family expectations, and stream fitment before making the Class 11 decision.',
     primaryCtaText: 'FIND YOUR DIRECTION →',
-    secondaryCtaText: 'SEE WHAT\'S INSIDE →',
+    secondaryCtaText: "VIEW SAMPLE REPORT →",
+    sampleReportHref: '/psychometric-test/sample-report?type=grade10',
     microStats: [
       { value: '30 MODULES', label: 'Stream Fitment Evaluation', subtitle: 'PCM, PCB, Commerce, Arts & Design' },
       { value: 'STUDENT + PARENT', label: 'Alignment Matrix', subtitle: 'Side-by-Side Expectation Analysis' },
@@ -193,7 +196,8 @@ export const PSYCHOMETRIC_LANDING_CONFIG: Record<VariantId, VariantConfig> = {
     heroHeadlineLine3: 'Marks.',
     heroSubtitle: 'Understand your cognitive strengths, career fit, degree options, university direction, and study-abroad possibilities before choosing your undergraduate path.',
     primaryCtaText: 'DISCOVER YOUR PATH →',
-    secondaryCtaText: 'SEE WHAT\'S INSIDE →',
+    secondaryCtaText: "VIEW SAMPLE REPORT →",
+    sampleReportHref: '/psychometric-test/sample-report?type=grade12',
     microStats: [
       { value: '30 MODULES', label: 'Undergraduate Degree Matching', subtitle: '500+ Global University Database' },
       { value: 'STUDENT + PARENT', label: 'Expectation Matrix', subtitle: 'Budget, Location & Career Alignment' },

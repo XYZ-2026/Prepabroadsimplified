@@ -161,12 +161,12 @@ export default function PsychometricLandingPage({ variant, onStart }: Props) {
               >
                 {config.primaryCtaText}
               </button>
-              <a
-                href="#deliverables"
-                className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-white hover:bg-slate-50 border border-slate-300/80 text-[#690b1b] font-bold text-sm text-center shadow-sm transition-all"
+              <Link
+                href={config.sampleReportHref}
+                className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-white hover:bg-slate-50 border border-slate-300/80 text-[#690b1b] font-bold text-sm text-center shadow-sm transition-all flex items-center justify-center gap-2"
               >
                 {config.secondaryCtaText}
-              </a>
+              </Link>
             </div>
 
             {/* Quick Feature Pills */}
@@ -430,6 +430,25 @@ export default function PsychometricLandingPage({ variant, onStart }: Props) {
               </div>
             </div>
           ))}
+        </div>
+
+        {/* View Sample Report Bar */}
+        <div className="mt-10 p-6 rounded-3xl bg-gradient-to-r from-purple-50 via-amber-50/50 to-purple-50 border border-purple-200/80 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-2xl bg-[#690b1b] text-white flex items-center justify-center font-bold text-sm shrink-0">
+              <FileText className="w-5 h-5 text-amber-300" />
+            </div>
+            <div>
+              <h4 className="font-display font-extrabold text-sm text-slate-900">Want to see what a complete report looks like?</h4>
+              <p className="text-xs text-slate-500 font-medium">Explore the full 56-page interactive report shell with sample candidate data.</p>
+            </div>
+          </div>
+          <Link
+            href={config.sampleReportHref}
+            className="px-6 py-3 rounded-xl bg-[#690b1b] hover:bg-[#830e22] text-white font-extrabold text-xs shadow-md flex items-center gap-2 transition-all shrink-0"
+          >
+            VIEW SAMPLE REPORT →
+          </Link>
         </div>
       </section>
 

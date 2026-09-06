@@ -72,6 +72,49 @@ export default function ToolAccessTableClient({ initialUsers }: { initialUsers: 
 
   return (
     <>
+      {/* Policy Indicator Banner */}
+      <div style={{
+        backgroundColor: '#f0fdf4',
+        border: '1px solid #bbf7d0',
+        borderRadius: '12px',
+        padding: '16px 20px',
+        marginBottom: '24px',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '12px'
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <span style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: '#22c55e', display: 'inline-block' }}></span>
+            <strong style={{ color: '#166534', fontSize: '14px', letterSpacing: '0.5px' }}>
+              CURRENT ACCESS POLICY: ALL PSYCHOMETRIC TESTS ENABLED
+            </strong>
+          </div>
+          <span style={{ fontSize: '12px', fontWeight: 600, padding: '4px 10px', borderRadius: '20px', backgroundColor: '#dcfce7', color: '#15803d' }}>
+            ● Open Access Active
+          </span>
+        </div>
+        <p style={{ fontSize: '13px', color: '#166534', margin: 0, lineHeight: 1.5 }}>
+          All newly created and existing users automatically receive full access to all three psychometric assessments. Manual per-user toggles below remain available for granular overrides and future manual mode.
+        </p>
+
+        {/* 3 Test Cards Indicator */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '12px', marginTop: '4px' }}>
+          <div style={{ padding: '12px 16px', borderRadius: '8px', background: '#fff', border: '1px solid #86efac', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <span style={{ fontSize: '13px', fontWeight: 600, color: '#1e293b' }}>7th–9th Grade Test</span>
+            <span style={{ fontSize: '12px', fontWeight: 700, color: '#16a34a' }}>✓ ENABLED</span>
+          </div>
+          <div style={{ padding: '12px 16px', borderRadius: '8px', background: '#fff', border: '1px solid #86efac', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <span style={{ fontSize: '13px', fontWeight: 600, color: '#1e293b' }}>Class 10 Test</span>
+            <span style={{ fontSize: '12px', fontWeight: 700, color: '#16a34a' }}>✓ ENABLED</span>
+          </div>
+          <div style={{ padding: '12px 16px', borderRadius: '8px', background: '#fff', border: '1px solid #86efac', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <span style={{ fontSize: '13px', fontWeight: 600, color: '#1e293b' }}>Class 12 Test</span>
+            <span style={{ fontSize: '12px', fontWeight: 700, color: '#16a34a' }}>✓ ENABLED</span>
+          </div>
+        </div>
+      </div>
+
       <div className={styles.usersControls}>
         <div className={styles.searchBox}>
           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

@@ -70,11 +70,15 @@ export default function AuthForm() {
           role: 'student',
           toolAccess: {
             iqTest: true,
-            psychometricTest: false,
+            psychometricTest: true,
+            grade7_9: true,
+            grade10: true,
+            grade12: true,
             universityPredictor: true,
           },
           createdAt: serverTimestamp(),
         });
+        console.log(`[TOOL ACCESS] user=${user.email} policy=ALL_ENABLED grade7_9=true grade10=true grade12=true`);
       } else {
         const data = userSnap.data();
         if (!data.studentType || !data.state) {
@@ -169,11 +173,15 @@ export default function AuthForm() {
         role: regRole,
         toolAccess: {
           iqTest: true,
-          psychometricTest: false,
+          psychometricTest: true,
+          grade7_9: true,
+          grade10: true,
+          grade12: true,
           universityPredictor: true,
         },
         createdAt: serverTimestamp(),
       });
+      console.log(`[TOOL ACCESS] user=${cleanEmail} policy=ALL_ENABLED grade7_9=true grade10=true grade12=true`);
 
       const idToken = await user.getIdToken();
       const response = await fetch('/api/auth/login', {

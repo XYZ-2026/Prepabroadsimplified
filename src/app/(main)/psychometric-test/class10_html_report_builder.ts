@@ -321,7 +321,7 @@ export function buildClass10ExecutiveHTMLReport(
       mechanism: "Risk tolerance profiles measure cognitive responses to uncertainty and potential loss.",
       subfacet_desc: `Uncertainty Endurance (${Math.min(99, oSc + 4)}%) allows you to lead initiatives in early-stage emerging technology fields where rubrics are unformed.`,
       facets: [
-        ["Ambiguity Resilience", `${Math.min(99, oSc + 2)}%`, "Remains calm and effective in undefined, rapidly shifting scenarios."],
+        ["Ambiguity Resilience", `${Math.min(99, oSc + 2)}%`, "Remains calm and effective in unstructured, rapidly shifting scenarios."],
         ["Calculated Risk Stance", `${oSc}%`, "Evaluates risk-reward ratios dispassionately before taking bold pivots."],
         ["Uncertainty Endurance", `${Math.min(99, oSc + 4)}%`, "Sustains long focus windows without needing immediate explicit rubrics."],
         ["Innovation Courage", `${Math.max(45, oSc - 5)}%`, "Willing to champion untried ideas despite initial institutional resistance."]

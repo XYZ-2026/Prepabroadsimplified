@@ -1,9 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { adminDb } from '@/lib/firebase-admin';
 import { verifySessionCookie, getUserRole } from '@/lib/auth';
-import { buildClass10ExecutiveHTMLReport } from '@/app/(main)/psychometric-test/class10_html_report_builder';
 import type { EditorialStudent, EditorialScores } from '@/app/(main)/psychometric-test/class10_editorial_engine';
 import { getOrGenerateReportSnapshot } from '@/lib/report-snapshot-service';
+import { adaptReportData, resolveReportVariant } from '@/app/(main)/psychometric-test/report-engine/adapters';
+import { buildUniversalExecutiveHTMLReport } from '@/app/(main)/psychometric-test/report-engine/universal-html-report-builder';
+import { buildUniversalExecutiveSummaryHTMLReport } from '@/app/(main)/psychometric-test/report-engine/universal-executive-summary-builder';
+import { getVariantConfig } from '@/app/(main)/psychometric-test/report-engine/universal-report-schema';
 
 export async function POST(req: NextRequest) {
   let browser: any = null;
@@ -44,7 +47,13 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    // Extract student & scores for Class 10 Report Builder
+    // Determine variant and configuration
+    const rawVariant = data?.assessmentType || body.assessmentType || body.variant;
+    const gradeCandidate = data?.student?.grade || data?.studentInfo?.grade || reqStudent?.grade;
+    const resolvedVariant = resolveReportVariant(rawVariant, gradeCandidate);
+    const variantConfig = getVariantConfig(resolvedVariant);
+
+    // Extract student & scores for Universal Report Builder
     let studentName = 'Candidate';
     let editorialStudent: EditorialStudent;
     let scores: EditorialScores;
@@ -65,16 +74,20 @@ export async function POST(req: NextRequest) {
         }
       }
       
+      const rawGrade = studentObj.grade || studentInfo.grade || variantConfig.defaultGradeLabel;
+      const formattedGrade = rawGrade.toLowerCase().includes('class') || rawGrade.toLowerCase().includes('grade') ? rawGrade : `Class ${rawGrade}`;
+      const defaultAge = resolvedVariant === 'junior' ? '13' : resolvedVariant === 'senior' ? '17' : '15';
+
       editorialStudent = {
         name: studentName,
-        grade: studentObj.grade || studentInfo.grade || 'Class 10',
-        age: studentObj.age || studentInfo.age || '15',
+        grade: formattedGrade,
+        age: studentObj.age || studentInfo.age || defaultAge,
         school: studentObj.school || studentInfo.school || '',
         city: studentObj.city || studentInfo.city || 'India',
         stream: studentObj.stream || studentInfo.stream || '',
         email: studentObj.email || studentInfo.email || data.email || '',
         date: data.createdAt || data.date || new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }),
-        reportId: `AS-10-${resultId.substring(0, 6).toUpperCase()}`,
+        reportId: `${variantConfig.reportIdPrefix}-${resultId.substring(0, 6).toUpperCase()}`,
         parentName: data.parentName || studentObj.parentName || studentInfo.parentName || '',
       };
 
@@ -114,16 +127,20 @@ export async function POST(req: NextRequest) {
       };
     } else if (reqStudent && reqScores) {
       studentName = reqStudent.name || 'Candidate';
+      const rawGrade = reqStudent.grade || variantConfig.defaultGradeLabel;
+      const formattedGrade = rawGrade.toLowerCase().includes('class') || rawGrade.toLowerCase().includes('grade') ? rawGrade : `Class ${rawGrade}`;
+      const defaultAge = resolvedVariant === 'junior' ? '13' : resolvedVariant === 'senior' ? '17' : '15';
+
       editorialStudent = {
         name: studentName,
-        grade: reqStudent.grade || 'Class 10',
-        age: reqStudent.age || '15',
+        grade: formattedGrade,
+        age: reqStudent.age || defaultAge,
         school: reqStudent.school || '',
         city: reqStudent.city || 'India',
         stream: reqStudent.stream || '',
         email: reqStudent.email || '',
         date: reqStudent.date || new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }),
-        reportId: reqStudent.reportId || `AS-10-${Math.floor(100000 + Math.random() * 900000)}`,
+        reportId: reqStudent.reportId || `${variantConfig.reportIdPrefix}-${Math.floor(100000 + Math.random() * 900000)}`,
         parentName: reqStudent.parentName || '',
       };
 
@@ -169,7 +186,7 @@ export async function POST(req: NextRequest) {
     }
 
     const targetId = resultId || editorialStudent.reportId;
-    console.log(`[PDF DOWNLOAD] mode=${isExecutive ? 'EXECUTIVE_SUMMARY' : 'FULL'} reportId=${targetId} source=SAVED_SNAPSHOT groq=false navigation=false`);
+    console.log(`[PDF DOWNLOAD] mode=${isExecutive ? 'EXECUTIVE_SUMMARY' : 'FULL'} variant=${resolvedVariant} reportId=${targetId} source=SAVED_SNAPSHOT groq=false navigation=false`);
     const snapshotResult = await getOrGenerateReportSnapshot({
       resultId: targetId,
       student: editorialStudent,
@@ -178,13 +195,18 @@ export async function POST(req: NextRequest) {
     });
     const personalization = snapshotResult.personalization;
 
-    let targetHTMLReport = '';
-    if (isExecutive) {
-      const { buildClass10ExecutiveSummaryHTMLReport } = await import('@/app/(main)/psychometric-test/class10_executive_summary_builder');
-      targetHTMLReport = buildClass10ExecutiveSummaryHTMLReport(editorialStudent, scores, personalization, comparisonData, parentProfile);
-    } else {
-      targetHTMLReport = buildClass10ExecutiveHTMLReport(editorialStudent, scores, personalization, comparisonData, parentProfile);
-    }
+    const adaptedData = adaptReportData(
+      editorialStudent,
+      scores,
+      personalization,
+      comparisonData,
+      parentProfile,
+      resolvedVariant
+    );
+
+    const targetHTMLReport = isExecutive
+      ? buildUniversalExecutiveSummaryHTMLReport(adaptedData)
+      : buildUniversalExecutiveHTMLReport(adaptedData);
 
     // Launch Headless Chromium via Puppeteer
     const puppeteer = (await import('puppeteer')).default;
@@ -233,9 +255,10 @@ export async function POST(req: NextRequest) {
     await browser.close();
     browser = null;
 
+    const variantTag = resolvedVariant === 'junior' ? 'Junior' : resolvedVariant === 'senior' ? 'Class12' : 'Class10';
     const safeFileName = isExecutive 
-      ? `${studentName.replace(/[^a-zA-Z0-9]/g, '_')}_Class10_Executive_Career_Summary.pdf`
-      : `${studentName.replace(/[^a-zA-Z0-9]/g, '_')}_Class10_Full_Psychometric_Report.pdf`;
+      ? `${studentName.replace(/[^a-zA-Z0-9]/g, '_')}_${variantTag}_Executive_Career_Summary.pdf`
+      : `${studentName.replace(/[^a-zA-Z0-9]/g, '_')}_${variantTag}_Full_Psychometric_Report.pdf`;
 
     return new NextResponse(pdfBuffer, {
       status: 200,

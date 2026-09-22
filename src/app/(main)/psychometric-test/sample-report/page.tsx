@@ -3,8 +3,9 @@
 import React, { useState, useCallback, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import ReportViewerShell from '@/components/Report/ReportViewerShell';
-import { buildClass10ExecutiveHTMLReport } from '@/app/(main)/psychometric-test/class10_html_report_builder';
-import { buildClass10ExecutiveSummaryHTMLReport } from '@/app/(main)/psychometric-test/class10_executive_summary_builder';
+import { adaptReportData } from '@/app/(main)/psychometric-test/report-engine/adapters';
+import { buildUniversalExecutiveHTMLReport } from '@/app/(main)/psychometric-test/report-engine/universal-html-report-builder';
+import { buildUniversalExecutiveSummaryHTMLReport } from '@/app/(main)/psychometric-test/report-engine/universal-executive-summary-builder';
 import {
   getSampleStudent,
   getSampleGradeLabel,
@@ -65,22 +66,22 @@ function SampleReportViewerContent() {
   const student = getSampleStudent(type);
   const gradeLabel = getSampleGradeLabel(type);
 
-  // Build the report HTML using the real production engine
+  // Map SampleReportType to universal variant ('junior' | 'grade10' | 'senior')
+  const variant = type === 'junior' ? 'junior' : type === 'grade12' ? 'senior' : 'grade10';
+
+  const adaptedData = adaptReportData(
+    student,
+    SAMPLE_SCORES,
+    SAMPLE_PERSONALIZATION,
+    SAMPLE_COMPARISON,
+    SAMPLE_PARENT_PROFILE,
+    variant
+  );
+
+  // Build the report HTML using the universal production engine
   const reportHtml = viewMode === 'executive'
-    ? buildClass10ExecutiveSummaryHTMLReport(
-        student,
-        SAMPLE_SCORES,
-        SAMPLE_PERSONALIZATION,
-        SAMPLE_COMPARISON,
-        SAMPLE_PARENT_PROFILE
-      )
-    : buildClass10ExecutiveHTMLReport(
-        student,
-        SAMPLE_SCORES,
-        SAMPLE_PERSONALIZATION,
-        SAMPLE_COMPARISON,
-        SAMPLE_PARENT_PROFILE
-      );
+    ? buildUniversalExecutiveSummaryHTMLReport(adaptedData)
+    : buildUniversalExecutiveHTMLReport(adaptedData);
 
   // Inject watermark
   const watermarkedHtml = injectSampleWatermark(reportHtml);

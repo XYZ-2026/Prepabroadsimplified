@@ -67,7 +67,7 @@ export default function IQAssessmentLandingPage() {
           </div>
           <div>
             <span className="font-display font-extrabold text-sm md:text-base tracking-tight text-white uppercase block leading-none">
-              ABROAD SIMPLIFIED
+              CAREER SIMPLIFIED
             </span>
             <span className="text-[10px] text-amber-300/80 font-mono font-semibold tracking-widest uppercase block mt-0.5">
               Cognitive Division
@@ -288,7 +288,7 @@ export default function IQAssessmentLandingPage() {
                 </div>
                 <div className="flex items-start gap-3">
                   <CheckCircle2 className="w-5 h-5 text-[#690b1b] shrink-0 mt-0.5" />
-                  <span className="text-xs md:text-sm text-slate-700 font-semibold">Integrates seamlessly with Abroad Simplified psychometric profile tools.</span>
+                  <span className="text-xs md:text-sm text-slate-700 font-semibold">Integrates seamlessly with Career Simplified psychometric profile tools.</span>
                 </div>
               </div>
             </div>
@@ -533,7 +533,7 @@ export default function IQAssessmentLandingPage() {
               </div>
               <div>
                 <h3 className="font-display font-bold text-base text-slate-900 mb-1">Student Profile Integration</h3>
-                <p className="text-xs text-slate-500 font-medium leading-relaxed">Integrates directly into your Abroad Simplified dashboard for holistic counsellor academic guidance.</p>
+                <p className="text-xs text-slate-500 font-medium leading-relaxed">Integrates directly into your Career Simplified dashboard for holistic counsellor academic guidance.</p>
               </div>
             </div>
           </div>
@@ -550,7 +550,7 @@ export default function IQAssessmentLandingPage() {
               MORE THAN A SCORE.
             </h2>
             <p className="text-xs md:text-sm text-slate-300 font-medium max-w-2xl mx-auto mb-14">
-              A cognitive score is one part of a broader student journey. Abroad Simplified connects cognitive insights into holistic academic and career planning.
+              A cognitive score is one part of a broader student journey. Career Simplified connects cognitive insights into holistic academic and career planning.
             </p>
 
             {/* Visual Step Flow */}
@@ -752,7 +752,7 @@ export default function IQAssessmentLandingPage() {
                 </div>
                 <div>
                   <div className="text-xs font-bold text-slate-900">Academic Guidance Counsellor</div>
-                  <div className="text-[11px] text-slate-500 font-medium">Abroad Simplified Network</div>
+                  <div className="text-[11px] text-slate-500 font-medium">Career Simplified Network</div>
                 </div>
               </div>
             </div>
@@ -843,7 +843,7 @@ export default function IQAssessmentLandingPage() {
           
           <div>
             <div className="font-display font-extrabold text-sm text-white uppercase tracking-tight mb-3">
-              ABROAD SIMPLIFIED
+              CAREER SIMPLIFIED
             </div>
             <p className="text-slate-400 leading-relaxed font-medium">
               Simplified Center for Cognitive Sciences — Cognitive Assessment & Research Division. Supporting holistic student profiling and academic guidance.
@@ -883,7 +883,7 @@ export default function IQAssessmentLandingPage() {
         </div>
 
         <div className="max-w-7xl mx-auto pt-8 border-t border-slate-900 text-center text-slate-500 font-medium">
-          © {new Date().getFullYear()} Abroad Simplified. All rights reserved. Standardized Cognitive Ability Assessment.
+          © {new Date().getFullYear()} Career Simplified. All rights reserved. Standardized Cognitive Ability Assessment.
         </div>
       </footer>
 

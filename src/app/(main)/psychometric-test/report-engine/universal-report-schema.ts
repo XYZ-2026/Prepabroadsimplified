@@ -12,6 +12,14 @@ import type { PathwayRoadmapData, StudyAbroadGuideData, AcademicStage, StudentAc
 
 export type ReportVariant = 'junior' | 'grade10' | 'senior';
 
+export const REPORT_ORGANIZATION_IDENTITY = {
+  organizationName: 'Career Simplified',
+  divisionName: 'Psychometric Research & Academic Assessment Division',
+  secondaryDivisionName: 'Academic & Career Assessment Division',
+  institutionalGovernance: 'Institutional Psychometric Governance',
+  curriculumAlignment: 'Curriculum & Career Alignment Division',
+} as const;
+
 export interface ReportVariantConfig {
   variant: ReportVariant;
   editionName: string;                // e.g. "Junior (Class 7–9)", "Class 10", "Class 12 (Senior)"

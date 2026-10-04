@@ -78,7 +78,7 @@ export default function AuthInfographics() {
         <div className={`${styles.bentoCard} ${styles.bentoSquareImageCard}`}>
           <img 
             src="/hero_vector_2d.svg" 
-            alt="Abroad Simplified 2D Vector Infographic" 
+            alt="Career Simplified 2D Vector Infographic" 
             className={styles.bentoSquareImg}
           />
         </div>

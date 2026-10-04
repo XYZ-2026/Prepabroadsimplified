@@ -15,23 +15,40 @@ import type { AlignmentResult } from './comparison-engine';
 import type { ParentProfile } from './parent-scoring';
 import { getPathwayRoadmapData, getStudyAbroadGuideData, getAcademicProfileRoadmapData, getStudentActionPlanData } from './class10_roadmap_engine';
 import { formatReportDate } from './class10_html_report_builder';
+import type { UniversalReportData, ReportVariant, ReportVariantConfig } from './report-engine/universal-report-schema';
+import { getVariantConfig } from './report-engine/universal-report-schema';
+import { resolveReportVariant } from './report-engine/adapters';
 
 export const totalExecutiveSummaryPages = 15;
+
+export function buildUniversalExecutiveSummaryHTMLReport(data: UniversalReportData): string {
+  return buildClass10ExecutiveSummaryHTMLReport(
+    data.student,
+    data.scores,
+    data.personalization,
+    data.comparisonData,
+    data.parentProfile,
+    data
+  );
+}
 
 export function buildClass10ExecutiveSummaryHTMLReport(
   student: EditorialStudent,
   scores: EditorialScores,
   personalization: PersonalizationData,
   comparisonData?: AlignmentResult | null,
-  parentProfile?: ParentProfile | null
+  parentProfile?: ParentProfile | null,
+  universalData?: UniversalReportData
 ): string {
+  const variant: ReportVariant = universalData?.variant || resolveReportVariant(undefined, student.grade);
+  const variantConfig: ReportVariantConfig = universalData?.config || getVariantConfig(variant);
   const name = student.name || 'Candidate';
   const firstName = name.split(' ')[0] || 'Candidate';
   const dateStr = formatReportDate(student.date);
   const rid = (student.reportId || `AS-10-EXECUTIVE`).toUpperCase();
 
   const careerFitmentList = scores.careerFitment || [];
-  const primaryCareerName = careerFitmentList[0]?.name || 'STEM & Engineering Pathway';
+  const primaryCareerName = careerFitmentList[0]?.name || (variant === 'senior' ? 'Computer Science & AI Engineering' : variant === 'junior' ? 'Foundational STEM & Analytics' : 'STEM & Engineering Pathway');
   const topFitScore = careerFitmentList[0]?.score || 95;
 
   const secondaryCareerName = careerFitmentList[1]?.name || 'Commerce, Business & Management';
@@ -40,13 +57,13 @@ export function buildClass10ExecutiveSummaryHTMLReport(
   const alternativeCareerName = careerFitmentList[2]?.name || 'Science — Medical & Life Sciences (PCB)';
   const alternativeFitScore = careerFitmentList[2]?.score || 82;
 
-  const primaryRoadmap = getPathwayRoadmapData(primaryCareerName, 'PRIMARY TARGET PATHWAY (RECOMMENDED #1)', student, scores, comparisonData);
-  const secondaryRoadmap = getPathwayRoadmapData(secondaryCareerName, 'SECONDARY TARGET PATHWAY (RECOMMENDED #2)', student, scores, comparisonData);
-  const alternativeRoadmap = getPathwayRoadmapData(alternativeCareerName, 'STRATEGIC ALTERNATIVE PATHWAY (RECOMMENDED #3)', student, scores, comparisonData);
+  const primaryRoadmap = universalData?.roadmaps?.primary || getPathwayRoadmapData(primaryCareerName, 'PRIMARY TARGET PATHWAY (RECOMMENDED #1)', student, scores, comparisonData);
+  const secondaryRoadmap = universalData?.roadmaps?.secondary || getPathwayRoadmapData(secondaryCareerName, 'SECONDARY TARGET PATHWAY (RECOMMENDED #2)', student, scores, comparisonData);
+  const alternativeRoadmap = universalData?.roadmaps?.alternative || getPathwayRoadmapData(alternativeCareerName, 'STRATEGIC ALTERNATIVE PATHWAY (RECOMMENDED #3)', student, scores, comparisonData);
 
-  const studyAbroadGuide = getStudyAbroadGuideData(student, scores, comparisonData);
-  const academicTimeline = getAcademicProfileRoadmapData(student, scores);
-  const studentActionPlan = getStudentActionPlanData(student, scores);
+  const studyAbroadGuide = universalData?.studyAbroad || getStudyAbroadGuideData(student, scores, comparisonData);
+  const academicTimeline = universalData?.academicRoadmap || getAcademicProfileRoadmapData(student, scores);
+  const studentActionPlan = universalData?.actionPlan || getStudentActionPlanData(student, scores);
 
   const overallApt = scores.aptitude?.overall || 78;
   const verbSc = scores.aptitude?.verbal || 75;
@@ -204,7 +221,7 @@ export function buildClass10ExecutiveSummaryHTMLReport(
              PAGE 01: EXECUTIVE COVER & CANDIDATE SNAPSHOT
              ========================================== -->
         <section class="as-report-page avoid-break" id="page-1" data-page="1">
-            <div class="maroon-gradient rounded-3xl p-8 text-white shadow-2xl relative overflow-hidden border-4 border-gold h-full flex flex-col justify-between">
+            <div style="min-height: 273mm; height: 273mm;" class="maroon-gradient rounded-3xl p-8 text-white shadow-2xl relative overflow-hidden border-4 border-gold h-full flex flex-col justify-between">
                 <!-- Background Ambient Elements -->
                 <div class="absolute -top-24 -right-24 w-96 h-96 bg-gold/10 rounded-full blur-3xl pointer-events-none"></div>
                 <div class="absolute -bottom-24 -left-24 w-96 h-96 bg-maroon-light/20 rounded-full blur-3xl pointer-events-none"></div>
@@ -212,7 +229,7 @@ export function buildClass10ExecutiveSummaryHTMLReport(
                 <!-- Brand Header -->
                 <div class="flex justify-between items-start border-b-2 border-gold/40 pb-6 relative z-10">
                     <div>
-                        <span class="text-gold font-bold text-xs tracking-widest block uppercase mb-1">ABROAD SIMPLIFIED PREMIA</span>
+                        <span class="text-gold font-bold text-xs tracking-widest block uppercase mb-1">CAREER SIMPLIFIED PREMIA</span>
                         <h1 class="text-3xl font-black text-white tracking-tight">EXECUTIVE CAREER EDITION</h1>
                         <p class="text-gold/80 text-xs font-semibold mt-1">15-Page Curated Psychometric &amp; Decision Support Evaluation</p>
                     </div>
@@ -234,7 +251,7 @@ export function buildClass10ExecutiveSummaryHTMLReport(
                             </div>
                             <div class="text-right">
                                 <span class="text-xs text-gold uppercase font-bold tracking-wider block">Academic Level</span>
-                                <span class="text-lg font-bold text-white">${student.grade || 'Class 10'}</span>
+                                <span class="text-lg font-bold text-white">${student.grade || variantConfig.defaultGradeLabel || 'Class 10'}</span>
                             </div>
                         </div>
 
@@ -280,7 +297,7 @@ export function buildClass10ExecutiveSummaryHTMLReport(
 
                 <!-- Footer Notice -->
                 <div class="border-t border-gold/40 pt-4 flex justify-between items-center text-xs text-gold/80 relative z-10">
-                    <span>PrepAbroad Psychometric Evaluation System</span>
+                    <span>Career Simplified Psychometric Evaluation System</span>
                     <span>Executive Career Edition • Page 01 of 15</span>
                 </div>
             </div>

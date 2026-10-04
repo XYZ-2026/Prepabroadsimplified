@@ -4,8 +4,8 @@ import { verifySessionCookie, getUserRole } from '@/lib/auth';
 import type { EditorialStudent, EditorialScores } from '@/app/(main)/psychometric-test/class10_editorial_engine';
 import { getOrGenerateReportSnapshot } from '@/lib/report-snapshot-service';
 import { adaptReportData, resolveReportVariant } from '@/app/(main)/psychometric-test/report-engine/adapters';
-import { buildUniversalExecutiveHTMLReport } from '@/app/(main)/psychometric-test/report-engine/universal-html-report-builder';
-import { buildUniversalExecutiveSummaryHTMLReport } from '@/app/(main)/psychometric-test/report-engine/universal-executive-summary-builder';
+import { buildUniversalExecutiveHTMLReport } from '@/app/(main)/psychometric-test/class10_html_report_builder';
+import { buildUniversalExecutiveSummaryHTMLReport } from '@/app/(main)/psychometric-test/class10_executive_summary_builder';
 import { getVariantConfig } from '@/app/(main)/psychometric-test/report-engine/universal-report-schema';
 
 export async function POST(req: NextRequest) {

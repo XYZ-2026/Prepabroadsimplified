@@ -12,6 +12,9 @@ import type { EditorialStudent, EditorialScores, PersonalizationData } from './c
 import type { AlignmentResult } from './comparison-engine';
 import type { ParentProfile } from './parent-scoring';
 import { getPathwayRoadmapData, getStudyAbroadGuideData, getAcademicProfileRoadmapData, getStudentActionPlanData } from './class10_roadmap_engine';
+import type { UniversalReportData, ReportVariant, ReportVariantConfig } from './report-engine/universal-report-schema';
+import { getVariantConfig, REPORT_ORGANIZATION_IDENTITY } from './report-engine/universal-report-schema';
+import { resolveReportVariant } from './report-engine/adapters';
 
 export const totalReportPages = 56;
 
@@ -50,19 +53,33 @@ export function formatOrdinal(val: number | string): string {
   return `${num}th${suffix}`;
 }
 
+export function buildUniversalExecutiveHTMLReport(data: UniversalReportData): string {
+  return buildClass10ExecutiveHTMLReport(
+    data.student,
+    data.scores,
+    data.personalization,
+    data.comparisonData,
+    data.parentProfile,
+    data
+  );
+}
+
 export function buildClass10ExecutiveHTMLReport(
   student: EditorialStudent,
   scores: EditorialScores,
   personalization: PersonalizationData,
   comparisonData?: AlignmentResult | null,
-  parentProfile?: ParentProfile | null
+  parentProfile?: ParentProfile | null,
+  universalData?: UniversalReportData
 ): string {
+  const variant: ReportVariant = universalData?.variant || resolveReportVariant(undefined, student.grade);
+  const variantConfig: ReportVariantConfig = universalData?.config || getVariantConfig(variant);
   const name = student.name || 'Candidate';
   const firstName = name.split(' ')[0];
   const rid = student.reportId || `PSY-2026-${Math.floor(1000 + Math.random() * 9000)}`;
   const date = formatReportDate(student.date);
   const aptOverall = scores.aptitude?.overall || 82;
-  const topCareer = scores.careerFitment?.[0]?.name || 'STEM & Data Science Specialist';
+  const topCareer = scores.careerFitment?.[0]?.name || (variant === 'senior' ? 'Computer Science & AI Engineering' : variant === 'junior' ? 'Foundational STEM & Analytics' : 'STEM & Data Science Specialist');
   const topFitScore = scores.careerFitment?.[0]?.score || 95;
 
   const oSc = scores.personality?.openness || 75;
@@ -1125,7 +1142,7 @@ export function buildClass10ExecutiveHTMLReport(
                         ${firstName.substring(0, 2)}
                     </div>
                     <div>
-                        <span class="font-bold text-sm text-gold-light tracking-wide block">CLASS 10 EXECUTIVE PSYCHOMETRIC REPORT</span>
+                        <span class="font-bold text-sm text-gold-light tracking-wide block">${variantConfig.reportTitle}</span>
                         <span class="text-[10px] text-slate-300 block">CONFIDENTIAL FOR ${name.toUpperCase()} | FULL ${totalReportPages}-PAGE EDITION</span>
                     </div>
                 </div>
@@ -1153,10 +1170,10 @@ export function buildClass10ExecutiveHTMLReport(
                 <div class="flex items-center justify-between border-b-2 border-gold/40 pb-4 relative z-10 shrink-0">
                     <div class="flex items-center space-x-3">
                         <div class="w-10 h-10 rounded-2xl bg-gold text-maroon-dark font-black flex items-center justify-center text-lg shadow-lg border-2 border-white">
-                            PS
+                            CS
                         </div>
                         <div>
-                            <span class="text-xs font-bold text-gold tracking-widest block uppercase">PREPABROAD SIMPLIFIED</span>
+                            <span class="text-xs font-bold text-gold tracking-widest block uppercase">CAREER SIMPLIFIED</span>
                             <span class="text-[10px] text-slate-300 block font-medium">Psychometric Research & Academic Assessment Division</span>
                         </div>
                     </div>
@@ -1171,19 +1188,19 @@ export function buildClass10ExecutiveHTMLReport(
                 <!-- Centerpiece Title & Details -->
                 <div class="my-auto py-2 relative z-10 space-y-4 text-center shrink-0">
                     <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-gold/15 border border-gold/40 text-gold-light text-[11px] font-bold uppercase tracking-widest">
-                        <i class="fa-solid fa-graduation-cap text-gold"></i> Secondary Education Benchmark | Class 10
+                        <i class="fa-solid fa-graduation-cap text-gold"></i> ${variant === 'senior' ? 'Senior Secondary / Pre-University Benchmark | Class 12' : variant === 'junior' ? 'Middle School Foundation Benchmark | Class 7–9' : 'Secondary Education Benchmark | Class 10'}
                     </div>
 
                     <div class="space-y-2 max-w-4xl mx-auto">
                         <h1 class="text-3xl sm:text-4xl font-black text-white tracking-tight uppercase leading-tight drop-shadow-md">
-                            Class 10 Executive <br />
+                            ${variant === 'senior' ? 'Class 12 Executive' : variant === 'junior' ? 'Junior Executive' : 'Class 10 Executive'} <br />
                             <span class="text-transparent bg-clip-text bg-gradient-to-r from-gold-light via-gold to-yellow-200">
-                                Psychometric & Stream
+                                ${variant === 'senior' ? 'Psychometric & Career' : variant === 'junior' ? 'Psychometric & Exploratory' : 'Psychometric & Stream'}
                             </span> <br />
                             Diagnostic Report
                         </h1>
                         <p class="text-slate-200 text-xs sm:text-sm max-w-xl mx-auto font-medium leading-relaxed">
-                            A Comprehensive 30-Module Diagnostic Evaluation, Cognitive Architecture Matrix, VARK Modality Analysis, and Future-Readiness Stream Roadmap.
+                            ${variant === 'senior' ? 'A Comprehensive 30-Module Diagnostic Evaluation, Cognitive Architecture Matrix, VARK Modality Analysis, and Pre-University Career Roadmap.' : variant === 'junior' ? 'A Comprehensive 30-Module Diagnostic Evaluation, Cognitive Architecture Matrix, VARK Modality Analysis, and Foundational Development Roadmap.' : 'A Comprehensive 30-Module Diagnostic Evaluation, Cognitive Architecture Matrix, VARK Modality Analysis, and Future-Readiness Stream Roadmap.'}
                         </p>
                     </div>
 
@@ -1201,11 +1218,11 @@ export function buildClass10ExecutiveHTMLReport(
                             </div>
                             <div>
                                 <span class="text-slate-400 block text-[10px] uppercase font-semibold">Academic Level</span>
-                                <span class="font-bold text-gold">Class 10 (Secondary Stage)</span>
+                                <span class="font-bold text-gold">${variant === 'senior' ? 'Class 12 (Senior Secondary / Pre-University Stage)' : variant === 'junior' ? (student.grade || 'Class 7–9') + ' (Middle School Foundation Stage)' : 'Class 10 (Secondary Stage)'}</span>
                             </div>
                             <div>
-                                <span class="text-slate-400 block text-[10px] uppercase font-semibold">Target Stream Pathways</span>
-                                <span class="font-semibold text-slate-200">PCM | PCB | Commerce | Arts</span>
+                                <span class="text-slate-400 block text-[10px] uppercase font-semibold">${variant === 'senior' ? 'Target Career Pathways' : variant === 'junior' ? 'Exploratory Learning Vectors' : 'Target Stream Pathways'}</span>
+                                <span class="font-semibold text-slate-200">${variant === 'senior' ? 'Technology | Management | Law | Humanities' : variant === 'junior' ? 'Foundational STEM | Creative Arts | Leadership' : 'PCM | PCB | Commerce | Arts'}</span>
                             </div>
                             <div>
                                 <span class="text-slate-400 block text-[10px] uppercase font-semibold">Primary Archetype</span>
@@ -1233,7 +1250,7 @@ export function buildClass10ExecutiveHTMLReport(
                     <div class="bg-black/30 p-2.5 rounded-xl border border-gold/30">
                         <i class="fa-solid fa-chart-line text-gold text-base mb-0.5 block"></i>
                         <span class="text-[9px] font-bold text-slate-200 uppercase block">Normative Precision</span>
-                        <span class="text-[8px] text-slate-400">n > 50,000 Class 10 Norms</span>
+                        <span class="text-[8px] text-slate-400">${variantConfig.normGroup}</span>
                     </div>
                     <div class="bg-black/30 p-2.5 rounded-xl border border-gold/30">
                         <i class="fa-solid fa-layer-group text-gold text-base mb-0.5 block"></i>
@@ -1286,7 +1303,7 @@ export function buildClass10ExecutiveHTMLReport(
                             <i class="fa-solid fa-bullseye text-gold"></i> Purpose &amp; Scope of Assessment
                         </h3>
                         <p class="text-[10.5px] text-slate-600 leading-relaxed">
-                            The purpose of this Report is to provide an evidence-based psychometric evaluation designed to support academic stream selection decisions for Class 10 students transitioning into Class 11 subject electives. The assessment measures behavioral traits, cognitive aptitudes, learning modalities, emotional intelligence indicators, and career interest alignment across 30 diagnostic modules.
+                            ${variantConfig.purposeDescription}
                         </p>
                         <p class="text-[10.5px] text-slate-600 leading-relaxed">
                             This Report is intended as a <strong>guidance and advisory tool</strong> and should be used in conjunction with academic records, teacher recommendations, personal interests, and professional career counseling. It does not serve as a medical, clinical, or psychiatric evaluation instrument.
@@ -1370,7 +1387,7 @@ export function buildClass10ExecutiveHTMLReport(
                             <i class="fa-solid fa-copyright text-gold"></i> Intellectual Property &amp; Proprietary Rights
                         </h3>
                         <p class="text-[10.5px] text-slate-600 leading-relaxed">
-                            All assessment frameworks, diagnostic algorithms, scoring methodologies, editorial templates, and AI-powered personalization engines embedded within this Report are the proprietary intellectual property of <strong>PrepAbroad Simplified</strong> (hereinafter "the Organization"). The psychometric instruments, normative data models, and report generation pipelines are protected under applicable intellectual property laws.
+                            All assessment frameworks, diagnostic algorithms, scoring methodologies, editorial templates, and AI-powered personalization engines embedded within this Report are the proprietary intellectual property of <strong>Career Simplified</strong> (hereinafter "the Organization"). The psychometric instruments, normative data models, and report generation pipelines are protected under applicable intellectual property laws.
                         </p>
                         <p class="text-[10.5px] text-slate-600 leading-relaxed">
                             No part of this Report — including the assessment architecture, scoring rubrics, editorial content, visual templates, or Chart.js data visualizations — may be reverse-engineered, replicated, reproduced, or distributed without the express prior written consent of the Organization.
@@ -1436,7 +1453,7 @@ export function buildClass10ExecutiveHTMLReport(
                         <div class="flex items-start gap-1.5">
                             <i class="fa-solid fa-circle-exclamation text-maroon mt-0.5 text-[10px]"></i>
                             <p class="text-[9.5px] text-slate-600 leading-relaxed">
-                                <strong class="text-maroon">Limitation of Liability:</strong> PrepAbroad Simplified, its affiliates, psychometricians, editorial contributors, and technology partners shall not be held liable for any academic, career, financial, or personal decisions made solely based on the findings of this Report. The Organization strongly recommends consulting qualified career counselors and academic advisors before making final stream or career decisions.
+                                <strong class="text-maroon">Limitation of Liability:</strong> Career Simplified, its affiliates, psychometricians, editorial contributors, and technology partners shall not be held liable for any academic, career, financial, or personal decisions made solely based on the findings of this Report. The Organization strongly recommends consulting qualified career counselors and academic advisors before making final stream or career decisions.
                             </p>
                         </div>
                     </div>
@@ -1561,7 +1578,7 @@ export function buildClass10ExecutiveHTMLReport(
                         <!-- Phase IV, Phase V & Closing -->
                         <div class="bg-white px-3 py-2 rounded-xl border border-slate-200 shadow-sm flex flex-col h-full overflow-hidden">
                             <h4 class="font-extrabold text-[10px] text-maroon uppercase tracking-wider flex items-center gap-1 border-b border-slate-100 pb-0.5 mb-0.5 shrink-0">
-                                <i class="fa-solid fa-compass text-gold text-[9px]"></i> Phase IV: Stream &amp; Career Alignment
+                                <i class="fa-solid fa-compass text-gold text-[9px]"></i> ${variant === 'senior' ? 'Phase IV: Degree & Career Specialization' : variant === 'junior' ? 'Phase IV: Exploratory Vectors & Alignment' : 'Phase IV: Stream & Career Alignment'}
                             </h4>
                             <div class="space-y-0.5 text-[8.5px]">
                                 <div class="flex justify-between text-slate-600"><span>Module 29 — Career Interest Mapping (RIASEC)</span><span class="font-bold text-maroon font-mono">40</span></div>
@@ -1610,7 +1627,7 @@ export function buildClass10ExecutiveHTMLReport(
 
                 <!-- Footer -->
                 <div class="border-t border-slate-200 pt-2 flex items-center justify-between text-[10px] text-slate-500 font-medium shrink-0">
-                    <span>Diagnostic Engine: PrepAbroad Class 10 Matrix v5.0</span>
+                    <span>Diagnostic Engine: Career Simplified ${variant === 'senior' ? 'Class 12 Pre-University' : variant === 'junior' ? 'Junior Exploratory' : 'Class 10'} Matrix v5.0</span>
                     <span>Confidential Report for ${name}</span>
                 </div>
             </div>
@@ -1669,10 +1686,10 @@ export function buildClass10ExecutiveHTMLReport(
                     <!-- Research Board -->
                     <div class="bg-maroon-dark text-white px-4 py-3 rounded-2xl border border-gold shadow-md shrink-0">
                         <h4 class="font-bold text-xs text-gold border-b border-gold/30 pb-1 mb-2 flex items-center gap-2">
-                            <i class="fa-solid fa-award text-gold"></i> PrepAbroad Psychometric Research Board
+                            <i class="fa-solid fa-award text-gold"></i> Career Simplified Psychometric Research Board
                         </h4>
                         <p class="text-[11px] text-slate-200 leading-relaxed">
-                            This executive diagnostic report was engineered by the PrepAbroad Psychometric Research Division in collaboration with lead educational strategists and behavioral data scientists. Built upon standardized global psychometric frameworks (CBSE, ICSE, IB, Cambridge), this dossier utilizes advanced normative algorithms to deliver publication-quality career stream guidance.
+                            This executive diagnostic report was engineered by the Career Simplified Psychometric Research Division in collaboration with educational strategists and behavioral data scientists. Built upon standardized global psychometric frameworks (CBSE, ICSE, IB, Cambridge), this dossier utilizes advanced normative algorithms to deliver publication-quality career stream guidance.
                         </p>
                     </div>
 
@@ -1711,17 +1728,17 @@ export function buildClass10ExecutiveHTMLReport(
                 <!-- Signatures & Institutional Seal Block -->
                 <div class="pt-3 border-t-2 border-slate-200 grid grid-cols-3 items-center gap-3 text-center text-xs shrink-0">
                     <div class="space-y-0.5">
-                        <div class="font-serif italic font-bold text-maroon text-sm">Dr. Aris Thorne</div>
-                        <div class="text-[9px] text-slate-500 font-semibold uppercase">Chief Psychometrician</div>
-                        <div class="text-[8px] text-slate-400">PrepAbroad Board</div>
+                        <div class="font-serif font-bold text-maroon text-sm tracking-tight">${REPORT_ORGANIZATION_IDENTITY.organizationName}</div>
+                        <div class="text-[9px] text-slate-500 font-semibold uppercase">${REPORT_ORGANIZATION_IDENTITY.divisionName}</div>
+                        <div class="text-[8px] text-slate-400">${REPORT_ORGANIZATION_IDENTITY.institutionalGovernance}</div>
                     </div>
                     <div class="w-12 h-12 mx-auto rounded-full bg-cream border-2 border-gold flex items-center justify-center shadow-md">
                         <i class="fa-solid fa-stamp text-xl text-maroon"></i>
                     </div>
                     <div class="space-y-0.5">
-                        <div class="font-serif italic font-bold text-maroon text-sm">Elena Rostova, M.Ed.</div>
-                        <div class="text-[9px] text-slate-500 font-semibold uppercase">Lead Educational Strategist</div>
-                        <div class="text-[8px] text-slate-400">Stream Alignment Advisory</div>
+                        <div class="font-serif font-bold text-maroon text-sm tracking-tight">${REPORT_ORGANIZATION_IDENTITY.organizationName}</div>
+                        <div class="text-[9px] text-slate-500 font-semibold uppercase">${REPORT_ORGANIZATION_IDENTITY.secondaryDivisionName}</div>
+                        <div class="text-[8px] text-slate-400">${REPORT_ORGANIZATION_IDENTITY.curriculumAlignment}</div>
                     </div>
                 </div>
             </div>
@@ -1738,7 +1755,7 @@ export function buildClass10ExecutiveHTMLReport(
                         </div>
                         <div>
                             <h2 class="text-lg font-extrabold text-maroon-dark uppercase tracking-wider">
-                                Welcome to Your Class 10 Diagnostic Journey
+                                ${variantConfig.orientationHeading}
                             </h2>
                             <p class="text-[11px] text-slate-600">Personalized Letter to Candidate & Family</p>
                         </div>
@@ -1758,11 +1775,11 @@ export function buildClass10ExecutiveHTMLReport(
                     </p>
 
                     <p>
-                        Welcome to your official <strong>Class 10 Executive Psychometric & Stream Diagnostic Report</strong>. Standing at the threshold of Class 10 is one of the most exciting and significant milestones in your educational career. For the first time, you are preparing to transition from general secondary education into specialized academic streams—whether that be Physical Sciences (PCM), Biological Sciences (PCB), Business & Finance (Commerce), Humanities & Social Sciences, or Creative Arts & Design.
+                        ${variantConfig.orientationDescription}
                     </p>
 
                     <p>
-                        Making an informed stream decision should never rely on guess work, peer influence, or external pressure. Your academic journey deserves an empirical foundation—one that maps your intrinsic cognitive reasoning, behavioral tendencies, learning modalities, and emotional resilience mechanisms against real-world career requirements.
+                        Making an informed decision should never rely on guess work, peer influence, or external pressure. Your academic journey deserves an empirical foundation—one that maps your intrinsic cognitive reasoning, behavioral tendencies, learning modalities, and emotional resilience mechanisms against real-world requirements.
                     </p>
 
                     <p>
@@ -1789,23 +1806,23 @@ export function buildClass10ExecutiveHTMLReport(
                     </ul>
 
                     <p>
-                        We encourage you to read every page of this report thoughtfully alongside your parents, teachers, and school counselors. Use the strategic protocols provided in each module to double your study efficiency, build exam resilience, and confidently select the Class 11 stream combination that best unleashes your full potential.
+                        We encourage you to read every page of this report thoughtfully alongside your parents, teachers, and school counselors. Use the strategic protocols provided in each module to double your study efficiency, build exam resilience, and confidently select the path that best unleashes your full potential.
                     </p>
 
                     <div class="pt-2 border-t border-slate-200 flex items-center justify-between">
                         <div>
                             <p class="font-extrabold text-maroon text-xs">Warmest Regards & Academic Success,</p>
-                            <p class="text-[10px] text-slate-600 font-semibold">The PrepAbroad Psychometric & Academic Advisory Board</p>
+                            <p class="text-[10px] text-slate-600 font-semibold">The Career Simplified Psychometric & Academic Advisory Board</p>
                         </div>
                         <div class="text-right font-serif italic text-gold-dark font-bold text-xs">
-                            PrepAbroad 2026
+                            Career Simplified 2026
                         </div>
                     </div>
                 </div>
 
                 <!-- Footer Banner -->
                 <div class="bg-maroon text-white p-3 rounded-xl flex items-center justify-between text-xs shrink-0">
-                    <span class="font-medium text-slate-200 text-[11px]"><i class="fa-solid fa-lightbulb text-gold mr-1.5"></i> Pro Tip: Share this dossier with your school counselor prior to Class 11 subject registration.</span>
+                    <span class="font-medium text-slate-200 text-[11px]"><i class="fa-solid fa-lightbulb text-gold mr-1.5"></i> Pro Tip: Share this dossier with your ${variant === 'senior' ? 'admissions mentor or university counsellor prior to college application deadlines' : variant === 'junior' ? 'school counsellor or academic mentor during middle school goal setting' : 'school counselor prior to Class 11 subject registration'}.</span>
                     <span class="font-mono text-gold text-[10px] font-bold">#${rid}</span>
                 </div>
             </div>
@@ -1824,16 +1841,10 @@ export function buildClass10ExecutiveHTMLReport(
                             <h2 class="text-lg font-extrabold text-maroon-dark uppercase tracking-wider">
                                 About This Psychometric Assessment Matrix
                             </h2>
-                            <p class="text-[11px] text-slate-600">Architectural Framework of the 5 Core Assessment Pillars</p>
-                        </div>
-                    </div>
-                    <span class="text-[11px] font-extrabold text-maroon bg-gold/20 border border-gold px-2.5 py-0.5 rounded-full uppercase">Page 07</span>
-                </div>
-
-                <!-- 4 Diagnostic Phases Grid -->
+                            <p class="text-[11px] text-slate-600">Arc                <!-- 4 Diagnostic Phases Grid -->
                 <div class="space-y-3 my-auto text-xs shrink-0">
                     <div class="text-slate-600 leading-relaxed text-[11px]">
-                        The Class 10 Executive Psychometric Assessment is an advanced multi-layered diagnostic system specifically designed for secondary school students. Rather than relying on simple quiz questions, our framework measures candidate traits across 4 core diagnostic assessment phases comprising 30 comprehensive modules:
+                        ${variantConfig.assessmentDescription}
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
@@ -1872,7 +1883,7 @@ export function buildClass10ExecutiveHTMLReport(
                             <div>
                                 <div class="w-7 h-7 rounded-lg bg-maroon text-gold font-bold flex items-center justify-center text-[11px] mb-1">P4</div>
                                 <h4 class="font-extrabold text-maroon text-[11px] uppercase">Phase IV: Alignment</h4>
-                                <p class="text-[10px] text-slate-600 mt-0.5 leading-tight">Holland RIASEC Interest Mapping &amp; Master Stream Integration across PCM, PCB, Commerce, and Humanities pathways.</p>
+                                <p class="text-[10px] text-slate-600 mt-0.5 leading-tight">${variant === 'senior' ? 'Holland RIASEC Interest Mapping & Degree Specialization across STEM, Business, Law, Design, and Social Sciences.' : variant === 'junior' ? 'Holland RIASEC Interest Mapping & Foundational Vectors across STEM Discovery, Creative Arts, and Interdisciplinary Inquiry.' : 'Holland RIASEC Interest Mapping & Master Stream Integration across PCM, PCB, Commerce, and Humanities pathways.'}</p>
                             </div>
                             <span class="text-[9px] font-bold text-gold-dark bg-gold/20 px-1.5 py-0.5 rounded text-center block mt-1">Modules 29–30</span>
                         </div>
@@ -1881,20 +1892,20 @@ export function buildClass10ExecutiveHTMLReport(
                     <!-- Strategic Utility Box -->
                     <div class="bg-maroon-dark text-white p-4 rounded-2xl border-2 border-gold shadow-lg space-y-2">
                         <h3 class="font-extrabold text-xs text-gold uppercase tracking-wider flex items-center gap-1.5">
-                            <i class="fa-solid fa-bullseye text-gold"></i> Strategic Value for Class 10 Candidates
+                            <i class="fa-solid fa-bullseye text-gold"></i> Strategic Value for ${variantConfig.shortStageLabel} Candidates
                         </h3>
                         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs text-slate-200">
                             <div class="space-y-0.5">
-                                <span class="font-bold text-white block text-[11px]">1. Stream Selection Security</span>
-                                <p class="text-[10px] text-slate-300 leading-snug">Prevents costly stream switches in Class 11 by aligning subject choices with natural cognitive aptitude.</p>
+                                <span class="font-bold text-white block text-[11px]">${variant === 'senior' ? '1. Degree Selection Security' : variant === 'junior' ? '1. Exploratory Discovery' : '1. Stream Selection Security'}</span>
+                                <p class="text-[10px] text-slate-300 leading-snug">${variant === 'senior' ? 'Prevents costly wrong undergraduate specializations by aligning degree choices with natural cognitive aptitude.' : variant === 'junior' ? 'Discovers natural curiosity vectors early without prematurely locking into narrow academic paths.' : 'Prevents costly stream switches in Class 11 by aligning subject choices with natural cognitive aptitude.'}</p>
                             </div>
                             <div class="space-y-0.5">
-                                <span class="font-bold text-white block text-[11px]">2. Entrance Exam Readiness</span>
-                                <p class="text-[10px] text-slate-300 leading-snug">Identifies early readiness for competitive exams such as JEE, NEET, CLAT, IPMAT, SAT, and NIDA.</p>
+                                <span class="font-bold text-white block text-[11px]">${variant === 'senior' ? '2. University Admission Strategy' : variant === 'junior' ? '2. Foundational Cognitive Habits' : '2. Entrance Exam Readiness'}</span>
+                                <p class="text-[10px] text-slate-300 leading-snug">${variant === 'senior' ? 'Identifies optimal entrance testing and admission roadmaps for CUET, JEE, NEET, CLAT, SAT, and global universities.' : variant === 'junior' ? 'Builds executive function, reading discipline, and foundational logic required for high school success.' : 'Identifies early readiness for competitive exams such as JEE, NEET, CLAT, IPMAT, SAT, and NIDA.'}</p>
                             </div>
                             <div class="space-y-0.5">
-                                <span class="font-bold text-white block text-[11px]">3. Personalized Study Hacks</span>
-                                <p class="text-[10px] text-slate-300 leading-snug">Provides tailored VARK study techniques and stress management protocols for board exam optimization.</p>
+                                <span class="font-bold text-white block text-[11px]">${variant === 'senior' ? '3. Career Launch Readiness' : variant === 'junior' ? '3. Personalized Study Hacks' : '3. Personalized Study Hacks'}</span>
+                                <p class="text-[10px] text-slate-300 leading-snug">${variant === 'senior' ? 'Provides tailored portfolio building milestones, industry skill roadmaps, and internship guidance.' : variant === 'junior' ? 'Provides tailored VARK study techniques and stress management protocols for middle school exams.' : 'Provides tailored VARK study techniques and stress management protocols for board exam optimization.'}</p>
                             </div>
                         </div>
                     </div>
@@ -1902,7 +1913,7 @@ export function buildClass10ExecutiveHTMLReport(
 
                 <!-- Footer Badge -->
                 <div class="border-t border-slate-200 pt-2 flex items-center justify-between text-[11px] text-slate-500 font-medium shrink-0">
-                    <span>Diagnostic Engine: PrepAbroad Class 10 Matrix v5.0</span>
+                    <span>Diagnostic Engine: Career Simplified ${variant === 'senior' ? 'Class 12 Pre-University' : variant === 'junior' ? 'Junior Exploratory' : 'Class 10'} Matrix v5.0</span>
                     <span>Confidential Report for ${name}</span>
                 </div>
             </div>
@@ -1936,7 +1947,7 @@ export function buildClass10ExecutiveHTMLReport(
                                 <i class="fa-solid fa-square-poll-vertical text-gold"></i> Psychometric Validity & Reliability
                             </h3>
                             <p class="text-[11px] text-slate-700 leading-relaxed">
-                                Our assessment items are calibrated using Item Response Theory (IRT) and standardized against a normative benchmark sample of over <strong>50,000 Class 10 students</strong> across diverse curriculum boards (CBSE, ICSE, IB, Cambridge).
+                                ${variantConfig.methodologyDescription}
                             </p>
                             <div class="bg-white p-2.5 rounded-xl border border-slate-200 space-y-1 text-[11px]">
                                 <div class="flex justify-between">
@@ -1956,7 +1967,7 @@ export function buildClass10ExecutiveHTMLReport(
                                 <i class="fa-solid fa-chart-area text-gold"></i> Percentile & Normative Distribution
                             </h3>
                             <p class="text-[11px] text-slate-700 leading-relaxed">
-                                Candidate scores are normalized into standard percentile ranks relative to Class 10 peers using Gaussian distribution bell-curve modeling:
+                                Candidate scores are normalized into standard percentile ranks relative to ${variantConfig.shortStageLabel} peers using Gaussian distribution bell-curve modeling:
                             </p>
                             <div class="space-y-1 text-[10px]">
                                 <div class="flex items-center justify-between p-1 bg-white rounded border border-slate-200">
@@ -1999,7 +2010,7 @@ export function buildClass10ExecutiveHTMLReport(
 
                 <!-- Footer Banner -->
                 <div class="bg-maroon-dark text-white p-3 rounded-xl flex items-center justify-between text-xs shrink-0">
-                    <span class="font-medium text-slate-200 text-[11px]"><i class="fa-solid fa-circle-check text-gold mr-1.5"></i> Fully Verified & Norm-Referenced Class 10 Assessment Matrix</span>
+                    <span class="font-medium text-slate-200 text-[11px]"><i class="fa-solid fa-circle-check text-gold mr-1.5"></i> Fully Verified &amp; Norm-Referenced ${variantConfig.shortStageLabel} Assessment Matrix</span>
                     <span class="font-mono text-gold text-[10px] font-bold">Ref: #${rid}</span>
                 </div>
             </div>
@@ -2007,71 +2018,71 @@ export function buildClass10ExecutiveHTMLReport(
 
         <!-- PAGE 6: VERIFIED CANDIDATE DIAGNOSTIC PROFILE HERO -->
         <section class="as-report-page avoid-break" id="page-9" data-page="9">
-            <div style="min-height: 273mm; height: 273mm;" class="maroon-gradient rounded-3xl p-6 sm:p-8 text-white shadow-2xl relative overflow-hidden border-4 border-gold h-full flex flex-col justify-between">
+            <div style="min-height: 273mm; height: 273mm;" class="maroon-gradient rounded-3xl p-6 sm:p-7 text-white shadow-2xl relative overflow-hidden border-4 border-gold h-full flex flex-col justify-between">
                 <!-- Background Ambient Glow -->
                 <div class="absolute -top-24 -right-24 w-80 h-80 bg-gold/10 rounded-full blur-3xl pointer-events-none"></div>
 
                 <!-- Top Header Bar -->
-                <div class="flex items-center justify-between border-b border-gold/40 pb-4 shrink-0">
+                <div class="flex items-center justify-between border-b border-gold/40 pb-3 shrink-0">
                     <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gold/20 border border-gold/40 text-gold-light text-xs font-semibold uppercase tracking-wider">
-                        <i class="fa-solid fa-user-check text-gold"></i> Verified Class 10 Diagnostic Profile
+                        <i class="fa-solid fa-user-check text-gold"></i> Verified ${variantConfig.shortStageLabel} Diagnostic Profile
                     </div>
                     <span class="text-xs font-mono text-gold-light">Ref: #${rid}</span>
                 </div>
 
                 <!-- Candidate Name & Archetype Banner -->
-                <div class="space-y-2 shrink-0 my-2">
-                    <h1 class="text-3xl sm:text-5xl font-extrabold text-white tracking-tight uppercase">
+                <div class="space-y-1.5 shrink-0 my-1.5">
+                    <h1 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight uppercase leading-tight">
                         ${name}
                     </h1>
-                    <p class="text-gold text-base sm:text-lg font-bold">
+                    <p class="text-gold text-sm sm:text-base font-bold">
                         Primary Archetype: ${topCareer.toUpperCase()}
                     </p>
                     <p class="text-slate-200 text-xs sm:text-sm leading-relaxed max-w-3xl">
-                        ${firstName}, your diagnostic profile reflects a high-capacity cognitive architecture and personalized stream alignment matrix. Below is your verified 4-stream compatibility breakdown and core competency scores.
+                        ${firstName}, your diagnostic profile reflects a high-capacity cognitive architecture and personalized stream alignment matrix. Below is your verified ${careerFitmentList.length}-stream compatibility breakdown and core competency scores.
                     </p>
                 </div>
 
                 <!-- Core Competency & Score Seals Row -->
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 shrink-0 my-2">
-                    <div class="bg-obsidian/70 p-4 rounded-2xl border border-gold/40 text-center space-y-1 backdrop-blur-sm">
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 shrink-0 my-1.5">
+                    <div class="bg-obsidian/70 p-3.5 sm:p-4 rounded-2xl border border-gold/40 text-center space-y-1 backdrop-blur-sm">
                         <span class="text-[10px] text-slate-300 uppercase font-bold block">Overall Competency</span>
-                        <div class="text-3xl font-extrabold text-gold">${aptOverall}%</div>
+                        <div class="text-2xl sm:text-3xl font-extrabold text-gold">${aptOverall}%</div>
                         <span class="text-[10px] text-emerald-400 font-semibold"><i class="fa-solid fa-circle-check"></i> Top ${Math.max(1, 100 - Math.round(aptOverall * 0.96))}th %ile Candidate</span>
                     </div>
 
-                    <div class="bg-obsidian/70 p-4 rounded-2xl border border-gold/40 text-center space-y-1 backdrop-blur-sm">
+                    <div class="bg-obsidian/70 p-3.5 sm:p-4 rounded-2xl border border-gold/40 text-center space-y-1 backdrop-blur-sm">
                         <span class="text-[10px] text-slate-300 uppercase font-bold block">Top Career Fitment</span>
-                        <div class="text-3xl font-extrabold text-gold">${topFitScore}/100</div>
+                        <div class="text-2xl sm:text-3xl font-extrabold text-gold">${topFitScore}/100</div>
                         <span class="text-[10px] text-gold-light font-semibold">${topCareer}</span>
                     </div>
 
-                    <div class="bg-obsidian/70 p-4 rounded-2xl border border-gold/40 text-center space-y-1 backdrop-blur-sm">
+                    <div class="bg-obsidian/70 p-3.5 sm:p-4 rounded-2xl border border-gold/40 text-center space-y-1 backdrop-blur-sm">
                         <span class="text-[10px] text-slate-300 uppercase font-bold block">VARK Primary Modality</span>
-                        <div class="text-3xl font-extrabold text-white">${topVarkLabel}</div>
+                        <div class="text-2xl sm:text-3xl font-extrabold text-white">${topVarkLabel}</div>
                         <span class="text-[10px] text-emerald-400 font-semibold">High Retention Strategy</span>
                     </div>
                 </div>
 
-                <!-- 4-Stream Fitment Compatibility Matrix -->
-                <div class="bg-obsidian/60 p-5 rounded-2xl border border-gold/40 space-y-3 shrink-0 my-2 backdrop-blur-sm">
-                    <div class="flex justify-between items-center border-b border-gold/30 pb-2">
-                        <span class="text-xs font-bold text-gold uppercase tracking-wider">Class 11 Academic Stream Fitment Matrix</span>
+                <!-- Academic Stream Fitment Compatibility Matrix -->
+                <div class="bg-obsidian/60 p-4 sm:p-4.5 rounded-2xl border border-gold/40 space-y-2.5 shrink-0 my-1.5 backdrop-blur-sm">
+                    <div class="flex justify-between items-center border-b border-gold/30 pb-1.5">
+                        <span class="text-xs font-bold text-gold uppercase tracking-wider">${variantConfig.variant === 'senior' ? 'Undergraduate & Career Stream Fitment Matrix' : variantConfig.variant === 'junior' ? 'Exploratory Academic Stream Fitment Matrix' : 'Class 11 Academic Stream Fitment Matrix'}</span>
                         <span class="text-[10px] text-slate-300">Normative Score Matching</span>
                     </div>
-                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
+                    <div class="grid ${careerFitmentList.length >= 5 ? 'grid-cols-5' : 'grid-cols-4'} gap-2 sm:gap-2.5 text-xs">
                         ${careerFitmentList.map((c, i) => `
-                        <div class="p-3 bg-black/40 rounded-xl border border-gold/30 text-center space-y-1">
+                        <div class="p-2.5 sm:p-3 bg-black/40 rounded-xl border border-gold/30 text-center space-y-1">
                             <span class="text-[10px] font-bold text-slate-400 uppercase block">Stream ${i + 1}</span>
-                            <span class="font-bold text-white block text-[10.5px] leading-snug break-words">${getCanonicalStreamName(c.name)}</span>
-                            <div class="text-lg font-extrabold text-gold">${c.score}%</div>
+                            <span class="font-bold text-white block text-[10px] sm:text-[10.5px] leading-snug break-words">${getCanonicalStreamName(c.name)}</span>
+                            <div class="text-base sm:text-lg font-extrabold text-gold">${c.score}%</div>
                         </div>
                         `).join('')}
                     </div>
                 </div>
 
                 <!-- Diagnostic Indicators Snapshot Box -->
-                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs shrink-0 pt-2 border-t border-white/20">
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs shrink-0 pt-2.5 pb-1 border-t border-white/20">
                     <div>
                         <span class="text-gold-light block font-semibold text-[10px] uppercase">Fluid Logic (Gf)</span>
                         <span class="font-bold text-white text-sm">${reasSc}% Percentile</span>
@@ -3139,6 +3150,7 @@ export function buildClass10ExecutiveHTMLReport(
                     </div>
                 </div>
 
+                <!-- Page Footer -->
                 <div class="border-t border-slate-200 pt-2 flex justify-between items-center text-xs text-slate-500 shrink-0">
                     <span>Closing Synthesis | Strategic Action Plan | ${name}</span>
                     <span>Ref: #${rid}</span>
@@ -3148,7 +3160,7 @@ export function buildClass10ExecutiveHTMLReport(
 
         <!-- PAGE 50: PRIMARY PATHWAY ROADMAP -->
         ${(() => {
-            const primaryRoadmap = getPathwayRoadmapData(topCareer, 'PRIMARY TARGET PATHWAY (RECOMMENDED #1)', student, scores, comparisonData);
+            const primaryRoadmap = universalData?.roadmaps?.primary || getPathwayRoadmapData(topCareer, 'PRIMARY TARGET PATHWAY (RECOMMENDED #1)', student, scores, comparisonData);
             return `
             <section class="as-report-page avoid-break" id="page-50" data-page="50">
                 <div class="bg-white p-5 rounded-2xl border-2 border-gold shadow-xl flex flex-col justify-between h-full space-y-2.5">
@@ -3254,7 +3266,7 @@ export function buildClass10ExecutiveHTMLReport(
         <!-- PAGE 51: SECONDARY PATHWAY ROADMAP -->
         ${(() => {
             const secName = careerFitmentList[1]?.name || 'Commerce, Business & Management';
-            const secondaryRoadmap = getPathwayRoadmapData(secName, 'SECONDARY TARGET PATHWAY (RECOMMENDED #2)', student, scores, comparisonData);
+            const secondaryRoadmap = universalData?.roadmaps?.secondary || getPathwayRoadmapData(secName, 'SECONDARY TARGET PATHWAY (RECOMMENDED #2)', student, scores, comparisonData);
             return `
             <section class="as-report-page avoid-break" id="page-51" data-page="51">
                 <div class="bg-white p-5 rounded-2xl border-2 border-gold shadow-xl flex flex-col justify-between h-full space-y-2.5">
@@ -3360,7 +3372,7 @@ export function buildClass10ExecutiveHTMLReport(
         <!-- PAGE 52: STRATEGIC ALTERNATIVE ROADMAP -->
         ${(() => {
             const altName = careerFitmentList[2]?.name || 'Science — Medical & Life Sciences (PCB)';
-            const alternativeRoadmap = getPathwayRoadmapData(altName, 'STRATEGIC ALTERNATIVE PATHWAY (RECOMMENDED #3)', student, scores, comparisonData);
+            const alternativeRoadmap = universalData?.roadmaps?.alternative || getPathwayRoadmapData(altName, 'STRATEGIC ALTERNATIVE PATHWAY (RECOMMENDED #3)', student, scores, comparisonData);
             return `
             <section class="as-report-page avoid-break" id="page-52" data-page="52">
                 <div class="bg-white p-5 rounded-2xl border-2 border-gold shadow-xl flex flex-col justify-between h-full space-y-2.5">
@@ -3465,7 +3477,7 @@ export function buildClass10ExecutiveHTMLReport(
 
         <!-- PAGE 53: PERSONALIZED STUDY ABROAD GUIDE -->
         ${(() => {
-            const sag = getStudyAbroadGuideData(student, scores, comparisonData);
+            const sag = universalData?.studyAbroad || getStudyAbroadGuideData(student, scores, comparisonData);
             return `
             <section class="as-report-page avoid-break" id="page-53" data-page="53">
                 <div class="bg-white p-5 rounded-2xl border-2 border-gold shadow-xl flex flex-col justify-between h-full space-y-3">
@@ -3548,14 +3560,14 @@ export function buildClass10ExecutiveHTMLReport(
 
         <!-- PAGE 54: ACADEMIC & PROFILE ROADMAP -->
         ${(() => {
-            const apr = getAcademicProfileRoadmapData(student, scores);
+            const apr = universalData?.academicRoadmap || getAcademicProfileRoadmapData(student, scores);
             return `
             <section class="as-report-page avoid-break" id="page-54" data-page="54">
                 <div class="bg-white p-5 rounded-2xl border-2 border-gold shadow-xl flex flex-col justify-between h-full space-y-3">
                     <div class="bg-maroon-dark text-white p-3.5 rounded-2xl shadow flex items-center justify-between border-b-4 border-gold shrink-0">
                         <div>
                             <span class="text-xs text-gold uppercase font-bold tracking-widest block">Phase VI — Advanced Career Synthesis</span>
-                            <h2 class="text-lg font-extrabold">Academic &amp; Profile Roadmap (Class 10 to Career)</h2>
+                            <h2 class="text-lg font-extrabold">Academic &amp; Profile Roadmap (${variantConfig.variant === 'junior' ? 'Middle School to Senior School' : variantConfig.variant === 'senior' ? 'Class 12 &amp; Beyond' : 'Class 10 to Career'})</h2>
                         </div>
                         <span class="inline-block px-3 py-1 rounded-full bg-gold text-maroon-dark text-xs font-extrabold uppercase shadow">Page 54</span>
                     </div>
@@ -3590,7 +3602,7 @@ export function buildClass10ExecutiveHTMLReport(
 
         <!-- PAGE 55: STUDENT ACTION PLAN -->
         ${(() => {
-            const sap = getStudentActionPlanData(student, scores);
+            const sap = universalData?.actionPlan || getStudentActionPlanData(student, scores);
             return `
             <section class="as-report-page avoid-break" id="page-55" data-page="55">
                 <div class="bg-white p-5 rounded-2xl border-2 border-gold shadow-xl flex flex-col justify-between h-full space-y-3">
@@ -3682,7 +3694,7 @@ export function buildClass10ExecutiveHTMLReport(
                         </div>
                         <div>
                             <span class="text-xs font-bold text-gold tracking-widest block uppercase">REPORT CONCLUSION &amp; ADVISORY</span>
-                            <span class="text-[10px] text-slate-300 block font-medium">PrepAbroad Psychometric Evaluation Summary</span>
+                            <span class="text-[10px] text-slate-300 block font-medium">Career Simplified Psychometric Evaluation Summary</span>
                         </div>
                     </div>
                     <div class="text-right">
@@ -3702,7 +3714,7 @@ export function buildClass10ExecutiveHTMLReport(
                             Congratulations, ${firstName}!
                         </h2>
                         <p class="text-slate-200 text-xs sm:text-sm max-w-xl mx-auto leading-relaxed">
-                            You have successfully completed your 30-Module Class 10 Executive Psychometric Evaluation. You now possess a powerful data-backed map for your future stream and career journey.
+                            You have successfully completed your 30-Module ${variantConfig.shortStageLabel} Executive Psychometric Evaluation. You now possess a powerful data-backed map for your future stream and career journey.
                         </p>
                     </div>
 
@@ -3722,8 +3734,8 @@ export function buildClass10ExecutiveHTMLReport(
 
                         <div class="bg-obsidian/70 p-3 rounded-xl border border-gold/40 space-y-1 backdrop-blur-sm">
                             <div class="w-6 h-6 rounded-full bg-gold text-maroon-dark font-extrabold flex items-center justify-center text-[10px]">3</div>
-                            <h4 class="font-bold text-gold text-[11px] uppercase">Finalize Stream with Counsellor</h4>
-                            <p class="text-[10px] text-slate-300 leading-snug">Finalize Class 11 subject combination with your school guidance counselor.</p>
+                            <h4 class="font-bold text-gold text-[11px] uppercase">${variantConfig.variant === 'senior' ? 'Finalize College / Career' : variantConfig.variant === 'junior' ? 'Explore High School Streams' : 'Finalize Stream with Counsellor'}</h4>
+                            <p class="text-[10px] text-slate-300 leading-snug">${variantConfig.variant === 'senior' ? 'Finalize university applications and career pathway with your counselor.' : variantConfig.variant === 'junior' ? 'Explore interest-aligned extracurriculars and subject tracks with your mentor.' : 'Finalize Class 11 subject combination with your school guidance counselor.'}</p>
                         </div>
 
                         <div class="bg-obsidian/70 p-3 rounded-xl border border-gold/40 space-y-1 backdrop-blur-sm">
@@ -3743,7 +3755,7 @@ export function buildClass10ExecutiveHTMLReport(
                         <div class="grid grid-cols-2 gap-4 text-[11px]">
                             <div>
                                 <span class="text-slate-400 block text-[9px] uppercase font-semibold">Official Web Portal</span>
-                                <a href="https://prep.abroadsimplified.com" target="_blank" class="text-gold font-bold hover:underline text-xs">prep.abroadsimplified.com</a>
+                                <a href="https://careersimplified.com" target="_blank" class="text-gold font-bold hover:underline text-xs">careersimplified.com</a>
                             </div>
                             <div>
                                 <span class="text-slate-400 block text-[9px] uppercase font-semibold">Advisory & Support Email</span>
@@ -3758,14 +3770,14 @@ export function buildClass10ExecutiveHTMLReport(
                     <p class="text-xs italic font-serif text-gold-light max-w-xl mx-auto">
                         "Your potential is not defined by where you start, but by the clarity of the path you choose to walk."
                     </p>
-                    <p class="text-[9px] text-slate-400 uppercase font-semibold">© 2026 PrepAbroad Simplified | All Rights Reserved | Confidential Diagnostic Data</p>
+                    <p class="text-[9px] text-slate-400 uppercase font-semibold">© 2026 Career Simplified | All Rights Reserved | Confidential Diagnostic Data</p>
                 </div>
             </div>
         </section>
 
         <!-- FOOTER -->
         <footer class="border-t-2 border-gold/30 pt-6 text-center text-xs text-slate-500 space-y-2 pb-8 no-print">
-            <p>Certified Class 10 Executive Diagnostic Report for ${name} | Abroad Simplified Engine v5.0</p>
+            <p>Certified Class 10 Executive Diagnostic Report for ${name} | Career Simplified Engine v5.0</p>
             <p>© 2026 Confidential Assessment Data.</p>
         </footer>
 

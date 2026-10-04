@@ -171,8 +171,12 @@ export default function UsersTableClient({ initialUsers }: { initialUsers: UserD
                     <span className={styles.userPhone}>{user.mobile}</span>
                   </td>
                   <td>
-                    <span style={{ display: 'block', color: 'var(--text-heading)', fontWeight: 500, textTransform: 'uppercase' }}>{user.studentType}</span>
-                    <span className={styles.userSubtext}>{user.city}, {user.state}</span>
+                    <span style={{ display: 'block', color: 'var(--text-heading)', fontWeight: 600 }}>
+                      {user.grade ? `Grade ${user.grade}` : (user.studentType || '—')}
+                    </span>
+                    <span className={styles.userSubtext}>
+                      {user.stream ? `${user.stream} · ` : ''}{user.city ? `${user.city}, ${user.state}` : (user.state || '—')}
+                    </span>
                   </td>
                   <td>
                     <span className={styles.userSubtext}>{user.createdAtStr}</span>

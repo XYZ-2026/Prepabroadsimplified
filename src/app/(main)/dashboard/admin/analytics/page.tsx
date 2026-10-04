@@ -24,9 +24,11 @@ export default async function AdminAnalyticsPage() {
 
   try {
     if (process.env.FIREBASE_ADMIN_PROJECT_ID) {
-      const [iqSnapshot, psychoSnapshot] = await Promise.all([
-        adminDb.collection('iq_results').get(),
-        adminDb.collection('psychometric_results').get()
+      const [iqCountSnap, psychoCountSnap, iqSnapshot, psychoSnapshot] = await Promise.all([
+        adminDb.collection('iq_results').count().get(),
+        adminDb.collection('psychometric_results').count().get(),
+        adminDb.collection('iq_results').limit(200).get(),
+        adminDb.collection('psychometric_results').limit(200).get()
       ]);
       
       const combinedDocs = [
@@ -34,9 +36,9 @@ export default async function AdminAnalyticsPage() {
         ...psychoSnapshot.docs.map(doc => ({ ...doc.data(), _type: 'psychometric' } as any))
       ];
       
-      totalAssessments = combinedDocs.length;
-      iqTestCount = iqSnapshot.docs.length;
-      psychoCount = psychoSnapshot.docs.length;
+      iqTestCount = iqCountSnap.data().count;
+      psychoCount = psychoCountSnap.data().count;
+      totalAssessments = iqTestCount + psychoCount;
 
       const tierCounts: Record<string, number> = {};
       const strengthCounts: Record<string, number> = {

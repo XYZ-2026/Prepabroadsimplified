@@ -1,8 +1,14 @@
 // ═══════════════════════════════════════════════════════════
 // Authoritative Tool Access Policy & Evaluation System
+// Upgraded to GRADE_BASED_ACCESS (Single Source of Truth)
 // ═══════════════════════════════════════════════════════════
 
-export type AccessPolicyMode = 'ALL_ENABLED' | 'MANUAL' | 'RESTRICTED';
+import { 
+  getStudentPsychometricAccess, 
+  resolveAssessmentVariant 
+} from '@/lib/psychometric-access-policy';
+
+export type AccessPolicyMode = 'GRADE_BASED_ACCESS' | 'MANUAL' | 'RESTRICTED' | 'ALL_ENABLED';
 
 export interface PsychometricAccessPolicy {
   defaultMode: AccessPolicyMode;
@@ -17,22 +23,26 @@ export interface UserToolAccess {
   grade7_9?: boolean;
   grade10?: boolean;
   grade12?: boolean;
-  [key: string]: boolean | undefined;
+  adminOverride?: boolean;
+  allowedVariants?: string[];
+  [key: string]: unknown;
 }
 
 /**
  * Authoritative global policy configuration for Psychometric & Platform tools.
- * Currently set to ALL_ENABLED mode (All 3 psychometric tests open to all students).
- * Switch `defaultMode` to 'MANUAL' when restricted per-user access allocation is required.
+ * Primary policy: GRADE_BASED_ACCESS (Student access resolved deterministically from academic grade).
+ * Legacy ALL_ENABLED policy is officially retired.
  */
 export const PSYCHOMETRIC_ACCESS_POLICY: PsychometricAccessPolicy = {
-  defaultMode: 'ALL_ENABLED',
+  defaultMode: 'GRADE_BASED_ACCESS',
   psychometricTools: [
     'grade7_9',
     'grade10',
     'grade12',
+    'junior',
+    'senior',
   ],
-  allowAllPsychometricTools: true,
+  allowAllPsychometricTools: false,
 };
 
 /**
@@ -40,45 +50,57 @@ export const PSYCHOMETRIC_ACCESS_POLICY: PsychometricAccessPolicy = {
  */
 export function isToolAccessGranted(
   toolId: string,
-  userAccess?: UserToolAccess | null
+  userAccess?: UserToolAccess | null,
+  academicGrade?: unknown,
+  userRole?: string
 ): boolean {
-  const isPsychometric = 
-    toolId === 'psychometricTest' ||
+  // Global tools
+  if (toolId === 'iqTest') {
+    return userAccess?.iqTest !== false;
+  }
+  if (toolId === 'universityPredictor') {
+    return userAccess?.universityPredictor !== false;
+  }
+
+  // Base psychometric test access
+  if (toolId === 'psychometricTest') {
+    if (userAccess?.psychometricTest === false) return false;
+    return true;
+  }
+
+  // Specific psychometric test variants
+  const isPsychometricVariant = 
     toolId === 'grade7_9' ||
     toolId === 'grade10' ||
     toolId === 'grade12' ||
     toolId === 'junior' ||
-    toolId === 'senior';
+    toolId === 'senior' ||
+    toolId === 'JUNIOR_7_9' ||
+    toolId === 'CLASS_10' ||
+    toolId === 'SENIOR_12';
 
-  // Under ALL_ENABLED policy, all 3 psychometric tests are granted automatically
-  if (PSYCHOMETRIC_ACCESS_POLICY.defaultMode === 'ALL_ENABLED' && isPsychometric) {
-    console.log(`[TOOL ACCESS CHECK] tool=${toolId} policy=ALL_ENABLED allowed=true`);
-    return true;
-  }
+  if (isPsychometricVariant) {
+    // If grade is provided, resolve strictly via Grade-Based Access Policy
+    if (academicGrade !== undefined) {
+      const evaluation = getStudentPsychometricAccess(academicGrade, userAccess, userRole);
+      return evaluation.canAccess(toolId);
+    }
 
-  // If userAccess record is missing, default to true in free/open phase
-  if (!userAccess) {
-    return true;
-  }
+    // If grade is not directly passed to this function, check manual override / legacy toolAccess
+    if (userAccess?.psychometricTest === false) {
+      return false;
+    }
 
-  // Manual per-user evaluation logic
-  if (toolId === 'psychometricTest') {
-    return userAccess.psychometricTest !== false;
-  }
-  if (toolId === 'grade7_9' || toolId === 'junior') {
-    return userAccess.grade7_9 !== false && userAccess.psychometricTest !== false;
-  }
-  if (toolId === 'grade10') {
-    return userAccess.grade10 !== false && userAccess.psychometricTest !== false;
-  }
-  if (toolId === 'grade12' || toolId === 'senior') {
-    return userAccess.grade12 !== false && userAccess.psychometricTest !== false;
-  }
-  if (toolId === 'iqTest') {
-    return userAccess.iqTest !== false;
-  }
-  if (toolId === 'universityPredictor') {
-    return userAccess.universityPredictor !== false;
+    const resolved = resolveAssessmentVariant(toolId);
+    if (resolved === 'JUNIOR_7_9') {
+      return userAccess?.grade7_9 !== false;
+    }
+    if (resolved === 'CLASS_10') {
+      return userAccess?.grade10 !== false;
+    }
+    if (resolved === 'SENIOR_12') {
+      return userAccess?.grade12 !== false;
+    }
   }
 
   return true;

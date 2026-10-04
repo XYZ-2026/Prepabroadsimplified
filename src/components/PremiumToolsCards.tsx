@@ -52,7 +52,7 @@ export default function PremiumToolsCards({ onLinkClick }: { onLinkClick?: () =>
         </Link>
       </div>
 
-      {/* Ad 3: Abroad Simplified */}
+      {/* Ad 3: Career Simplified */}
       <div className="group flex flex-col justify-between p-6 rounded-2xl border border-gray-100 bg-gradient-to-b from-emerald-50/50 to-white shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
         <div>
           <div className="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
@@ -61,14 +61,13 @@ export default function PremiumToolsCards({ onLinkClick }: { onLinkClick?: () =>
           <div className="inline-block px-3 py-1 mb-3 text-xs font-semibold tracking-wider text-emerald-700 bg-emerald-100 rounded-full">
             PLATFORM TOOLS
           </div>
-          <h3 className="text-2xl font-bold text-gray-900 mb-2">Abroad Simplified</h3>
+          <h3 className="text-2xl font-bold text-gray-900 mb-2">Career Simplified</h3>
           <p className="text-gray-600 mb-4 text-sm leading-relaxed">
             Search 500+ global universities, find matching scholarships, take advanced psychometric tests, and get expert visa guidance all in one place.
           </p>
         </div>
         <Link 
-          href="https://www.abroadsimplified.com/"
-          target="_blank"
+          href="/"
           onClick={onLinkClick}
           className="w-full inline-flex justify-center items-center text-center px-6 py-2.5 text-sm font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 hover:bg-emerald-600 hover:text-white rounded-xl transition-colors duration-300"
         >

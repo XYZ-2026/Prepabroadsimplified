@@ -1,0 +1,160 @@
+{
+  "results": [
+    {
+      "suite": "Public",
+      "name": "Homepage Load",
+      "status": "PASS",
+      "details": "Title: \"Abroad Simplified — Student Intelligence...\"",
+      "durationMs": 13887
+    },
+    {
+      "suite": "Auth",
+      "name": "Admin Login & Cookie",
+      "status": "PASS",
+      "details": "Session cookie verified",
+      "durationMs": 3262
+    },
+    {
+      "suite": "Admin",
+      "name": "User Management",
+      "status": "PASS",
+      "details": "Rows: 28",
+      "durationMs": 2485
+    },
+    {
+      "suite": "Admin",
+      "name": "Counsellor Allotment",
+      "status": "PASS",
+      "details": "Cards: 0",
+      "durationMs": 1873
+    },
+    {
+      "suite": "Admin",
+      "name": "Tool Access Control",
+      "status": "PASS",
+      "details": "Toggles: 81",
+      "durationMs": 1598
+    },
+    {
+      "suite": "Admin",
+      "name": "Business & Test Analytics",
+      "status": "PASS",
+      "details": "Stat Cards: 12",
+      "durationMs": 3317
+    },
+    {
+      "suite": "Admin",
+      "name": "Assessments Record Log",
+      "status": "PASS",
+      "details": "Records: 101",
+      "durationMs": 5931
+    },
+    {
+      "suite": "Admin",
+      "name": "User Journey Analytics",
+      "status": "PASS",
+      "details": "Text length: 685",
+      "durationMs": 3649
+    },
+    {
+      "suite": "Counsellor",
+      "name": "Counsellor Overview",
+      "status": "PASS",
+      "details": "Loaded",
+      "durationMs": 1369
+    },
+    {
+      "suite": "Counsellor",
+      "name": "Assigned Students Roster",
+      "status": "PASS",
+      "details": "Loaded",
+      "durationMs": 1435
+    },
+    {
+      "suite": "Counsellor",
+      "name": "SJF Allotment Engine Overview",
+      "status": "PASS",
+      "details": "Loaded",
+      "durationMs": 5457
+    },
+    {
+      "suite": "Counsellor",
+      "name": "Counsellor Student Analytics",
+      "status": "PASS",
+      "details": "Loaded",
+      "durationMs": 1060
+    },
+    {
+      "suite": "Student",
+      "name": "Profile View",
+      "status": "PASS",
+      "details": "Loaded",
+      "durationMs": 3131
+    },
+    {
+      "suite": "Student",
+      "name": "Profile Edit Wizard",
+      "status": "PASS",
+      "details": "Loaded",
+      "durationMs": 1168
+    },
+    {
+      "suite": "Student",
+      "name": "Assessment History",
+      "status": "PASS",
+      "details": "Loaded",
+      "durationMs": 2850
+    },
+    {
+      "suite": "University Finder",
+      "name": "Controls & Discovery UI",
+      "status": "PASS",
+      "details": "Interactive controls: 13",
+      "durationMs": 3045
+    },
+    {
+      "suite": "Psychometric",
+      "name": "Test Variants Hub",
+      "status": "WARN",
+      "details": "Variants rendered: 0",
+      "durationMs": 3219
+    },
+    {
+      "suite": "Psychometric",
+      "name": "Sample Report Viewer Shell",
+      "status": "PASS",
+      "details": "Viewer present: true",
+      "durationMs": 14193
+    },
+    {
+      "suite": "IQ Test",
+      "name": "Instructions Page",
+      "status": "PASS",
+      "details": "Loaded",
+      "durationMs": 4561
+    },
+    {
+      "suite": "IQ Test",
+      "name": "Test Questions Engine",
+      "status": "WARN",
+      "details": "Questions UI active: false",
+      "durationMs": 1541
+    },
+    {
+      "suite": "Parent Assessment",
+      "name": "Security Token Gate",
+      "status": "WARN",
+      "details": "Token enforcement active",
+      "durationMs": 250
+    },
+    {
+      "suite": "Roadmap Studio",
+      "name": "Destination & Frontier Flow",
+      "status": "FAIL",
+      "details": "ML Engineer Destination: false",
+      "durationMs": 698
+    }
+  ],
+  "consoleErrors": [],
+  "failedRequests": []
+}

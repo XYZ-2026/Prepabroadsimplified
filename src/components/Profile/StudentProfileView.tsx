@@ -2,6 +2,11 @@
 
 import React from 'react';
 import Link from 'next/link';
+import { 
+  getStudentPsychometricAccess, 
+  formatGradeLabel, 
+  normalizeGrade 
+} from '@/lib/psychometric-access-policy';
 
 export interface StudentProfileData {
   id?: string;
@@ -9,18 +14,26 @@ export interface StudentProfileData {
   email: string;
   mobile?: string;
   studentType?: string;
+  grade?: string;
+  academicGrade?: string;
+  currentSchool?: string;
+  schoolName?: string;
+  board?: string;
+  stream?: string;
   state?: string;
   city?: string;
   createdAtStr?: string;
-  currentSchool?: string;
   graduationYear?: string;
   targetCountries?: string;
   degreeLevel?: string;
   fieldOfInterest?: string;
+  goals?: string[];
+  declaredInterests?: string[];
   counsellorName?: string;
   counsellorEmail?: string;
   counsellorMobile?: string;
   counsellorDesignation?: string;
+  toolAccess?: any;
 }
 
 interface Props {
@@ -39,7 +52,19 @@ export default function StudentProfileView({
   const name = student.name || 'Unknown';
   const email = student.email || 'Unknown';
   const mobile = student.mobile && student.mobile !== '' ? student.mobile : 'Not Provided';
-  const studentType = student.studentType ? student.studentType.toUpperCase() : 'Not Provided';
+  
+  const rawGrade = student.grade || student.academicGrade;
+  const normalizedGrade = normalizeGrade(rawGrade);
+  const gradeLabel = formatGradeLabel(rawGrade);
+
+  const currentSchool = student.schoolName || student.currentSchool || 'Not Provided';
+  const board = student.board || 'Not Provided';
+  const stream = student.stream || '';
+  
+  const studentType = normalizedGrade 
+    ? (normalizedGrade === '11' || normalizedGrade === '12' ? 'CLASS 11/12' : `GRADE ${normalizedGrade}`)
+    : (student.studentType ? student.studentType.toUpperCase() : 'STUDENT');
+
   const city = student.city || '';
   const state = student.state || '';
   let location = 'Not Provided';
@@ -48,7 +73,6 @@ export default function StudentProfileView({
   else if (state) location = state;
 
   const createdAtStr = student.createdAtStr || 'Unknown';
-  const currentSchool = student.currentSchool || 'Not Provided';
   const graduationYear = student.graduationYear || 'Not Provided';
   const targetCountries = student.targetCountries || 'Not Provided';
   const degreeLevel = student.degreeLevel
@@ -62,13 +86,51 @@ export default function StudentProfileView({
   const counsellorDesignation = student.counsellorDesignation || 'Education Counsellor';
   const hasAssignedCounsellor = counsellorName !== 'Not Assigned' && counsellorName !== '';
 
+  const access = getStudentPsychometricAccess(rawGrade, student.toolAccess);
+  const isProfileFromRegistration = Boolean(rawGrade || currentSchool !== 'Not Provided' || board !== 'Not Provided');
+
   return (
     <div style={{ width: '100%', margin: '0 auto', paddingBottom: '20px' }}>
       {/* Optional Top Title Header */}
       {!hideHeaderTitle && (
         <div style={{ marginBottom: '24px' }}>
           <h1 style={{ fontSize: '26px', fontWeight: 800, color: '#0f172a', margin: '0 0 6px 0' }}>My Profile</h1>
-          <p style={{ fontSize: '14px', color: '#64748b', margin: 0 }}>View account details, academic background, and study abroad preferences.</p>
+          <p style={{ fontSize: '14px', color: '#64748b', margin: 0 }}>
+            Authoritative academic profile and psychometric eligibility status.
+          </p>
+        </div>
+      )}
+
+      {/* Auto-filled from registration notice */}
+      {isProfileFromRegistration && (
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          gap: '12px',
+          padding: '12px 18px',
+          borderRadius: '12px',
+          background: 'rgba(5, 150, 105, 0.08)',
+          border: '1px solid rgba(5, 150, 105, 0.25)',
+          marginBottom: '20px',
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', color: '#065f46', fontWeight: 600 }}>
+            <span>✓</span>
+            <span>Profile completed from your registration details.</span>
+          </div>
+          {showEditButton && (
+            <Link
+              href={editUrl}
+              style={{
+                fontSize: '12.5px',
+                fontWeight: 700,
+                color: '#065f46',
+                textDecoration: 'underline',
+              }}
+            >
+              Edit Profile ✎
+            </Link>
+          )}
         </div>
       )}
 
@@ -106,20 +168,18 @@ export default function StudentProfileView({
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '4px' }}>
               <h1 style={{ fontSize: '26px', fontWeight: 800, margin: 0, color: '#ffffff' }}>{name}</h1>
-              {studentType !== 'NOT PROVIDED' && (
-                <span style={{
-                  padding: '4px 12px',
-                  borderRadius: '20px',
-                  background: 'rgba(255, 255, 255, 0.2)',
-                  color: '#ffffff',
-                  fontSize: '12px',
-                  fontWeight: 700,
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.5px',
-                }}>
-                  {studentType}
-                </span>
-              )}
+              <span style={{
+                padding: '4px 12px',
+                borderRadius: '20px',
+                background: 'rgba(255, 255, 255, 0.2)',
+                color: '#ffffff',
+                fontSize: '12px',
+                fontWeight: 700,
+                textTransform: 'uppercase',
+                letterSpacing: '0.5px',
+              }}>
+                {studentType}
+              </span>
             </div>
             <p style={{ margin: 0, opacity: 0.9, fontSize: '14px', color: '#ffffff' }}>
               {email} · {mobile !== 'Not Provided' ? mobile : 'No phone'}
@@ -229,7 +289,66 @@ export default function StudentProfileView({
         </div>
       )}
 
-      {/* Section 1: Personal & Contact Details Cards */}
+      {/* Section 1: Academic Background Cards (Authoritative) */}
+      <div style={{ marginBottom: '36px' }}>
+        <h2 style={{ fontSize: '18px', fontWeight: 800, color: '#0f172a', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-red-deep, #690b1b)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+          Academic Profile &amp; Stage
+        </h2>
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
+          gap: '20px',
+        }}>
+          {/* Academic Grade & Assessment Status */}
+          <div style={{ background: '#ffffff', borderRadius: '16px', padding: '24px', border: '1px solid #e2e8f0', boxShadow: '0 2px 6px rgba(0,0,0,0.02)', borderLeft: '4px solid #690b1b' }}>
+            <div style={{ fontSize: '12px', fontWeight: 600, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '6px' }}>
+              Academic Stage
+            </div>
+            <div style={{ fontSize: '20px', fontWeight: 800, color: '#0f172a', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span>{gradeLabel}</span>
+              {normalizedGrade && (
+                <span style={{ fontSize: '11px', fontWeight: 700, padding: '2px 8px', borderRadius: '10px', background: '#dcfce7', color: '#166534' }}>
+                  Verified
+                </span>
+              )}
+            </div>
+            <div style={{ fontSize: '12px', color: '#690b1b', fontWeight: 600, marginTop: '8px' }}>
+              {access.status === 'ELIGIBLE' 
+                ? `✓ Unlocked: ${access.eligibleTestName}`
+                : '⚠ Please set grade in profile to unlock test'}
+            </div>
+          </div>
+
+          {/* School Name */}
+          <div style={{ background: '#ffffff', borderRadius: '16px', padding: '24px', border: '1px solid #e2e8f0', boxShadow: '0 2px 6px rgba(0,0,0,0.02)', borderLeft: '4px solid #2563eb' }}>
+            <div style={{ fontSize: '12px', fontWeight: 600, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '6px' }}>
+              School / College Name
+            </div>
+            <div style={{ fontSize: '18px', fontWeight: 800, color: '#0f172a' }}>{currentSchool}</div>
+          </div>
+
+          {/* Board */}
+          <div style={{ background: '#ffffff', borderRadius: '16px', padding: '24px', border: '1px solid #e2e8f0', boxShadow: '0 2px 6px rgba(0,0,0,0.02)', borderLeft: '4px solid #d97706' }}>
+            <div style={{ fontSize: '12px', fontWeight: 600, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '6px' }}>
+              Education Board
+            </div>
+            <div style={{ fontSize: '18px', fontWeight: 800, color: '#0f172a' }}>{board}</div>
+          </div>
+
+          {/* Stream (if applicable) */}
+          {(stream || normalizedGrade === '11' || normalizedGrade === '12') && (
+            <div style={{ background: '#ffffff', borderRadius: '16px', padding: '24px', border: '1px solid #e2e8f0', boxShadow: '0 2px 6px rgba(0,0,0,0.02)', borderLeft: '4px solid #9333ea' }}>
+              <div style={{ fontSize: '12px', fontWeight: 600, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '6px' }}>
+                Academic Stream
+              </div>
+              <div style={{ fontSize: '18px', fontWeight: 800, color: '#0f172a' }}>{stream || 'Not Specified'}</div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Section 2: Personal & Contact Details Cards */}
       <div style={{ marginBottom: '36px' }}>
         <h2 style={{ fontSize: '18px', fontWeight: 800, color: '#0f172a', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '10px' }}>
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-red-deep, #690b1b)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
@@ -273,17 +392,6 @@ export default function StudentProfileView({
             </div>
           </div>
 
-          {/* Student Level */}
-          <div style={{ background: '#ffffff', borderRadius: '16px', padding: '20px 24px', border: '1px solid #e2e8f0', boxShadow: '0 2px 6px rgba(0,0,0,0.02)', display: 'flex', alignItems: 'center', gap: '16px' }}>
-            <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: 'rgba(217, 119, 6, 0.08)', color: '#d97706', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
-            </div>
-            <div>
-              <div style={{ fontSize: '12px', fontWeight: 600, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Student Level</div>
-              <div style={{ fontSize: '16px', fontWeight: 700, color: '#0f172a', marginTop: '2px' }}>{studentType}</div>
-            </div>
-          </div>
-
           {/* Location */}
           <div style={{ background: '#ffffff', borderRadius: '16px', padding: '20px 24px', border: '1px solid #e2e8f0', boxShadow: '0 2px 6px rgba(0,0,0,0.02)', display: 'flex', alignItems: 'center', gap: '16px' }}>
             <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: 'rgba(147, 51, 234, 0.08)', color: '#9333ea', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -308,30 +416,47 @@ export default function StudentProfileView({
         </div>
       </div>
 
-      {/* Section 2: Academic Background Cards */}
-      <div style={{ marginBottom: '36px' }}>
-        <h2 style={{ fontSize: '18px', fontWeight: 800, color: '#0f172a', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-red-deep, #690b1b)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
-          Academic Background
-        </h2>
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-          gap: '20px',
-        }}>
-          <div style={{ background: '#ffffff', borderRadius: '16px', padding: '24px', border: '1px solid #e2e8f0', boxShadow: '0 2px 6px rgba(0,0,0,0.02)', borderLeft: '4px solid var(--color-red-deep, #690b1b)' }}>
-            <div style={{ fontSize: '12px', fontWeight: 600, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '6px' }}>Current School / College</div>
-            <div style={{ fontSize: '18px', fontWeight: 800, color: '#0f172a' }}>{currentSchool}</div>
-          </div>
-
-          <div style={{ background: '#ffffff', borderRadius: '16px', padding: '24px', border: '1px solid #e2e8f0', boxShadow: '0 2px 6px rgba(0,0,0,0.02)', borderLeft: '4px solid #2563eb' }}>
-            <div style={{ fontSize: '12px', fontWeight: 600, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '6px' }}>Expected Graduation Year</div>
-            <div style={{ fontSize: '18px', fontWeight: 800, color: '#0f172a' }}>{graduationYear}</div>
+      {/* Section 3: Goals & Declared Interests (Self-reported) */}
+      {(student.goals?.length || student.declaredInterests?.length) ? (
+        <div style={{ marginBottom: '36px' }}>
+          <h2 style={{ fontSize: '18px', fontWeight: 800, color: '#0f172a', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-red-deep, #690b1b)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            Goals &amp; Priorities (Self-Reported)
+          </h2>
+          <div style={{ background: '#ffffff', borderRadius: '16px', padding: '24px', border: '1px solid #e2e8f0', boxShadow: '0 2px 6px rgba(0,0,0,0.02)' }}>
+            {student.goals && student.goals.length > 0 && (
+              <div style={{ marginBottom: '16px' }}>
+                <div style={{ fontSize: '12px', fontWeight: 700, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '8px' }}>
+                  Target Priorities
+                </div>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                  {student.goals.map((goal, idx) => (
+                    <span key={idx} style={{ padding: '6px 12px', borderRadius: '20px', background: '#f1f5f9', color: '#1e293b', fontSize: '13px', fontWeight: 600 }}>
+                      ✓ {goal}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+            {student.declaredInterests && student.declaredInterests.length > 0 && (
+              <div>
+                <div style={{ fontSize: '12px', fontWeight: 700, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '8px' }}>
+                  Declared Interest Fields
+                </div>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                  {student.declaredInterests.map((interest, idx) => (
+                    <span key={idx} style={{ padding: '6px 12px', borderRadius: '20px', background: 'rgba(105, 11, 27, 0.06)', color: '#690b1b', fontSize: '13px', fontWeight: 600 }}>
+                      ★ {interest}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </div>
-      </div>
+      ) : null}
 
-      {/* Section 3: Study Abroad Preferences Cards */}
+      {/* Section 4: Study Abroad Preferences Cards */}
       <div>
         <h2 style={{ fontSize: '18px', fontWeight: 800, color: '#0f172a', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '10px' }}>
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-red-deep, #690b1b)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>

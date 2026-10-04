@@ -1,0 +1,219 @@
+{
+  "account": "agampuri61@gmail.com",
+  "testedAt": "2026-10-04T19:00:40.607Z",
+  "total": 28,
+  "passed": 28,
+  "warned": 0,
+  "failed": 0,
+  "consoleErrors": [],
+  "failedRequests": [
+    {
+      "url": "http://localhost:3000/psychometric-test/sample-report/preview",
+      "status": 404,
+      "method": "GET"
+    },
+    {
+      "url": "http://localhost:3000/api/parent-assessment/verify-token",
+      "status": 404,
+      "method": "POST"
+    }
+  ],
+  "auditLog": [
+    {
+      "module": "Auth",
+      "action": "Load /auth page",
+      "status": "PASS",
+      "details": "Auth form displayed",
+      "durationMs": 3226
+    },
+    {
+      "module": "Auth",
+      "action": "Student Login & Session Cookie",
+      "status": "PASS",
+      "details": "HTTP-only __session cookie active (MaxAge: 1791572396.548805)",
+      "durationMs": 3563
+    },
+    {
+      "module": "Security / RBAC",
+      "action": "Student Access to Admin Dashboard Blocked",
+      "status": "PASS",
+      "details": "Current URL: http://localhost:3000/dashboard/student/profile",
+      "durationMs": 9300
+    },
+    {
+      "module": "Student Dashboard",
+      "action": "Dashboard Home Render",
+      "status": "PASS",
+      "details": "Welcome elements verified: true",
+      "durationMs": 1437
+    },
+    {
+      "module": "Student Profile",
+      "action": "Profile Details Render",
+      "status": "PASS",
+      "details": "Student profile data visible: true",
+      "durationMs": 779
+    },
+    {
+      "module": "Student Profile",
+      "action": "Profile Update Wizard",
+      "status": "PASS",
+      "details": "Form inputs detected: 25",
+      "durationMs": 1275
+    },
+    {
+      "module": "Student Dashboard",
+      "action": "Assessment History Screen",
+      "status": "PASS",
+      "details": "Content rendered (2291 chars)",
+      "durationMs": 1267
+    },
+    {
+      "module": "Roadmap Studio",
+      "action": "Interactive Start Screen Mounting",
+      "status": "PASS",
+      "details": "Starting stage cards (Class 10th, 12th) loaded",
+      "durationMs": 840
+    },
+    {
+      "module": "Roadmap Studio",
+      "action": "Start Pathway from Class 10th",
+      "status": "PASS",
+      "details": "Selected Class 10th stage card",
+      "durationMs": 0
+    },
+    {
+      "module": "Roadmap Studio",
+      "action": "Canvas & Node Generation",
+      "status": "PASS",
+      "details": "Active nodes rendered on canvas: 20",
+      "durationMs": 0
+    },
+    {
+      "module": "Roadmap Studio",
+      "action": "Side Detail Panel Mount",
+      "status": "PASS",
+      "details": "Detail Inspector mounted with route metadata",
+      "durationMs": 0
+    },
+    {
+      "module": "Roadmap Studio",
+      "action": "Frontier Exploration & URL Sync",
+      "status": "PASS",
+      "details": "Path progression synced in URL: http://localhost:3000/career-roadmap?path=LEVEL_001",
+      "durationMs": 0
+    },
+    {
+      "module": "Roadmap Studio",
+      "action": "Save & Bookmark Modal Interaction",
+      "status": "PASS",
+      "details": "Save Roadmap dialog opened smoothly",
+      "durationMs": 0
+    },
+    {
+      "module": "Psychometric",
+      "action": "Assessment Hub & Variants",
+      "status": "PASS",
+      "details": "Career Simplified Hub active with grade 7-12 variants",
+      "durationMs": 3377
+    },
+    {
+      "module": "Psychometric",
+      "action": "High-Fidelity Sample Report Viewer",
+      "status": "PASS",
+      "details": "Report preview container mounted with PDF options",
+      "durationMs": 10180
+    },
+    {
+      "module": "Psychometric",
+      "action": "Diagnostic Report Branding",
+      "status": "PASS",
+      "details": "Career Simplified Premia header verified in report engine",
+      "durationMs": 465
+    },
+    {
+      "module": "IQ Test",
+      "action": "Landing Page & Branding",
+      "status": "PASS",
+      "details": "Career Simplified branding active",
+      "durationMs": 1471
+    },
+    {
+      "module": "IQ Test",
+      "action": "Test Specifications",
+      "status": "PASS",
+      "details": "45 Questions / 15 Minutes verified",
+      "durationMs": 1471
+    },
+    {
+      "module": "IQ Test",
+      "action": "Candidate Instructions & Rules",
+      "status": "PASS",
+      "details": "Instructions loaded with test controls",
+      "durationMs": 2017
+    },
+    {
+      "module": "IQ Test",
+      "action": "Interactive Test Runner Mounting",
+      "status": "PASS",
+      "details": "Question SVG matrix active",
+      "durationMs": 1230
+    },
+    {
+      "module": "IQ Test",
+      "action": "Countdown Timer & Counter",
+      "status": "PASS",
+      "details": "Live 15-minute countdown clock active",
+      "durationMs": 1230
+    },
+    {
+      "module": "IQ Test",
+      "action": "Multiple-Choice Option Grid",
+      "status": "PASS",
+      "details": "Options grid active with 9 interactive choices",
+      "durationMs": 1230
+    },
+    {
+      "module": "University Finder",
+      "action": "Page Access & Mounted",
+      "status": "PASS",
+      "details": "Accessible to authenticated student",
+      "durationMs": 1031
+    },
+    {
+      "module": "University Finder",
+      "action": "Inline Form Error Banner (No alert popup)",
+      "status": "PASS",
+      "details": "Validation active",
+      "durationMs": 0
+    },
+    {
+      "module": "University Finder",
+      "action": "Prediction Calculation & Categorization",
+      "status": "PASS",
+      "details": "Prediction categories rendered (Cards found: 9)",
+      "durationMs": 0
+    },
+    {
+      "module": "University Finder",
+      "action": "PDF Generation Action Button",
+      "status": "PASS",
+      "details": "Download PDF button available with Career Simplified header",
+      "durationMs": 0
+    },
+    {
+      "module": "Parent Assessment",
+      "action": "Security Gate (No Token)",
+      "status": "PASS",
+      "details": "Unauthenticated direct access correctly blocked",
+      "durationMs": 819
+    },
+    {
+      "module": "Parent Assessment",
+      "action": "Forged Token Cryptographic Rejection",
+      "status": "PASS",
+      "details": "Forged token rejected",
+      "durationMs": 170
+    }
+  ]
+}

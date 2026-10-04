@@ -22,10 +22,10 @@ export const metadata: Metadata = {
     canonical: '/university-finder',
   },
   openGraph: {
-    title: 'AI University Finder & Predictor | Abroad Simplified',
+    title: 'AI University Finder & Predictor | Career Simplified',
     description:
       'Match your profile with 500+ universities worldwide. Get instant admit chances, tuition estimates, and scholarship matches.',
-    url: 'https://www.abroadsimplified.com/university-finder',
+    url: 'https://careersimplified.com/university-finder',
   },
 };
 

@@ -28,9 +28,16 @@ export function proxy(request: NextRequest) {
     return NextResponse.redirect(new URL('/dashboard/student', request.url));
   }
 
-  return NextResponse.next();
+  const requestHeaders = new Headers(request.headers);
+  requestHeaders.set('x-pathname', path);
+
+  return NextResponse.next({
+    request: {
+      headers: requestHeaders,
+    },
+  });
 }
 
 export const config = {
-  matcher: ['/dashboard', '/dashboard/:path*', '/auth'],
+  matcher: ['/dashboard', '/dashboard/:path*', '/auth', '/psychometric-test/:path*'],
 };

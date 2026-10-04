@@ -13,17 +13,11 @@ export default async function AdminCounsellorsPage() {
   let counsellors: CounsellorData[] = [];
 
   try {
-    // 1. Fetch all users with role 'counsellor'
-    const counsellorsSnap = await adminDb
-      .collection('users')
-      .where('role', '==', 'counsellor')
-      .get();
-
-    // 2. Fetch all users with assignedCounsellor field set
-    const studentsSnap = await adminDb
-      .collection('users')
-      .where('assignedCounsellor', '!=', null)
-      .get();
+    // 1. Fetch counsellors and assigned students concurrently
+    const [counsellorsSnap, studentsSnap] = await Promise.all([
+      adminDb.collection('users').where('role', '==', 'counsellor').get(),
+      adminDb.collection('users').where('assignedCounsellor', '!=', null).get()
+    ]);
 
     const studentsByCounsellor: Record<string, AllottedStudentData[]> = {};
 

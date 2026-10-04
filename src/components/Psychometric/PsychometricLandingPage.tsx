@@ -28,15 +28,29 @@ import {
   Briefcase 
 } from 'lucide-react';
 
+export interface LandingEligibility {
+  isEligible: boolean;
+  studentGradeLabel?: string;
+  targetDescription?: string;
+  eligibleHref?: string;
+  eligibleTestName?: string;
+  status?: 'ELIGIBLE' | 'PROFILE_INCOMPLETE' | 'DISABLED';
+}
+
 interface Props {
   variant: VariantId;
   onStart: () => void;
+  eligibility?: LandingEligibility;
+  existingResultId?: string;
+  existingResultDate?: string;
 }
 
-export default function PsychometricLandingPage({ variant, onStart }: Props) {
+export default function PsychometricLandingPage({ variant, onStart, eligibility, existingResultId, existingResultDate }: Props) {
   const config: VariantConfig = PSYCHOMETRIC_LANDING_CONFIG[variant] || PSYCHOMETRIC_LANDING_CONFIG['10'];
   const [activeTab, setActiveTab] = useState<VariantId>(variant);
   const [reportPageIdx, setReportPageIdx] = useState(0);
+
+  const isEligible = eligibility ? eligibility.isEligible : true;
 
   // Sync activeTab with variant prop if changed
   useEffect(() => {
@@ -61,10 +75,10 @@ export default function PsychometricLandingPage({ variant, onStart }: Props) {
           {/* Brand Logo */}
           <Link href="/" className="flex items-center gap-2">
             <div className="w-8 h-8 rounded-xl bg-[#690b1b] text-white font-black text-xs flex items-center justify-center shadow-md">
-              AS
+              CS
             </div>
             <span className="font-display font-extrabold text-base tracking-tight text-slate-900">
-              Abroad <span className="text-[#690b1b]">Simplified</span>
+              Career <span className="text-[#690b1b]">Simplified</span>
             </span>
           </Link>
 
@@ -100,12 +114,35 @@ export default function PsychometricLandingPage({ variant, onStart }: Props) {
               </Link>
             </div>
 
-            <button
-              onClick={onStart}
-              className="px-5 py-2.5 rounded-xl bg-[#690b1b] hover:bg-[#830e22] text-white font-extrabold text-xs shadow-md shadow-[#690b1b]/20 transition-all cursor-pointer"
-            >
-              START ASSESSMENT
-            </button>
+            {existingResultId ? (
+              <Link
+                href={`/psychometric-test?resultId=${existingResultId}`}
+                className="px-5 py-2.5 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-extrabold text-xs shadow-md shadow-emerald-900/20 transition-all flex items-center gap-1.5"
+              >
+                <span>✓ VIEW REPORT</span>
+              </Link>
+            ) : isEligible ? (
+              <button
+                onClick={onStart}
+                className="px-5 py-2.5 rounded-xl bg-[#690b1b] hover:bg-[#830e22] text-white font-extrabold text-xs shadow-md shadow-[#690b1b]/20 transition-all cursor-pointer"
+              >
+                START ASSESSMENT
+              </button>
+            ) : eligibility?.status === 'PROFILE_INCOMPLETE' ? (
+              <Link
+                href="/dashboard/student/update-profile"
+                className="px-4 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-extrabold text-xs shadow-md transition-all"
+              >
+                SET GRADE
+              </Link>
+            ) : (
+              <Link
+                href={eligibility?.eligibleHref || '#'}
+                className="px-4 py-2 rounded-xl bg-[#690b1b] hover:bg-[#830e22] text-white font-extrabold text-xs shadow-md transition-all"
+              >
+                MY ASSESSMENT →
+              </Link>
+            )}
           </div>
 
         </div>
@@ -154,20 +191,77 @@ export default function PsychometricLandingPage({ variant, onStart }: Props) {
               {config.heroSubtitle}
             </p>
 
-            <div className="flex flex-col sm:flex-row items-center gap-4 mb-8">
-              <button
-                onClick={onStart}
-                className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-[#690b1b] hover:bg-[#830e22] text-white font-extrabold text-sm tracking-wide shadow-xl shadow-[#690b1b]/20 flex items-center justify-center gap-2.5 transition-all transform hover:-translate-y-0.5 cursor-pointer ring-1 ring-amber-400/30"
-              >
-                {config.primaryCtaText}
-              </button>
-              <Link
-                href={config.sampleReportHref}
-                className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-white hover:bg-slate-50 border border-slate-300/80 text-[#690b1b] font-bold text-sm text-center shadow-sm transition-all flex items-center justify-center gap-2"
-              >
-                {config.secondaryCtaText}
-              </Link>
-            </div>
+            {existingResultId ? (
+              <div className="p-6 rounded-2xl bg-emerald-50 border border-emerald-200 text-left max-w-xl mb-8 shadow-sm">
+                <div className="text-emerald-900 font-extrabold text-base mb-1.5 flex items-center gap-2">
+                  <CheckCircle2 className="w-5 h-5 text-emerald-600" /> Assessment Already Completed!
+                </div>
+                <p className="text-slate-600 text-xs mb-4 leading-relaxed">
+                  You have already completed this psychometric assessment. Your comprehensive diagnostic career dossier and family alignment report are ready to view.
+                </p>
+                <div className="flex flex-wrap items-center gap-3">
+                  <Link
+                    href={`/psychometric-test?resultId=${existingResultId}`}
+                    className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-[#690b1b] hover:bg-[#830e22] text-white font-extrabold text-xs shadow-md shadow-[#690b1b]/20 transition-all"
+                  >
+                    VIEW YOUR COMPLETED REPORT →
+                  </Link>
+                  <button
+                    onClick={onStart}
+                    className="text-xs font-semibold text-slate-500 hover:text-slate-800 underline transition-colors cursor-pointer"
+                  >
+                    Retake assessment
+                  </button>
+                </div>
+              </div>
+            ) : isEligible ? (
+              <div className="flex flex-col sm:flex-row items-center gap-4 mb-8">
+                <button
+                  onClick={onStart}
+                  className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-[#690b1b] hover:bg-[#830e22] text-white font-extrabold text-sm tracking-wide shadow-xl shadow-[#690b1b]/20 flex items-center justify-center gap-2.5 transition-all transform hover:-translate-y-0.5 cursor-pointer ring-1 ring-amber-400/30"
+                >
+                  {config.primaryCtaText}
+                </button>
+                <Link
+                  href={config.sampleReportHref}
+                  className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-white hover:bg-slate-50 border border-slate-300/80 text-[#690b1b] font-bold text-sm text-center shadow-sm transition-all flex items-center justify-center gap-2"
+                >
+                  {config.secondaryCtaText}
+                </Link>
+              </div>
+            ) : eligibility?.status === 'PROFILE_INCOMPLETE' ? (
+              <div className="p-5 rounded-2xl bg-amber-50 border border-amber-200 text-left max-w-xl mb-8 shadow-sm">
+                <div className="text-amber-900 font-extrabold text-sm mb-1 flex items-center gap-2">
+                  <span>⚠️</span> Academic Profile Incomplete
+                </div>
+                <p className="text-slate-600 text-xs mb-3 leading-relaxed">
+                  Please specify your current academic grade (Grade 7 to 12) in your profile to unlock and start your psychometric assessment.
+                </p>
+                <Link
+                  href="/dashboard/student/update-profile"
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#690b1b] hover:bg-[#830e22] text-white font-extrabold text-xs shadow-md transition-all"
+                >
+                  Complete Profile &amp; Select Grade →
+                </Link>
+              </div>
+            ) : (
+              <div className="p-5 rounded-2xl bg-amber-50 border border-amber-200 text-left max-w-xl mb-8 shadow-sm">
+                <div className="text-amber-900 font-extrabold text-sm mb-1 flex items-center gap-2">
+                  <span>🔒</span> Assessment Stage Mismatch
+                </div>
+                <p className="text-slate-600 text-xs mb-3 leading-relaxed">
+                  This assessment is designed for <strong>{variant === '7-9' ? 'Class 7–9' : variant === '10' ? 'Class 10' : 'Class 11–12'}</strong> students. Your current profile is registered as <strong>{eligibility?.studentGradeLabel || 'another grade'}</strong>.
+                </p>
+                {eligibility?.eligibleHref && (
+                  <Link
+                    href={eligibility.eligibleHref}
+                    className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#690b1b] hover:bg-[#830e22] text-white font-extrabold text-xs shadow-md shadow-[#690b1b]/20 transition-all"
+                  >
+                    GO TO MY ASSESSMENT ({eligibility.eligibleTestName || 'My Assessment'}) →
+                  </Link>
+                )}
+              </div>
+            )}
 
             {/* Quick Feature Pills */}
             <div className="flex flex-wrap items-center gap-4 text-xs font-semibold text-slate-500 pt-4 border-t border-slate-200">
@@ -289,10 +383,10 @@ export default function PsychometricLandingPage({ variant, onStart }: Props) {
               </ul>
             </div>
 
-            {/* Right: Abroad Simplified Flow */}
+            {/* Right: Career Simplified Flow */}
             <div className="bg-slate-800/80 rounded-3xl border border-emerald-500/30 p-8">
               <div className="text-xs font-extrabold text-emerald-400 uppercase tracking-wider mb-4">
-                ABROAD SIMPLIFIED APPROACH (STUDENT FIRST)
+                CAREER SIMPLIFIED APPROACH (STUDENT FIRST)
               </div>
               <ul className="space-y-3 text-xs text-slate-300 font-medium">
                 {config.simplifiedFlow.map((item, i) => (
@@ -631,12 +725,28 @@ export default function PsychometricLandingPage({ variant, onStart }: Props) {
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <button
-              onClick={onStart}
-              className="w-full sm:w-auto px-10 py-4.5 rounded-2xl bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-slate-950 font-extrabold text-base shadow-2xl flex items-center justify-center gap-2.5 transition-all transform hover:-translate-y-0.5 cursor-pointer"
-            >
-              {config.primaryCtaText}
-            </button>
+            {isEligible ? (
+              <button
+                onClick={onStart}
+                className="w-full sm:w-auto px-10 py-4.5 rounded-2xl bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-slate-950 font-extrabold text-base shadow-2xl flex items-center justify-center gap-2.5 transition-all transform hover:-translate-y-0.5 cursor-pointer"
+              >
+                {config.primaryCtaText}
+              </button>
+            ) : eligibility?.status === 'PROFILE_INCOMPLETE' ? (
+              <Link
+                href="/dashboard/student/update-profile"
+                className="w-full sm:w-auto px-10 py-4.5 rounded-2xl bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-slate-950 font-extrabold text-base shadow-2xl flex items-center justify-center gap-2.5 transition-all transform hover:-translate-y-0.5 cursor-pointer"
+              >
+                Complete Profile &amp; Select Grade →
+              </Link>
+            ) : (
+              <Link
+                href={eligibility?.eligibleHref || '#'}
+                className="w-full sm:w-auto px-10 py-4.5 rounded-2xl bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-slate-950 font-extrabold text-base shadow-2xl flex items-center justify-center gap-2.5 transition-all transform hover:-translate-y-0.5 cursor-pointer"
+              >
+                Go to My Assessment ({eligibility?.eligibleTestName || 'My Assessment'}) →
+              </Link>
+            )}
           </div>
         </div>
       </section>
@@ -646,9 +756,9 @@ export default function PsychometricLandingPage({ variant, onStart }: Props) {
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="flex items-center gap-2">
             <div className="w-6 h-6 rounded-lg bg-[#690b1b] text-white font-bold flex items-center justify-center text-[10px]">
-              AS
+              CS
             </div>
-            <span className="font-bold text-white">Abroad Simplified</span> — Psychometric & Study Abroad Platform
+            <span className="font-bold text-white">Career Simplified</span> — Psychometric &amp; Career Decision Platform
           </div>
           <div className="flex flex-wrap items-center gap-6">
             <Link href="/psychometric-test?type=junior" className="hover:text-white transition-colors">Class 7–9 Assessment</Link>
@@ -656,7 +766,7 @@ export default function PsychometricLandingPage({ variant, onStart }: Props) {
             <Link href="/psychometric-test?type=grade12" className="hover:text-white transition-colors">Class 12 Assessment</Link>
             <Link href="/university-finder" className="hover:text-white transition-colors">University Finder</Link>
           </div>
-          <div>© 2026 Abroad Simplified. All rights reserved.</div>
+          <div>© 2026 Career Simplified. All rights reserved.</div>
         </div>
       </footer>
 

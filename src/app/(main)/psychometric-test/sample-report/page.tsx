@@ -4,8 +4,8 @@ import React, { useState, useCallback, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import ReportViewerShell from '@/components/Report/ReportViewerShell';
 import { adaptReportData } from '@/app/(main)/psychometric-test/report-engine/adapters';
-import { buildUniversalExecutiveHTMLReport } from '@/app/(main)/psychometric-test/report-engine/universal-html-report-builder';
-import { buildUniversalExecutiveSummaryHTMLReport } from '@/app/(main)/psychometric-test/report-engine/universal-executive-summary-builder';
+import { buildUniversalExecutiveHTMLReport } from '@/app/(main)/psychometric-test/class10_html_report_builder';
+import { buildUniversalExecutiveSummaryHTMLReport } from '@/app/(main)/psychometric-test/class10_executive_summary_builder';
 import {
   getSampleStudent,
   getSampleGradeLabel,

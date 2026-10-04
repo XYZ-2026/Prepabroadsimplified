@@ -72,7 +72,7 @@ export default function ReportHeader({ userRole, activeMode = 'full', onSwitchMo
         </Link>
 
         <div className="report-brand">
-          <span className="brand-red" style={{ color: 'var(--color-red-deep, #690b1b)', fontWeight: 800 }}>Abroad</span>{' '}
+          <span className="brand-red" style={{ color: 'var(--color-red-deep, #690b1b)', fontWeight: 800 }}>Career</span>{' '}
           <span style={{ color: '#0f172a', fontWeight: 800 }}>Simplified</span>
           <span className="report-badge">Official Report View</span>
         </div>

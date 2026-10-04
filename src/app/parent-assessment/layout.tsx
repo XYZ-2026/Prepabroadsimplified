@@ -6,7 +6,7 @@ export default function ParentAssessmentLayout({ children }: { children: React.R
       {/* Minimal Header */}
       <header className="parent-header">
         <div className="parent-brand">
-          <span className="brand-red" style={{ color: 'var(--color-red-deep, #690b1b)', fontWeight: 800 }}>Abroad</span>{' '}
+          <span className="brand-red" style={{ color: 'var(--color-red-deep, #690b1b)', fontWeight: 800 }}>Career</span>{' '}
           <span style={{ color: '#0f172a', fontWeight: 800 }}>Simplified</span>
           <span className="parent-badge">Family & Parent Portal</span>
         </div>

@@ -5,7 +5,7 @@ import AccessRestricted from '@/components/Auth/AccessRestricted';
 import ToolLocked from '@/components/Auth/ToolLocked';
 
 export const metadata: Metadata = {
-  title: 'Online IQ / Cognitive Assessment | Abroad Simplified',
+  title: 'Online IQ / Cognitive Assessment | Career Simplified',
   description:
     'Take a visual-first 45-question cognitive assessment measuring reasoning, pattern recognition, numerical, spatial and abstract thinking.',
   keywords: [
@@ -14,16 +14,16 @@ export const metadata: Metadata = {
     '45-question IQ assessment',
     'visual matrix reasoning',
     'pattern recognition test',
-    'Abroad Simplified',
+    'Career Simplified',
   ],
   alternates: {
     canonical: '/iq-test',
   },
   openGraph: {
-    title: 'Online IQ / Cognitive Assessment | Abroad Simplified',
+    title: 'Online IQ / Cognitive Assessment | Career Simplified',
     description:
       'Take a visual-first 45-question cognitive assessment measuring reasoning, pattern recognition, numerical, spatial and abstract thinking.',
-    url: 'https://www.abroadsimplified.com/iq-test',
+    url: 'https://careersimplified.com/iq-test',
   },
 };
 

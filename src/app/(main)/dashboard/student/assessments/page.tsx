@@ -2,6 +2,7 @@ import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { adminDb } from '@/lib/firebase-admin';
 import { verifySessionCookie } from '@/lib/auth';
+import { getStudentPsychometricAccess, formatGradeLabel } from '@/lib/psychometric-access-policy';
 import styles from '@/styles/student-dashboard.module.css';
 import componentsStyles from '@/styles/components.module.css';
 
@@ -13,8 +14,21 @@ export default async function AssessmentsPage() {
   }
 
   let assessments: Array<any> = [];
+  let savedRoadmaps: Array<any> = [];
+  let userGrade: string | null = null;
+  let userToolAccess: any = null;
+  let userRole = 'student';
+  let completedPsychMap: Record<string, { id: string; reportUrl: string; createdAt: string; testName: string }> = {};
 
   try {
+    const userDoc = await adminDb.collection('users').doc(claims.uid).get();
+    if (userDoc.exists) {
+      const uData = userDoc.data();
+      userGrade = uData?.grade || uData?.academicGrade || null;
+      userToolAccess = uData?.toolAccess || null;
+      userRole = uData?.role || 'student';
+    }
+
     const assessmentsSnapshot = await adminDb
       .collection('iq_results')
       .where('userId', '==', claims.uid)
@@ -24,6 +38,26 @@ export default async function AssessmentsPage() {
       .collection('psychometric_results')
       .where('userId', '==', claims.uid)
       .get();
+
+    psychometricSnapshot.docs.forEach(doc => {
+      const d = doc.data();
+      const t = (d.assessmentType || d.testType || '').toLowerCase();
+      const v = (d.assessmentVariant || '').toUpperCase();
+      let key = 'senior';
+      if (t === 'junior' || v === 'JUNIOR_7_9' || t.includes('junior') || t.includes('7') || t.includes('8') || t.includes('9')) {
+        key = 'junior';
+      } else if (t === 'grade10' || v === 'CLASS_10' || t.includes('10')) {
+        key = 'grade10';
+      }
+      if (!completedPsychMap[key]) {
+        completedPsychMap[key] = {
+          id: doc.id,
+          reportUrl: `/psychometric-test?resultId=${doc.id}`,
+          createdAt: d.createdAt,
+          testName: d.testName || 'Psychometric Assessment',
+        };
+      }
+    });
       
     const workflowsSnapshot = await adminDb
       .collection('assessment_workflow')
@@ -34,6 +68,16 @@ export default async function AssessmentsPage() {
     workflowsSnapshot.docs.forEach(doc => {
       workflows.set(doc.data().resultId, doc.data().state);
     });
+
+    const roadmapsSnapshot = await adminDb
+      .collection('career_roadmaps')
+      .where('userId', '==', claims.uid)
+      .get();
+
+    savedRoadmaps = roadmapsSnapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    }));
       
     assessments = [
       ...assessmentsSnapshot.docs.map(doc => ({
@@ -57,16 +101,182 @@ export default async function AssessmentsPage() {
     console.error('Error fetching assessments:', error);
   }
 
+  const access = getStudentPsychometricAccess(userGrade, userToolAccess, userRole);
+
   return (
     <div className={styles.dashboardContent}>
       <div className={styles.pageHeader}>
         <h1 className={styles.pageTitle}>My Assessments</h1>
-        <p className={styles.pageSubtitle}>View your past test results and analytical breakdowns.</p>
+        <p className={styles.pageSubtitle}>
+          Academic-stage assessment access and past test analytics.
+        </p>
       </div>
 
+      {/* Profile Incomplete Warning Banner if grade is missing */}
+      {access.status === 'PROFILE_INCOMPLETE' && (
+        <div style={{
+          background: '#fffbeb',
+          border: '1.5px solid #fde68a',
+          borderRadius: '16px',
+          padding: '20px 24px',
+          marginBottom: '28px',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          flexWrap: 'wrap',
+          gap: '14px',
+        }}>
+          <div>
+            <div style={{ fontSize: '15px', fontWeight: 800, color: '#92400e', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span>⚠️</span> Academic Profile Incomplete
+            </div>
+            <p style={{ margin: '4px 0 0 0', fontSize: '13.5px', color: '#b45309' }}>
+              Please select your current academic grade (Grade 7 to 12) in your profile to unlock your psychometric assessment.
+            </p>
+          </div>
+          <Link
+            href="/dashboard/student/update-profile"
+            className={`${componentsStyles.btn} ${componentsStyles.btnPrimary}`}
+            style={{ fontSize: '13px', padding: '8px 18px', background: '#92400e', color: '#fff' }}
+          >
+            Select Grade Now →
+          </Link>
+        </div>
+      )}
+
+      {/* ── Section 1: Psychometric Assessment Ecosystem (Grade-Based Access) ── */}
+      <div className={styles.card} style={{ marginBottom: '32px' }}>
+        <div className={styles.cardHeader} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '10px' }}>
+          <div>
+            <h2 className={styles.cardTitle}>Career Simplified Psychometric Tests</h2>
+            <p style={{ fontSize: '13px', color: '#64748b', margin: '2px 0 0 0' }}>
+              Assessment eligibility is authoritatively governed by your academic stage: <strong>{access.gradeLabel}</strong>
+            </p>
+          </div>
+          {access.grade && (
+            <span style={{ fontSize: '12px', fontWeight: 700, padding: '4px 10px', borderRadius: '12px', background: 'rgba(105, 11, 27, 0.08)', color: '#690b1b' }}>
+              {formatGradeLabel(access.grade)}
+            </span>
+          )}
+        </div>
+        <div className={styles.cardBody}>
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+            gap: '20px',
+          }}>
+            {access.allAssessments.map(item => {
+              const completedInfo = completedPsychMap[item.toolKey];
+              const isCompleted = !!completedInfo;
+
+              return (
+                <div 
+                  key={item.variant}
+                  style={{
+                    background: item.isEligible ? '#ffffff' : '#f8fafc',
+                    borderRadius: '16px',
+                    padding: '24px',
+                    border: item.isEligible ? (isCompleted ? '2px solid #057a55' : '2px solid #690b1b') : '1px solid #e2e8f0',
+                    boxShadow: item.isEligible ? (isCompleted ? '0 8px 24px rgba(5, 122, 85, 0.08)' : '0 8px 24px rgba(105, 11, 27, 0.08)') : 'none',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'space-between',
+                    position: 'relative',
+                    opacity: item.isEligible ? 1 : 0.82,
+                  }}
+                >
+                  <div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+                      <span style={{
+                        fontSize: '11px',
+                        fontWeight: 800,
+                        padding: '3px 8px',
+                        borderRadius: '8px',
+                        background: isCompleted ? '#dcfce7' : (item.isEligible ? '#dcfce7' : '#f1f5f9'),
+                        color: isCompleted ? '#166534' : (item.isEligible ? '#166534' : '#64748b'),
+                        letterSpacing: '0.5px',
+                        textTransform: 'uppercase',
+                      }}>
+                        {isCompleted ? '✓ COMPLETED' : (item.statusBadge === 'AVAILABLE' ? '✓ AVAILABLE' : '🔒 LOCKED')}
+                      </span>
+                      <span style={{ fontSize: '12px', fontWeight: 600, color: '#64748b' }}>
+                        {item.targetDescription}
+                      </span>
+                    </div>
+
+                    <h3 style={{ fontSize: '17px', fontWeight: 800, color: item.isEligible ? '#0f172a' : '#475569', margin: '0 0 6px 0' }}>
+                      {item.name}
+                    </h3>
+                    <p style={{ fontSize: '12.5px', color: '#64748b', margin: '0 0 16px 0', lineHeight: 1.5 }}>
+                      {isCompleted 
+                        ? 'Assessment completed! Your comprehensive diagnostic career dossier and family alignment report are ready to view.'
+                        : (item.isEligible 
+                          ? 'Designed specifically for your academic stage. Comprehensive evaluation of aptitude, RIASEC interest, and career alignment.'
+                          : item.lockedReason)}
+                    </p>
+                  </div>
+
+                  <div>
+                    {isCompleted ? (
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                        <Link
+                          href={completedInfo.reportUrl}
+                          className={`${componentsStyles.btn} ${componentsStyles.btnPrimary}`}
+                          style={{ width: '100%', justifyContent: 'center', textAlign: 'center', display: 'flex', padding: '10px', background: '#057A55', color: '#ffffff' }}
+                        >
+                          View Diagnostic Report →
+                        </Link>
+                        <Link
+                          href={`${item.href}&retake=true`}
+                          style={{
+                            textAlign: 'center',
+                            fontSize: '12px',
+                            color: '#64748b',
+                            textDecoration: 'underline',
+                            cursor: 'pointer',
+                          }}
+                        >
+                          Retake assessment
+                        </Link>
+                      </div>
+                    ) : item.isEligible ? (
+                      <Link
+                        href={item.href}
+                        className={`${componentsStyles.btn} ${componentsStyles.btnPrimary}`}
+                        style={{ width: '100%', justifyContent: 'center', textAlign: 'center', display: 'flex', padding: '10px' }}
+                      >
+                        Explore Assessment →
+                      </Link>
+                    ) : (
+                      <div
+                        style={{
+                          width: '100%',
+                          padding: '10px',
+                          textAlign: 'center',
+                          borderRadius: '8px',
+                          background: '#f1f5f9',
+                          color: '#94a3b8',
+                          fontSize: '13px',
+                          fontWeight: 600,
+                          cursor: 'not-allowed',
+                          userSelect: 'none',
+                        }}
+                      >
+                        🔒 Not Available for {access.gradeLabel}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+
+      {/* ── Section 2: Completed Assessments History ── */}
       <div className={styles.card}>
         <div className={styles.cardHeader}>
-          <h2 className={styles.cardTitle}>Completed Tests</h2>
+          <h2 className={styles.cardTitle}>Completed Tests History</h2>
         </div>
         <div className={styles.cardBody}>
           {assessments.length === 0 ? (
@@ -81,9 +291,11 @@ export default async function AssessmentsPage() {
                 </svg>
               </div>
               <p style={{ marginBottom: '24px', fontSize: '16px', fontWeight: '500' }}>You haven't taken any assessments yet.</p>
-              <Link href="/iq-test" className={`${componentsStyles.btn} ${componentsStyles.btnPrimary}`}>
-                Take an IQ Test
-              </Link>
+              {access.status === 'ELIGIBLE' && (
+                <Link href={access.eligibleHref} className={`${componentsStyles.btn} ${componentsStyles.btnPrimary}`}>
+                  Take Your {access.eligibleAssessment?.shortName} →
+                </Link>
+              )}
             </div>
           ) : (
             <div className={styles.assessmentGrid}>
@@ -94,6 +306,11 @@ export default async function AssessmentsPage() {
                   month: 'long',
                   day: 'numeric'
                 });
+
+                // Attempt Grade (HISTORICALLY IMMUTABLE)
+                const attemptGrade = assessment.academicGradeAtAttempt 
+                  ? `Grade ${assessment.academicGradeAtAttempt}`
+                  : (assessment.student?.grade || 'Class 10');
 
                 // Format strength nicely
                 let formattedStrength = 'N/A';
@@ -133,6 +350,11 @@ export default async function AssessmentsPage() {
                           <span style={{ fontSize: '11px', fontWeight: 700, padding: '3px 8px', borderRadius: '10px', background: assessment.type === 'psychometric' ? 'var(--color-gold-light, #f4b400)' : 'var(--color-red-tint, #ffe5e5)', color: assessment.type === 'psychometric' ? '#000' : 'var(--color-red-deep, #690b1b)' }}>
                             {assessment.type === 'psychometric' ? 'Psychometric' : 'IQ Test'}
                           </span>
+                          {assessment.type === 'psychometric' && (
+                            <span style={{ fontSize: '10.5px', fontWeight: 700, padding: '2px 6px', borderRadius: '6px', background: '#f1f5f9', color: '#475569' }}>
+                              Attempt: {attemptGrade}
+                            </span>
+                          )}
                         </div>
                         <h3 className={styles.cardTitlePremium}>
                           {assessment.testName || 'IQ Assessment'}
@@ -211,6 +433,74 @@ export default async function AssessmentsPage() {
                   </div>
                 );
               })}
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* ── Section 3: Career Roadmap Studio ── */}
+      <div className={styles.card} style={{ marginTop: '32px' }}>
+        <div className={styles.cardHeader} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '10px' }}>
+          <div>
+            <h2 className={styles.cardTitle}>Career Roadmap Studio</h2>
+            <p style={{ fontSize: '13px', color: '#64748b', margin: '2px 0 0 0' }}>
+              Interactive academic pathways, entrance exams, degree programmes, and career outcomes.
+            </p>
+          </div>
+          <Link
+            href="/career-roadmap"
+            className={`${componentsStyles.btn} ${componentsStyles.btnPrimary}`}
+            style={{ fontSize: '13px', padding: '8px 18px', background: '#690B1B', color: '#fff' }}
+          >
+            Launch Studio →
+          </Link>
+        </div>
+        <div className={styles.cardBody}>
+          {savedRoadmaps && savedRoadmaps.length > 0 ? (
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '16px' }}>
+              {savedRoadmaps.map((rm: any) => (
+                <div
+                  key={rm.id}
+                  style={{
+                    padding: '16px 20px',
+                    borderRadius: '12px',
+                    border: '1px solid #e2e8f0',
+                    background: '#f8fafc',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'space-between',
+                    gap: '12px',
+                  }}
+                >
+                  <div>
+                    <h3 style={{ fontSize: '15px', fontWeight: 700, color: '#0f172a', margin: '0 0 4px 0' }}>
+                      {rm.title}
+                    </h3>
+                    <p style={{ fontSize: '12px', color: '#64748b', margin: 0 }}>
+                      {rm.selectedPathNodeIds?.length || 0} Stages Mapped · Saved {new Date(rm.updatedAt || rm.createdAt).toLocaleDateString()}
+                    </p>
+                    {rm.notes && (
+                      <p style={{ fontSize: '12px', color: '#475569', fontStyle: 'italic', marginTop: '6px' }}>
+                        "{rm.notes}"
+                      </p>
+                    )}
+                  </div>
+                  <Link
+                    href={`/career-roadmap`}
+                    className={`${componentsStyles.btn} ${componentsStyles.btnOutline}`}
+                    style={{ fontSize: '12px', textAlign: 'center', justifyContent: 'center' }}
+                  >
+                    Open in Studio ↗
+                  </Link>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div style={{ textAlign: 'center', padding: '24px', color: '#64748b' }}>
+              <p style={{ fontSize: '14px', margin: '0 0 6px 0' }}>No career roadmaps saved yet.</p>
+              <p style={{ fontSize: '12px', margin: 0 }}>
+                Explore 1,000+ career routes and save your personalized pathway map.
+              </p>
             </div>
           )}
         </div>

@@ -7,10 +7,11 @@ export default async function AdminAssessmentsPage() {
   
   try {
     if (process.env.FIREBASE_ADMIN_PROJECT_ID) {
-      // 1. Fetch assessments
-      const [iqSnapshot, psychoSnapshot] = await Promise.all([
+      // 1. Fetch assessments and users concurrently
+      const [iqSnapshot, psychoSnapshot, usersSnapshot] = await Promise.all([
         adminDb.collection('iq_results').orderBy('createdAt', 'desc').limit(100).get(),
-        adminDb.collection('psychometric_results').orderBy('createdAt', 'desc').limit(100).get()
+        adminDb.collection('psychometric_results').orderBy('createdAt', 'desc').limit(100).get(),
+        adminDb.collection('users').limit(200).get(),
       ]);
       
       // Combine them and sort by date descending
@@ -20,8 +21,7 @@ export default async function AdminAssessmentsPage() {
         return db - da;
       }).slice(0, 200);
 
-      // 2. Fetch users to map user details
-      const usersSnapshot = await adminDb.collection('users').get();
+      // 2. Map user details
       const userMap = new Map();
       usersSnapshot.docs.forEach(doc => {
         const data = doc.data();

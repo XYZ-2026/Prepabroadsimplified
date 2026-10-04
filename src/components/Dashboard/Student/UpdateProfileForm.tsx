@@ -4,31 +4,87 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import styles from '@/styles/student-dashboard.module.css';
 import componentsStyles from '@/styles/components.module.css';
+import { 
+  AcademicGrade, 
+  formatGradeLabel, 
+  getStudentPsychometricAccess, 
+  normalizeGrade 
+} from '@/lib/psychometric-access-policy';
 
 export interface ProfileData {
   name: string;
   email: string;
   mobile: string;
-  studentType: string;
+  studentType?: string;
+  grade?: string;
+  academicGrade?: string;
+  board?: string;
+  stream?: string;
   state: string;
   city: string;
   currentSchool: string;
+  schoolName?: string;
   graduationYear: string;
   targetCountries: string;
   degreeLevel: string;
   fieldOfInterest: string;
 }
 
+const BOARD_OPTIONS = ['CBSE', 'ICSE', 'State Board', 'IB', 'Cambridge', 'Other'];
+
+const STREAM_OPTIONS = [
+  'Science (PCM)',
+  'Science (PCB)',
+  'Commerce',
+  'Humanities / Arts',
+];
+
+const STATE_OPTIONS = [
+  'Andhra Pradesh', 'Arunachal Pradesh', 'Assam', 'Bihar', 'Chhattisgarh',
+  'Delhi', 'Goa', 'Gujarat', 'Haryana', 'Himachal Pradesh', 'Jharkhand',
+  'Karnataka', 'Kerala', 'Madhya Pradesh', 'Maharashtra', 'Manipur',
+  'Meghalaya', 'Mizoram', 'Nagaland', 'Odisha', 'Punjab', 'Rajasthan',
+  'Sikkim', 'Tamil Nadu', 'Telangana', 'Tripura', 'Uttar Pradesh',
+  'Uttarakhand', 'West Bengal', 'Other'
+];
+
 export default function UpdateProfileForm({ initialData }: { initialData: ProfileData }) {
   const router = useRouter();
-  const [formData, setFormData] = useState<ProfileData>(initialData);
+
+  const initialGrade = normalizeGrade(initialData.grade || initialData.academicGrade) || '';
+  const initialBoard = initialData.board || 'CBSE';
+  const isCustomBoard = !BOARD_OPTIONS.slice(0, 5).includes(initialBoard) && initialBoard !== '';
+
+  const [formData, setFormData] = useState<ProfileData>({
+    ...initialData,
+    grade: initialGrade,
+    academicGrade: initialGrade,
+    board: isCustomBoard ? 'Other' : (initialBoard || 'CBSE'),
+    stream: initialData.stream || '',
+    currentSchool: initialData.schoolName || initialData.currentSchool || '',
+  });
+
+  const [customBoard, setCustomBoard] = useState(isCustomBoard ? initialBoard : '');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
+  const currentNormalizedGrade = normalizeGrade(formData.grade);
+  const isSeniorGrade = currentNormalizedGrade === '11' || currentNormalizedGrade === '12';
+  const access = getStudentPsychometricAccess(formData.grade);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleGradeChange = (newGrade: AcademicGrade) => {
+    setFormData(prev => ({
+      ...prev,
+      grade: newGrade,
+      academicGrade: newGrade,
+      stream: (newGrade === '11' || newGrade === '12') ? prev.stream : '',
+    }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -38,12 +94,20 @@ export default function UpdateProfileForm({ initialData }: { initialData: Profil
     setSuccess('');
 
     try {
+      const finalBoard = formData.board === 'Other' && customBoard.trim() ? customBoard.trim() : formData.board;
+
+      const payload = {
+        ...formData,
+        board: finalBoard,
+        schoolName: formData.currentSchool,
+      };
+
       const response = await fetch('/api/user/update-profile', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(payload),
       });
 
       const result = await response.json();
@@ -52,13 +116,12 @@ export default function UpdateProfileForm({ initialData }: { initialData: Profil
         throw new Error(result.error || 'Failed to update profile');
       }
 
-      setSuccess('Profile updated successfully!');
+      setSuccess('Profile updated successfully! Academic eligibility re-evaluated.');
       router.refresh();
       
-      // Clear success message after 3 seconds
       setTimeout(() => {
         setSuccess('');
-      }, 3000);
+      }, 4000);
       
     } catch (err: any) {
       setError(err.message || 'An error occurred');
@@ -85,6 +148,7 @@ export default function UpdateProfileForm({ initialData }: { initialData: Profil
         )}
         
         <form onSubmit={handleSubmit}>
+          {/* Personal Details */}
           <div className={styles.formRow}>
             <div className={styles.formGroup}>
               <label htmlFor="name">Full Name</label>
@@ -123,24 +187,6 @@ export default function UpdateProfileForm({ initialData }: { initialData: Profil
               />
             </div>
             <div className={styles.formGroup}>
-              <label htmlFor="studentType">Student Type</label>
-              <select 
-                id="studentType" 
-                name="studentType" 
-                required 
-                value={formData.studentType} 
-                onChange={handleChange}
-              >
-                <option value="" disabled>Select Level</option>
-                <option value="ug">UG (Undergraduate)</option>
-                <option value="pg">PG (Postgraduate)</option>
-                <option value="phd">PhD</option>
-              </select>
-            </div>
-          </div>
-
-          <div className={styles.formRow}>
-            <div className={styles.formGroup}>
               <label htmlFor="state">State</label>
               <select 
                 id="state" 
@@ -150,37 +196,15 @@ export default function UpdateProfileForm({ initialData }: { initialData: Profil
                 onChange={handleChange}
               >
                 <option value="" disabled>Select State</option>
-                <option value="Andhra Pradesh">Andhra Pradesh</option>
-                <option value="Arunachal Pradesh">Arunachal Pradesh</option>
-                <option value="Assam">Assam</option>
-                <option value="Bihar">Bihar</option>
-                <option value="Chhattisgarh">Chhattisgarh</option>
-                <option value="Goa">Goa</option>
-                <option value="Gujarat">Gujarat</option>
-                <option value="Haryana">Haryana</option>
-                <option value="Himachal Pradesh">Himachal Pradesh</option>
-                <option value="Jharkhand">Jharkhand</option>
-                <option value="Karnataka">Karnataka</option>
-                <option value="Kerala">Kerala</option>
-                <option value="Madhya Pradesh">Madhya Pradesh</option>
-                <option value="Maharashtra">Maharashtra</option>
-                <option value="Manipur">Manipur</option>
-                <option value="Meghalaya">Meghalaya</option>
-                <option value="Mizoram">Mizoram</option>
-                <option value="Nagaland">Nagaland</option>
-                <option value="Odisha">Odisha</option>
-                <option value="Punjab">Punjab</option>
-                <option value="Rajasthan">Rajasthan</option>
-                <option value="Sikkim">Sikkim</option>
-                <option value="Tamil Nadu">Tamil Nadu</option>
-                <option value="Telangana">Telangana</option>
-                <option value="Tripura">Tripura</option>
-                <option value="Uttar Pradesh">Uttar Pradesh</option>
-                <option value="Uttarakhand">Uttarakhand</option>
-                <option value="West Bengal">West Bengal</option>
+                {STATE_OPTIONS.map(s => (
+                  <option key={s} value={s}>{s}</option>
+                ))}
               </select>
             </div>
-            <div className={styles.formGroup}>
+          </div>
+
+          <div className={styles.formRow}>
+            <div className={styles.formGroup} style={{ flex: 1 }}>
               <label htmlFor="city">City</label>
               <input
                 type="text"
@@ -193,22 +217,135 @@ export default function UpdateProfileForm({ initialData }: { initialData: Profil
             </div>
           </div>
 
-          <div style={{ marginTop: '32px', marginBottom: '24px', paddingBottom: '12px', borderBottom: '1px solid #e5e7eb' }}>
-            <h3 style={{ fontSize: '18px', fontWeight: 'bold', color: '#111827' }}>Academic Background</h3>
+          {/* Academic Background (Authoritative) */}
+          <div style={{ marginTop: '32px', marginBottom: '20px', paddingBottom: '12px', borderBottom: '1px solid #e5e7eb' }}>
+            <h3 style={{ fontSize: '18px', fontWeight: 'bold', color: '#111827' }}>Academic Background &amp; Stage</h3>
+            <p style={{ fontSize: '13px', color: '#6b7280', margin: '4px 0 0 0' }}>
+              Your selected grade determines your unlocked psychometric assessment.
+            </p>
           </div>
 
+          {/* Grade Selector */}
+          <div style={{ marginBottom: '20px' }}>
+            <label style={{ display: 'block', fontSize: '13px', fontWeight: 700, color: '#1e293b', marginBottom: '8px' }}>
+              Current Academic Grade:
+            </label>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(100px, 1fr))', gap: '8px' }}>
+              {(['7', '8', '9', '10', '11', '12'] as AcademicGrade[]).map(g => {
+                const isSelected = formData.grade === g;
+                return (
+                  <button
+                    key={g}
+                    type="button"
+                    onClick={() => handleGradeChange(g)}
+                    style={{
+                      padding: '10px 8px',
+                      borderRadius: '10px',
+                      border: isSelected ? '2px solid #690b1b' : '1px solid #cbd5e1',
+                      background: isSelected ? 'rgba(105, 11, 27, 0.06)' : '#ffffff',
+                      color: isSelected ? '#690b1b' : '#334155',
+                      fontWeight: isSelected ? 800 : 600,
+                      fontSize: '13px',
+                      cursor: 'pointer',
+                      transition: 'all 0.15s ease',
+                      textAlign: 'center',
+                    }}
+                  >
+                    Grade {g}
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Eligibility Live Notice */}
+            <div style={{
+              marginTop: '10px',
+              padding: '10px 14px',
+              borderRadius: '8px',
+              background: '#f8fafc',
+              border: '1px solid #e2e8f0',
+              fontSize: '12.5px',
+              color: '#475569',
+              lineHeight: 1.5,
+            }}>
+              <strong>Psychometric Tool Unlocked:</strong>{' '}
+              <span style={{ color: '#690b1b', fontWeight: 700 }}>
+                {access.status === 'ELIGIBLE' ? access.eligibleTestName : 'Select a grade to unlock'}
+              </span>
+              <div style={{ fontSize: '11.5px', color: '#64748b', marginTop: '2px' }}>
+                Note: Updating your grade immediately recalculates your assessment eligibility. Historical completed reports remain preserved under the grade at time of attempt.
+              </div>
+            </div>
+          </div>
+
+          {/* School Name & Board */}
           <div className={styles.formRow}>
             <div className={styles.formGroup}>
-              <label htmlFor="currentSchool">Current School / College Name</label>
+              <label htmlFor="currentSchool">School / College Name</label>
               <input
                 type="text"
                 id="currentSchool"
                 name="currentSchool"
+                required
                 value={formData.currentSchool}
                 onChange={handleChange}
                 placeholder="e.g. Delhi Public School"
               />
             </div>
+            <div className={styles.formGroup}>
+              <label htmlFor="board">Education Board</label>
+              <select
+                id="board"
+                name="board"
+                required
+                value={formData.board}
+                onChange={handleChange}
+              >
+                {BOARD_OPTIONS.map(b => (
+                  <option key={b} value={b}>{b}</option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          {formData.board === 'Other' && (
+            <div className={styles.formRow} style={{ marginTop: '-8px' }}>
+              <div className={styles.formGroup} style={{ width: '100%' }}>
+                <label htmlFor="customBoard">Specify Board Name</label>
+                <input
+                  type="text"
+                  id="customBoard"
+                  required
+                  placeholder="e.g. Maharashtra State Board, NIOS"
+                  value={customBoard}
+                  onChange={(e) => setCustomBoard(e.target.value)}
+                />
+              </div>
+            </div>
+          )}
+
+          {/* Senior Stream Selector for 11 & 12 */}
+          {isSeniorGrade && (
+            <div className={styles.formRow}>
+              <div className={styles.formGroup} style={{ width: '100%' }}>
+                <label htmlFor="stream">Academic Stream (Grade {formData.grade})</label>
+                <select
+                  id="stream"
+                  name="stream"
+                  required
+                  value={formData.stream}
+                  onChange={handleChange}
+                >
+                  <option value="" disabled>Select Stream</option>
+                  {STREAM_OPTIONS.map(st => (
+                    <option key={st} value={st}>{st}</option>
+                  ))}
+                </select>
+              </div>
+            </div>
+          )}
+
+          <div className={styles.formRow}>
             <div className={styles.formGroup}>
               <label htmlFor="graduationYear">Expected Graduation Year</label>
               <input
@@ -222,6 +359,7 @@ export default function UpdateProfileForm({ initialData }: { initialData: Profil
             </div>
           </div>
 
+          {/* Study Abroad Preferences */}
           <div style={{ marginTop: '32px', marginBottom: '24px', paddingBottom: '12px', borderBottom: '1px solid #e5e7eb' }}>
             <h3 style={{ fontSize: '18px', fontWeight: 'bold', color: '#111827' }}>Study Abroad Preferences</h3>
           </div>
@@ -275,7 +413,7 @@ export default function UpdateProfileForm({ initialData }: { initialData: Profil
               className={`${componentsStyles.btn} ${componentsStyles.btnPrimary}`}
               disabled={loading}
             >
-              {loading ? 'Saving Changes...' : 'Save Changes'}
+              {loading ? 'Saving Changes...' : 'Save Profile Changes'}
             </button>
           </div>
         </form>

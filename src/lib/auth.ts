@@ -83,21 +83,26 @@ export async function getUserProfile() {
     const userDoc = await adminDb.collection('users').doc(claims.uid).get();
     if (userDoc.exists) {
       const data = userDoc.data();
+      const rawGrade = data?.grade || data?.academicGrade || '';
       return {
+        uid: claims.uid,
         role: resolveRole(claims, data?.role),
         name: data?.name || claims.name || '',
         email: data?.email || claims.email || '',
         mobile: data?.mobile || '',
+        grade: rawGrade,
+        academicGrade: rawGrade,
+        currentSchool: data?.currentSchool || data?.schoolName || '',
+        schoolName: data?.schoolName || data?.currentSchool || '',
+        board: data?.board || '',
+        stream: data?.stream || '',
+        studentType: data?.studentType || '',
         state: data?.state || '',
         city: data?.city || '',
-        toolAccess: data?.toolAccess || {
-          iqTest: true,
-          psychometricTest: true,
-          grade7_9: true,
-          grade10: true,
-          grade12: true,
-          universityPredictor: true,
-        },
+        goals: data?.goals || data?.onboarding?.goals || [],
+        declaredInterests: data?.declaredInterests || data?.onboarding?.declaredInterests || [],
+        onboarding: data?.onboarding || null,
+        toolAccess: data?.toolAccess || {},
       };
     }
   } catch (error) {
@@ -105,20 +110,24 @@ export async function getUserProfile() {
   }
 
   return {
+    uid: claims.uid,
     role: resolveRole(claims),
     name: claims.name || '',
     email: claims.email || '',
     mobile: '',
+    grade: '',
+    academicGrade: '',
+    currentSchool: '',
+    schoolName: '',
+    board: '',
+    stream: '',
+    studentType: '',
     state: '',
     city: '',
-    toolAccess: {
-      iqTest: true,
-      psychometricTest: true,
-      grade7_9: true,
-      grade10: true,
-      grade12: true,
-      universityPredictor: true,
-    },
+    goals: [],
+    declaredInterests: [],
+    onboarding: null,
+    toolAccess: {},
   };
 }
 
@@ -128,6 +137,16 @@ export async function getUserProfile() {
 export async function getUserRole(): Promise<'admin' | 'counsellor' | 'student' | null> {
   const claims = await verifySessionCookie();
   if (!claims) return null;
+
+  // Fast-path for hardcoded or verified admin
+  if (claims.email === 'admin@as.com' || claims.admin === true || claims.role === 'admin') {
+    return 'admin';
+  }
+
+  // Fast-path for counsellor demo
+  if (claims.email === 'counsellor@as.com' || claims.role === 'counsellor') {
+    return 'counsellor';
+  }
 
   // Check Firestore for explicit role
   try {

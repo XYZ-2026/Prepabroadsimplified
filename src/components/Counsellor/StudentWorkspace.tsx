@@ -7,6 +7,7 @@ import ReportViewerShell from '@/components/Report/ReportViewerShell';
 import { buildClass10ExecutiveHTMLReport } from '@/app/(main)/psychometric-test/class10_html_report_builder';
 import { buildClass10ExecutiveSummaryHTMLReport } from '@/app/(main)/psychometric-test/class10_executive_summary_builder';
 import type { EditorialStudent, EditorialScores } from '@/app/(main)/psychometric-test/class10_editorial_engine';
+import { getStudentPsychometricAccess } from '@/lib/psychometric-access-policy';
 
 export interface StudentData extends StudentProfileData {
   id: string;
@@ -58,10 +59,14 @@ export default function StudentWorkspace({
   psychoResults,
   onBack,
 }: StudentWorkspaceProps) {
-  const [activeTab, setActiveTab] = useState<'profile' | 'reports' | 'iq' | 'notes' | 'workflow'>('reports');
+  const [activeTab, setActiveTab] = useState<'profile' | 'reports' | 'iq' | 'notes' | 'workflow' | 'roadmap'>('reports');
   const [previewMode, setPreviewMode] = useState<'full' | 'executive' | null>(null);
   const [activeResultId, setActiveResultId] = useState<string | null>(null);
   const [isDownloading, setIsDownloading] = useState<'full' | 'executive' | null>(null);
+
+  // Student Roadmaps State
+  const [studentRoadmaps, setStudentRoadmaps] = useState<any[]>([]);
+  const [roadmapsLoading, setRoadmapsLoading] = useState(false);
 
   // Counsellor Notes State
   const [noteText, setNoteText] = useState('');
@@ -73,9 +78,23 @@ export default function StudentWorkspace({
   const [familyDiscussion, setFamilyDiscussion] = useState('Pending');
   const [nextAction, setNextAction] = useState('');
 
+  React.useEffect(() => {
+    if (activeTab === 'roadmap') {
+      setRoadmapsLoading(true);
+      fetch(`/api/career-roadmap/save?studentId=${student.id}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.roadmaps) setStudentRoadmaps(data.roadmaps);
+        })
+        .catch(err => console.error('Error fetching student roadmaps:', err))
+        .finally(() => setRoadmapsLoading(false));
+    }
+  }, [activeTab, student.id]);
+
   const studentPsycho = psychoResults.filter(r => r.userId === student.id);
   const studentIQ = iqResults.filter(r => r.userId === student.id);
   const latestPsycho = studentPsycho[0] || null;
+  const accessPolicy = getStudentPsychometricAccess(student.grade || student.academicGrade);
 
   // Handle PDF Download directly via POST API
   const handleDownloadPDF = async (reportType: 'full' | 'executive', resultId?: string) => {
@@ -140,13 +159,15 @@ export default function StudentWorkspace({
 
   // If in Preview Mode, render full ReportViewerShell
   if (previewMode && latestPsycho) {
+    const rawGrade = student.grade || student.academicGrade || (latestPsycho as any).academicGradeAtAttempt || '10';
+    const formattedGrade = rawGrade.toLowerCase().includes('class') || rawGrade.toLowerCase().includes('grade') ? rawGrade : `Class ${rawGrade}`;
     const editorialStudent: EditorialStudent = {
       name: student.name || 'Candidate',
-      grade: 'Class 10',
+      grade: formattedGrade,
       age: '15',
-      school: student.currentSchool || '',
+      school: student.currentSchool || student.schoolName || '',
       city: student.city || 'India',
-      stream: '',
+      stream: student.stream || '',
       email: student.email || '',
       date: student.createdAtStr || new Date().toLocaleDateString(),
       reportId: `AS-10-${(latestPsycho.id || '100000').substring(0, 6).toUpperCase()}`,
@@ -287,7 +308,7 @@ export default function StudentWorkspace({
           zIndex: 10,
         }}>
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px', flexWrap: 'wrap' }}>
               <h1 style={{ fontSize: '28px', fontWeight: 800, margin: 0 }}>{student.name}</h1>
               <span style={{
                 padding: '4px 12px',
@@ -300,13 +321,29 @@ export default function StudentWorkspace({
                 letterSpacing: '0.5px',
                 textTransform: 'uppercase',
               }}>
-                {student.studentType || 'Class 10 Student'}
+                {student.grade ? `Grade ${student.grade}` : (student.studentType || 'Student')}
               </span>
+              {accessPolicy && (
+                <span style={{
+                  padding: '4px 10px',
+                  borderRadius: '16px',
+                  background: 'rgba(255,255,255,0.18)',
+                  color: '#fff',
+                  fontSize: '11px',
+                  fontWeight: 600,
+                  border: '1px solid rgba(255,255,255,0.25)',
+                }}>
+                  🎯 {accessPolicy.badgeLabel}
+                </span>
+              )}
             </div>
             <p style={{ margin: 0, opacity: 0.9, fontSize: '14px', lineHeight: 1.6 }}>
               ✉ {student.email} &nbsp;·&nbsp; 📞 {student.mobile || 'No phone'} &nbsp;·&nbsp; 📍 {student.city}{student.city && student.state ? ', ' : ''}{student.state}
             </p>
-            <div style={{ display: 'flex', gap: '16px', marginTop: '14px', fontSize: '12.5px', opacity: 0.85 }}>
+            <div style={{ display: 'flex', gap: '16px', marginTop: '12px', fontSize: '12.5px', opacity: 0.9, flexWrap: 'wrap' }}>
+              <span>School: <strong>{student.currentSchool || student.schoolName || '—'}</strong></span>
+              <span>Board: <strong>{student.board || '—'}</strong></span>
+              {student.stream && <span>Stream: <strong>{student.stream}</strong></span>}
               <span>Assigned Counsellor: <strong>{student.counsellorName || 'Assigned Staff'}</strong></span>
               <span>Joined: {student.createdAtStr}</span>
             </div>
@@ -415,6 +452,7 @@ export default function StudentWorkspace({
       }}>
         {[
           { key: 'reports', label: '🧭 Assessment & Reports' },
+          { key: 'roadmap', label: '🗺️ Career Roadmaps' },
           { key: 'workflow', label: '🎯 Counsellor Workflow' },
           { key: 'notes', label: '📝 Private Notes' },
           { key: 'profile', label: '📋 Profile & Background' },
@@ -600,6 +638,107 @@ export default function StudentWorkspace({
                   </div>
                 </div>
               ))
+            )}
+          </div>
+        )}
+        {activeTab === 'roadmap' && (
+          <div style={{ background: '#fff', padding: '32px', borderRadius: '16px', border: '1px solid #e2e8f0', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px', flexWrap: 'wrap', gap: '12px' }}>
+              <div>
+                <h3 style={{ margin: 0, fontSize: '20px', fontWeight: 800, color: '#0f172a' }}>
+                  Student Career Roadmaps
+                </h3>
+                <p style={{ margin: '4px 0 0', fontSize: '13px', color: '#64748b' }}>
+                  Interactive pathway plans and academic milestone choices mapped by this student.
+                </p>
+              </div>
+              <a
+                href="/career-roadmap"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  padding: '10px 18px',
+                  background: '#690B1B',
+                  color: '#fff',
+                  borderRadius: '10px',
+                  textDecoration: 'none',
+                  fontWeight: 700,
+                  fontSize: '13px',
+                }}
+              >
+                Launch Studio ↗
+              </a>
+            </div>
+
+            {roadmapsLoading ? (
+              <div style={{ textAlign: 'center', padding: '40px', color: '#64748b' }}>
+                Loading saved roadmaps...
+              </div>
+            ) : studentRoadmaps.length === 0 ? (
+              <div style={{ textAlign: 'center', padding: '60px 20px', color: '#64748b' }}>
+                <p style={{ fontSize: '15px', fontWeight: 600, marginBottom: '6px' }}>No saved career roadmaps yet for this student.</p>
+                <p style={{ fontSize: '13px' }}>The student can explore and save customized career maps from the Career Roadmap Studio.</p>
+              </div>
+            ) : (
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '16px' }}>
+                {studentRoadmaps.map((rm) => (
+                  <div
+                    key={rm.roadmapId}
+                    style={{
+                      padding: '20px',
+                      background: '#f8fafc',
+                      borderRadius: '12px',
+                      border: '1px solid #e2e8f0',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'space-between',
+                      gap: '14px',
+                    }}
+                  >
+                    <div>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '8px' }}>
+                        <h4 style={{ margin: 0, fontSize: '16px', fontWeight: 800, color: '#0f172a' }}>
+                          {rm.title}
+                        </h4>
+                        <span style={{ fontSize: '11px', color: '#64748b' }}>
+                          {new Date(rm.updatedAt).toLocaleDateString()}
+                        </span>
+                      </div>
+                      <div style={{ fontSize: '12px', color: '#475569', marginBottom: '8px' }}>
+                        <strong>{rm.selectedPathNodeIds?.length || 0} Stages:</strong>{' '}
+                        {rm.selectedPathNodeIds?.slice(0, 4).join(' → ')}
+                        {(rm.selectedPathNodeIds?.length || 0) > 4 ? ' ...' : ''}
+                      </div>
+                      {rm.notes && (
+                        <p style={{ margin: 0, fontSize: '12px', fontStyle: 'italic', color: '#64748b', background: '#ffffff', padding: '8px 12px', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
+                          "{rm.notes}"
+                        </p>
+                      )}
+                    </div>
+                    <div style={{ display: 'flex', gap: '8px', borderTop: '1px solid #e2e8f0', paddingTop: '12px' }}>
+                      <a
+                        href={`/career-roadmap`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{
+                          flex: 1,
+                          padding: '8px',
+                          textAlign: 'center',
+                          borderRadius: '8px',
+                          background: '#fff',
+                          border: '1px solid #cbd5e1',
+                          color: '#0f172a',
+                          fontSize: '12px',
+                          fontWeight: 700,
+                          textDecoration: 'none',
+                        }}
+                      >
+                        Open in Studio ↗
+                      </a>
+                    </div>
+                  </div>
+                ))}
+              </div>
             )}
           </div>
         )}

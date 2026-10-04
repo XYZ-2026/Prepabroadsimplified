@@ -7,7 +7,7 @@ const inter = Inter({ subsets: ['latin'], variable: '--next-font-primary', displ
 const lexend = Lexend({ subsets: ['latin'], variable: '--next-font-heading', display: 'swap' });
 
 function getValidSiteUrl(urlInput?: string): string {
-  const fallback = 'https://prep.abroadsimplified.com';
+  const fallback = 'https://careersimplified.com';
   if (!urlInput) return fallback;
   let raw = urlInput.trim();
   if (!raw.startsWith('http://') && !raw.startsWith('https://')) {
@@ -25,29 +25,26 @@ const siteUrl = getValidSiteUrl(process.env.NEXT_PUBLIC_APP_URL);
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: 'Abroad Simplified — Your Ultimate Study Abroad Hub',
-    template: '%s | Abroad Simplified',
+    default: 'Career Simplified — Modern Career Planning & Student Intelligence Platform',
+    template: '%s | Career Simplified',
   },
   description:
-    'Abroad Simplified is your ultimate study abroad hub. Find universities, scholarships, SOP guidance, and visa support for USA, UK, Germany, Canada, and Australia.',
+    'Career Simplified is a comprehensive career planning and student intelligence platform. Discover career roadmaps, cognitive strengths, psychometric profiling, and global university admissions guidance.',
   keywords: [
+    'career simplified',
+    'career roadmap studio',
+    'career planning',
+    'psychometric assessment',
+    'IQ test for students',
+    'stream selection',
     'study abroad',
     'university finder',
-    'scholarship finder',
-    'IELTS',
-    'TOEFL',
-    'SOP builder',
-    'visa guidance',
-    'abroad simplified',
-    'study in USA',
-    'study in UK',
-    'study in Germany',
-    'psychometric test',
-    'IQ test for students',
+    'college search',
+    'career counselling',
   ],
-  authors: [{ name: 'Abroad Simplified Team', url: siteUrl }],
-  creator: 'Abroad Simplified',
-  publisher: 'Abroad Simplified',
+  authors: [{ name: 'Career Simplified Team', url: siteUrl }],
+  creator: 'Career Simplified',
+  publisher: 'Career Simplified',
   formatDetection: {
     email: false,
     address: false,
@@ -57,11 +54,11 @@ export const metadata: Metadata = {
     canonical: '/',
   },
   openGraph: {
-    title: 'Abroad Simplified — Your Ultimate Study Abroad Hub',
+    title: 'Career Simplified — Modern Career Planning & Student Intelligence Platform',
     description:
-      'University finder, scholarship matching, SOP builder, and visa guidance — all in one platform.',
+      'Career Roadmap Studio, cognitive profiling, psychometric assessments, and university admissions matching — all in one connected platform.',
     url: siteUrl,
-    siteName: 'Abroad Simplified',
+    siteName: 'Career Simplified',
     locale: 'en_US',
     type: 'website',
     images: [
@@ -69,15 +66,15 @@ export const metadata: Metadata = {
         url: '/study_abroad_hero.png',
         width: 1200,
         height: 630,
-        alt: 'Abroad Simplified — Study Abroad Platform',
+        alt: 'Career Simplified — Career Planning & Student Intelligence',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Abroad Simplified — Your Ultimate Study Abroad Hub',
+    title: 'Career Simplified — Modern Career Planning & Student Intelligence Platform',
     description:
-      'University finder, scholarship matching, SOP builder, and visa guidance — all in one platform.',
+      'Career Roadmap Studio, cognitive profiling, psychometric assessments, and university admissions matching — all in one connected platform.',
     images: ['/study_abroad_hero.png'],
   },
   verification: {
@@ -107,11 +104,11 @@ export default function RootLayout({
       {
         '@type': 'EducationalOrganization',
         '@id': `${siteUrl}/#organization`,
-        name: 'Abroad Simplified',
+        name: 'Career Simplified',
         url: `${siteUrl}/`,
         logo: `${siteUrl}/logo-square-cropped.avif`,
         description:
-          'Your ultimate study abroad hub — university finder, scholarship matching, SOP builder, and visa guidance.',
+          'Comprehensive career planning and student intelligence platform — career roadmaps, cognitive assessments, psychometric profiling, and university admissions guidance.',
         address: {
           '@type': 'PostalAddress',
           addressLocality: 'Mumbai',
@@ -124,8 +121,8 @@ export default function RootLayout({
         '@type': 'WebSite',
         '@id': `${siteUrl}/#website`,
         url: `${siteUrl}/`,
-        name: 'Abroad Simplified',
-        description: 'Comprehensive study abroad guidance, university matchmaker & psychometric assessment portal.',
+        name: 'Career Simplified',
+        description: 'Modern career planning, cognitive profiling & psychometric evaluation platform.',
         publisher: {
           '@id': `${siteUrl}/#organization`,
         },

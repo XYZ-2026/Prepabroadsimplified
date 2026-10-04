@@ -11,6 +11,7 @@ type Screen = "verifying" | "invalid_result" | "landing" | "parent_info" | "ques
 function ParentAssessmentContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
+  const tokenParam = searchParams.get('token');
   const resultIdParam = searchParams.get('resultId');
 
   const [screen, setScreen] = useState<Screen>("verifying");
@@ -35,35 +36,74 @@ function ParentAssessmentContent() {
   const lastSavedAnswersRef = useRef<Record<number, number>>({});
 
   useEffect(() => {
-    // Verify result ID or fetch latest pending for user
-    fetch('/api/parent-assessment/verify-result', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ resultId: resultIdParam })
-    })
-      .then(res => res.json())
-      .then(data => {
-        if (data.success) {
-          setStudentName(data.studentName);
-          setResultId(data.resultId);
-          if (data.savedState) {
-            setAnswers(data.savedState.answers || {});
-            setParentName(data.savedState.parentName || "");
-            setParentRelation(data.savedState.parentRelation || "");
-            lastSavedAnswersRef.current = data.savedState.answers || {};
-          }
-          setScreen("landing");
-        } else {
-          setScreen("invalid_result");
-          setErrorMessage(data.error || "Psychometric assessment result not found.");
-        }
+    // If cryptographic token is present, verify via secure token verification endpoint
+    if (tokenParam) {
+      fetch('/api/parent-assessment/verify-token', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token: tokenParam })
       })
-      .catch(err => {
-        console.error(err);
-        setScreen("invalid_result");
-        setErrorMessage("Failed to load assessment. Please make sure you have completed the student psychometric test.");
-      });
-  }, [resultIdParam]);
+        .then(res => res.json())
+        .then(data => {
+          if (data.success) {
+            setStudentName(data.studentName);
+            setResultId(data.resultId);
+            if (data.savedState) {
+              setAnswers(data.savedState.answers || {});
+              setParentName(data.savedState.parentName || "");
+              setParentRelation(data.savedState.parentRelation || "");
+              lastSavedAnswersRef.current = data.savedState.answers || {};
+            }
+            setScreen("landing");
+          } else {
+            setScreen("invalid_result");
+            setErrorMessage(data.error || "The invitation link is invalid or has expired.");
+          }
+        })
+        .catch(err => {
+          console.error(err);
+          setScreen("invalid_result");
+          setErrorMessage("Failed to verify invitation. Please check your internet connection.");
+        });
+      return;
+    }
+
+    // Fallback: Verify result ID directly (for backward compatibility)
+    if (resultIdParam) {
+      fetch('/api/parent-assessment/verify-result', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ resultId: resultIdParam })
+      })
+        .then(res => res.json())
+        .then(data => {
+          if (data.success) {
+            setStudentName(data.studentName);
+            setResultId(data.resultId);
+            if (data.savedState) {
+              setAnswers(data.savedState.answers || {});
+              setParentName(data.savedState.parentName || "");
+              setParentRelation(data.savedState.parentRelation || "");
+              lastSavedAnswersRef.current = data.savedState.answers || {};
+            }
+            setScreen("landing");
+          } else {
+            setScreen("invalid_result");
+            setErrorMessage(data.error || "Psychometric assessment result not found.");
+          }
+        })
+        .catch(err => {
+          console.error(err);
+          setScreen("invalid_result");
+          setErrorMessage("Failed to load assessment. Please make sure you have completed the student psychometric test.");
+        });
+      return;
+    }
+
+    // Neither token nor resultId supplied
+    setScreen("invalid_result");
+    setErrorMessage("Invitation token required. Please access this assessment using the secure link shared by your student.");
+  }, [tokenParam, resultIdParam]);
 
   // Save Progress
   const saveProgress = async (currentAnswers: Record<number, number>) => {

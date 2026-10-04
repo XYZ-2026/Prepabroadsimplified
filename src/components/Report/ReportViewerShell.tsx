@@ -200,7 +200,7 @@ export default function ReportViewerShell({
     });
   }, []);
 
-  // ── Listen for postMessage from iframe ──
+  // ── Listen for postMessage from iframe + readiness fallback ──
   useEffect(() => {
     function handleMessage(e: MessageEvent) {
       if (!e.data || typeof e.data !== 'object') return;
@@ -218,7 +218,30 @@ export default function ReportViewerShell({
       }
     }
     window.addEventListener('message', handleMessage);
-    return () => window.removeEventListener('message', handleMessage);
+
+    // Readiness polling & timeout fallback in case postMessage fired before listener attached
+    const checkReady = () => {
+      try {
+        const doc = iframeRef.current?.contentDocument;
+        if (doc && (doc.readyState === 'complete' || doc.readyState === 'interactive') && doc.querySelector('.as-report-page')) {
+          setIframeReady(true);
+        }
+      } catch {
+        // Cross-origin fallback
+      }
+    };
+    checkReady();
+    const interval = setInterval(checkReady, 250);
+    const timeout = setTimeout(() => {
+      setIframeReady(true);
+      clearInterval(interval);
+    }, 2000);
+
+    return () => {
+      window.removeEventListener('message', handleMessage);
+      clearInterval(interval);
+      clearTimeout(timeout);
+    };
   }, [totalPages, scrollToPage]);
 
   // ── Handle mode switch ──
@@ -498,6 +521,7 @@ export default function ReportViewerShell({
         <iframe
           ref={iframeRef}
           srcDoc={preparedHtml}
+          onLoad={() => setIframeReady(true)}
           title={`${mode === 'full' ? 'Full Diagnostic Report' : 'Executive Career Edition'} — ${studentName}`}
           style={{
             width: '100%',

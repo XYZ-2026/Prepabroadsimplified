@@ -7,7 +7,7 @@ import styles from '@/styles/components.module.css';
 export default function Footer() {
   const pathname = usePathname();
 
-  if (pathname?.startsWith('/iq-test') || pathname?.startsWith('/university-finder')) {
+  if (pathname?.startsWith('/iq-test') || pathname?.startsWith('/university-finder') || pathname?.startsWith('/career-roadmap')) {
     return null;
   }
 
@@ -16,10 +16,10 @@ export default function Footer() {
       <div className={styles.footerGrid}>
         <div>
           <div className={styles.footerBrandLogoText}>
-            <span className="brand-red">Abroad</span> Simplified
+            <span className="brand-red">Career</span> Simplified
           </div>
           <p className={styles.footerBrandDesc}>
-            Think Beyond Your Boundaries. Your complete guide to studying abroad.
+            Think Beyond Your Boundaries. Modern Career Planning, Cognitive Intelligence & Global Admissions.
           </p>
           <div className={styles.footerSocials}>
             <a href="#" className={styles.footerSocialLink} aria-label="Instagram">
@@ -62,8 +62,8 @@ export default function Footer() {
         </div>
       </div>
       <div className={styles.footerBottom}>
-        <p>© 2026 Abroad Simplified. All rights reserved.</p>
-        <p>Mumbai, Maharashtra, India | support@abroadsimplified.com</p>
+        <p>© 2026 Career Simplified. All rights reserved.</p>
+        <p>Mumbai, Maharashtra, India | support@careersimplified.com</p>
       </div>
     </footer>
   );

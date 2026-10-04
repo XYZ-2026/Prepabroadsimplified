@@ -149,12 +149,12 @@ export default function TermsPopup({ isOpen, onClose, onProceed }: TermsPopupPro
                     className="p-6 text-sm text-slate-600 space-y-4"
                   >
                     <h3 className="font-bold text-slate-800 text-base">Terms and Conditions</h3>
-                    <p>Welcome to Abroad Simplified's Psychometric Assessment.</p>
+                    <p>Welcome to Career Simplified's Psychometric Assessment.</p>
                     <ul className="list-disc pl-5 space-y-2">
                       <li><strong>Assessment Integrity:</strong> You agree to take the assessment honestly and without external assistance. The results are generated based on your inputs and are intended for guidance purposes only.</li>
-                      <li><strong>Intellectual Property:</strong> All content, questions, and reports generated are the intellectual property of Abroad Simplified. Reproduction or distribution is strictly prohibited.</li>
+                      <li><strong>Intellectual Property:</strong> All content, questions, and reports generated are the intellectual property of Career Simplified. Reproduction or distribution is strictly prohibited.</li>
                       <li><strong>Non-Refundable:</strong> If you opt for a premium report or paid features, the fees are non-refundable once the report is generated.</li>
-                      <li><strong>Limitation of Liability:</strong> Abroad Simplified is not responsible for any career or educational decisions made based on the results of this assessment. The reports are suggestive and should not be taken as absolute guarantees of success in any particular field.</li>
+                      <li><strong>Limitation of Liability:</strong> Career Simplified is not responsible for any career or educational decisions made based on the results of this assessment. The reports are suggestive and should not be taken as absolute guarantees of success in any particular field.</li>
                     </ul>
                     <p className="mt-4 font-medium text-slate-800">By continuing, you agree to these terms.</p>
                   </motion.div>
@@ -170,7 +170,7 @@ export default function TermsPopup({ isOpen, onClose, onProceed }: TermsPopupPro
                     className="p-6 text-sm text-slate-600 space-y-4"
                   >
                     <h3 className="font-bold text-slate-800 text-base">Privacy Policy</h3>
-                    <p>Your privacy is important to us at Abroad Simplified.</p>
+                    <p>Your privacy is important to us at Career Simplified.</p>
                     <ul className="list-disc pl-5 space-y-2">
                       <li><strong>Data Collection:</strong> We collect your assessment responses, basic profile information (like age, grade, stream), and contact details to generate your report.</li>
                       <li><strong>Data Usage:</strong> Your data is used exclusively to formulate your personalized psychometric report, recommend suitable career paths, and provide related counseling services if requested.</li>

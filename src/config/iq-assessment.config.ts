@@ -27,7 +27,7 @@ export const IQ_CERTIFICATE_CONFIG = {
 };
 
 export const IQ_ASSESSMENT_CONFIG = {
-  brandName: 'Abroad Simplified',
+  brandName: 'Career Simplified',
   assessmentTitle: 'Standardized 45-Item Cognitive Assessment',
   questionCount: 45,
   estimatedDuration: '15 Minutes',
@@ -157,11 +157,11 @@ export const IQ_ASSESSMENT_CONFIG = {
     },
     {
       question: 'How is my data handled?',
-      answer: 'Your assessment data is linked securely to your authenticated Abroad Simplified account and stored in encrypted cloud infrastructure. It is never shared with third parties.'
+      answer: 'Your assessment data is linked securely to your authenticated Career Simplified account and stored in encrypted cloud infrastructure. It is never shared with third parties.'
     },
     {
       question: 'Will this determine my career path?',
-      answer: 'No single test determines a student\'s career. Your cognitive profile serves as one helpful input alongside psychometric guidance, academic interests, and counsellor advisement on the Abroad Simplified platform.'
+      answer: 'No single test determines a student\'s career. Your cognitive profile serves as one helpful input alongside psychometric guidance, academic interests, and counsellor advisement on the Career Simplified platform.'
     }
   ] as IQConfigFAQ[]
 };

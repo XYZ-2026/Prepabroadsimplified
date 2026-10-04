@@ -2,9 +2,9 @@ import type { MetadataRoute } from 'next';
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: 'Abroad Simplified — Study Abroad Hub',
-    short_name: 'Abroad Simplified',
-    description: 'Find universities, scholarships, SOP guidance, and visa support for USA, UK, Germany, Canada, and Australia.',
+    name: 'Career Simplified — Modern Career Planning & Student Intelligence',
+    short_name: 'Career Simplified',
+    description: 'Discover career roadmaps, cognitive strengths, psychometric profiling, and global university admissions guidance.',
     start_url: '/',
     display: 'standalone',
     background_color: '#ffffff',

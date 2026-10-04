@@ -5,9 +5,9 @@ import AuthInfographics from '@/components/Auth/AuthInfographics';
 import styles from '@/styles/auth.module.css';
 
 export const metadata: Metadata = {
-  title: 'Student & Counsellor Login / Sign Up',
+  title: 'Student & Counsellor Login / Sign Up | Career Simplified',
   description:
-    'Sign in or register for Abroad Simplified to access personalized university matching, SOP guidance, and psychometric assessments.',
+    'Sign in or register for Career Simplified to access personalized career roadmaps, cognitive assessments, and university guidance.',
   alternates: {
     canonical: '/auth',
   },
@@ -25,12 +25,12 @@ export default function AuthPage() {
           <div className={styles.authTopbarLogoIcon}>
             <img 
               src="/logo-square-cropped.avif" 
-              alt="Abroad Simplified" 
+              alt="Career Simplified" 
               style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '10px' }} 
             />
           </div>
           <div className={styles.authTopbarText}>
-            <span className={styles.authTopbarTitle}>Abroad Simplified</span>
+            <span className={styles.authTopbarTitle}>Career Simplified</span>
             <span className={styles.authTopbarSubtitle}>LOGIN / REGISTER</span>
           </div>
         </Link>
@@ -43,7 +43,7 @@ export default function AuthPage() {
             <AuthForm />
           </section>
 
-          {/* Right Side: Abroad Simplified Infographics & Value Proposition */}
+          {/* Right Side: Career Simplified Infographics & Value Proposition */}
           <section>
             <AuthInfographics />
           </section>

@@ -196,10 +196,12 @@ export default function CounsellorStudentsClient({ students, iqResults, psychoRe
                       <span className={styles.userPhone}>{student.mobile || '—'}</span>
                     </td>
                     <td>
-                      <span style={{ display: 'block', color: 'var(--text-heading)', fontWeight: 500, textTransform: 'uppercase' }}>
-                        {student.studentType || '—'}
+                      <span style={{ display: 'block', color: 'var(--text-heading)', fontWeight: 600 }}>
+                        {student.grade ? `Grade ${student.grade}` : (student.studentType || '—')}
                       </span>
-                      <span className={styles.userSubtext}>{student.city}{student.city && student.state ? ', ' : ''}{student.state}</span>
+                      <span className={styles.userSubtext}>
+                        {student.stream ? `${student.stream} · ` : ''}{student.city}{student.city && student.state ? ', ' : ''}{student.state}
+                      </span>
                     </td>
                     <td>
                       <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>

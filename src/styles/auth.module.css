@@ -655,3 +655,477 @@
     font-size: 0.75rem;
   }
 }
+
+/* ══════════════════════════════════════════════════════════════
+   Multi-Step Student Registration & Grade Onboarding Wizard
+   ══════════════════════════════════════════════════════════════ */
+
+.wizardHeader {
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.85rem;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.wizardProgressBarTrack {
+  width: 100%;
+  height: 5px;
+  background: #f1f5f9;
+  border-radius: 999px;
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+
+.wizardProgressBarFill {
+  height: 100%;
+  background: linear-gradient(90deg, #690b1b 0%, #b91c1c 100%);
+  border-radius: 999px;
+  transition: width 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.wizardStepsRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+}
+
+.wizardStepItem {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #94a3b8;
+  cursor: default;
+}
+
+.wizardStepItemActive {
+  color: #690b1b;
+}
+
+.wizardStepItemDone {
+  color: #059669;
+}
+
+.wizardStepCircle {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  font-weight: 700;
+  background: #f1f5f9;
+  color: #64748b;
+  transition: all 0.2s ease;
+}
+
+.wizardStepItemActive .wizardStepCircle {
+  background: #690b1b;
+  color: #ffffff;
+  box-shadow: 0 0 0 3px rgba(105, 11, 27, 0.15);
+}
+
+.wizardStepItemDone .wizardStepCircle {
+  background: #059669;
+  color: #ffffff;
+}
+
+.wizardSectionTitle {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0 0 0.25rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.wizardSectionSubtitle {
+  font-size: 0.8rem;
+  color: #64748b;
+  margin: 0 0 1rem 0;
+  line-height: 1.4;
+}
+
+/* Grade Selection Grid */
+.gradeSectionWrapper {
+  margin-bottom: 1.2rem;
+}
+
+.gradeGridLabel {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #1e293b;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.6rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.gradeGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.65rem;
+}
+
+@media (max-width: 480px) {
+  .gradeGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.gradeCard {
+  border: 1.5px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 0.75rem 0.65rem;
+  background: #ffffff;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  position: relative;
+  user-select: none;
+}
+
+.gradeCard:hover {
+  border-color: #cbd5e1;
+  background: #f8fafc;
+  transform: translateY(-1px);
+}
+
+.gradeCardActive {
+  border-color: #690b1b;
+  background: rgba(105, 11, 27, 0.04);
+  box-shadow: 0 4px 12px rgba(105, 11, 27, 0.1);
+}
+
+.gradeCardNumber {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #0f172a;
+  line-height: 1.1;
+}
+
+.gradeCardActive .gradeCardNumber {
+  color: #690b1b;
+}
+
+.gradeCardSub {
+  font-size: 0.68rem;
+  color: #64748b;
+  font-weight: 600;
+}
+
+.gradeCardBadge {
+  position: absolute;
+  top: 4px;
+  right: 6px;
+  font-size: 0.6rem;
+  color: #690b1b;
+  font-weight: 700;
+}
+
+/* Board Pill Select */
+.boardPillsWrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-top: 0.35rem;
+}
+
+.boardPill {
+  padding: 0.45rem 0.85rem;
+  border-radius: 20px;
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #475569;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.boardPill:hover {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+}
+
+.boardPillActive {
+  background: #690b1b;
+  border-color: #690b1b;
+  color: #ffffff;
+}
+
+/* Stream Cards (11-12) */
+.streamWrapper {
+  margin-top: 1rem;
+  padding: 0.9rem;
+  border-radius: 12px;
+  background: #fdf2f4;
+  border: 1px solid #fecdd3;
+  animation: fadeIn 0.25s ease forwards;
+}
+
+.streamTitle {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #9f1239;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.streamGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.5rem;
+}
+
+@media (max-width: 440px) {
+  .streamGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.streamCard {
+  border: 1.5px solid #fda4af;
+  border-radius: 8px;
+  padding: 0.6rem 0.75rem;
+  background: #ffffff;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.2s ease;
+}
+
+.streamCardActive {
+  border-color: #690b1b;
+  background: #690b1b;
+  color: #ffffff;
+}
+
+.streamCardName {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.streamCardActive .streamCardName {
+  color: #ffffff;
+}
+
+.streamCardSub {
+  font-size: 0.65rem;
+  color: #64748b;
+  margin-top: 1px;
+}
+
+.streamCardActive .streamCardSub {
+  color: #fecdd3;
+}
+
+/* Goals Grid */
+.goalsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.6rem;
+  margin-bottom: 1.1rem;
+}
+
+@media (max-width: 440px) {
+  .goalsGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.goalCard {
+  border: 1.5px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 0.65rem 0.8rem;
+  background: #ffffff;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.goalCard:hover {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+}
+
+.goalCardActive {
+  border-color: #690b1b;
+  background: rgba(105, 11, 27, 0.04);
+}
+
+.goalIcon {
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+.goalCardText {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.goalCardSub {
+  font-size: 0.67rem;
+  color: #64748b;
+  margin-top: 1px;
+}
+
+/* Interest Chips */
+.interestsWrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.interestChip {
+  padding: 0.4rem 0.75rem;
+  border-radius: 20px;
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #475569;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.interestChip:hover {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+}
+
+.interestChipActive {
+  background: #1e293b;
+  border-color: #1e293b;
+  color: #ffffff;
+}
+
+/* Compact Review Summary Card (Step 4) */
+.profileSummaryBox {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 0.9rem 1.1rem;
+  margin-bottom: 1.1rem;
+}
+
+.profileSummaryTitle {
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.6rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.profileSummaryGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.6rem;
+}
+
+.summaryItem {
+  display: flex;
+  flex-direction: column;
+}
+
+.summaryItemLabel {
+  font-size: 0.68rem;
+  color: #64748b;
+  font-weight: 600;
+}
+
+.summaryItemValue {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+/* Post Registration Welcome */
+.welcomeCard {
+  text-align: center;
+  padding: 1rem 0.5rem;
+  animation: fadeIn 0.3s ease forwards;
+}
+
+.welcomeIconWrapper {
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  background: rgba(105, 11, 27, 0.08);
+  color: #690b1b;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.welcomeHeading {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0 0 0.35rem 0;
+}
+
+.welcomeSub {
+  font-size: 0.85rem;
+  color: #64748b;
+  margin: 0 0 1.25rem 0;
+}
+
+.unlockedAssessmentBanner {
+  background: linear-gradient(135deg, #690b1b 0%, #4a0e17 100%);
+  color: #ffffff;
+  border-radius: 14px;
+  padding: 1.25rem 1.1rem;
+  margin-bottom: 1.5rem;
+  text-align: left;
+  box-shadow: 0 8px 20px rgba(105, 11, 27, 0.2);
+}
+
+.unlockedBadge {
+  display: inline-block;
+  font-size: 0.65rem;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 12px;
+  background: #22c55e;
+  color: #ffffff;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.5rem;
+}
+
+.unlockedTitle {
+  font-size: 1.05rem;
+  font-weight: 800;
+  margin: 0 0 0.35rem 0;
+  color: #ffffff;
+}
+
+.unlockedDescription {
+  font-size: 0.78rem;
+  opacity: 0.9;
+  margin: 0;
+  line-height: 1.4;
+  color: #fce7f3;
+}

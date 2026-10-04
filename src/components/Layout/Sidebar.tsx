@@ -18,6 +18,10 @@ export default function Sidebar({ userRole, userName, userEmail }: SidebarProps)
   const [isOpen, setIsOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(true);
   const [parentStatus, setParentStatus] = useState<{ isUnlocked: boolean; latestResultId?: string; hasPendingParentTest?: boolean }>({ isUnlocked: false });
+  const [psychUserStatus, setPsychUserStatus] = useState<{
+    resultsByType?: Record<string, { resultId: string; reportUrl: string }>;
+    latestResultId?: string;
+  } | null>(null);
   
   const psychType = searchParams.get('type') || 'senior';
 
@@ -32,6 +36,15 @@ export default function Sidebar({ userRole, userName, userEmail }: SidebarProps)
         }
       })
       .catch(() => setParentStatus({ isUnlocked: false }));
+
+    fetch('/api/psychometric-test/user-status')
+      .then(res => res.json())
+      .then(data => {
+        if (data.authenticated && data.resultsByType) {
+          setPsychUserStatus(data);
+        }
+      })
+      .catch(() => {});
   }, [pathname]);
 
   const isActive = (href: string) => {
@@ -96,6 +109,9 @@ export default function Sidebar({ userRole, userName, userEmail }: SidebarProps)
 
   const handleLogout = async () => {
     try {
+      const { auth } = await import('@/lib/firebase');
+      const { signOut } = await import('firebase/auth');
+      await signOut(auth).catch(() => {});
       await fetch('/api/auth/logout', { method: 'POST' });
       window.location.href = '/auth';
     } catch {
@@ -114,7 +130,7 @@ export default function Sidebar({ userRole, userName, userEmail }: SidebarProps)
       {/* Logo Block */}
       <div className={styles.sidebarLogoBlock}>
         <div className={styles.sidebarLogo}>
-          <span className="brand-red">Abroad</span> <span>Simplified</span>
+          <span className="brand-red">Career</span> <span>Simplified</span>
         </div>
         <button className={styles.sidebarClose} onClick={closeSidebar} aria-label="Close sidebar">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -201,6 +217,18 @@ export default function Sidebar({ userRole, userName, userEmail }: SidebarProps)
           {/* Section: CAREER & STUDY ABROAD */}
           <nav className={styles.sidebarNavSection}>
             <p className={styles.navLabel}>CAREER & STUDY ABROAD</p>
+            <div className={styles.navItem}>
+              <Link
+                href="/career-roadmap"
+                onClick={handleLinkClick}
+                className={`${styles.navLink} ${pathname === '/career-roadmap' ? styles.navLinkActive : ''}`}
+              >
+                <span className={styles.navLinkIcon}>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></svg>
+                </span>
+                <span className={styles.navLinkText}>Career Roadmap Studio</span>
+              </Link>
+            </div>
             <div className={styles.navItem}>
               <Link
                 href="/university-finder"
@@ -392,9 +420,18 @@ export default function Sidebar({ userRole, userName, userEmail }: SidebarProps)
               </div>
             </nav>
 
-            {/* Study Abroad Tools */}
+            {/* Career & Planning Tools */}
             <nav className={styles.sidebarNavSection}>
-              <p className={styles.navLabel}>Study Abroad Tools</p>
+              <p className={styles.navLabel}>{pathname?.startsWith('/career-roadmap') ? 'Career Tools' : 'Career & Planning Tools'}</p>
+
+              <div className={styles.navItem}>
+                <Link href="/career-roadmap" onClick={handleLinkClick} className={`${styles.navLink} ${isActive('/career-roadmap') ? styles.navLinkActive : ''}`}>
+                  <span className={styles.navLinkIcon}>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></svg>
+                  </span>
+                  <span className={styles.navLinkText}>Career Roadmap Studio</span>
+                </Link>
+              </div>
 
               <div className={styles.navItem}>
                 <Link href="/university-finder" onClick={handleLinkClick} className={`${styles.navLink} ${isActive('/university-finder') ? styles.navLinkActive : ''}`}>
@@ -431,15 +468,55 @@ export default function Sidebar({ userRole, userName, userEmail }: SidebarProps)
                   </svg>
                 </button>
                 <div className={styles.navSubLinks}>
-                  <Link href="/psychometric-test?type=junior" onClick={handleLinkClick} className={`${styles.navSubLink} ${isActive('/psychometric-test') && psychType === 'junior' ? styles.navSubLinkActive : ''}`}>
-                    7th - 9th Grade Test
-                  </Link>
-                  <Link href="/psychometric-test?type=grade10" onClick={handleLinkClick} className={`${styles.navSubLink} ${isActive('/psychometric-test') && psychType === 'grade10' ? styles.navSubLinkActive : ''}`}>
-                    10th Grade Test
-                  </Link>
-                  <Link href="/psychometric-test?type=senior" onClick={handleLinkClick} className={`${styles.navSubLink} ${isActive('/psychometric-test') && psychType === 'senior' ? styles.navSubLinkActive : ''}`}>
-                    11th - 12th Grade Test
-                  </Link>
+                  {(() => {
+                    const juniorRes = psychUserStatus?.resultsByType?.['junior'];
+                    const grade10Res = psychUserStatus?.resultsByType?.['grade10'];
+                    const seniorRes = psychUserStatus?.resultsByType?.['senior'];
+
+                    return (
+                      <>
+                        <Link 
+                          href={juniorRes ? juniorRes.reportUrl : "/psychometric-test?type=junior"} 
+                          onClick={handleLinkClick} 
+                          className={`${styles.navSubLink} ${isActive('/psychometric-test') && (psychType === 'junior' || searchParams.get('resultId') === juniorRes?.resultId) ? styles.navSubLinkActive : ''}`}
+                          style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}
+                        >
+                          <span>7th - 9th Grade Test</span>
+                          {juniorRes && (
+                            <span style={{ fontSize: '10.5px', padding: '1px 5px', borderRadius: '4px', background: '#dcfce7', color: '#166534', fontWeight: 700 }}>
+                              ✓ Report
+                            </span>
+                          )}
+                        </Link>
+                        <Link 
+                          href={grade10Res ? grade10Res.reportUrl : "/psychometric-test?type=grade10"} 
+                          onClick={handleLinkClick} 
+                          className={`${styles.navSubLink} ${isActive('/psychometric-test') && (psychType === 'grade10' || searchParams.get('resultId') === grade10Res?.resultId) ? styles.navSubLinkActive : ''}`}
+                          style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}
+                        >
+                          <span>10th Grade Test</span>
+                          {grade10Res && (
+                            <span style={{ fontSize: '10.5px', padding: '1px 5px', borderRadius: '4px', background: '#dcfce7', color: '#166534', fontWeight: 700 }}>
+                              ✓ Report
+                            </span>
+                          )}
+                        </Link>
+                        <Link 
+                          href={seniorRes ? seniorRes.reportUrl : "/psychometric-test?type=senior"} 
+                          onClick={handleLinkClick} 
+                          className={`${styles.navSubLink} ${isActive('/psychometric-test') && (psychType === 'senior' || searchParams.get('resultId') === seniorRes?.resultId) ? styles.navSubLinkActive : ''}`}
+                          style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}
+                        >
+                          <span>11th - 12th Grade Test</span>
+                          {seniorRes && (
+                            <span style={{ fontSize: '10.5px', padding: '1px 5px', borderRadius: '4px', background: '#dcfce7', color: '#166534', fontWeight: 700 }}>
+                              ✓ Report
+                            </span>
+                          )}
+                        </Link>
+                      </>
+                    );
+                  })()}
                   {parentStatus.isUnlocked ? (
                     <Link 
                       href={`/parent-assessment?resultId=${parentStatus.latestResultId}`} 

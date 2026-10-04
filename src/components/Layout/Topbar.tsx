@@ -17,10 +17,11 @@ export default function Topbar() {
     window.addEventListener('scroll', handleScroll, { passive: true });
     handleScroll(); // Check on mount
 
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.removeEventListener('scroll', handleScroll);
   }, []);
 
   const isTestPage = pathname === '/iq-test/test';
+  const isRoadmap = pathname?.startsWith('/career-roadmap');
 
   const toggleSidebar = () => {
     window.dispatchEvent(new Event('toggle-sidebar'));
@@ -42,18 +43,22 @@ export default function Topbar() {
             </svg>
           </button>
         )}
-        <Link href="/" className={styles.topbarLogo}>
-          <span className="brand-red">Abroad</span>{' '}
+        <Link href={isRoadmap ? "/career-roadmap" : "/"} className={styles.topbarLogo}>
+          <span className="brand-red">Career</span>{' '}
           <span>Simplified</span>
         </Link>
       </div>
 
-      <div className={styles.topbarCenter}>Think Beyond Your Boundaries</div>
+      <div className={styles.topbarCenter}>
+        {!isRoadmap && 'Think Beyond Your Boundaries'}
+      </div>
 
       <div className={styles.topbarRight}>
-        <Link href="#tools" className={styles.btnTopbarCta}>
-          Study Abroad Tools
-        </Link>
+        {!isRoadmap && (
+          <Link href="#tools" className={styles.btnTopbarCta}>
+            Career & Study Tools
+          </Link>
+        )}
         <button className={styles.bellBtn} aria-label="Notifications">
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />

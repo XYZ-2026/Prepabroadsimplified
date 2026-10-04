@@ -3,11 +3,11 @@
 import { Brain, Star, Target, BookOpen, Briefcase, Zap, Dumbbell, TrendingUp, ClipboardList, BarChart2, Calculator, Microscope, Calendar, PenTool, X, GraduationCap, ChevronRight, Lock, CheckCircle2 } from 'lucide-react';
 import React, { useState, useEffect, useRef, useCallback, Suspense } from "react";
 import Script from "next/script";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import PremiumToolsCards from "@/components/PremiumToolsCards";
 import TermsPopup from "@/components/TermsPopup";
 import FamilyInsights from "./FamilyInsights";
-import PsychometricLandingPage from "@/components/Psychometric/PsychometricLandingPage";
+import PsychometricLandingPage, { LandingEligibility } from "@/components/Psychometric/PsychometricLandingPage";
 import { VariantId } from "@/config/psychometric-landing.config";
 import "./assessment.css";
 import {
@@ -30,11 +30,9 @@ import {
 import { LOGO_BASE64 } from '@/lib/logo-base64';
 import { EditorialStudent } from './class10_editorial_engine';
 import { generatePersonalization } from './class10_personalization';
-import { buildClass10ExecutiveHTMLReport } from './class10_html_report_builder';
-import { buildClass10ExecutiveSummaryHTMLReport } from './class10_executive_summary_builder';
+import { buildClass10ExecutiveHTMLReport, buildUniversalExecutiveHTMLReport } from './class10_html_report_builder';
+import { buildClass10ExecutiveSummaryHTMLReport, buildUniversalExecutiveSummaryHTMLReport } from './class10_executive_summary_builder';
 import { adaptReportData, resolveReportVariant } from './report-engine/adapters';
-import { buildUniversalExecutiveHTMLReport } from './report-engine/universal-html-report-builder';
-import { buildUniversalExecutiveSummaryHTMLReport } from './report-engine/universal-executive-summary-builder';
 import { getVariantConfig } from './report-engine/universal-report-schema';
 import ReportViewerShell from '@/components/Report/ReportViewerShell';
 import { jsPDF } from 'jspdf';
@@ -950,9 +948,11 @@ function getDynamicStudyAbroad(careerName: string, studentName: string) {
 // ─── Main Component ───────────────────────────────────────────────────────────
 function AssessmentPageContent() {
   const searchParams = useSearchParams();
+  const router = useRouter();
   const assessmentType = searchParams.get("type") || "senior";
 
   const [screen, setScreen] = useState<Screen>(searchParams.get("resultId") ? "fetching" : "landing");
+  const [existingResult, setExistingResult] = useState<any>(null);
   const [showTerms, setShowTerms] = useState(false);
   const [reportMode, setReportMode] = useState<'detailed' | 'basic'>('detailed');
   const [viewReportMode, setViewReportMode] = useState<'full' | 'executive'>(searchParams.get("mode") === "executive" ? "executive" : "full");
@@ -998,6 +998,8 @@ function AssessmentPageContent() {
   const [activeJuniorMonth, setActiveJuniorMonth] = useState(1);
   const [active9YearTab, setActive9YearTab] = useState<'matrix' | 1 | 2 | 3 | 4>('matrix');
   const advancingRef = useRef(false);
+  const [userProfile, setUserProfile] = useState<any>(null);
+  const [userAccess, setUserAccess] = useState<any>(null);
 
   useEffect(() => {
     if (screen === "questions" || screen === "loading-r") {
@@ -1016,14 +1018,22 @@ function AssessmentPageContent() {
         .then(res => res.json())
         .then(data => {
           if (data.success && data.result) {
-            setStudent(data.result);
             if (data.reportLocked) {
               setScreen("locked");
               return;
             }
             setScores(data.result.scores);
             setReportData(data.result.narrative);
-            setStudent(data.result.student || data.result);
+
+            // Historical Report Immutability:
+            // Use academicGradeAtAttempt if present, falling back to student grade saved at time of test
+            const rawStudent = data.result.student || data.result;
+            const attemptGrade = data.result.academicGradeAtAttempt || rawStudent.grade || rawStudent.academicGrade;
+            setStudent({
+              ...rawStudent,
+              grade: attemptGrade ? String(attemptGrade) : rawStudent.grade,
+            });
+
             if (data.result.questions) setQuestions(data.result.questions);
             if (data.result.answers) setAnswers(data.result.answers);
             if (data.result.careerAbroadData) setCareerAbroadData(data.result.careerAbroadData);
@@ -1045,12 +1055,46 @@ function AssessmentPageContent() {
         })
         .catch(err => console.error("Error fetching result:", err));
     } else {
-      // Fetch user profile if taking a new test
+      const isRetake = searchParams.get('retake') === 'true';
+      const requestedType = searchParams.get('type') || '';
+
+      // Check if user has already completed a psychometric assessment
+      fetch(`/api/psychometric-test/user-status?type=${encodeURIComponent(requestedType)}`)
+        .then(res => res.json())
+        .then(statusData => {
+          if (statusData.authenticated && statusData.hasCompletedTest && !isRetake) {
+            // Find matching result for the requested type/variant, or fall back to their latest completed result
+            const targetResult = statusData.matchingResult || (statusData.latestResultId ? { reportUrl: statusData.latestReportUrl, resultId: statusData.latestResultId } : null);
+            if (targetResult && targetResult.reportUrl) {
+              console.log('[PSYCHOMETRIC TEST] Found existing completed assessment, redirecting directly to report:', targetResult.reportUrl);
+              router.replace(targetResult.reportUrl);
+              return;
+            }
+          }
+          if (statusData.matchingResult || statusData.latestResultId) {
+            setExistingResult(statusData.matchingResult || statusData.results?.[0] || null);
+          }
+        })
+        .catch(err => console.error('Error checking user psychometric status:', err));
+
+      // Fetch user profile and access policy if taking a new test
       fetch('/api/user/update-profile')
         .then(res => res.json())
         .then(data => {
-          if (data.success && data.user && data.user.name) {
-            setStudent(prev => ({ ...prev, name: data.user.name }));
+          if (data.success && data.user) {
+            setUserProfile(data.user);
+            const access = data.psychometricAccess || data.user.psychometricAccess;
+            if (access) {
+              setUserAccess(access);
+            }
+            setStudent(prev => ({
+              ...prev,
+              name: data.user.name || prev.name,
+              grade: data.user.grade || data.user.academicGrade || prev.grade,
+              school: data.user.schoolName || data.user.currentSchool || prev.school,
+              stream: data.user.stream || prev.stream,
+              email: data.user.email || prev.email,
+            }));
           }
         })
         .catch(() => {});
@@ -1296,13 +1340,13 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
     }
 
     if (assessmentType === "junior") {
-      setStudent((prev) => ({ ...prev, grade: "", stream: "not-selected" }));
+      setStudent((prev) => ({ ...prev, grade: userProfile?.grade || prev.grade || "", stream: "not-selected" }));
     } else if (assessmentType === "grade10") {
       setStudent((prev) => ({ ...prev, grade: "10", stream: "not-selected" }));
-    } else if (assessmentType === "grade12") {
-      setStudent((prev) => ({ ...prev, grade: "", stream: "not-selected" }));
+    } else if (assessmentType === "senior" || assessmentType === "grade12") {
+      setStudent((prev) => ({ ...prev, grade: userProfile?.grade || prev.grade || "12", stream: userProfile?.stream || prev.stream || "not-selected" }));
     }
-  }, [assessmentType]);
+  }, [assessmentType, userProfile]);
 
   const showToast = useCallback((msg: string) => {
     setToastMsg(msg);
@@ -1314,7 +1358,7 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
   function startJuniorAssessment(grade: string) {
     setStudent((p) => ({
       ...p,
-      name: p.name || "Guest Student",
+      name: p.name || userProfile?.name || "Student",
       grade: grade,
       stream: "not-selected",
     }));
@@ -1325,18 +1369,56 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
 
   // ── Landing → Details ──────────────────────────────────────────────────────
   function goToDetails() {
+    if (userAccess && userAccess.status === "PROFILE_INCOMPLETE") {
+      showToast("Please complete your grade in your profile first to unlock your psychometric assessment.");
+      setTimeout(() => {
+        window.location.href = "/dashboard/student/update-profile";
+      }, 1500);
+      return;
+    }
+
+    const activeVariant: VariantId = 
+      assessmentType === "junior" ? "7-9" : 
+      assessmentType === "grade10" ? "10" : "12";
+
+    const isEligible = userAccess ? (
+      (activeVariant === '7-9' && userAccess.eligibleVariant === 'JUNIOR_7_9') ||
+      (activeVariant === '10' && userAccess.eligibleVariant === 'CLASS_10') ||
+      (activeVariant === '12' && userAccess.eligibleVariant === 'SENIOR_12')
+    ) : true;
+
+    if (userAccess && !isEligible) {
+      showToast(`Your registered grade is ${userAccess.gradeLabel || userAccess.grade}. Please take the ${userAccess.eligibleTestName || 'assigned assessment'}.`);
+      if (userAccess.eligibleHref) {
+        setTimeout(() => {
+          window.location.href = userAccess.eligibleHref;
+        }, 1500);
+      }
+      return;
+    }
+
     if (assessmentType === "junior") {
-      setJuniorGradeSelectorOpen(true);
+      const canonicalGrade = student.grade || userProfile?.grade || userProfile?.academicGrade;
+      if (canonicalGrade && ["7", "8", "9"].includes(String(canonicalGrade))) {
+        startJuniorAssessment(String(canonicalGrade));
+      } else {
+        setJuniorGradeSelectorOpen(true);
+      }
     } else if (assessmentType === "grade10") {
       setStudent((p) => ({
         ...p,
-        name: p.name || "Guest Student",
+        name: p.name || userProfile?.name || "Student",
         grade: "10",
         stream: "not-selected",
       }));
       setScreen("loading-q");
       loadQuestions("not-selected");
     } else {
+      setStudent((p) => ({
+        ...p,
+        name: p.name || userProfile?.name || "Student",
+        grade: p.grade || userProfile?.grade || "12",
+      }));
       setScreen("details");
       setStreamStep("main");
     }
@@ -1346,8 +1428,8 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
   function startAssessmentWithStream(stream: string) {
     setStudent((p) => ({
       ...p,
-      name: p.name || "Guest Student",
-      grade: "12",
+      name: p.name || userProfile?.name || "Student",
+      grade: p.grade || userProfile?.grade || "12",
       stream: stream,
     }));
     setScreen("loading-q");
@@ -1496,6 +1578,15 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
         })
       });
       const data = await res.json();
+      if (res.status === 403 || !res.ok) {
+        showToast(data.message || data.error || "Submission rejected: your grade is not eligible for this assessment.");
+        if (data.redirectUrl) {
+          setTimeout(() => {
+            window.location.href = data.redirectUrl;
+          }, 2000);
+        }
+        return;
+      }
       if (data.success && data.resultId) {
         // Keep the loading screen visible during navigation (don't switch to "landing")
         window.location.href = `/psychometric-test/result/${data.resultId}`;
@@ -1779,7 +1870,7 @@ Return ONLY valid JSON with this exact structure (no markdown):
           "Khan Academy (Free conceptual foundation courses)",
           "Coursera / edX (Introductory university-level modules)",
           "Anki / Quizlet (Spaced repetition study decks)",
-          "Abroad Simplified Advisory Portal (Career roadmap guidance)"
+          "Career Simplified Advisory Portal (Career roadmap guidance)"
         ],
       },
       psychologicalSummary: {
@@ -2134,11 +2225,47 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
         const activeVariant: VariantId = 
           assessmentType === "junior" ? "7-9" : 
           assessmentType === "grade10" ? "10" : "12";
+
+        const isEligible = userAccess ? (
+          (activeVariant === '7-9' && userAccess.eligibleVariant === 'JUNIOR_7_9') ||
+          (activeVariant === '10' && userAccess.eligibleVariant === 'CLASS_10') ||
+          (activeVariant === '12' && userAccess.eligibleVariant === 'SENIOR_12')
+        ) : true;
+
+        const landingEligibility: LandingEligibility | undefined = userAccess ? {
+          isEligible,
+          studentGradeLabel: userAccess.gradeLabel || (userAccess.grade ? `Grade ${userAccess.grade}` : undefined),
+          targetDescription: userAccess.eligibleAssessment?.targetDescription,
+          eligibleHref: userAccess.eligibleHref,
+          eligibleTestName: userAccess.eligibleTestName,
+          status: userAccess.status,
+        } : undefined;
         
         return (
           <PsychometricLandingPage 
             variant={activeVariant} 
-            onStart={() => setShowTerms(true)} 
+            existingResultId={existingResult?.resultId}
+            existingResultDate={existingResult?.createdAt}
+            onStart={() => {
+              if (userAccess && userAccess.status === "PROFILE_INCOMPLETE") {
+                showToast("Please complete your grade in your profile first to unlock your psychometric assessment.");
+                setTimeout(() => {
+                  window.location.href = "/dashboard/student/update-profile";
+                }, 1500);
+                return;
+              }
+              if (landingEligibility && !landingEligibility.isEligible) {
+                showToast(`Your registered grade is ${userAccess.gradeLabel || userAccess.grade}. Please take the ${userAccess.eligibleTestName || 'assigned assessment'}.`);
+                if (userAccess.eligibleHref) {
+                  setTimeout(() => {
+                    window.location.href = userAccess.eligibleHref;
+                  }, 1500);
+                }
+                return;
+              }
+              setShowTerms(true);
+            }} 
+            eligibility={landingEligibility}
           />
         );
       })()}
@@ -2690,7 +2817,7 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
           <div className="as-crm-modal" style={{ maxWidth: '420px', borderRadius: '16px', overflow: 'hidden', padding: 0 }}>
             <div style={{ background: '#690B1B', color: '#fff', padding: '20px 24px', position: 'relative' }}>
               <div style={{ fontSize: '10px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.8px', color: 'rgba(255,255,255,0.7)', marginBottom: '4px' }}>Secure Payment Gateway</div>
-              <h3 style={{ fontSize: '18px', fontWeight: 700, margin: 0 }}>Abroad Simplified</h3>
+              <h3 style={{ fontSize: '18px', fontWeight: 700, margin: 0 }}>Career Simplified</h3>
               <button 
                 onClick={() => setPayModalOpen(false)}
                 style={{ position: 'absolute', top: '20px', right: '20px', background: 'transparent', border: 'none', color: '#fff', fontSize: '16px', cursor: 'pointer' }}

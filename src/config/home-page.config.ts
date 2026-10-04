@@ -44,7 +44,7 @@ export interface FAQItem {
 }
 
 export const HOME_PAGE_CONFIG = {
-  brandName: 'Abroad Simplified',
+  brandName: 'Career Simplified',
   tagline: 'Student Intelligence, Career & Study Abroad Platform',
   heroEyebrow: 'STUDENT INTELLIGENCE × STUDY ABROAD',
   heroHeadlineLine1: 'KNOW YOURSELF.',
@@ -284,12 +284,12 @@ export const HOME_PAGE_CONFIG = {
 
   faqs: [
     {
-      question: 'What is Abroad Simplified?',
-      answer: 'Abroad Simplified is a complete Student Intelligence, Career, and Study Abroad platform. We combine cognitive assessments, psychometric profiling, parent alignment, university discovery, and expert counsellor guidance in one connected platform.'
+      question: 'What is Career Simplified?',
+      answer: 'Career Simplified is a complete Student Intelligence, Career, and Higher Education platform. We combine cognitive assessments, psychometric profiling, parent alignment, university discovery, and expert counsellor guidance in one connected platform.'
     },
     {
       question: 'What can I use the platform for?',
-      answer: 'You can use Abroad Simplified to discover your cognitive strengths, evaluate career directions, compare 500+ global universities across 40 countries, track application deadlines, and consult with academic counsellors.'
+      answer: 'You can use Career Simplified to discover your cognitive strengths, evaluate career directions, compare 500+ global universities across 40 countries, track application deadlines, and consult with academic counsellors.'
     },
     {
       question: 'What does the Psychometric Assessment measure?',
@@ -301,7 +301,7 @@ export const HOME_PAGE_CONFIG = {
     },
     {
       question: 'Can parents participate in the process?',
-      answer: 'Yes! Abroad Simplified features a dedicated Parent Assessment tool that allows parents to share their perspectives on budgets, country preferences, and career expectations. The system generates a side-by-side comparison report for family discussion.'
+      answer: 'Yes! Career Simplified features a dedicated Parent Assessment tool that allows parents to share their perspectives on budgets, country preferences, and career expectations. The system generates a side-by-side comparison report for family discussion.'
     },
     {
       question: 'Can I speak to a counsellor for human guidance?',

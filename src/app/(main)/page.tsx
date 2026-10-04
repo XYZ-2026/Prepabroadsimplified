@@ -34,17 +34,17 @@ import {
 import HeroVisualMockup from '@/components/Home/HeroVisualMockup';
 
 export const metadata: Metadata = {
-  title: 'Abroad Simplified — Student Intelligence, Career & Study Abroad Platform',
+  title: 'Career Simplified — Student Intelligence, Career & Study Abroad Platform',
   description:
     'Understand your strengths, discover career pathways, explore 500+ global universities across USA, UK, Germany, Canada, & Australia, and get expert counsellor guidance.',
   alternates: {
     canonical: '/',
   },
   openGraph: {
-    title: 'Abroad Simplified — Student Intelligence, Career & Study Abroad Platform',
+    title: 'Career Simplified — Student Intelligence, Career & Study Abroad Platform',
     description:
       'Understand your strengths, discover career pathways, explore top global universities, and build your study-abroad plan.',
-    url: 'https://www.abroadsimplified.com/',
+    url: 'https://careersimplified.com/',
   },
 };
 
@@ -139,7 +139,7 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ── 3. SECTION — WHY ABROAD SIMPLIFIED? ── */}
+      {/* ── 3. SECTION — WHY CAREER SIMPLIFIED? ── */}
       <section className="py-20 px-4 md:px-8 max-w-7xl mx-auto">
         <div className="max-w-4xl mx-auto text-center">
           <span className="text-xs font-extrabold text-[#690b1b] uppercase tracking-widest mb-3 block">
@@ -150,7 +150,7 @@ export default async function HomePage() {
           </h2>
           <p className="text-base md:text-lg text-slate-600 leading-relaxed font-medium mb-12">
             Students often begin with a university or a country. <br className="hidden sm:inline" />
-            <strong className="text-slate-900 font-bold">Abroad Simplified begins with the student.</strong>
+            <strong className="text-slate-900 font-bold">Career Simplified begins with the student.</strong>
           </p>
 
           {/* 4-Step Flow Cards */}

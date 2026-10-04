@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import styles from '@/styles/university-finder.module.css';
 import { predictUniversities, UserProfile, PredictionResult, UniversityResult } from '@/lib/university-predictor';
-import { MapPin, Award, Search } from 'lucide-react';
+import { MapPin, Award, Search, AlertCircle } from 'lucide-react';
 import { LOGO_BASE64 } from '@/lib/logo-base64';
 
 export interface InitialDetails {
@@ -24,6 +24,8 @@ export default function UniversityFinderWizard({ initialDetails }: { initialDeta
   const [n_ap, setNAp] = useState(0);
   const [apScores, setApScores] = useState<number[]>([]);
   const [results, setResults] = useState<PredictionResult | null>(null);
+  const [formError, setFormError] = useState<string | null>(null);
+  const [pdfError, setPdfError] = useState<string | null>(null);
 
   // Load from localStorage on mount
   useEffect(() => {
@@ -40,10 +42,11 @@ export default function UniversityFinderWizard({ initialDetails }: { initialDeta
 
   const handleSaveDetails = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!details.name || !details.email || !details.mobile || !details.state || !details.city) {
-      alert("Please fill all details");
+    if (!details.name?.trim() || !details.email?.trim() || !details.mobile?.trim() || !details.state?.trim() || !details.city?.trim()) {
+      setFormError("Please fill in all details (Full Name, Email, Mobile Number, State, City) to proceed.");
       return;
     }
+    setFormError(null);
     localStorage.setItem('STUDENT_DETAILS', JSON.stringify(details));
     setStep(2);
   };
@@ -86,6 +89,24 @@ export default function UniversityFinderWizard({ initialDetails }: { initialDeta
       <div className={styles.wizardCard}>
         {renderStepper()}
         <h1 className={styles.wizardTitle}>Enter Student Details</h1>
+        {formError && (
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '10px',
+            backgroundColor: '#fef2f2',
+            border: '1px solid #f87171',
+            borderRadius: '10px',
+            padding: '12px 16px',
+            marginBottom: '18px',
+            color: '#991b1b',
+            fontSize: '13px',
+            fontWeight: 500
+          }}>
+            <AlertCircle size={18} style={{ flexShrink: 0 }} />
+            <span>{formError}</span>
+          </div>
+        )}
         <form onSubmit={handleSaveDetails}>
           <div className={styles.grid2}>
             <div className={styles.inputGroup}>
@@ -262,7 +283,7 @@ export default function UniversityFinderWizard({ initialDetails }: { initialDeta
       await loadScript('https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js');
     } catch (e) {
       console.error("Failed to load PDF generation scripts");
-      alert("Failed to load PDF tools. Please check your connection.");
+      setPdfError("Failed to load PDF generation tools. Please check your network connection and try again.");
       return;
     }
     
@@ -281,7 +302,7 @@ export default function UniversityFinderWizard({ initialDetails }: { initialDeta
       doc.setTextColor(150, 150, 150);
       doc.setFontSize(8);
       doc.setFont(fontNormal, 'normal');
-      doc.text('ABROAD SIMPLIFIED • PERSONALISED UNIVERSITY REPORT', pageWidth / 2, 15, { align: 'center' });
+      doc.text('CAREER SIMPLIFIED • PERSONALISED UNIVERSITY REPORT', pageWidth / 2, 15, { align: 'center' });
       
       doc.setFontSize(10);
       doc.setTextColor(180, 20, 30); // Red accent
@@ -318,10 +339,10 @@ export default function UniversityFinderWizard({ initialDetails }: { initialDeta
     doc.setTextColor(255, 255, 255);
     doc.setFontSize(12);
     doc.setFont(fontNormal, 'bold');
-    doc.text('ABROAD ', margin + 18, 47);
+    doc.text('CAREER ', margin + 18, 47);
     doc.setTextColor(255, 193, 7); // Yellow
     doc.setFont(fontNormal, 'normal');
-    doc.text('SIMPLIFIED', margin + 39, 47);
+    doc.text('SIMPLIFIED', margin + 37, 47);
     
     doc.setTextColor(255, 193, 7); // Yellow
     doc.setFontSize(10);
@@ -365,7 +386,7 @@ export default function UniversityFinderWizard({ initialDetails }: { initialDeta
     doc.setTextColor(150, 150, 150);
     doc.setFont(fontNormal, 'normal');
     doc.text('CONFIDENTIAL & PERSONALISED', margin, pageHeight - 12);
-    doc.text('abroadsimplified.com', pageWidth - margin, pageHeight - 12, { align: 'right' });
+    doc.text('careersimplified.com', pageWidth - margin, pageHeight - 12, { align: 'right' });
 
     // --- PAGE 2: PROFILE SUMMARY ---
     doc.addPage();
@@ -484,7 +505,7 @@ export default function UniversityFinderWizard({ initialDetails }: { initialDeta
     doc.setFontSize(10);
     doc.setTextColor(100, 100, 100);
     doc.setFont(fontNormal, 'normal');
-    doc.text('A full breakdown of 161 universities across your shortlisted countries, ranked from the most\nambitious reach to the safest bet, based on your current profile match.', margin, 45);
+    doc.text(`A full breakdown of ${results.all.length} universities across your shortlisted countries, ranked from the most\nambitious reach to the safest bet, based on your current profile match.`, margin, 45);
 
     const gapHead = ['COUNTRY', 'UNIVERSITY', 'QS RANK', 'REQUIRED', 'YOUR\nMATCH', 'GAP'];
     const gapBody = results.all.map(u => [
@@ -732,7 +753,7 @@ export default function UniversityFinderWizard({ initialDetails }: { initialDeta
     doc.setTextColor(200, 200, 200);
     doc.setFontSize(10);
     doc.setFont(fontNormal, 'normal');
-    doc.text('This report is a snapshot, not a ceiling. Strengthening academics, test scores, and extracurriculars\ncan shift your match percentage meaningfully within a single application cycle. Connect with an\nAbroad Simplified counsellor to turn this data into a personalised action plan.', margin + 15, 55);
+    doc.text('This report is a snapshot, not a ceiling. Strengthening academics, test scores, and extracurriculars\ncan shift your match percentage meaningfully within a single application cycle. Connect with a\nCareer Simplified counsellor to turn this data into a personalised action plan.', margin + 15, 55);
     
     // CTA Button
     doc.setFillColor(220, 53, 69);
@@ -758,6 +779,24 @@ export default function UniversityFinderWizard({ initialDetails }: { initialDeta
           <button onClick={() => setStep(2)} className={styles.btnSecondary}>← Back to Editor</button>
         </div>
       </div>
+      {pdfError && (
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '10px',
+          backgroundColor: '#fef2f2',
+          border: '1px solid #f87171',
+          borderRadius: '10px',
+          padding: '12px 16px',
+          marginBottom: '18px',
+          color: '#991b1b',
+          fontSize: '13px',
+          fontWeight: 500
+        }}>
+          <AlertCircle size={18} style={{ flexShrink: 0 }} />
+          <span>{pdfError}</span>
+        </div>
+      )}
       
       {results.ambitious.length > 0 && (
         <>

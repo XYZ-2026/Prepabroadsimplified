@@ -11,19 +11,21 @@ export default async function CounsellorHomePage() {
 
   const counsellorId = claims.uid;
 
-  // Ensure counsellor document exists in Firestore with role 'counsellor'
+  // Ensure counsellor document exists in Firestore for actual counsellors (never mutate admin accounts)
   try {
-    const userRef = adminDb.collection('users').doc(counsellorId);
-    const userDoc = await userRef.get();
-    if (!userDoc.exists) {
-      await userRef.set({
-        name: claims.name || claims.email?.split('@')[0] || 'Counsellor',
-        email: claims.email || '',
-        role: 'counsellor',
-        createdAt: new Date(),
-      }, { merge: true });
-    } else if (userDoc.data()?.role !== 'counsellor') {
-      await userRef.update({ role: 'counsellor' });
+    if (claims.email !== 'admin@as.com' && !claims.admin && claims.role !== 'admin') {
+      const userRef = adminDb.collection('users').doc(counsellorId);
+      const userDoc = await userRef.get();
+      if (!userDoc.exists) {
+        await userRef.set({
+          name: claims.name || claims.email?.split('@')[0] || 'Counsellor',
+          email: claims.email || '',
+          role: 'counsellor',
+          createdAt: new Date(),
+        }, { merge: true });
+      } else if (!userDoc.data()?.role) {
+        await userRef.update({ role: 'counsellor' });
+      }
     }
   } catch (err) {
     console.error('Error ensuring counsellor doc:', err);

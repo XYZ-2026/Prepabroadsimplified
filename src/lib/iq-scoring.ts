@@ -79,7 +79,7 @@ const PERSONA_MAP: Record<string, string> = {
 };
 
 function generateInsights(userName: string, strength: string, weakness: string, tier: string, iq: number): string {
-  return `Dear ${userName}, based on your performance on the Abroad Simplified Advanced IQ Assessment, you have achieved an overall IQ score of ${iq}, placing you in the '${tier}' cognitive category.
+  return `Dear ${userName}, based on your performance on the Career Simplified Advanced IQ Assessment, you have achieved an overall IQ score of ${iq}, placing you in the '${tier}' cognitive category.
 
 Your primary cognitive strength is ${strength}. In environments requiring rapid processing of ${strength.toLowerCase()} assets, you possess a distinct competitive advantage.
 

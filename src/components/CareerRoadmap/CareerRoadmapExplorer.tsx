@@ -399,6 +399,21 @@ export default function CareerRoadmapExplorer() {
   // PDF Export State
   const [pdfLoading, setPdfLoading] = useState(false);
 
+  // Mobile Mode State
+  const [isMobile, setIsMobile] = useState(false);
+  const [mobileTab, setMobileTab] = useState<'map' | 'details'>('map');
+  const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(typeof window !== 'undefined' && window.innerWidth <= 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
   // Toast feedback
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
@@ -1075,8 +1090,8 @@ export default function CareerRoadmapExplorer() {
 
   return (
     <div className="roadmapStudio">
-      {/* ── Studio Toolbar Header ── */}
-      <header className="studioHeader">
+      {/* ── Studio Toolbar Header (Desktop) ── */}
+      <header className="studioHeader studioHeaderDesktop">
         <div className="studioTitleGroup">
           <h1 className="studioMainTitle">
             Career Roadmap Studio
@@ -1188,6 +1203,180 @@ export default function CareerRoadmapExplorer() {
         </div>
       </header>
 
+      {/* ── Studio Toolbar Header (Mobile Optimized) ── */}
+      <header className="mobileStudioHeader">
+        <div className="mobileHeaderTopRow">
+          <div className="mobileHeaderBrand">
+            <span>Career Roadmap</span>
+          </div>
+
+          {/* Mobile View Toggle: [ MAP ] [ DETAILS ] */}
+          {!showStartScreen && (
+            <div className="mobileTabSwitcher" role="tablist">
+              <button
+                type="button"
+                role="tab"
+                aria-selected={mobileTab === 'map'}
+                className={`mobileTabBtn ${mobileTab === 'map' ? 'mobileTabBtnActive' : ''}`}
+                onClick={() => setMobileTab('map')}
+              >
+                🗺️ Map
+              </button>
+              <button
+                type="button"
+                role="tab"
+                aria-selected={mobileTab === 'details'}
+                className={`mobileTabBtn ${mobileTab === 'details' ? 'mobileTabBtnActive' : ''}`}
+                onClick={() => setMobileTab('details')}
+                disabled={!currentNodeDetail && !detailLoading}
+              >
+                📄 Details
+              </button>
+            </div>
+          )}
+
+          {/* Action icons */}
+          <div className="mobileHeaderActions">
+            <button
+              type="button"
+              className="mobileIconBtn"
+              onClick={() => setMobileSearchOpen(true)}
+              title="Search Pathways"
+              aria-label="Search pathways"
+            >
+              🔍
+            </button>
+
+            {!showStartScreen && (
+              <button
+                type="button"
+                className="mobileSaveBtn"
+                onClick={() => setShowSaveModal(true)}
+                title="Save Pathway"
+              >
+                {isSaved ? '✓ Saved' : 'Save'}
+              </button>
+            )}
+
+            <button
+              type="button"
+              className="mobileIconBtn"
+              onClick={() => setMobileMenuOpen(prev => !prev)}
+              title="More Options"
+              aria-label="More options"
+            >
+              ⋮
+            </button>
+          </div>
+        </div>
+
+        {/* Mobile Dropdown Menu */}
+        {mobileMenuOpen && (
+          <div className="mobileActionsDropdown">
+            <button
+              type="button"
+              className="mobileActionMenuItem"
+              onClick={() => {
+                setMobileMenuOpen(false);
+                openLoadRoadmapsModal();
+              }}
+            >
+              📂 Saved Roadmaps
+            </button>
+            {!showStartScreen && (
+              <button
+                type="button"
+                className="mobileActionMenuItem"
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  handleDownloadPDF();
+                }}
+                disabled={pdfLoading}
+              >
+                📥 {pdfLoading ? 'Generating PDF...' : 'Download PDF'}
+              </button>
+            )}
+            {!showStartScreen && (
+              <button
+                type="button"
+                className="mobileActionMenuItem"
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  setShowStartOverModal(true);
+                }}
+              >
+                ↺ Start Over
+              </button>
+            )}
+            {isStaff && (
+              <button
+                type="button"
+                className="mobileActionMenuItem"
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  setInspectorMode(!inspectorMode);
+                }}
+              >
+                🔍 Toggle Inspector Mode
+              </button>
+            )}
+          </div>
+        )}
+      </header>
+
+      {/* Mobile Search Modal Overlay */}
+      {mobileSearchOpen && (
+        <div className="mobileSearchModalOverlay" onClick={() => setMobileSearchOpen(false)}>
+          <div className="mobileSearchModal" onClick={e => e.stopPropagation()}>
+            <div className="mobileSearchHeader">
+              <span style={{ fontSize: '15px' }}>🔍</span>
+              <input
+                className="mobileSearchInput"
+                type="text"
+                autoFocus
+                placeholder="Search careers, degrees, programmes..."
+                value={searchQuery}
+                onChange={e => handleSearch(e.target.value)}
+              />
+              <button
+                type="button"
+                className="mobileSearchClose"
+                onClick={() => setMobileSearchOpen(false)}
+                aria-label="Close search"
+              >
+                ✕
+              </button>
+            </div>
+            <div className="mobileSearchResultsList">
+              {searchResults.length === 0 && searchQuery.trim() !== '' ? (
+                <div style={{ padding: '24px', textAlign: 'center', color: 'var(--roadmap-slate-400)', fontSize: '13px' }}>
+                  No matching nodes found.
+                </div>
+              ) : (
+                searchResults.map(res => (
+                  <div
+                    key={res.id}
+                    className="searchResultItem"
+                    onClick={() => {
+                      handleSelectSearchResult(res);
+                      setMobileSearchOpen(false);
+                    }}
+                  >
+                    <div className="searchResultIcon">
+                      <NodeIcon type={res.type} size={15} />
+                    </div>
+                    <div className="searchResultText">
+                      <div className="searchResultName">{res.label}</div>
+                      <div className="searchResultType">{res.typeLabel}</div>
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* ── Sticky Breadcrumb / Stepper ── */}
       {selectedPath.length > 0 && !showStartScreen && (
         <nav className="breadcrumbBar" aria-label="Roadmap Path Navigation">
@@ -1219,7 +1408,10 @@ export default function CareerRoadmapExplorer() {
       {/* ── Main Studio Body ── */}
       <div className="studioBody">
         {/* Graph Canvas or Start Screen */}
-        <main className="graphCanvas" ref={canvasContainerRef}>
+        <main
+          className={`graphCanvas ${isMobile ? (mobileTab === 'map' ? 'graphCanvasMobileActive' : 'graphCanvasMobileHidden') : ''}`}
+          ref={canvasContainerRef}
+        >
           {showStartScreen ? (
             <StartScreen
               startOptions={startOptions}
@@ -1519,10 +1711,55 @@ export default function CareerRoadmapExplorer() {
               </button>
             </div>
           )}
+          {/* Mobile Focus Floating Dock (Tap to view details & next options) */}
+          {isMobile && !showStartScreen && currentNodeDetail && (
+            <div className="mobileFocusFloatingDock">
+              <div className="mobileFocusInfo">
+                <div className="mobileFocusType">
+                  Focus · Step {currentStepNumber}
+                </div>
+                <div className="mobileFocusName">
+                  {currentNodeDetail.node.displayName || currentNodeDetail.node.canonicalName}
+                </div>
+              </div>
+              <button
+                type="button"
+                className="mobileFocusDetailsBtn"
+                onClick={() => setMobileTab('details')}
+              >
+                <span>Details & Next</span>
+                <span>→</span>
+              </button>
+            </div>
+          )}
         </main>
 
         {/* ── Right Detail Panel (Information Surface) ── */}
-        <aside className={`detailPanel ${!currentNodeDetail && !detailLoading ? 'detailPanelHidden' : ''}`}>
+        <aside
+          className={`detailPanel ${
+            isMobile
+              ? mobileTab === 'details'
+                ? 'detailPanelMobileActive'
+                : 'detailPanelMobileHidden'
+              : !currentNodeDetail && !detailLoading
+              ? 'detailPanelHidden'
+              : ''
+          }`}
+        >
+          {isMobile && (
+            <div className="mobileDetailsTopBar">
+              <button
+                type="button"
+                className="mobileDetailsBackBtn"
+                onClick={() => setMobileTab('map')}
+              >
+                ← Back to Map View
+              </button>
+              <span className="mobileDetailsStepBadge">
+                Step {currentStepNumber} of {selectedPath.length}
+              </span>
+            </div>
+          )}
           {detailLoading ? (
             <div className="detailLoading" style={{ padding: '40px 20px', textAlign: 'center' }}>
               <div className="loadingSpinner" style={{ margin: '0 auto 12px auto' }} />
@@ -1536,7 +1773,7 @@ export default function CareerRoadmapExplorer() {
               inspectorMode={inspectorMode}
               isCompared={comparedNodeIds.includes(currentNodeDetail.node.id)}
               onToggleCompare={() => handleToggleCompare(currentNodeDetail.node.id)}
-              onClose={() => {}}
+              onClose={() => setMobileTab('map')}
               onSelectFrontierNode={(id, label, type) => handleNodeCardClick(id, label, type)}
               onSaveRoadmap={() => setShowSaveModal(true)}
               onDownloadPDF={handleDownloadPDF}

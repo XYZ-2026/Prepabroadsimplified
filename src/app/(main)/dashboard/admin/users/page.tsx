@@ -108,6 +108,66 @@ export default async function AdminUsersPage() {
         </div>
       </div>
 
+      {/* Admin Master Data Export Card */}
+      <div style={{
+        background: '#ffffff',
+        border: '1.5px solid #e2e8f0',
+        borderRadius: '12px',
+        padding: '16px 20px',
+        marginBottom: '24px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        flexWrap: 'wrap',
+        gap: '12px',
+        boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <div style={{
+            width: '40px',
+            height: '40px',
+            borderRadius: '10px',
+            background: 'linear-gradient(135deg, #10B981 0%, #059669 100%)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            color: '#fff',
+            fontSize: '18px',
+          }}>
+            📊
+          </div>
+          <div>
+            <div style={{ fontWeight: 800, fontSize: '14.5px', color: '#0f172a' }}>
+              Master Career Roadmap Dataset (Excel Export)
+            </div>
+            <div style={{ fontSize: '12px', color: '#64748b' }}>
+              Complete runtime graph + Layer B enrichment + Study abroad data (Single Sheet: ROADMAP_MASTER_DATA · 3,513 records)
+            </div>
+          </div>
+        </div>
+        <a
+          href="/api/admin/roadmap-export"
+          download="Career_Roadmap_COMPLETE_DATA.xlsx"
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '8px',
+            padding: '10px 18px',
+            borderRadius: '10px',
+            background: 'var(--color-red-deep, #690b1b)',
+            color: '#ffffff',
+            fontWeight: 700,
+            fontSize: '13px',
+            textDecoration: 'none',
+            boxShadow: '0 2px 6px rgba(105, 11, 27, 0.25)',
+            minHeight: '44px',
+          }}
+        >
+          <span>Download Master Dataset (.xlsx)</span>
+          <span>↓</span>
+        </a>
+      </div>
+
       <UsersTableClient initialUsers={initialUsers} />
     </div>
   );

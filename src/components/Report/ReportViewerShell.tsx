@@ -49,11 +49,34 @@ function prepareReportHtml(html: string): string {
       /* Hide report's own sticky nav — viewer shell provides toolbar */
       nav.sticky { display: none !important; }
       /* Remove top margin/padding that the nav would have caused */
-      body { padding-top: 0 !important; margin-top: 0 !important; }
+      body { 
+        padding-top: 0 !important; 
+        margin-top: 0 !important; 
+        overflow-x: hidden !important;
+      }
       /* Ensure pages have slight gap for scrolling clarity */
-      .as-report-page { margin-bottom: 16px !important; }
+      .as-report-page { 
+        margin-bottom: 16px !important; 
+        box-shadow: 0 4px 16px rgba(0,0,0,0.08) !important;
+      }
       /* Smooth scrolling inside iframe */
       html { scroll-behavior: smooth; }
+
+      @media screen and (max-width: 820px) {
+        body {
+          padding: 8px 4px !important;
+          background: #e2e8f0 !important;
+          display: flex !important;
+          flex-direction: column !important;
+          align-items: center !important;
+        }
+        .as-report-page {
+          max-width: calc(100vw - 12px) !important;
+          margin-left: auto !important;
+          margin-right: auto !important;
+          box-sizing: border-box !important;
+        }
+      }
     </style>
   `;
 
@@ -61,6 +84,40 @@ function prepareReportHtml(html: string): string {
   const trackingScript = `
     <script id="viewer-shell-tracking">
     (function() {
+      // 0. Responsive fit-to-width scaling on mobile
+      function adjustMobileScale() {
+        var screenW = window.innerWidth;
+        if (screenW < 800) {
+          var targetW = screenW - 12;
+          var baseW = 794; // 210mm standard CSS width
+          var factor = Math.max(0.40, Math.min(1.0, targetW / baseW));
+          var pagesList = document.querySelectorAll('.as-report-page');
+          pagesList.forEach(function(p) {
+            p.style.transformOrigin = 'top center';
+            if ('zoom' in p.style) {
+              p.style.zoom = String(Number(factor.toFixed(3)));
+            } else {
+              p.style.transform = 'scale(' + Number(factor.toFixed(3)) + ')';
+              p.style.marginBottom = 'calc(297mm * ' + factor + ' - 297mm + 16px)';
+            }
+          });
+        } else {
+          var pagesList = document.querySelectorAll('.as-report-page');
+          pagesList.forEach(function(p) {
+            if ('zoom' in p.style) {
+              p.style.zoom = '1';
+            } else {
+              p.style.transform = 'none';
+              p.style.marginBottom = '16px';
+            }
+          });
+        }
+      }
+      window.addEventListener('resize', adjustMobileScale);
+      window.addEventListener('load', adjustMobileScale);
+      setTimeout(adjustMobileScale, 150);
+      setTimeout(adjustMobileScale, 600);
+
       // 1. Stamp 1-indexed data-page and id on every .as-report-page element as absolute guarantee
       var pages = document.querySelectorAll('.as-report-page');
       pages.forEach(function(el, idx) {
@@ -174,7 +231,18 @@ export default function ReportViewerShell({
   const [activePage, setActivePage] = useState(1);
   const [iframeReady, setIframeReady] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const [mobileSectionsOpen, setMobileSectionsOpen] = useState(false);
   const totalPages = mode === 'full' ? 56 : 15;
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(typeof window !== 'undefined' && window.innerWidth <= 1024);
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   // ── Send scroll command to iframe ──
   const scrollToPage = useCallback((pageNum: number) => {
@@ -266,6 +334,335 @@ export default function ReportViewerShell({
   const MAROON_DARK = '#4A0E17';
   const GOLD = '#C9A55D';
   const CREAM = '#FAF8F5';
+
+  if (isMobile) {
+    return (
+      <div
+        className="report-viewer-shell no-print"
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          height: '100vh',
+          width: '100vw',
+          overflow: 'hidden',
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          zIndex: 100,
+          background: '#f1f5f9',
+        }}
+      >
+        {/* ── Mobile Top Toolbar ── */}
+        <div
+          style={{
+            height: '52px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            padding: '0 12px',
+            background: '#ffffff',
+            borderBottom: '1px solid #e2e8f0',
+            boxShadow: '0 1px 4px rgba(0,0,0,0.04)',
+            zIndex: 30,
+            gap: '8px',
+            flexShrink: 0,
+          }}
+        >
+          <a
+            href={backHref}
+            style={{
+              display: 'flex', alignItems: 'center', gap: '4px',
+              color: '#334155', fontWeight: 600, fontSize: '12px',
+              textDecoration: 'none', padding: '6px 10px', borderRadius: '8px',
+              background: '#f8fafc', border: '1px solid #cbd5e1',
+            }}
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="19" y1="12" x2="5" y2="12" /><polyline points="12 19 5 12 12 5" />
+            </svg>
+            <span>Back</span>
+          </a>
+
+          {/* Mode Switcher Pill */}
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            background: '#f1f5f9',
+            padding: '2px',
+            borderRadius: '8px',
+            border: '1px solid #cbd5e1',
+            gap: '2px',
+          }}>
+            <button
+              type="button"
+              onClick={() => handleSwitchMode('full')}
+              style={{
+                padding: '4px 9px',
+                borderRadius: '6px',
+                fontSize: '11px',
+                fontWeight: mode === 'full' ? 800 : 600,
+                border: 'none',
+                cursor: 'pointer',
+                background: mode === 'full' ? MAROON : 'transparent',
+                color: mode === 'full' ? '#ffffff' : '#475569',
+              }}
+            >
+              Full (56P)
+            </button>
+            <button
+              type="button"
+              onClick={() => handleSwitchMode('executive')}
+              style={{
+                padding: '4px 9px',
+                borderRadius: '6px',
+                fontSize: '11px',
+                fontWeight: mode === 'executive' ? 800 : 600,
+                border: 'none',
+                cursor: 'pointer',
+                background: mode === 'executive' ? MAROON : 'transparent',
+                color: mode === 'executive' ? '#ffffff' : '#475569',
+              }}
+            >
+              Exec (15P)
+            </button>
+          </div>
+
+          {/* Sections drawer toggle & download */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <button
+              type="button"
+              onClick={() => setMobileSectionsOpen(true)}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '4px',
+                padding: '6px 10px',
+                borderRadius: '8px',
+                fontSize: '11.5px',
+                fontWeight: 700,
+                background: '#f8fafc',
+                color: MAROON,
+                border: `1.5px solid ${MAROON}`,
+                cursor: 'pointer',
+              }}
+            >
+              📑 Sections
+            </button>
+            <button
+              type="button"
+              onClick={mode === 'full' ? onDownloadFull : onDownloadSummary}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '4px',
+                padding: '6px 10px',
+                borderRadius: '8px',
+                fontSize: '11.5px',
+                fontWeight: 700,
+                background: MAROON,
+                color: '#ffffff',
+                border: 'none',
+                cursor: 'pointer',
+              }}
+            >
+              📥 PDF
+            </button>
+          </div>
+        </div>
+
+        {/* ── Mobile Viewport ── */}
+        <div
+          style={{
+            flex: 1,
+            height: 'calc(100vh - 104px)',
+            overflow: 'hidden',
+            background: '#e2e8f0',
+            position: 'relative',
+          }}
+        >
+          {!iframeReady && (
+            <div style={{
+              position: 'absolute', inset: 0, display: 'flex',
+              alignItems: 'center', justifyContent: 'center',
+              background: '#f1f5f9', zIndex: 5,
+              flexDirection: 'column', gap: '12px',
+            }}>
+              <div style={{
+                width: '32px', height: '32px', border: `3px solid #e2e8f0`,
+                borderTopColor: MAROON, borderRadius: '50%',
+                animation: 'spin 0.8s linear infinite',
+              }} />
+              <span style={{ fontSize: '12px', color: '#64748b', fontWeight: 600 }}>
+                Loading {mode === 'full' ? '56' : '15'}-page report...
+              </span>
+            </div>
+          )}
+
+          <iframe
+            ref={iframeRef}
+            srcDoc={preparedHtml}
+            onLoad={() => setIframeReady(true)}
+            title={`${mode === 'full' ? 'Full Diagnostic Report' : 'Executive Career Edition'} — ${studentName}`}
+            style={{
+              width: '100%',
+              height: '100%',
+              border: 'none',
+              display: 'block',
+              opacity: iframeReady ? 1 : 0,
+              transition: 'opacity 0.3s ease',
+            }}
+            sandbox="allow-scripts allow-same-origin"
+          />
+        </div>
+
+        {/* ── Mobile Bottom Navigation Bar (Prev / Next & Page Stepper) ── */}
+        <div
+          style={{
+            height: '52px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            padding: '0 16px',
+            background: '#ffffff',
+            borderTop: '1px solid #e2e8f0',
+            boxShadow: '0 -2px 8px rgba(0,0,0,0.05)',
+            zIndex: 30,
+            flexShrink: 0,
+          }}
+        >
+          <button
+            type="button"
+            onClick={() => {
+              const prev = Math.max(1, activePage - 1);
+              scrollToPage(prev);
+              setActivePage(prev);
+            }}
+            disabled={activePage <= 1}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              padding: '8px 14px',
+              borderRadius: '8px',
+              fontSize: '12px',
+              fontWeight: 700,
+              background: '#f8fafc',
+              border: '1px solid #cbd5e1',
+              color: activePage <= 1 ? '#94a3b8' : '#334155',
+              cursor: activePage <= 1 ? 'not-allowed' : 'pointer',
+              minHeight: '36px',
+            }}
+          >
+            ‹ Prev
+          </button>
+
+          <span style={{ fontSize: '12.5px', fontWeight: 800, color: '#0f172a' }}>
+            Page {activePage} <span style={{ color: '#94a3b8', fontWeight: 500 }}>/ {totalPages}</span>
+          </span>
+
+          <button
+            type="button"
+            onClick={() => {
+              const next = Math.min(totalPages, activePage + 1);
+              scrollToPage(next);
+              setActivePage(next);
+            }}
+            disabled={activePage >= totalPages}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              padding: '8px 14px',
+              borderRadius: '8px',
+              fontSize: '12px',
+              fontWeight: 700,
+              background: activePage >= totalPages ? '#f8fafc' : MAROON,
+              border: activePage >= totalPages ? '1px solid #cbd5e1' : `1px solid ${MAROON}`,
+              color: activePage >= totalPages ? '#94a3b8' : '#ffffff',
+              cursor: activePage >= totalPages ? 'not-allowed' : 'pointer',
+              minHeight: '36px',
+            }}
+          >
+            Next ›
+          </button>
+        </div>
+
+        {/* ── Mobile Sections Drawer ── */}
+        {mobileSectionsOpen && (
+          <div
+            style={{
+              position: 'fixed',
+              inset: 0,
+              background: 'rgba(15, 23, 42, 0.55)',
+              backdropFilter: 'blur(3px)',
+              zIndex: 1000,
+              display: 'flex',
+            }}
+            onClick={() => setMobileSectionsOpen(false)}
+          >
+            <div
+              style={{
+                width: 'min(310px, 85vw)',
+                height: '100%',
+                background: '#ffffff',
+                display: 'flex',
+                flexDirection: 'column',
+                boxShadow: '4px 0 24px rgba(0,0,0,0.2)',
+              }}
+              onClick={e => e.stopPropagation()}
+            >
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                padding: '14px 16px',
+                borderBottom: '1px solid #e2e8f0',
+              }}>
+                <span style={{ fontWeight: 800, fontSize: '14px', color: '#0f172a' }}>
+                  Report Sections
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setMobileSectionsOpen(false)}
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    fontSize: '18px',
+                    color: '#64748b',
+                    cursor: 'pointer',
+                    padding: '4px 8px',
+                  }}
+                >
+                  ✕
+                </button>
+              </div>
+              <div style={{ flex: 1, overflowY: 'auto' }}>
+                <ReportNavigationSidebar
+                  mode={mode}
+                  viewerRole={viewerRole}
+                  studentName={studentName}
+                  studentGrade={studentGrade}
+                  reportId={reportId}
+                  activePage={activePage}
+                  isCollapsed={false}
+                  onToggleCollapse={() => {}}
+                  onSelectPage={(pageNum) => {
+                    scrollToPage(pageNum);
+                    setActivePage(pageNum);
+                    setMobileSectionsOpen(false);
+                  }}
+                  onSwitchMode={(newMode) => {
+                    handleSwitchMode(newMode);
+                    setMobileSectionsOpen(false);
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  }
 
   return (
     <div

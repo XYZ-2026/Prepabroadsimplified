@@ -1924,8 +1924,41 @@ body.test-active .main-content {
 @media (max-width: 768px) {
   .as-form-grid { grid-template-columns: 1fr; }
   .as-two-col { grid-template-columns: 1fr; }
-  .as-q-text { font-size: 17px; }
-  .as-likert-row { grid-template-columns: repeat(3, 1fr); }
+  .as-q-text { font-size: 16px; line-height: 1.5; }
+  .as-opt-btn { min-height: 48px; padding: 14px 16px; }
+  .as-likert-row {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .as-lik-btn {
+    flex-direction: row;
+    justify-content: flex-start;
+    padding: 12px 16px;
+    gap: 14px;
+    min-height: 50px;
+  }
+  .as-lik-emo { font-size: 22px; flex-shrink: 0; }
+  .as-lik-lbl { font-size: 13px; text-align: left; }
+  .as-q-body { padding: 12px 16px 90px 16px; }
+  .as-q-card { padding: 18px 16px; border-radius: 14px; }
+  .as-q-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid var(--border);
+    padding: 12px 16px;
+    margin: 0;
+    z-index: 50;
+    box-shadow: 0 -4px 16px rgba(0,0,0,0.06);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .as-btn-nav { min-height: 44px; padding: 10px 20px; font-size: 14px; }
   .as-rep-kpis { grid-template-columns: repeat(2, 1fr); }
   .as-ap-grid { grid-template-columns: 1fr; }
   .as-indian-rm-grid { grid-template-columns: 1fr; }
@@ -1948,6 +1981,11 @@ body.test-active .main-content {
   .as-q-review-box { padding: 16px; }
   .as-cw { height: 240px; width: 100%; }
   .as-cwsm { height: 240px; width: 100%; }
+}
+
+@media (max-width: 480px) {
+  .as-rep-kpis { grid-template-columns: 1fr; }
+  .as-psych-traits { grid-template-columns: 1fr; }
 }
 
 /* PRINT */

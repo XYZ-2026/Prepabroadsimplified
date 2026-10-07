@@ -524,21 +524,21 @@ export default function IQTestRunnerPage() {
           </div>
 
           {/* Navigation Control Bar */}
-          <div className="mt-8 pt-6 border-t border-slate-100 flex items-center justify-between">
+          <div className="mt-8 pt-6 border-t border-slate-100 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
             <button
               onClick={goPrev}
               disabled={currentIndex === 0}
-              className="px-4 py-2.5 rounded-xl border border-slate-200 text-xs font-bold text-slate-700 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-1.5 transition-colors"
+              className="px-4 py-2.5 min-h-[44px] rounded-xl border border-slate-200 text-xs font-bold text-slate-700 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-1.5 transition-colors"
             >
               <ChevronLeft className="w-4 h-4" />
               Previous
             </button>
 
-            <div className="flex items-center gap-2">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
               {currentIndex < questions.length - 1 ? (
                 <button
                   onClick={goNext}
-                  className="px-5 py-2.5 rounded-xl bg-purple-50 text-[#690b1b] hover:bg-purple-100 text-xs font-bold flex items-center gap-1.5 transition-colors"
+                  className="px-5 py-2.5 min-h-[44px] rounded-xl bg-purple-50 text-[#690b1b] hover:bg-purple-100 text-xs font-bold flex items-center justify-center gap-1.5 transition-colors"
                 >
                   Next Question
                   <ChevronRight className="w-4 h-4" />
@@ -547,7 +547,7 @@ export default function IQTestRunnerPage() {
 
               <button
                 onClick={handleFinishAttemptClick}
-                className="px-6 py-2.5 rounded-xl bg-[#690b1b] text-white hover:bg-[#520815] text-xs font-bold shadow-md transition-colors flex items-center gap-1.5"
+                className="px-6 py-2.5 min-h-[44px] rounded-xl bg-[#690b1b] text-white hover:bg-[#520815] text-xs font-bold shadow-md transition-colors flex items-center justify-center gap-1.5"
               >
                 <span>Finish & Calculate Result</span>
                 <Sparkles className="w-4 h-4" />

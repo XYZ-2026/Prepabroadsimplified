@@ -1627,36 +1627,359 @@
   }
 }
 
+/* ── Mobile Roadmap Mode (<= 768px) ── */
 @media (max-width: 768px) {
-  .studioHeader {
+  .roadmapStudio {
+    height: calc(100vh - var(--topbar-height, 60px));
+  }
+
+  /* Desktop header hidden on mobile */
+  .studioHeaderDesktop {
+    display: none !important;
+  }
+
+  /* Mobile Studio Header */
+  .mobileStudioHeader {
+    display: flex;
     flex-direction: column;
-    align-items: stretch;
-    padding: 12px 16px;
-    gap: 12px;
+    background: var(--roadmap-white);
+    border-bottom: 1px solid var(--roadmap-slate-200);
+    flex-shrink: 0;
+    z-index: 30;
   }
 
-  .studioControls {
+  .mobileHeaderTopRow {
+    display: flex;
+    align-items: center;
     justify-content: space-between;
+    padding: 10px 14px;
+    gap: 8px;
+    border-bottom: 1px solid var(--roadmap-slate-100);
   }
 
-  .searchContainer {
+  .mobileHeaderBrand {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 15px;
+    font-weight: 800;
+    color: var(--roadmap-slate-900);
+    white-space: nowrap;
+  }
+
+  /* Tab Switcher: [ Map ] [ Details ] */
+  .mobileTabSwitcher {
+    display: inline-flex;
+    align-items: center;
+    background: var(--roadmap-slate-100);
+    padding: 3px;
+    border-radius: 8px;
+    gap: 2px;
+  }
+
+  .mobileTabBtn {
+    padding: 6px 14px;
+    font-size: 12px;
+    font-weight: 700;
+    border-radius: 6px;
+    border: none;
+    background: transparent;
+    color: var(--roadmap-slate-600);
+    cursor: pointer;
+    min-height: 34px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    transition: all 0.15s ease;
+  }
+
+  .mobileTabBtnActive {
+    background: var(--roadmap-white);
+    color: var(--roadmap-primary);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  }
+
+  .mobileHeaderActions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .mobileIconBtn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    border: 1px solid var(--roadmap-slate-200);
+    background: var(--roadmap-white);
+    color: var(--roadmap-slate-700);
+    cursor: pointer;
+    font-size: 13px;
+    transition: all 0.15s ease;
+  }
+
+  .mobileIconBtn:active {
+    background: var(--roadmap-slate-100);
+    transform: scale(0.96);
+  }
+
+  .mobileSaveBtn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 0 10px;
+    height: 36px;
+    border-radius: 8px;
+    border: 1px solid var(--roadmap-primary);
+    background: var(--roadmap-primary);
+    color: var(--roadmap-white);
+    font-size: 11.5px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  /* Mobile Actions Menu Dropdown */
+  .mobileActionsDropdown {
+    position: absolute;
+    top: 50px;
+    right: 12px;
+    background: var(--roadmap-white);
+    border: 1px solid var(--roadmap-slate-200);
+    border-radius: 12px;
+    box-shadow: 0 10px 28px rgba(15, 23, 42, 0.14);
+    padding: 6px;
+    min-width: 190px;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .mobileActionMenuItem {
+    display: flex;
+    align-items: center;
+    gap: 10px;
     width: 100%;
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: none;
+    background: transparent;
+    color: var(--roadmap-slate-800);
+    font-size: 13px;
+    font-weight: 600;
+    text-align: left;
+    cursor: pointer;
   }
 
-  .searchInput:focus {
-    width: 100%;
+  .mobileActionMenuItem:hover,
+  .mobileActionMenuItem:active {
+    background: var(--roadmap-slate-100);
   }
 
-  .detailPanel {
+  /* Breadcrumb path on mobile */
+  .breadcrumbBar {
+    padding: 8px 12px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    white-space: nowrap;
+    border-bottom: 1px solid var(--roadmap-slate-200);
+    background: var(--roadmap-white);
+    scrollbar-width: none;
+  }
+
+  .breadcrumbBar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .breadcrumbItem {
+    padding: 5px 10px;
+    font-size: 11.5px;
+    min-height: 32px;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  /* Mobile Studio Body Toggle */
+  .studioBody {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .detailPanelMobileHidden {
+    display: none !important;
+  }
+
+  .graphCanvasMobileHidden {
+    display: none !important;
+  }
+
+  .detailPanelMobileActive {
+    display: flex !important;
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    right: auto !important;
+    bottom: auto !important;
+    width: 100% !important;
+    height: 100% !important;
+    overflow-y: auto !important;
+    box-shadow: none !important;
+    z-index: 10 !important;
+  }
+
+  .graphCanvasMobileActive {
+    display: block !important;
+    width: 100% !important;
+    height: 100% !important;
+  }
+
+  /* Mobile floating focus dock when on Map tab */
+  .mobileFocusFloatingDock {
+    position: absolute;
+    bottom: 56px;
+    left: 12px;
+    right: 12px;
+    background: var(--roadmap-white);
+    border: 1px solid var(--roadmap-slate-200);
+    border-radius: 12px;
+    padding: 10px 14px;
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    z-index: 40;
+  }
+
+  .mobileFocusInfo {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .mobileFocusType {
+    font-size: 10px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--roadmap-primary);
+  }
+
+  .mobileFocusName {
+    font-size: 13px;
+    font-weight: 800;
+    color: var(--roadmap-slate-900);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .mobileFocusDetailsBtn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    background: var(--roadmap-primary);
+    color: var(--roadmap-white);
+    border: none;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 700;
+    white-space: nowrap;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(105, 11, 27, 0.25);
+  }
+
+  /* Mobile Details view top bar */
+  .mobileDetailsTopBar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 16px;
+    background: var(--roadmap-slate-50);
+    border-bottom: 1px solid var(--roadmap-slate-200);
+  }
+
+  .mobileDetailsBackBtn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 6px;
+    border: 1px solid var(--roadmap-slate-300);
+    background: var(--roadmap-white);
+    color: var(--roadmap-slate-800);
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  .mobileDetailsStepBadge {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--roadmap-slate-500);
+  }
+
+  /* Full-width Search Overlay on Mobile */
+  .mobileSearchModalOverlay {
     position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    width: 100%;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(4px);
     z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 12px;
   }
 
+  .mobileSearchModal {
+    background: var(--roadmap-white);
+    border-radius: 14px;
+    width: 100%;
+    max-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+  }
+
+  .mobileSearchHeader {
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--roadmap-slate-200);
+    gap: 10px;
+  }
+
+  .mobileSearchInput {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 15px;
+    color: var(--roadmap-slate-900);
+    background: transparent;
+  }
+
+  .mobileSearchClose {
+    background: none;
+    border: none;
+    font-size: 18px;
+    color: var(--roadmap-slate-500);
+    cursor: pointer;
+    padding: 4px;
+  }
+
+  .mobileSearchResultsList {
+    flex: 1;
+    overflow-y: auto;
+    max-height: 60vh;
+  }
+
+  /* Start Screen grids on mobile */
   .primaryStageGrid {
     grid-template-columns: 1fr;
   }
@@ -1673,6 +1996,32 @@
 
   .pathSummaryActions {
     justify-content: space-between;
+  }
+
+  /* Touch-friendly next options in details */
+  .continuationOptionCard {
+    min-height: 48px;
+    padding: 12px 14px;
+  }
+
+  .graphControlsGroup {
+    bottom: 12px;
+    right: 12px;
+    gap: 4px;
+  }
+
+  .graphControlBtn {
+    height: 36px;
+    font-size: 12px;
+  }
+
+  .compareDock {
+    bottom: 50px;
+    left: 8px;
+    right: 8px;
+    flex-direction: column;
+    align-items: stretch;
+    padding: 10px;
   }
 }
 

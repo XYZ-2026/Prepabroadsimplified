@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
+import { CAREER_ROADMAP_ENABLED } from '@/config/feature-flags';
 import styles from '@/styles/components.module.css';
 
 export default function Topbar() {
@@ -17,11 +18,11 @@ export default function Topbar() {
     window.addEventListener('scroll', handleScroll, { passive: true });
     handleScroll(); // Check on mount
 
-    window.removeEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   const isTestPage = pathname === '/iq-test/test';
-  const isRoadmap = pathname?.startsWith('/career-roadmap');
+  const isRoadmap = CAREER_ROADMAP_ENABLED && pathname?.startsWith('/career-roadmap');
 
   const toggleSidebar = () => {
     window.dispatchEvent(new Event('toggle-sidebar'));

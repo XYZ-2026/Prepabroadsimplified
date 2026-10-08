@@ -1,4 +1,6 @@
 import { Metadata } from 'next';
+import { redirect } from 'next/navigation';
+import { CAREER_ROADMAP_ENABLED } from '@/config/feature-flags';
 import CareerRoadmapExplorer from '@/components/CareerRoadmap/CareerRoadmapExplorer';
 
 export const metadata: Metadata = {
@@ -10,5 +12,10 @@ export const metadata: Metadata = {
 };
 
 export default function CareerRoadmapPage() {
+  if (!CAREER_ROADMAP_ENABLED) {
+    redirect('/dashboard');
+  }
+
   return <CareerRoadmapExplorer />;
 }
+

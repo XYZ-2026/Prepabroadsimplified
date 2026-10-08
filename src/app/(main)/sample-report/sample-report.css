@@ -1,0 +1,336 @@
+/* ═══════════════════════════════════════════════════════════
+   Sample Report — Styles
+   Watermark overlay, floating badge, CTA banner, upsell modal
+   ═══════════════════════════════════════════════════════════ */
+
+/* ── Floating "SAMPLE REPORT" Badge ── */
+.sr-floating-badge {
+  position: fixed;
+  top: 68px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 18px;
+  background: linear-gradient(135deg, #fef3c7 0%, #fffbeb 100%);
+  border: 1.5px solid #d97706;
+  border-radius: 100px;
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 1.2px;
+  color: #92400e;
+  text-transform: uppercase;
+  box-shadow: 0 4px 16px rgba(217, 119, 6, 0.2), 0 1px 3px rgba(0, 0, 0, 0.08);
+  pointer-events: none;
+  animation: sr-badge-pulse 3s ease-in-out infinite;
+}
+
+.sr-floating-badge-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #d97706;
+  animation: sr-dot-pulse 2s ease-in-out infinite;
+}
+
+@keyframes sr-badge-pulse {
+  0%, 100% { opacity: 0.9; }
+  50% { opacity: 1; }
+}
+
+@keyframes sr-dot-pulse {
+  0%, 100% { transform: scale(1); opacity: 0.8; }
+  50% { transform: scale(1.3); opacity: 1; }
+}
+
+/* ── Bottom CTA Banner ── */
+.sr-cta-banner {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 200;
+  background: linear-gradient(135deg, #690B1B 0%, #4A0E17 100%);
+  border-top: 2px solid rgba(201, 165, 93, 0.4);
+  box-shadow: 0 -4px 24px rgba(105, 11, 27, 0.25);
+  padding: 0 20px;
+}
+
+.sr-cta-banner-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 0;
+}
+
+.sr-cta-banner-text {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.sr-cta-banner-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  background: rgba(201, 165, 93, 0.2);
+  border: 1px solid rgba(201, 165, 93, 0.4);
+  border-radius: 6px;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  color: #C9A55D;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.sr-cta-banner-desc {
+  font-size: 12.5px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.4;
+}
+
+.sr-cta-banner-btn {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 24px;
+  background: linear-gradient(135deg, #C9A55D 0%, #D4B76A 100%);
+  color: #1e1e1e;
+  font-size: 11.5px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  border-radius: 10px;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(201, 165, 93, 0.3);
+}
+
+.sr-cta-banner-btn:hover {
+  background: linear-gradient(135deg, #D4B76A 0%, #E0C87A 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(201, 165, 93, 0.4);
+}
+
+/* ── Upsell Modal ── */
+.sr-upsell-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(6px);
+  animation: sr-fade-in 0.2s ease;
+}
+
+.sr-upsell-modal {
+  position: relative;
+  width: 90%;
+  max-width: 440px;
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 36px 32px 28px;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.2);
+  animation: sr-scale-in 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  text-align: center;
+}
+
+.sr-upsell-close {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: #f1f5f9;
+  color: #64748b;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+}
+
+.sr-upsell-close:hover {
+  background: #e2e8f0;
+  color: #334155;
+}
+
+.sr-upsell-icon-wrap {
+  width: 64px;
+  height: 64px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #fef2f2 0%, #fff5f5 100%);
+  border: 1.5px solid rgba(105, 11, 27, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+}
+
+.sr-upsell-title {
+  font-size: 20px;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0 0 10px;
+  letter-spacing: -0.3px;
+}
+
+.sr-upsell-desc {
+  font-size: 13.5px;
+  color: #64748b;
+  line-height: 1.6;
+  margin: 0 0 20px;
+  font-weight: 500;
+}
+
+.sr-upsell-features {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  text-align: left;
+  margin-bottom: 24px;
+  padding: 16px;
+  background: #f8fafc;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+}
+
+.sr-upsell-feature {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #334155;
+}
+
+.sr-upsell-cta-btn {
+  display: block;
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(135deg, #690B1B 0%, #4A0E17 100%);
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  text-decoration: none;
+  text-align: center;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 16px rgba(105, 11, 27, 0.3);
+  margin-bottom: 10px;
+}
+
+.sr-upsell-cta-btn:hover {
+  background: linear-gradient(135deg, #830e22 0%, #690B1B 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(105, 11, 27, 0.35);
+}
+
+.sr-upsell-dismiss {
+  background: none;
+  border: none;
+  font-size: 12px;
+  font-weight: 600;
+  color: #94a3b8;
+  cursor: pointer;
+  padding: 8px;
+  transition: color 0.15s ease;
+}
+
+.sr-upsell-dismiss:hover {
+  color: #64748b;
+}
+
+/* ── Loading State ── */
+.sr-loading {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #f1f5f9;
+  gap: 16px;
+}
+
+.sr-loading-spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid #e2e8f0;
+  border-top-color: #690B1B;
+  border-radius: 50%;
+  animation: sr-spin 0.8s linear infinite;
+}
+
+.sr-loading-text {
+  font-size: 13px;
+  font-weight: 600;
+  color: #64748b;
+}
+
+/* ── Animations ── */
+@keyframes sr-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes sr-scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes sr-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .sr-cta-banner-inner {
+    flex-direction: column;
+    text-align: center;
+    gap: 10px;
+    padding: 14px 0;
+  }
+
+  .sr-cta-banner-text {
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .sr-cta-banner-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .sr-floating-badge {
+    font-size: 9px;
+    padding: 5px 14px;
+  }
+
+  .sr-upsell-modal {
+    padding: 28px 20px 24px;
+  }
+}

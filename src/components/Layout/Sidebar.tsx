@@ -217,18 +217,7 @@ export default function Sidebar({ userRole, userName, userEmail }: SidebarProps)
           {/* Section: CAREER & STUDY ABROAD */}
           <nav className={styles.sidebarNavSection}>
             <p className={styles.navLabel}>CAREER & STUDY ABROAD</p>
-            <div className={styles.navItem}>
-              <Link
-                href="/career-roadmap"
-                onClick={handleLinkClick}
-                className={`${styles.navLink} ${pathname === '/career-roadmap' ? styles.navLinkActive : ''}`}
-              >
-                <span className={styles.navLinkIcon}>
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></svg>
-                </span>
-                <span className={styles.navLinkText}>Career Roadmap Studio</span>
-              </Link>
-            </div>
+            {/* Career Roadmap Studio — DISABLED (feature flag: CAREER_ROADMAP_ENABLED=false) */}
             <div className={styles.navItem}>
               <Link
                 href="/university-finder"
@@ -422,16 +411,8 @@ export default function Sidebar({ userRole, userName, userEmail }: SidebarProps)
 
             {/* Career & Planning Tools */}
             <nav className={styles.sidebarNavSection}>
-              <p className={styles.navLabel}>{pathname?.startsWith('/career-roadmap') ? 'Career Tools' : 'Career & Planning Tools'}</p>
-
-              <div className={styles.navItem}>
-                <Link href="/career-roadmap" onClick={handleLinkClick} className={`${styles.navLink} ${isActive('/career-roadmap') ? styles.navLinkActive : ''}`}>
-                  <span className={styles.navLinkIcon}>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></svg>
-                  </span>
-                  <span className={styles.navLinkText}>Career Roadmap Studio</span>
-                </Link>
-              </div>
+              <p className={styles.navLabel}>Career & Planning Tools</p>
+              {/* Career Roadmap Studio — DISABLED (feature flag: CAREER_ROADMAP_ENABLED=false) */}
 
               <div className={styles.navItem}>
                 <Link href="/university-finder" onClick={handleLinkClick} className={`${styles.navLink} ${isActive('/university-finder') ? styles.navLinkActive : ''}`}>

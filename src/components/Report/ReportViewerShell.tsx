@@ -52,67 +52,90 @@ function prepareReportHtml(html: string): string {
       body { 
         padding-top: 0 !important; 
         margin-top: 0 !important; 
-        overflow-x: hidden !important;
       }
-      /* Ensure pages have slight gap for scrolling clarity */
+      /* Ensure pages preserve rigid A4 geometry and clean vertical separation */
       .as-report-page { 
-        margin-bottom: 16px !important; 
-        box-shadow: 0 4px 16px rgba(0,0,0,0.08) !important;
+        width: 210mm !important;
+        min-width: 210mm !important;
+        max-width: 210mm !important;
+        height: 297mm !important;
+        min-height: 297mm !important;
+        max-height: 297mm !important;
+        box-sizing: border-box !important;
+        overflow: hidden !important;
+        margin: 0 auto 20px auto !important; 
+        box-shadow: 0 4px 16px rgba(0,0,0,0.1) !important;
       }
       /* Smooth scrolling inside iframe */
       html { scroll-behavior: smooth; }
 
       @media screen and (max-width: 820px) {
         body {
-          padding: 8px 4px !important;
+          padding: 12px 0 80px 0 !important;
           background: #e2e8f0 !important;
           display: flex !important;
           flex-direction: column !important;
           align-items: center !important;
-        }
-        .as-report-page {
-          max-width: calc(100vw - 12px) !important;
-          margin-left: auto !important;
-          margin-right: auto !important;
-          box-sizing: border-box !important;
+          overflow-x: auto !important;
         }
       }
     </style>
   `;
 
-  // 2. Inject the page-tracking script before </body>
+  // 2. Inject the page-tracking + responsive scaling script before </body>
   const trackingScript = `
     <script id="viewer-shell-tracking">
     (function() {
+      var currentZoomMode = 'fit';
+
       // 0. Responsive fit-to-width scaling on mobile
       function adjustMobileScale() {
         var screenW = window.innerWidth;
-        if (screenW < 800) {
-          var targetW = screenW - 12;
-          var baseW = 794; // 210mm standard CSS width
-          var factor = Math.max(0.40, Math.min(1.0, targetW / baseW));
-          var pagesList = document.querySelectorAll('.as-report-page');
+        var pagesList = document.querySelectorAll('.as-report-page');
+        if (screenW < 820) {
+          var baseW = 794; // 210mm standard CSS width in pixels at 96 DPI
+          var baseH = 1123; // 297mm standard CSS height in pixels at 96 DPI
+          var targetW = Math.max(280, screenW - 16);
+          var factor = currentZoomMode === '100%' ? 1.0 : Math.min(1.0, Math.max(0.35, targetW / baseW));
+
           pagesList.forEach(function(p) {
-            p.style.transformOrigin = 'top center';
+            p.style.width = '794px';
+            p.style.minWidth = '794px';
+            p.style.maxWidth = '794px';
+            p.style.height = '1123px';
+            p.style.minHeight = '1123px';
+            p.style.maxHeight = '1123px';
+            p.style.boxSizing = 'border-box';
+            p.style.overflow = 'hidden';
+
             if ('zoom' in p.style) {
-              p.style.zoom = String(Number(factor.toFixed(3)));
+              p.style.zoom = String(Number(factor.toFixed(4)));
+              p.style.transform = 'none';
+              p.style.marginBottom = '20px';
+              p.style.marginLeft = 'auto';
+              p.style.marginRight = 'auto';
             } else {
-              p.style.transform = 'scale(' + Number(factor.toFixed(3)) + ')';
-              p.style.marginBottom = 'calc(297mm * ' + factor + ' - 297mm + 16px)';
+              p.style.transformOrigin = 'top center';
+              p.style.transform = 'scale(' + Number(factor.toFixed(4)) + ')';
+              var visualH = baseH * factor;
+              p.style.marginBottom = ((visualH - baseH) + 20) + 'px';
+              p.style.marginLeft = 'auto';
+              p.style.marginRight = 'auto';
             }
           });
         } else {
-          var pagesList = document.querySelectorAll('.as-report-page');
           pagesList.forEach(function(p) {
             if ('zoom' in p.style) {
               p.style.zoom = '1';
-            } else {
-              p.style.transform = 'none';
-              p.style.marginBottom = '16px';
             }
+            p.style.transform = 'none';
+            p.style.marginBottom = '24px';
+            p.style.marginLeft = 'auto';
+            p.style.marginRight = 'auto';
           });
         }
       }
+
       window.addEventListener('resize', adjustMobileScale);
       window.addEventListener('load', adjustMobileScale);
       setTimeout(adjustMobileScale, 150);
@@ -179,13 +202,17 @@ function prepareReportHtml(html: string): string {
         }
       }
 
-      // 4. Listen for scroll-to commands from parent window
+      // 4. Listen for commands from parent window
       window.addEventListener('message', function(e) {
-        if (e.data && e.data.type === 'scroll-to-page') {
+        if (!e.data || typeof e.data !== 'object') return;
+        if (e.data.type === 'scroll-to-page') {
           var targetPage = parseInt(e.data.page, 10);
           if (!isNaN(targetPage) && targetPage > 0) {
             jumpToPage(targetPage, e.data.title);
           }
+        } else if (e.data.type === 'set-zoom-mode') {
+          currentZoomMode = e.data.mode || 'fit';
+          adjustMobileScale();
         }
       });
 
@@ -193,6 +220,7 @@ function prepareReportHtml(html: string): string {
       window.parent.postMessage({ type: 'report-iframe-ready' }, '*');
     })();
     <\/script>
+
   `;
 
   // Insert the CSS after <head> or at start
@@ -233,6 +261,7 @@ export default function ReportViewerShell({
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [mobileSectionsOpen, setMobileSectionsOpen] = useState(false);
+  const [mobileZoomMode, setMobileZoomMode] = useState<'fit' | '100%'>('fit');
   const totalPages = mode === 'full' ? 56 : 15;
 
   useEffect(() => {
@@ -436,9 +465,9 @@ export default function ReportViewerShell({
                 display: 'flex',
                 alignItems: 'center',
                 gap: '4px',
-                padding: '6px 10px',
+                padding: '6px 9px',
                 borderRadius: '8px',
-                fontSize: '11.5px',
+                fontSize: '11px',
                 fontWeight: 700,
                 background: '#f8fafc',
                 color: MAROON,
@@ -447,6 +476,30 @@ export default function ReportViewerShell({
               }}
             >
               📑 Sections
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                const nextMode = mobileZoomMode === 'fit' ? '100%' : 'fit';
+                setMobileZoomMode(nextMode);
+                iframeRef.current?.contentWindow?.postMessage({ type: 'set-zoom-mode', mode: nextMode }, '*');
+              }}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '3px',
+                padding: '6px 8px',
+                borderRadius: '8px',
+                fontSize: '11px',
+                fontWeight: 700,
+                background: mobileZoomMode === '100%' ? '#fef3c7' : '#f8fafc',
+                color: mobileZoomMode === '100%' ? '#92400e' : '#475569',
+                border: mobileZoomMode === '100%' ? '1.5px solid #d97706' : '1px solid #cbd5e1',
+                cursor: 'pointer',
+              }}
+              title={mobileZoomMode === 'fit' ? 'Zoom to 100% (original size)' : 'Fit to screen width'}
+            >
+              {mobileZoomMode === 'fit' ? '🔍 100%' : '🔍 Fit'}
             </button>
             <button
               type="button"

@@ -79,16 +79,16 @@ export default function StudentWorkspace({
   const [nextAction, setNextAction] = useState('');
 
   React.useEffect(() => {
-    if (activeTab === 'roadmap') {
-      setRoadmapsLoading(true);
-      fetch(`/api/career-roadmap/save?studentId=${student.id}`)
-        .then(res => res.json())
-        .then(data => {
-          if (data.roadmaps) setStudentRoadmaps(data.roadmaps);
-        })
-        .catch(err => console.error('Error fetching student roadmaps:', err))
-        .finally(() => setRoadmapsLoading(false));
-    }
+    // Career Roadmap tab fetch — DISABLED (feature flag: CAREER_ROADMAP_ENABLED=false)
+    // Restore when the feature is re-enabled:
+    // if (activeTab === 'roadmap') {
+    //   setRoadmapsLoading(true);
+    //   fetch(`/api/career-roadmap/save?studentId=${student.id}`)
+    //     .then(res => res.json())
+    //     .then(data => { if (data.roadmaps) setStudentRoadmaps(data.roadmaps); })
+    //     .catch(err => console.error('Error fetching student roadmaps:', err))
+    //     .finally(() => setRoadmapsLoading(false));
+    // }
   }, [activeTab, student.id]);
 
   const studentPsycho = psychoResults.filter(r => r.userId === student.id);
@@ -452,7 +452,8 @@ export default function StudentWorkspace({
       }}>
         {[
           { key: 'reports', label: '🧭 Assessment & Reports' },
-          { key: 'roadmap', label: '🗺️ Career Roadmaps' },
+          // Career Roadmaps tab — DISABLED (feature flag: CAREER_ROADMAP_ENABLED=false)
+          // { key: 'roadmap', label: '🗺️ Career Roadmaps' },
           { key: 'workflow', label: '🎯 Counsellor Workflow' },
           { key: 'notes', label: '📝 Private Notes' },
           { key: 'profile', label: '📋 Profile & Background' },

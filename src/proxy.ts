@@ -1,9 +1,22 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import { CAREER_ROADMAP_ENABLED } from '@/config/feature-flags';
 
 export function proxy(request: NextRequest) {
   const session = request.cookies.get('__session')?.value;
   const path = request.nextUrl.pathname;
+
+  // Block user-facing career roadmap when feature flag is disabled
+  if (!CAREER_ROADMAP_ENABLED && path.startsWith('/career-roadmap')) {
+    return NextResponse.redirect(new URL('/dashboard', request.url));
+  }
+
+  // Redirect sample-report to public /sample-report route so it completely bypasses the psychometric test layout
+  if (path === '/psychometric-test/sample-report') {
+    const url = new URL('/sample-report', request.url);
+    url.search = request.nextUrl.search;
+    return NextResponse.redirect(url);
+  }
 
   // Protected routes
   const isDashboardRoute = path.startsWith('/dashboard');
@@ -39,5 +52,6 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/dashboard', '/dashboard/:path*', '/auth', '/psychometric-test/:path*'],
+  matcher: ['/dashboard', '/dashboard/:path*', '/auth', '/psychometric-test/:path*', '/career-roadmap', '/career-roadmap/:path*'],
 };
+

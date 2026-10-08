@@ -438,73 +438,12 @@ export default async function AssessmentsPage() {
         </div>
       </div>
 
-      {/* ── Section 3: Career Roadmap Studio ── */}
-      <div className={styles.card} style={{ marginTop: '32px' }}>
-        <div className={styles.cardHeader} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '10px' }}>
-          <div>
-            <h2 className={styles.cardTitle}>Career Roadmap Studio</h2>
-            <p style={{ fontSize: '13px', color: '#64748b', margin: '2px 0 0 0' }}>
-              Interactive academic pathways, entrance exams, degree programmes, and career outcomes.
-            </p>
-          </div>
-          <Link
-            href="/career-roadmap"
-            className={`${componentsStyles.btn} ${componentsStyles.btnPrimary}`}
-            style={{ fontSize: '13px', padding: '8px 18px', background: '#690B1B', color: '#fff' }}
-          >
-            Launch Studio →
-          </Link>
-        </div>
-        <div className={styles.cardBody}>
-          {savedRoadmaps && savedRoadmaps.length > 0 ? (
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '16px' }}>
-              {savedRoadmaps.map((rm: any) => (
-                <div
-                  key={rm.id}
-                  style={{
-                    padding: '16px 20px',
-                    borderRadius: '12px',
-                    border: '1px solid #e2e8f0',
-                    background: '#f8fafc',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'space-between',
-                    gap: '12px',
-                  }}
-                >
-                  <div>
-                    <h3 style={{ fontSize: '15px', fontWeight: 700, color: '#0f172a', margin: '0 0 4px 0' }}>
-                      {rm.title}
-                    </h3>
-                    <p style={{ fontSize: '12px', color: '#64748b', margin: 0 }}>
-                      {rm.selectedPathNodeIds?.length || 0} Stages Mapped · Saved {new Date(rm.updatedAt || rm.createdAt).toLocaleDateString()}
-                    </p>
-                    {rm.notes && (
-                      <p style={{ fontSize: '12px', color: '#475569', fontStyle: 'italic', marginTop: '6px' }}>
-                        "{rm.notes}"
-                      </p>
-                    )}
-                  </div>
-                  <Link
-                    href={`/career-roadmap`}
-                    className={`${componentsStyles.btn} ${componentsStyles.btnOutline}`}
-                    style={{ fontSize: '12px', textAlign: 'center', justifyContent: 'center' }}
-                  >
-                    Open in Studio ↗
-                  </Link>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div style={{ textAlign: 'center', padding: '24px', color: '#64748b' }}>
-              <p style={{ fontSize: '14px', margin: '0 0 6px 0' }}>No career roadmaps saved yet.</p>
-              <p style={{ fontSize: '12px', margin: 0 }}>
-                Explore 1,000+ career routes and save your personalized pathway map.
-              </p>
-            </div>
-          )}
-        </div>
-      </div>
+      {/* ── Section 3: Career Roadmap Studio — DISABLED ──
+          This section is temporarily hidden while the Career Roadmap feature is
+          disabled (feature flag: CAREER_ROADMAP_ENABLED = false).
+          Saved roadmap data is preserved in Firestore.
+          Restore this section when the feature is re-enabled.
+      */}
     </div>
   );
 }

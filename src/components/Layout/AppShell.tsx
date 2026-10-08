@@ -22,6 +22,7 @@ export default function AppShell({ children, userRole, userName, userEmail }: Ap
     pathname.startsWith('/iq-test/result') || 
     pathname.startsWith('/psychometric-test/result') ||
     pathname.startsWith('/psychometric-test/sample-report') ||
+    pathname.startsWith('/sample-report') ||
     (pathname === '/psychometric-test' && searchParams.has('resultId'));
 
   if (isReportView) {

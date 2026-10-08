@@ -29,7 +29,7 @@ export const metadata: Metadata = {
 
 export default async function PsychometricTestLayout({ children }: { children: React.ReactNode }) {
   const headersList = await headers();
-  const pathname = headersList.get('x-pathname') || '';
+  const pathname = headersList.get('x-pathname') || headersList.get('x-invoke-path') || headersList.get('x-matched-path') || headersList.get('next-url') || '';
   if (pathname.includes('/sample-report')) {
     return <>{children}</>;
   }

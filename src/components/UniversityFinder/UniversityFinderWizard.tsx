@@ -383,7 +383,7 @@ export default function UniversityFinderWizard({ initialDetails }: { initialDeta
     doc.setTextColor(150, 150, 150);
     doc.setFont(fontNormal, 'normal');
     doc.text('CONFIDENTIAL & PERSONALISED', margin, pageHeight - 12);
-    doc.text('clarvo.com', pageWidth - margin, pageHeight - 12, { align: 'right' });
+    doc.text('clarvo.in', pageWidth - margin, pageHeight - 12, { align: 'right' });
 
     // --- PAGE 2: PROFILE SUMMARY ---
     doc.addPage();

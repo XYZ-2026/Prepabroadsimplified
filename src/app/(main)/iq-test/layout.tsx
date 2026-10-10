@@ -23,7 +23,7 @@ export const metadata: Metadata = {
     title: 'Online IQ / Cognitive Assessment | CLARVO',
     description:
       'Take a visual-first 45-question cognitive assessment measuring reasoning, pattern recognition, numerical, spatial and abstract thinking.',
-    url: 'https://clarvo.com/iq-test',
+    url: 'https://clarvo.in/iq-test',
   },
 };
 

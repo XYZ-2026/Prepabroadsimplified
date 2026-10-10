@@ -32,7 +32,7 @@ export const metadata: Metadata = {
     title: 'Discover CLARVO — 30-Module Student Development Platform',
     description:
       'Explore CLARVO’s diagnostic assessments, cognitive profiling, stream selection engines, and university matching for students in Grades 7–12.',
-    url: 'https://clarvo.com/discover',
+    url: 'https://clarvo.in/discover',
   },
 };
 

@@ -3755,7 +3755,7 @@ export function buildClass10ExecutiveHTMLReport(
                         <div class="grid grid-cols-2 gap-4 text-[11px]">
                             <div>
                                 <span class="text-slate-400 block text-[9px] uppercase font-semibold">Official Web Portal</span>
-                                <a href="https://clarvo.com" target="_blank" class="text-gold font-bold hover:underline text-xs">clarvo.com</a>
+                                <a href="https://clarvo.in" target="_blank" class="text-gold font-bold hover:underline text-xs">clarvo.in</a>
                             </div>
                             <div>
                                 <span class="text-slate-400 block text-[9px] uppercase font-semibold">Advisory & Support Email</span>

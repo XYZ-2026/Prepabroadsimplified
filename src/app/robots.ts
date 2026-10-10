@@ -1,7 +1,7 @@
 import type { MetadataRoute } from 'next';
 
 function getValidSiteUrl(urlInput?: string): string {
-  const fallback = 'https://prep.abroadsimplified.com';
+  const fallback = 'https://clarvo.in';
   if (!urlInput) return fallback;
   let raw = urlInput.trim();
   if (!raw.startsWith('http://') && !raw.startsWith('https://')) {

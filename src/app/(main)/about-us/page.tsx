@@ -30,7 +30,7 @@ export const metadata: Metadata = {
     title: 'About Simplified Eduventures | CLARVO',
     description:
       'Simplified Eduventures exists to help students and families navigate important education decisions with greater clarity, structured guidance, and thoughtful planning.',
-    url: 'https://clarvo.com/about-us',
+    url: 'https://clarvo.in/about-us',
   },
 };
 

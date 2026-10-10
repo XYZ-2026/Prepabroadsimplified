@@ -152,7 +152,7 @@ export default function Sidebar({ userRole, userName, userEmail }: SidebarProps)
             <div className={styles.userNameText}>{userName || userRole}</div>
             <div className={styles.userMetaRow}>
               <span className={styles.userBadge}>{userRole.toUpperCase()}</span>
-              <span className={styles.userEmail}>{userEmail || `${userRole}@abroadsimplified.com`}</span>
+              <span className={styles.userEmail}>{userEmail || `${userRole}@clarvo.in`}</span>
             </div>
           </div>
         </div>

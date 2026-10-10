@@ -63,7 +63,7 @@ export default function Footer() {
       </div>
       <div className={styles.footerBottom}>
         <p>© 2026 CLARVO. A platform under Simplified Eduventures. All rights reserved.</p>
-        <p>Mumbai, Maharashtra, India | support@clarvo.com</p>
+        <p>Mumbai, Maharashtra, India | support@clarvo.in</p>
       </div>
     </footer>
   );

@@ -25,8 +25,8 @@ export default function AppShell({ children, userRole, userName, userEmail }: Ap
     pathname.startsWith('/sample-report') ||
     (pathname === '/psychometric-test' && searchParams.has('resultId'));
 
-  if (isReportView) {
-    // Report views use ReportViewerShell (or custom report dashboard) which manages its own sticky header/toolbar
+  if (isReportView || pathname === '/') {
+    // Report views and dedicated Home landing page render their own layout
     return <>{children}</>;
   }
 

@@ -25,7 +25,7 @@ export const metadata: Metadata = {
     title: 'AI University Finder & Predictor | CLARVO',
     description:
       'Match your profile with 500+ universities worldwide. Get instant admit chances, tuition estimates, and scholarship matches.',
-    url: 'https://clarvo.com/university-finder',
+    url: 'https://clarvo.in/university-finder',
   },
 };
 

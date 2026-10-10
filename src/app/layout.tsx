@@ -7,7 +7,7 @@ const inter = Inter({ subsets: ['latin'], variable: '--next-font-primary', displ
 const lexend = Lexend({ subsets: ['latin'], variable: '--next-font-heading', display: 'swap' });
 
 function getValidSiteUrl(urlInput?: string): string {
-  const fallback = 'https://clarvo.com';
+  const fallback = 'https://clarvo.in';
   if (!urlInput) return fallback;
   let raw = urlInput.trim();
   if (!raw.startsWith('http://') && !raw.startsWith('https://')) {

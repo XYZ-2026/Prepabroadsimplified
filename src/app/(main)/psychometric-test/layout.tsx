@@ -23,7 +23,7 @@ export const metadata: Metadata = {
     title: 'Psychometric Assessment & Career Personality Evaluation | CLARVO',
     description:
       'Discover your ideal career path, learning style, and academic-stream alignment.',
-    url: 'https://www.clarvo.com/psychometric-test',
+    url: 'https://clarvo.in/psychometric-test',
   },
 };
 

@@ -208,7 +208,8 @@ export default function AuthForm({ defaultTab }: AuthFormProps = {}) {
       });
 
       if (!response.ok) {
-        throw new Error('Failed to create session on server');
+        const errJson = await response.json().catch(() => ({}));
+        throw new Error(errJson.details || errJson.error || 'Failed to create session on server');
       }
 
       if (isNewUser) {
@@ -243,7 +244,8 @@ export default function AuthForm({ defaultTab }: AuthFormProps = {}) {
       });
 
       if (!response.ok) {
-        throw new Error('Failed to create session on server');
+        const errJson = await response.json().catch(() => ({}));
+        throw new Error(errJson.details || errJson.error || 'Failed to create session on server');
       }
 
       router.push('/');
@@ -391,7 +393,8 @@ export default function AuthForm({ defaultTab }: AuthFormProps = {}) {
       });
 
       if (!response.ok) {
-        throw new Error('Failed to create session on server');
+        const errJson = await response.json().catch(() => ({}));
+        throw new Error(errJson.details || errJson.error || 'Failed to create session on server');
       }
 
       // Resolve eligible assessment for Welcome screen

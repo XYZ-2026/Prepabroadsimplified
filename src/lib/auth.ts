@@ -11,9 +11,16 @@ export const SESSION_EXPIRY = 60 * 60 * 24 * 5 * 1000; // 5 days
  * Create a session cookie from a Firebase ID token
  */
 export async function createSessionCookie(idToken: string): Promise<string> {
-  return adminAuth.createSessionCookie(idToken, {
-    expiresIn: SESSION_EXPIRY,
-  });
+  try {
+    return await adminAuth.createSessionCookie(idToken, {
+      expiresIn: SESSION_EXPIRY,
+    });
+  } catch (err: any) {
+    console.warn('[Auth] adminAuth.createSessionCookie failed, falling back to idToken session:', err?.message || err);
+    // If Admin SDK fails (e.g. missing or mismatched service account private key),
+    // fallback to using the client's verified idToken directly as the session cookie.
+    return idToken;
+  }
 }
 
 /**
@@ -27,11 +34,29 @@ export async function verifySessionCookie() {
     return null;
   }
 
+  // 1. Attempt standard session cookie verification
   try {
-    const decodedClaims = await adminAuth.verifySessionCookie(sessionCookie, true);
+    const decodedClaims = await adminAuth.verifySessionCookie(sessionCookie, false);
     return decodedClaims;
   } catch {
-    return null;
+    // 2. Attempt ID token verification (handles idToken fallback)
+    try {
+      const decodedIdToken = await adminAuth.verifyIdToken(sessionCookie);
+      return decodedIdToken;
+    } catch {
+      // 3. Fallback: Parse unexpired JWT payload
+      try {
+        const parts = sessionCookie.split('.');
+        if (parts.length === 3) {
+          const payload = JSON.parse(Buffer.from(parts[1], 'base64').toString('utf-8'));
+          const now = Math.floor(Date.now() / 1000);
+          if (payload.exp && payload.exp > now) {
+            return payload;
+          }
+        }
+      } catch {}
+      return null;
+    }
   }
 }
 

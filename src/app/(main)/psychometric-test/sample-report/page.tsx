@@ -60,7 +60,8 @@ function SampleReportViewerContent() {
     ? rawType
     : 'grade10') as SampleReportType;
 
-  const [viewMode, setViewMode] = useState<'full' | 'executive'>('full');
+  const paramMode = searchParams.get('mode');
+  const [viewMode, setViewMode] = useState<'full' | 'executive'>(paramMode === 'executive' ? 'executive' : 'full');
   const [showUpsellModal, setShowUpsellModal] = useState(false);
 
   const student = getSampleStudent(type);

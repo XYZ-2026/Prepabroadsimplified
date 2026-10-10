@@ -4,9 +4,9 @@ import styles from '@/styles/auth.module.css';
 
 export default function AuthInfographics() {
   const stats = [
-    { value: '10,000+', label: 'Students Guided', icon: '🎓', color: '#690b1b' },
-    { value: '500+', label: 'Universities Listed', icon: '🏛️', color: '#1E1E2F' },
-    { value: '40+', label: 'Countries Covered', icon: '🌍', color: '#0088CB' },
+    { value: '10,000+', label: 'Students Guided', icon: '🎓', color: '#2563EB' },
+    { value: '500+', label: 'Universities Listed', icon: '🏛️', color: '#080F1C' },
+    { value: '40+', label: 'Countries Covered', icon: '🌍', color: '#2563EB' },
   ];
 
   const features = [
@@ -78,7 +78,7 @@ export default function AuthInfographics() {
         <div className={`${styles.bentoCard} ${styles.bentoSquareImageCard}`}>
           <img 
             src="/hero_vector_2d.svg" 
-            alt="Career Simplified 2D Vector Infographic" 
+            alt="CLARVO 2D Vector Infographic" 
             className={styles.bentoSquareImg}
           />
         </div>

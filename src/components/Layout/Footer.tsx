@@ -16,10 +16,10 @@ export default function Footer() {
       <div className={styles.footerGrid}>
         <div>
           <div className={styles.footerBrandLogoText}>
-            <span className="brand-red">Career</span> Simplified
+            <span style={{ fontWeight: 900, color: 'var(--clarvo-deep-black, #080F1C)' }}>CLARVO</span>
           </div>
           <p className={styles.footerBrandDesc}>
-            Think Beyond Your Boundaries. Modern Career Planning, Cognitive Intelligence & Global Admissions.
+            <strong>Clarity for Their Future.</strong> A premium student development platform for Grades 7–12, offering psychometric assessments, personalised career guidance, SAT preparation, one-to-one tutoring, and research/profile building.
           </p>
           <div className={styles.footerSocials}>
             <a href="#" className={styles.footerSocialLink} aria-label="Instagram">
@@ -37,33 +37,33 @@ export default function Footer() {
           </div>
         </div>
         <div className={styles.footerCol}>
-          <h4>Tools</h4>
-          <Link href="/university-finder">University Finder</Link>
-          <Link href="#">Scholarship Finder</Link>
-          <Link href="#">SOP Builder</Link>
-          <Link href="#">Visa Guidance</Link>
-          <Link href="#">Application Calendar</Link>
+          <h4>Platform & Tools</h4>
+          <Link href="/book-a-demo">Book a Demo</Link>
+          <Link href="/sample-reports">Sample Reports</Link>
+          <Link href="/psychometric-test">Psychometric Assessment</Link>
+          <Link href="/iq-test">Cognitive IQ Assessment</Link>
+          <Link href="/university-finder">University Predictor</Link>
         </div>
         <div className={styles.footerCol}>
-          <h4>Countries</h4>
-          <Link href="#">USA Guide</Link>
-          <Link href="#">UK Guide</Link>
-          <Link href="#">Germany Guide</Link>
-          <Link href="#">Canada Guide</Link>
-          <Link href="#">Australia Guide</Link>
+          <h4>Global Destinations</h4>
+          <Link href="/university-finder?country=USA">USA Guide</Link>
+          <Link href="/university-finder?country=UK">UK Guide</Link>
+          <Link href="/university-finder?country=Germany">Germany Guide</Link>
+          <Link href="/university-finder?country=Canada">Canada Guide</Link>
+          <Link href="/university-finder?country=Australia">Australia Guide</Link>
         </div>
         <div className={styles.footerCol}>
           <h4>Company</h4>
-          <Link href="#">About Us</Link>
-          <Link href="#">Blog</Link>
-          <Link href="#">Contact</Link>
-          <Link href="#">Privacy Policy</Link>
-          <Link href="#">Terms of Service</Link>
+          <Link href="/about-us">About Us</Link>
+          <Link href="/book-a-demo">Schedule Consultation</Link>
+          <Link href="/sample-reports">Explore Reports</Link>
+          <Link href="/terms-and-conditions">Terms of Service</Link>
+          <Link href="/privacy-policy">Privacy Policy</Link>
         </div>
       </div>
       <div className={styles.footerBottom}>
-        <p>© 2026 Career Simplified. All rights reserved.</p>
-        <p>Mumbai, Maharashtra, India | support@careersimplified.com</p>
+        <p>© 2026 CLARVO. A platform under Simplified Eduventures. All rights reserved.</p>
+        <p>Mumbai, Maharashtra, India | support@clarvo.com</p>
       </div>
     </footer>
   );

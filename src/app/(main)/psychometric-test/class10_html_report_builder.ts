@@ -1170,10 +1170,10 @@ export function buildClass10ExecutiveHTMLReport(
                 <div class="flex items-center justify-between border-b-2 border-gold/40 pb-4 relative z-10 shrink-0">
                     <div class="flex items-center space-x-3">
                         <div class="w-10 h-10 rounded-2xl bg-gold text-maroon-dark font-black flex items-center justify-center text-lg shadow-lg border-2 border-white">
-                            CS
+                            CL
                         </div>
                         <div>
-                            <span class="text-xs font-bold text-gold tracking-widest block uppercase">CAREER SIMPLIFIED</span>
+                            <span class="text-xs font-bold text-gold tracking-widest block uppercase">CLARVO</span>
                             <span class="text-[10px] text-slate-300 block font-medium">Psychometric Research & Academic Assessment Division</span>
                         </div>
                     </div>
@@ -1387,7 +1387,7 @@ export function buildClass10ExecutiveHTMLReport(
                             <i class="fa-solid fa-copyright text-gold"></i> Intellectual Property &amp; Proprietary Rights
                         </h3>
                         <p class="text-[10.5px] text-slate-600 leading-relaxed">
-                            All assessment frameworks, diagnostic algorithms, scoring methodologies, editorial templates, and AI-powered personalization engines embedded within this Report are the proprietary intellectual property of <strong>Career Simplified</strong> (hereinafter "the Organization"). The psychometric instruments, normative data models, and report generation pipelines are protected under applicable intellectual property laws.
+                            All assessment frameworks, diagnostic algorithms, scoring methodologies, editorial templates, and AI-powered personalization engines embedded within this Report are the proprietary intellectual property of <strong>CLARVO</strong> (hereinafter "the Organization"). The psychometric instruments, normative data models, and report generation pipelines are protected under applicable intellectual property laws.
                         </p>
                         <p class="text-[10.5px] text-slate-600 leading-relaxed">
                             No part of this Report — including the assessment architecture, scoring rubrics, editorial content, visual templates, or Chart.js data visualizations — may be reverse-engineered, replicated, reproduced, or distributed without the express prior written consent of the Organization.
@@ -1453,7 +1453,7 @@ export function buildClass10ExecutiveHTMLReport(
                         <div class="flex items-start gap-1.5">
                             <i class="fa-solid fa-circle-exclamation text-maroon mt-0.5 text-[10px]"></i>
                             <p class="text-[9.5px] text-slate-600 leading-relaxed">
-                                <strong class="text-maroon">Limitation of Liability:</strong> Career Simplified, its affiliates, psychometricians, editorial contributors, and technology partners shall not be held liable for any academic, career, financial, or personal decisions made solely based on the findings of this Report. The Organization strongly recommends consulting qualified career counselors and academic advisors before making final stream or career decisions.
+                                <strong class="text-maroon">Limitation of Liability:</strong> CLARVO, its affiliates, psychometricians, editorial contributors, and technology partners shall not be held liable for any academic, career, financial, or personal decisions made solely based on the findings of this Report. The Organization strongly recommends consulting qualified career counselors and academic advisors before making final stream or career decisions.
                             </p>
                         </div>
                     </div>
@@ -1627,7 +1627,7 @@ export function buildClass10ExecutiveHTMLReport(
 
                 <!-- Footer -->
                 <div class="border-t border-slate-200 pt-2 flex items-center justify-between text-[10px] text-slate-500 font-medium shrink-0">
-                    <span>Diagnostic Engine: Career Simplified ${variant === 'senior' ? 'Class 12 Pre-University' : variant === 'junior' ? 'Junior Exploratory' : 'Class 10'} Matrix v5.0</span>
+                    <span>Diagnostic Engine: CLARVO ${variant === 'senior' ? 'Class 12 Pre-University' : variant === 'junior' ? 'Junior Exploratory' : 'Class 10'} Matrix v5.0</span>
                     <span>Confidential Report for ${name}</span>
                 </div>
             </div>
@@ -1686,10 +1686,10 @@ export function buildClass10ExecutiveHTMLReport(
                     <!-- Research Board -->
                     <div class="bg-maroon-dark text-white px-4 py-3 rounded-2xl border border-gold shadow-md shrink-0">
                         <h4 class="font-bold text-xs text-gold border-b border-gold/30 pb-1 mb-2 flex items-center gap-2">
-                            <i class="fa-solid fa-award text-gold"></i> Career Simplified Psychometric Research Board
+                            <i class="fa-solid fa-award text-gold"></i> CLARVO Psychometric Research Board
                         </h4>
                         <p class="text-[11px] text-slate-200 leading-relaxed">
-                            This executive diagnostic report was engineered by the Career Simplified Psychometric Research Division in collaboration with educational strategists and behavioral data scientists. Built upon standardized global psychometric frameworks (CBSE, ICSE, IB, Cambridge), this dossier utilizes advanced normative algorithms to deliver publication-quality career stream guidance.
+                            This executive diagnostic report was engineered by the CLARVO Psychometric Research Division in collaboration with educational strategists and behavioral data scientists. Built upon standardized global psychometric frameworks (CBSE, ICSE, IB, Cambridge), this dossier utilizes advanced normative algorithms to deliver publication-quality career stream guidance.
                         </p>
                     </div>
 
@@ -1812,10 +1812,10 @@ export function buildClass10ExecutiveHTMLReport(
                     <div class="pt-2 border-t border-slate-200 flex items-center justify-between">
                         <div>
                             <p class="font-extrabold text-maroon text-xs">Warmest Regards & Academic Success,</p>
-                            <p class="text-[10px] text-slate-600 font-semibold">The Career Simplified Psychometric & Academic Advisory Board</p>
+                            <p class="text-[10px] text-slate-600 font-semibold">The CLARVO Psychometric & Academic Advisory Board</p>
                         </div>
                         <div class="text-right font-serif italic text-gold-dark font-bold text-xs">
-                            Career Simplified 2026
+                            CLARVO 2026
                         </div>
                     </div>
                 </div>
@@ -1913,7 +1913,7 @@ export function buildClass10ExecutiveHTMLReport(
 
                 <!-- Footer Badge -->
                 <div class="border-t border-slate-200 pt-2 flex items-center justify-between text-[11px] text-slate-500 font-medium shrink-0">
-                    <span>Diagnostic Engine: Career Simplified ${variant === 'senior' ? 'Class 12 Pre-University' : variant === 'junior' ? 'Junior Exploratory' : 'Class 10'} Matrix v5.0</span>
+                    <span>Diagnostic Engine: CLARVO ${variant === 'senior' ? 'Class 12 Pre-University' : variant === 'junior' ? 'Junior Exploratory' : 'Class 10'} Matrix v5.0</span>
                     <span>Confidential Report for ${name}</span>
                 </div>
             </div>
@@ -3694,7 +3694,7 @@ export function buildClass10ExecutiveHTMLReport(
                         </div>
                         <div>
                             <span class="text-xs font-bold text-gold tracking-widest block uppercase">REPORT CONCLUSION &amp; ADVISORY</span>
-                            <span class="text-[10px] text-slate-300 block font-medium">Career Simplified Psychometric Evaluation Summary</span>
+                            <span class="text-[10px] text-slate-300 block font-medium">CLARVO Psychometric Evaluation Summary</span>
                         </div>
                     </div>
                     <div class="text-right">
@@ -3755,7 +3755,7 @@ export function buildClass10ExecutiveHTMLReport(
                         <div class="grid grid-cols-2 gap-4 text-[11px]">
                             <div>
                                 <span class="text-slate-400 block text-[9px] uppercase font-semibold">Official Web Portal</span>
-                                <a href="https://careersimplified.com" target="_blank" class="text-gold font-bold hover:underline text-xs">careersimplified.com</a>
+                                <a href="https://clarvo.com" target="_blank" class="text-gold font-bold hover:underline text-xs">clarvo.com</a>
                             </div>
                             <div>
                                 <span class="text-slate-400 block text-[9px] uppercase font-semibold">Advisory & Support Email</span>
@@ -3770,14 +3770,14 @@ export function buildClass10ExecutiveHTMLReport(
                     <p class="text-xs italic font-serif text-gold-light max-w-xl mx-auto">
                         "Your potential is not defined by where you start, but by the clarity of the path you choose to walk."
                     </p>
-                    <p class="text-[9px] text-slate-400 uppercase font-semibold">© 2026 Career Simplified | All Rights Reserved | Confidential Diagnostic Data</p>
+                    <p class="text-[9px] text-slate-400 uppercase font-semibold">© 2026 CLARVO | All Rights Reserved | Confidential Diagnostic Data</p>
                 </div>
             </div>
         </section>
 
         <!-- FOOTER -->
         <footer class="border-t-2 border-gold/30 pt-6 text-center text-xs text-slate-500 space-y-2 pb-8 no-print">
-            <p>Certified Class 10 Executive Diagnostic Report for ${name} | Career Simplified Engine v5.0</p>
+            <p>Certified Class 10 Executive Diagnostic Report for ${name} | CLARVO Engine v5.0</p>
             <p>© 2026 Confidential Assessment Data.</p>
         </footer>
 

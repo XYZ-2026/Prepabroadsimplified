@@ -1870,7 +1870,7 @@ Return ONLY valid JSON with this exact structure (no markdown):
           "Khan Academy (Free conceptual foundation courses)",
           "Coursera / edX (Introductory university-level modules)",
           "Anki / Quizlet (Spaced repetition study decks)",
-          "Career Simplified Advisory Portal (Career roadmap guidance)"
+          "CLARVO Advisory Portal (Career roadmap guidance)"
         ],
       },
       psychologicalSummary: {
@@ -2817,7 +2817,7 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
           <div className="as-crm-modal" style={{ maxWidth: '420px', borderRadius: '16px', overflow: 'hidden', padding: 0 }}>
             <div style={{ background: '#690B1B', color: '#fff', padding: '20px 24px', position: 'relative' }}>
               <div style={{ fontSize: '10px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.8px', color: 'rgba(255,255,255,0.7)', marginBottom: '4px' }}>Secure Payment Gateway</div>
-              <h3 style={{ fontSize: '18px', fontWeight: 700, margin: 0 }}>Career Simplified</h3>
+              <h3 style={{ fontSize: '18px', fontWeight: 700, margin: 0 }}>CLARVO</h3>
               <button 
                 onClick={() => setPayModalOpen(false)}
                 style={{ position: 'absolute', top: '20px', right: '20px', background: 'transparent', border: 'none', color: '#fff', fontSize: '16px', cursor: 'pointer' }}

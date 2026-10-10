@@ -13,7 +13,7 @@ import type { PathwayRoadmapData, StudyAbroadGuideData, AcademicStage, StudentAc
 export type ReportVariant = 'junior' | 'grade10' | 'senior';
 
 export const REPORT_ORGANIZATION_IDENTITY = {
-  organizationName: 'Career Simplified',
+  organizationName: 'CLARVO',
   divisionName: 'Psychometric Research & Academic Assessment Division',
   secondaryDivisionName: 'Academic & Career Assessment Division',
   institutionalGovernance: 'Institutional Psychometric Governance',

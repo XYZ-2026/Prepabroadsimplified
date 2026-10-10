@@ -383,10 +383,10 @@ export default function PsychometricLandingPage({ variant, onStart, eligibility,
               </ul>
             </div>
 
-            {/* Right: Career Simplified Flow */}
-            <div className="bg-slate-800/80 rounded-3xl border border-emerald-500/30 p-8">
-              <div className="text-xs font-extrabold text-emerald-400 uppercase tracking-wider mb-4">
-                CAREER SIMPLIFIED APPROACH (STUDENT FIRST)
+            {/* Right: CLARVO Flow */}
+            <div className="bg-slate-800/80 rounded-3xl border border-blue-500/30 p-8">
+              <div className="text-xs font-extrabold text-blue-400 uppercase tracking-wider mb-4">
+                CLARVO APPROACH (STUDENT FIRST)
               </div>
               <ul className="space-y-3 text-xs text-slate-300 font-medium">
                 {config.simplifiedFlow.map((item, i) => (
@@ -755,18 +755,20 @@ export default function PsychometricLandingPage({ variant, onStart, eligibility,
       <footer className="bg-slate-950 text-slate-400 py-12 px-4 md:px-8 text-xs border-t border-slate-900">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="flex items-center gap-2">
-            <div className="w-6 h-6 rounded-lg bg-[#690b1b] text-white font-bold flex items-center justify-center text-[10px]">
-              CS
+            <div className="w-6 h-6 rounded-lg bg-[#2563EB] text-white font-bold flex items-center justify-center text-[10px]">
+              CL
             </div>
-            <span className="font-bold text-white">Career Simplified</span> — Psychometric &amp; Career Decision Platform
+            <span className="font-bold text-white">CLARVO</span> — Psychometric &amp; Career Decision Platform
           </div>
           <div className="flex flex-wrap items-center gap-6">
+            <Link href="/book-a-demo" className="text-blue-400 hover:text-blue-300 font-semibold transition-colors">Book a Demo</Link>
+            <Link href="/sample-reports" className="hover:text-white transition-colors">Sample Reports</Link>
             <Link href="/psychometric-test?type=junior" className="hover:text-white transition-colors">Class 7–9 Assessment</Link>
             <Link href="/psychometric-test?type=grade10" className="hover:text-white transition-colors">Class 10 Assessment</Link>
             <Link href="/psychometric-test?type=grade12" className="hover:text-white transition-colors">Class 12 Assessment</Link>
             <Link href="/university-finder" className="hover:text-white transition-colors">University Finder</Link>
           </div>
-          <div>© 2026 Career Simplified. All rights reserved.</div>
+          <div>© 2026 CLARVO. All rights reserved.</div>
         </div>
       </footer>
 

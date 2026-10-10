@@ -2,9 +2,9 @@ import type { MetadataRoute } from 'next';
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: 'Career Simplified — Modern Career Planning & Student Intelligence',
-    short_name: 'Career Simplified',
-    description: 'Discover career roadmaps, cognitive strengths, psychometric profiling, and global university admissions guidance.',
+    name: 'CLARVO — Clarity for Their Future',
+    short_name: 'CLARVO',
+    description: 'A premium student development platform for Grades 7–12, offering psychometric assessments, personalised career guidance, SAT preparation, one-to-one tutoring, and research/profile building.',
     start_url: '/',
     display: 'standalone',
     background_color: '#ffffff',

@@ -52,16 +52,16 @@ export default function PremiumToolsCards({ onLinkClick }: { onLinkClick?: () =>
         </Link>
       </div>
 
-      {/* Ad 3: Career Simplified */}
-      <div className="group flex flex-col justify-between p-6 rounded-2xl border border-gray-100 bg-gradient-to-b from-emerald-50/50 to-white shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+      {/* Ad 3: CLARVO Platform */}
+      <div className="group flex flex-col justify-between p-6 rounded-2xl border border-gray-100 bg-gradient-to-b from-blue-50/50 to-white shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
         <div>
-          <div className="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+          <div className="w-12 h-12 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
             <Globe className="w-7 h-7" />
           </div>
-          <div className="inline-block px-3 py-1 mb-3 text-xs font-semibold tracking-wider text-emerald-700 bg-emerald-100 rounded-full">
+          <div className="inline-block px-3 py-1 mb-3 text-xs font-semibold tracking-wider text-blue-700 bg-blue-100 rounded-full">
             PLATFORM TOOLS
           </div>
-          <h3 className="text-2xl font-bold text-gray-900 mb-2">Career Simplified</h3>
+          <h3 className="text-2xl font-bold text-gray-900 mb-2">CLARVO</h3>
           <p className="text-gray-600 mb-4 text-sm leading-relaxed">
             Search 500+ global universities, find matching scholarships, take advanced psychometric tests, and get expert visa guidance all in one place.
           </p>

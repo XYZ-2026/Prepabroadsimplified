@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, useEffect } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { auth as clientAuth, db as clientDb } from '@/lib/firebase';
 import { 
   signInWithEmailAndPassword, 
@@ -61,9 +61,40 @@ const STATE_OPTIONS = [
   'Uttarakhand', 'West Bengal', 'Other'
 ];
 
-export default function AuthForm() {
+interface AuthFormProps {
+  defaultTab?: Tab;
+}
+
+export default function AuthForm({ defaultTab }: AuthFormProps = {}) {
   const router = useRouter();
-  const [activeTab, setActiveTab] = useState<Tab>('login');
+  const searchParams = useSearchParams();
+
+  const getInitialTab = (): Tab => {
+    if (defaultTab) return defaultTab;
+    if (typeof window !== 'undefined' && searchParams) {
+      const tabParam = searchParams.get('tab');
+      const modeParam = searchParams.get('mode');
+      if (tabParam === 'register' || modeParam === 'signup') return 'register';
+      if (tabParam === 'forgot') return 'forgot';
+    }
+    return 'login';
+  };
+
+  const [activeTab, setActiveTab] = useState<Tab>(getInitialTab);
+
+  useEffect(() => {
+    if (searchParams) {
+      const tabParam = searchParams.get('tab');
+      const modeParam = searchParams.get('mode');
+      if (tabParam === 'register' || modeParam === 'signup') {
+        setActiveTab('register');
+      } else if (tabParam === 'login' || modeParam === 'signin') {
+        setActiveTab('login');
+      } else if (tabParam === 'forgot') {
+        setActiveTab('forgot');
+      }
+    }
+  }, [searchParams]);
   const [error, setError] = useState('');
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);

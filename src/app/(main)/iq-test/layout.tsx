@@ -5,7 +5,7 @@ import AccessRestricted from '@/components/Auth/AccessRestricted';
 import ToolLocked from '@/components/Auth/ToolLocked';
 
 export const metadata: Metadata = {
-  title: 'Online IQ / Cognitive Assessment | Career Simplified',
+  title: 'Online IQ / Cognitive Assessment | CLARVO',
   description:
     'Take a visual-first 45-question cognitive assessment measuring reasoning, pattern recognition, numerical, spatial and abstract thinking.',
   keywords: [
@@ -14,16 +14,16 @@ export const metadata: Metadata = {
     '45-question IQ assessment',
     'visual matrix reasoning',
     'pattern recognition test',
-    'Career Simplified',
+    'CLARVO',
   ],
   alternates: {
     canonical: '/iq-test',
   },
   openGraph: {
-    title: 'Online IQ / Cognitive Assessment | Career Simplified',
+    title: 'Online IQ / Cognitive Assessment | CLARVO',
     description:
       'Take a visual-first 45-question cognitive assessment measuring reasoning, pattern recognition, numerical, spatial and abstract thinking.',
-    url: 'https://careersimplified.com/iq-test',
+    url: 'https://clarvo.com/iq-test',
   },
 };
 

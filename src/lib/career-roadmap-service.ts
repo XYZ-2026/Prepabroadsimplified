@@ -451,7 +451,7 @@ export function getNode(id: string): RoadmapNode | undefined {
       typicalEntryRoute: `${parentNode?.displayName || 'Academic Pathway'} → Global Application`,
       furtherStudy: 'Global Master\'s, Ph.D., Postdoctoral research abroad.',
       careerOptions: 'International corporate roles, global research institutions, multinational consulting.',
-      sourceName: 'Career Simplified University Predictor & Global Dataset',
+      sourceName: 'CLARVO University Predictor & Global Dataset',
       sourcePage: 'University.json',
       sourceSection: 'International Education Hub',
       sourceType: 'DATABASE',

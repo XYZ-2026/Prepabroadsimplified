@@ -80,7 +80,7 @@ export async function POST(request: NextRequest) {
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>${title} | Career Simplified</title>
+  <title>${title} | CLARVO</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:wght@700&display=swap');
 
@@ -471,7 +471,7 @@ export async function POST(request: NextRequest) {
     </div>
 
     <div class="cover-footer-note">
-      <span>Powered by Career Simplified Advisory Graph Engine</span>
+      <span>Powered by CLARVO Advisory Graph Engine</span>
       <span>Strict Deterministic Data Ingestion</span>
     </div>
   </div>
@@ -479,7 +479,7 @@ export async function POST(request: NextRequest) {
   <!-- ── PAGE 2: TIMELINE PATHWAY ── -->
   <div class="page">
     <div class="page-header">
-      <div class="brand-logo"><span class="brand-red">Career</span> Simplified</div>
+      <div class="brand-logo"><span class="brand-red">CLARVO</span></div>
       <div class="page-tag">Pathway Route Map</div>
     </div>
 
@@ -511,7 +511,7 @@ export async function POST(request: NextRequest) {
   <!-- ── PAGE 3: WHY THESE CHOICES & DETAILS ── -->
   <div class="page">
     <div class="page-header">
-      <div class="brand-logo"><span class="brand-red">Career</span> Simplified</div>
+      <div class="brand-logo"><span class="brand-red">CLARVO</span></div>
       <div class="page-tag">Decision Analysis</div>
     </div>
 
@@ -556,7 +556,7 @@ export async function POST(request: NextRequest) {
   <!-- ── PAGE 4: ADMISSIONS & INSTITUTIONS ── -->
   <div class="page">
     <div class="page-header">
-      <div class="brand-logo"><span class="brand-red">Career</span> Simplified</div>
+      <div class="brand-logo"><span class="brand-red">CLARVO</span></div>
       <div class="page-tag">Admissions & Prospects</div>
     </div>
 
@@ -609,7 +609,7 @@ export async function POST(request: NextRequest) {
 
     <div class="disclaimer-box">
       <strong>Research & Verification Notice:</strong>
-      All pathways, degree durations, and entrance exams are compiled from authoritative educational sources (UGC, AICTE, CBSE, and respective university handbooks). College listings represent field-level recognition and may require individual entrance qualification or counseling quota cutoffs. Please consult with your Career Simplified counsellor before finalizing application submissions.
+      All pathways, degree durations, and entrance exams are compiled from authoritative educational sources (UGC, AICTE, CBSE, and respective university handbooks). College listings represent field-level recognition and may require individual entrance qualification or counseling quota cutoffs. Please consult with your CLARVO counsellor before finalizing application submissions.
     </div>
 
     <div class="page-footer">

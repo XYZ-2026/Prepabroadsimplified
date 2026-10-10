@@ -35,7 +35,7 @@ export default function HeroVisualMockup() {
     <div className="w-full max-w-xl mx-auto relative py-6 select-none">
       
       {/* Background Soft Aura & Grid */}
-      <div className="absolute inset-0 bg-gradient-to-tr from-[#690b1b]/5 via-amber-500/5 to-purple-500/5 rounded-3xl blur-2xl pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-tr from-[#2563EB]/5 via-amber-500/5 to-purple-500/5 rounded-3xl blur-2xl pointer-events-none" />
 
       {/* Main Composition Container */}
       <div className="relative z-10 grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
@@ -45,16 +45,16 @@ export default function HeroVisualMockup() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="md:col-span-12 bg-white/95 backdrop-blur-md rounded-3xl border border-slate-200/90 p-6 shadow-2xl shadow-[#690b1b]/10 relative z-20 overflow-hidden"
+          className="md:col-span-12 bg-white/95 backdrop-blur-md rounded-3xl border border-slate-200/90 p-6 shadow-2xl shadow-[#2563EB]/10 relative z-20 overflow-hidden"
         >
           {/* Card Header */}
           <div className="flex items-center justify-between pb-4 border-b border-slate-100 mb-4">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-[#690b1b] to-purple-900 text-white font-bold text-sm flex items-center justify-center shadow-md">
-                AP
+              <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-[#2563EB] to-blue-900 text-white font-bold text-sm flex items-center justify-center shadow-md">
+                CL
               </div>
               <div>
-                <span className="text-[10px] font-extrabold tracking-widest text-[#690b1b] uppercase block">
+                <span className="text-[10px] font-extrabold tracking-widest text-[#2563EB] uppercase block">
                   STUDENT INTELLIGENCE PROFILE
                 </span>
                 <h4 className="text-sm font-bold text-slate-900 leading-tight">Candidate Profile — Illustrative Demo</h4>
@@ -108,7 +108,7 @@ export default function HeroVisualMockup() {
           transition={{ duration: 0.6, delay: 0.2 }}
           className="md:col-span-6 bg-white/95 backdrop-blur-md rounded-2xl border border-slate-200/80 p-4 shadow-lg shadow-slate-900/5 flex items-center gap-3 relative z-10"
         >
-          <div className="w-9 h-9 rounded-xl bg-purple-100 text-[#690b1b] flex items-center justify-center shrink-0">
+          <div className="w-9 h-9 rounded-xl bg-blue-100 text-[#2563EB] flex items-center justify-center shrink-0">
             <Brain className="w-4 h-4" />
           </div>
           <div>

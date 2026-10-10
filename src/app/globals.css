@@ -4,56 +4,67 @@
 
 /* ============================================================
    globals.css — Global Styles, Variables, Typography, Layout
-   Career Simplified — Light theme with deep red/maroon accents
-   Migrated from legacy main.css
+   CLARVO — Premium Student Development Platform (Grades 7–12)
+   Brand Identity: Clarity for Their Future.
    ============================================================ */
-/* ── Google Fonts (moved to layout.tsx) ── */
+/* ── Google Fonts (configured in layout.tsx) ── */
 
 /* ── CSS Custom Properties ── */
 :root {
-  /* Backgrounds — Light theme */
+  /* Brand Identity Tokens */
+  --clarvo-blue-primary:   #2563EB;
+  --clarvo-blue-hover:     #1D4ED8;
+  --clarvo-blue-light:     #E8F0FF;
+  --clarvo-deep-black:     #080F1C;
+  --clarvo-white:          #FFFFFF;
+  --clarvo-text-body:      #344054;
+  --clarvo-text-secondary: #667085;
+  --clarvo-border:         #E4E7EC;
+  --clarvo-bg-soft:        #F8FAFC;
+
+  /* Backgrounds — Premium Light Theme */
   --color-page-bg:       #FFFFFF;
-  --color-section-alt:   #F9F4F4;
-  --color-section-cool:  #EBF4FB;
-  --color-section-lav:   #F2F0FC;
-  --color-dark-navy:     #1E1E2F;
-  --color-slate:         #2D303C;
-  --color-deep-bg:       #0E1222;
+  --color-section-alt:   #F8FAFC;
+  --color-section-cool:  #E8F0FF;
+  --color-section-lav:   #F8FAFC;
+  --color-dark-navy:     #080F1C;
+  --color-slate:         #344054;
+  --color-deep-bg:       #080F1C;
 
-  /* Primary Accent — Deep Red / Maroon (brand color) */
-  --color-red-deep:      #690b1b;
-  --color-red-darker:    #8D1212;
-  --color-red-vivid:     #ED1C24;
-  --color-red-blush:     #DB7D7D;
-  --color-red-tint:      #FFE5E5;
-  --color-red-tint-warm: #FDF4F4;
+  /* Primary Accent — Brand Blue (#2563EB) */
+  --color-red-deep:      #2563EB; /* Aliased for graceful legacy compatibility */
+  --color-red-darker:    #1D4ED8;
+  --color-red-vivid:     #2563EB;
+  --color-red-blush:     #93C5FD;
+  --color-red-tint:      #E8F0FF;
+  --color-red-tint-warm: #F8FAFC;
 
-  /* Secondary Accent — Gold */
-  --color-gold:          #F4B400;
-  --color-gold-deep:     #A59132;
-  --color-gold-light:    #DAB971;
-  --color-gold-bright:   #FFCB05;
-  --color-gold-neon:     #F7FF78;
+  /* Secondary Accents */
+  --color-gold:          #F59E0B;
+  --color-gold-deep:     #D97706;
+  --color-gold-light:    #FCD34D;
+  --color-gold-bright:   #FBBF24;
+  --color-gold-neon:     #FEF3C7;
 
-  /* Tertiary — Periwinkle / Blue */
-  --color-periwinkle:    #7D8DBD;
-  --color-blue-bright:   #0088CB;
-  --color-lavender:      #BFB4EE;
-  --color-blue-gray:     #BCC3C9;
+  /* Tertiary — Blue Accents */
+  --color-periwinkle:    #6366F1;
+  --color-blue-bright:   #2563EB;
+  --color-lavender:      #E0E7FF;
+  --color-blue-gray:     #94A3B8;
 
   /* Neutrals */
   --color-white:         #FFFFFF;
-  --color-gray-50:       #F9FAFB;
-  --color-gray-100:      #F3F4F6;
-  --color-gray-200:      #E5E7EB;
-  --color-gray-300:      #D1D5DB;
-  --color-gray-400:      #9CA3AF;
-  --color-gray-500:      #6B7280;
-  --color-gray-600:      #4B5563;
-  --color-gray-700:      #374151;
-  --color-gray-800:      #1F2937;
-  --color-gray-900:      #111827;
-  --color-black:         #000000;
+  --color-gray-50:       #F8FAFC;
+  --color-gray-100:      #F1F5F9;
+  --color-gray-200:      #E4E7EC;
+  --color-gray-300:      #D0D5DD;
+  --color-gray-400:      #98A2B3;
+  --color-gray-500:      #667085;
+  --color-gray-600:      #475467;
+  --color-gray-700:      #344054;
+  --color-gray-800:      #1D2939;
+  --color-gray-900:      #080F1C;
+  --color-black:         #080F1C;
 
   /* Semantic aliases */
   --bg-primary:          var(--color-white);
@@ -63,21 +74,21 @@
   --bg-topbar:           var(--color-white);
   --bg-surface:          var(--color-white);
   --bg-hover:            var(--color-gray-50);
-  --accent:              var(--color-red-deep);
-  --accent-hover:        var(--color-red-darker);
-  --accent-light:        var(--color-red-tint);
-  --text-heading:        var(--color-gray-900);
-  --text-body:           var(--color-gray-600);
-  --text-muted:          var(--color-gray-400);
-  --text-dark:           var(--color-gray-800);
-  --text-light:          var(--color-gray-500);
-  --text-accent:         var(--color-red-deep);
-  --border-color:        var(--color-gray-200);
+  --accent:              var(--clarvo-blue-primary);
+  --accent-hover:        var(--clarvo-blue-hover);
+  --accent-light:        var(--clarvo-blue-light);
+  --text-heading:        var(--clarvo-deep-black);
+  --text-body:           var(--clarvo-text-body);
+  --text-muted:          var(--clarvo-text-secondary);
+  --text-dark:           var(--clarvo-deep-black);
+  --text-light:          var(--clarvo-text-secondary);
+  --text-accent:         var(--clarvo-blue-primary);
+  --border-color:        var(--clarvo-border);
   --border-light:        var(--color-gray-100);
 
   /* Typography */
-  --font-primary: var(--next-font-primary), 'Inter', sans-serif;
-  --font-heading: var(--next-font-heading), 'Lexend', sans-serif;
+  --font-primary: var(--next-font-primary), 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-heading: var(--next-font-primary), 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-size-xs:   11px;
   --font-size-sm:   13px;
   --font-size-base: 15px;
@@ -88,18 +99,18 @@
 
   /* Layout */
   --sidebar-width:  280px;
-  --topbar-height:  60px;
-  --max-content-w:  1200px;
+  --topbar-height:  64px;
+  --max-content-w:  1240px;
   --radius-sm:      8px;
   --radius-md:      12px;
   --radius-lg:      16px;
-  --transition:     0.25s ease;
+  --transition:     0.2s ease;
 
   /* Shadows */
-  --shadow-sm:      0 1px 2px rgba(0, 0, 0, 0.05);
-  --shadow-md:      0 4px 12px rgba(0, 0, 0, 0.08);
-  --shadow-lg:      0 8px 24px rgba(0, 0, 0, 0.1);
-  --shadow-card:    0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-sm:      0 1px 2px rgba(8, 15, 28, 0.05);
+  --shadow-md:      0 4px 12px rgba(8, 15, 28, 0.06);
+  --shadow-lg:      0 12px 28px rgba(8, 15, 28, 0.08);
+  --shadow-card:    0 1px 3px rgba(8, 15, 28, 0.05), 0 1px 2px rgba(8, 15, 28, 0.03);
 }
 
 
@@ -213,7 +224,66 @@ h5, h6 {
 
 /* ── Utility classes ── */
 .brand-red {
-  color: var(--color-red-deep);
+  color: var(--clarvo-blue-primary);
+}
+
+.brand-blue {
+  color: var(--clarvo-blue-primary);
+}
+
+.clarvo-wordmark {
+  font-family: var(--font-primary);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--clarvo-deep-black);
+}
+
+.clarvo-wordmark-blue {
+  color: var(--clarvo-blue-primary);
+}
+
+.btn-primary-clarvo {
+  background-color: var(--clarvo-blue-primary);
+  color: var(--clarvo-white);
+  padding: 10px 20px;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: var(--font-size-sm);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  text-decoration: none;
+  transition: all var(--transition);
+  border: 1px solid transparent;
+  cursor: pointer;
+}
+.btn-primary-clarvo:hover {
+  background-color: var(--clarvo-blue-hover);
+  color: var(--clarvo-white);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+}
+
+.btn-secondary-clarvo {
+  background-color: var(--clarvo-white);
+  color: var(--clarvo-text-body);
+  border: 1px solid var(--clarvo-border);
+  padding: 10px 20px;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: var(--font-size-sm);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  text-decoration: none;
+  transition: all var(--transition);
+  cursor: pointer;
+}
+.btn-secondary-clarvo:hover {
+  background-color: var(--clarvo-bg-soft);
+  border-color: var(--clarvo-blue-primary);
+  color: var(--clarvo-blue-primary);
 }
 
 .gold {

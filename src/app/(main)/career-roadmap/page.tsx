@@ -5,9 +5,9 @@ import CareerRoadmapExplorer from '@/components/CareerRoadmap/CareerRoadmapExplo
 
 export const metadata: Metadata = {
   title: {
-    absolute: 'Career Roadmap Studio | Career Simplified',
+    absolute: 'Career Roadmap Studio | CLARVO',
   },
-  description: 'Explore career pathways, academic programmes, entrance exams, colleges, and career outcomes. Map your journey from 10th standard to your dream career with Career Simplified.',
+  description: 'Explore career pathways, academic programmes, entrance exams, colleges, and career outcomes. Map your journey from 10th standard to your dream career with CLARVO.',
   keywords: ['career roadmap', 'career planning', 'academic pathways', 'entrance exams', 'degree programmes', 'career guidance'],
 };
 

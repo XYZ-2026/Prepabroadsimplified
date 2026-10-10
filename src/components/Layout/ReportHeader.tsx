@@ -72,8 +72,7 @@ export default function ReportHeader({ userRole, activeMode = 'full', onSwitchMo
         </Link>
 
         <div className="report-brand">
-          <span className="brand-red" style={{ color: 'var(--color-red-deep, #690b1b)', fontWeight: 800 }}>Career</span>{' '}
-          <span style={{ color: '#0f172a', fontWeight: 800 }}>Simplified</span>
+          <span style={{ color: '#080F1C', fontWeight: 900, fontSize: '18px', letterSpacing: '-0.02em' }}>CLARVO</span>
           <span className="report-badge">Official Report View</span>
         </div>
       </div>

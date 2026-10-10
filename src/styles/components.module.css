@@ -74,11 +74,11 @@
 }
 
 .btnTopbarCta {
-  border: 1.5px solid var(--color-red-deep);
-  color: var(--color-red-deep);
-  background: transparent;
-  border-radius: 20px;
-  padding: 8px 20px;
+  background: var(--clarvo-blue-primary, #2563EB);
+  color: #FFFFFF;
+  border: 1px solid var(--clarvo-blue-primary, #2563EB);
+  border-radius: 10px;
+  padding: 8px 18px;
   font-size: var(--font-size-sm);
   font-weight: 600;
   cursor: pointer;
@@ -86,11 +86,14 @@
   font-family: var(--font-primary);
   white-space: nowrap;
   text-decoration: none;
+  box-shadow: 0 1px 2px rgba(37, 99, 235, 0.2);
 }
 
 .btnTopbarCta:hover {
-  background: var(--color-red-deep);
-  color: var(--color-white);
+  background: var(--clarvo-blue-hover, #1D4ED8);
+  border-color: var(--clarvo-blue-hover, #1D4ED8);
+  color: #FFFFFF;
+  box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3);
 }
 
 .bellBtn {
@@ -105,7 +108,7 @@
 }
 
 .bellBtn:hover {
-  color: var(--color-red-deep);
+  color: var(--clarvo-blue-primary, #2563EB);
 }
 
 .bellBadge {
@@ -114,7 +117,7 @@
   right: 0;
   width: 10px;
   height: 10px;
-  background: var(--color-red-vivid);
+  background: var(--clarvo-blue-primary, #2563EB);
   border-radius: 50%;
   border: 2px solid var(--bg-topbar);
 }
@@ -361,7 +364,7 @@
   display: block;
   width: 100%;
   padding: 10px 14px;
-  background-color: var(--color-red-deep);
+  background-color: var(--clarvo-blue-primary, #2563EB);
   color: #ffffff;
   border: none;
   border-radius: 12px;
@@ -374,7 +377,7 @@
 }
 
 .btnSidebarLogin:hover {
-  background-color: var(--color-red-darker);
+  background-color: var(--clarvo-blue-hover, #1D4ED8);
 }
 
 /* Sidebar: Quick Action */
@@ -386,7 +389,7 @@
   display: block;
   width: 100%;
   padding: 10px 14px;
-  background: var(--color-red-deep);
+  background: var(--clarvo-blue-primary, #2563EB);
   color: var(--color-white);
   border: none;
   border-radius: var(--radius-sm);
@@ -399,7 +402,7 @@
 }
 
 .btnSidebarCta:hover {
-  background: var(--color-red-darker);
+  background: var(--clarvo-blue-hover, #1D4ED8);
 }
 
 /* Sidebar: Navigation */

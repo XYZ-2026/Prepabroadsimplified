@@ -302,7 +302,7 @@ export default function UniversityFinderWizard({ initialDetails }: { initialDeta
       doc.setTextColor(150, 150, 150);
       doc.setFontSize(8);
       doc.setFont(fontNormal, 'normal');
-      doc.text('CAREER SIMPLIFIED • PERSONALISED UNIVERSITY REPORT', pageWidth / 2, 15, { align: 'center' });
+      doc.text('CLARVO • PERSONALISED UNIVERSITY REPORT', pageWidth / 2, 15, { align: 'center' });
       
       doc.setFontSize(10);
       doc.setTextColor(180, 20, 30); // Red accent
@@ -339,10 +339,7 @@ export default function UniversityFinderWizard({ initialDetails }: { initialDeta
     doc.setTextColor(255, 255, 255);
     doc.setFontSize(12);
     doc.setFont(fontNormal, 'bold');
-    doc.text('CAREER ', margin + 18, 47);
-    doc.setTextColor(255, 193, 7); // Yellow
-    doc.setFont(fontNormal, 'normal');
-    doc.text('SIMPLIFIED', margin + 37, 47);
+    doc.text('CLARVO', margin + 18, 47);
     
     doc.setTextColor(255, 193, 7); // Yellow
     doc.setFontSize(10);
@@ -386,7 +383,7 @@ export default function UniversityFinderWizard({ initialDetails }: { initialDeta
     doc.setTextColor(150, 150, 150);
     doc.setFont(fontNormal, 'normal');
     doc.text('CONFIDENTIAL & PERSONALISED', margin, pageHeight - 12);
-    doc.text('careersimplified.com', pageWidth - margin, pageHeight - 12, { align: 'right' });
+    doc.text('clarvo.com', pageWidth - margin, pageHeight - 12, { align: 'right' });
 
     // --- PAGE 2: PROFILE SUMMARY ---
     doc.addPage();
@@ -753,7 +750,7 @@ export default function UniversityFinderWizard({ initialDetails }: { initialDeta
     doc.setTextColor(200, 200, 200);
     doc.setFontSize(10);
     doc.setFont(fontNormal, 'normal');
-    doc.text('This report is a snapshot, not a ceiling. Strengthening academics, test scores, and extracurriculars\ncan shift your match percentage meaningfully within a single application cycle. Connect with a\nCareer Simplified counsellor to turn this data into a personalised action plan.', margin + 15, 55);
+    doc.text('This report is a snapshot, not a ceiling. Strengthening academics, test scores, and extracurriculars\ncan shift your match percentage meaningfully within a single application cycle. Connect with a\nCLARVO counsellor to turn this data into a personalised action plan.', margin + 15, 55);
     
     // CTA Button
     doc.setFillColor(220, 53, 69);

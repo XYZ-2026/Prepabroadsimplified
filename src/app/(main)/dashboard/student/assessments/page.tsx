@@ -148,13 +148,13 @@ export default async function AssessmentsPage() {
       <div className={styles.card} style={{ marginBottom: '32px' }}>
         <div className={styles.cardHeader} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '10px' }}>
           <div>
-            <h2 className={styles.cardTitle}>Career Simplified Psychometric Tests</h2>
+            <h2 className={styles.cardTitle}>CLARVO Psychometric Tests</h2>
             <p style={{ fontSize: '13px', color: '#64748b', margin: '2px 0 0 0' }}>
               Assessment eligibility is authoritatively governed by your academic stage: <strong>{access.gradeLabel}</strong>
             </p>
           </div>
           {access.grade && (
-            <span style={{ fontSize: '12px', fontWeight: 700, padding: '4px 10px', borderRadius: '12px', background: 'rgba(105, 11, 27, 0.08)', color: '#690b1b' }}>
+            <span style={{ fontSize: '12px', fontWeight: 700, padding: '4px 10px', borderRadius: '12px', background: 'rgba(37, 99, 235, 0.08)', color: '#2563EB' }}>
               {formatGradeLabel(access.grade)}
             </span>
           )}

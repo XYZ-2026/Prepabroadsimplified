@@ -20,10 +20,10 @@ export const metadata: Metadata = {
     canonical: '/psychometric-test',
   },
   openGraph: {
-    title: 'Psychometric Assessment & Career Personality Evaluation | Career Simplified',
+    title: 'Psychometric Assessment & Career Personality Evaluation | CLARVO',
     description:
       'Discover your ideal career path, learning style, and academic-stream alignment.',
-    url: 'https://www.careersimplified.com/psychometric-test',
+    url: 'https://www.clarvo.com/psychometric-test',
   },
 };
 

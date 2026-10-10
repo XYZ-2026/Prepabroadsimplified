@@ -7,7 +7,7 @@ const inter = Inter({ subsets: ['latin'], variable: '--next-font-primary', displ
 const lexend = Lexend({ subsets: ['latin'], variable: '--next-font-heading', display: 'swap' });
 
 function getValidSiteUrl(urlInput?: string): string {
-  const fallback = 'https://careersimplified.com';
+  const fallback = 'https://clarvo.com';
   if (!urlInput) return fallback;
   let raw = urlInput.trim();
   if (!raw.startsWith('http://') && !raw.startsWith('https://')) {
@@ -25,26 +25,27 @@ const siteUrl = getValidSiteUrl(process.env.NEXT_PUBLIC_APP_URL);
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: 'Career Simplified — Modern Career Planning & Student Intelligence Platform',
-    template: '%s | Career Simplified',
+    default: 'CLARVO — Clarity for Their Future | Student Development Platform',
+    template: '%s | CLARVO',
   },
   description:
-    'Career Simplified is a comprehensive career planning and student intelligence platform. Discover career roadmaps, cognitive strengths, psychometric profiling, and global university admissions guidance.',
+    'CLARVO is a premium student development platform for Grades 7–12, offering psychometric assessments, personalised career guidance, SAT preparation, one-to-one tutoring, and research/profile building.',
   keywords: [
-    'career simplified',
-    'career roadmap studio',
-    'career planning',
+    'CLARVO',
+    'clarvo',
+    'student development platform',
+    'clarity for their future',
     'psychometric assessment',
-    'IQ test for students',
+    'career guidance',
+    'SAT preparation',
+    'tutoring',
     'stream selection',
-    'study abroad',
+    'cognitive assessment',
     'university finder',
-    'college search',
-    'career counselling',
   ],
-  authors: [{ name: 'Career Simplified Team', url: siteUrl }],
-  creator: 'Career Simplified',
-  publisher: 'Career Simplified',
+  authors: [{ name: 'CLARVO Team', url: siteUrl }],
+  creator: 'CLARVO',
+  publisher: 'CLARVO',
   formatDetection: {
     email: false,
     address: false,
@@ -54,11 +55,11 @@ export const metadata: Metadata = {
     canonical: '/',
   },
   openGraph: {
-    title: 'Career Simplified — Modern Career Planning & Student Intelligence Platform',
+    title: 'CLARVO — Clarity for Their Future',
     description:
-      'Career Roadmap Studio, cognitive profiling, psychometric assessments, and university admissions matching — all in one connected platform.',
+      'A premium student development platform for Grades 7–12, offering psychometric assessments, personalised career guidance, SAT preparation, one-to-one tutoring, and research/profile building.',
     url: siteUrl,
-    siteName: 'Career Simplified',
+    siteName: 'CLARVO',
     locale: 'en_US',
     type: 'website',
     images: [
@@ -66,15 +67,15 @@ export const metadata: Metadata = {
         url: '/study_abroad_hero.png',
         width: 1200,
         height: 630,
-        alt: 'Career Simplified — Career Planning & Student Intelligence',
+        alt: 'CLARVO — Clarity for Their Future',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Career Simplified — Modern Career Planning & Student Intelligence Platform',
+    title: 'CLARVO — Clarity for Their Future',
     description:
-      'Career Roadmap Studio, cognitive profiling, psychometric assessments, and university admissions matching — all in one connected platform.',
+      'A premium student development platform for Grades 7–12, offering psychometric assessments, personalised career guidance, SAT preparation, one-to-one tutoring, and research/profile building.',
     images: ['/study_abroad_hero.png'],
   },
   verification: {
@@ -104,11 +105,11 @@ export default function RootLayout({
       {
         '@type': 'EducationalOrganization',
         '@id': `${siteUrl}/#organization`,
-        name: 'Career Simplified',
+        name: 'CLARVO',
         url: `${siteUrl}/`,
         logo: `${siteUrl}/logo-square-cropped.avif`,
         description:
-          'Comprehensive career planning and student intelligence platform — career roadmaps, cognitive assessments, psychometric profiling, and university admissions guidance.',
+          'A premium student development platform for Grades 7–12, offering psychometric assessments, personalised career guidance, SAT preparation, one-to-one tutoring, and research/profile building.',
         address: {
           '@type': 'PostalAddress',
           addressLocality: 'Mumbai',
@@ -121,8 +122,8 @@ export default function RootLayout({
         '@type': 'WebSite',
         '@id': `${siteUrl}/#website`,
         url: `${siteUrl}/`,
-        name: 'Career Simplified',
-        description: 'Modern career planning, cognitive profiling & psychometric evaluation platform.',
+        name: 'CLARVO',
+        description: 'Clarity for Their Future. Premium student development platform for Grades 7–12.',
         publisher: {
           '@id': `${siteUrl}/#organization`,
         },

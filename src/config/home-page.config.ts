@@ -44,23 +44,23 @@ export interface FAQItem {
 }
 
 export const HOME_PAGE_CONFIG = {
-  brandName: 'Career Simplified',
-  tagline: 'Student Intelligence, Career & Study Abroad Platform',
-  heroEyebrow: 'STUDENT INTELLIGENCE × STUDY ABROAD',
-  heroHeadlineLine1: 'KNOW YOURSELF.',
-  heroHeadlineLine2: 'FIND YOUR PATH.',
-  heroHeadlineLine3: 'GO FURTHER.',
-  heroSubtitle: 'Discover your strengths, explore career pathways, find universities that fit, and build your study-abroad journey around you.',
+  brandName: 'CLARVO',
+  tagline: 'Clarity for Their Future.',
+  heroEyebrow: 'STUDENT DEVELOPMENT PLATFORM • GRADES 7–12',
+  heroHeadlineLine1: 'CLARITY FOR',
+  heroHeadlineLine2: 'THEIR FUTURE',
+  heroHeadlineLine3: 'STARTS HERE.',
+  heroSubtitle: 'A premium student development platform for Grades 7–12, offering psychometric assessments, personalised career guidance, SAT preparation, one-to-one tutoring, and research/profile building.',
   
-  primaryCtaText: 'START YOUR JOURNEY →',
-  primaryCtaHref: '/psychometric-test',
-  secondaryCtaText: 'EXPLORE UNIVERSITIES',
-  secondaryCtaHref: '/university-finder',
+  primaryCtaText: 'Book a Demo',
+  primaryCtaHref: '/book-a-demo',
+  secondaryCtaText: 'Explore Sample Reports',
+  secondaryCtaHref: '/sample-reports',
   heroTrustLine: [
-    'Cognitive Assessment',
-    'Career Discovery',
-    'University Matching',
-    'Counsellor Guidance'
+    'Psychometric Assessments',
+    'Personalised Career Guidance',
+    'SAT Preparation & Tutoring',
+    'Research & Profile Building'
   ],
 
   trustMetrics: [
@@ -284,16 +284,16 @@ export const HOME_PAGE_CONFIG = {
 
   faqs: [
     {
-      question: 'What is Career Simplified?',
-      answer: 'Career Simplified is a complete Student Intelligence, Career, and Higher Education platform. We combine cognitive assessments, psychometric profiling, parent alignment, university discovery, and expert counsellor guidance in one connected platform.'
+      question: 'What is CLARVO?',
+      answer: 'CLARVO is a premium student development platform for Grades 7–12, offering psychometric assessments, personalised career guidance, SAT preparation, one-to-one tutoring, and research and profile building.'
     },
     {
-      question: 'What can I use the platform for?',
-      answer: 'You can use Career Simplified to discover your cognitive strengths, evaluate career directions, compare 500+ global universities across 40 countries, track application deadlines, and consult with academic counsellors.'
+      question: 'What can students and parents use CLARVO for?',
+      answer: 'You can use CLARVO to discover cognitive and psychological strengths, evaluate future career directions, prepare for standardized testing, build academic profiles, and consult with experienced educational advisors.'
     },
     {
       question: 'What does the Psychometric Assessment measure?',
-      answer: 'The Psychometric Assessment measures learning style, analytical mindset, career interests, personality traits, and cross-cultural adaptability to recommend optimal field and stream choices.'
+      answer: 'The Psychometric Assessment measures learning style, analytical mindset, career interests, personality traits, and stream suitability to recommend optimal career pathways for Grades 7–12 students.'
     },
     {
       question: 'What does the IQ Assessment measure?',
@@ -301,7 +301,7 @@ export const HOME_PAGE_CONFIG = {
     },
     {
       question: 'Can parents participate in the process?',
-      answer: 'Yes! Career Simplified features a dedicated Parent Assessment tool that allows parents to share their perspectives on budgets, country preferences, and career expectations. The system generates a side-by-side comparison report for family discussion.'
+      answer: 'Yes! CLARVO features a dedicated Parent Assessment tool that allows parents to share their perspectives on budgets, country preferences, and career expectations. The system generates a side-by-side comparison report for family discussion.'
     },
     {
       question: 'Can I speak to a counsellor for human guidance?',

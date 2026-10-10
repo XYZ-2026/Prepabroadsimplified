@@ -229,7 +229,7 @@ export function buildClass10ExecutiveSummaryHTMLReport(
                 <!-- Brand Header -->
                 <div class="flex justify-between items-start border-b-2 border-gold/40 pb-6 relative z-10">
                     <div>
-                        <span class="text-gold font-bold text-xs tracking-widest block uppercase mb-1">CAREER SIMPLIFIED PREMIA</span>
+                        <span class="text-gold font-bold text-xs tracking-widest block uppercase mb-1">CLARVO PREMIA</span>
                         <h1 class="text-3xl font-black text-white tracking-tight">EXECUTIVE CAREER EDITION</h1>
                         <p class="text-gold/80 text-xs font-semibold mt-1">15-Page Curated Psychometric &amp; Decision Support Evaluation</p>
                     </div>
@@ -297,7 +297,7 @@ export function buildClass10ExecutiveSummaryHTMLReport(
 
                 <!-- Footer Notice -->
                 <div class="border-t border-gold/40 pt-4 flex justify-between items-center text-xs text-gold/80 relative z-10">
-                    <span>Career Simplified Psychometric Evaluation System</span>
+                    <span>CLARVO Psychometric Evaluation System</span>
                     <span>Executive Career Edition • Page 01 of 15</span>
                 </div>
             </div>

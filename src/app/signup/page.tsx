@@ -6,11 +6,11 @@ import AuthInfographics from '@/components/Auth/AuthInfographics';
 import styles from '@/styles/auth.module.css';
 
 export const metadata: Metadata = {
-  title: 'Student & Counsellor Login / Sign Up | CLARVO',
+  title: 'Sign Up — Create Student Account | CLARVO',
   description:
-    'Sign in or register for CLARVO to access personalized career guidance, cognitive assessments, and profile tools.',
+    'Join CLARVO to access personalized student guidance, psychometric assessments, university matching, and profile building.',
   alternates: {
-    canonical: '/auth',
+    canonical: '/signup',
   },
   robots: {
     index: true,
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   },
 };
 
-export default function AuthPage() {
+export default function SignUpPage() {
   return (
     <>
       <header className={styles.authTopbar} style={{ justifyContent: 'space-between' }}>
@@ -54,14 +54,14 @@ export default function AuthPage() {
 
       <main className={styles.authMain}>
         <div className={styles.authLayoutGrid}>
-          {/* Left Side: Auth Card (Sign In / Register / Forgot Password) */}
+          {/* Left Side: Auth Card (Sign Up view directly exposed) */}
           <section className={styles.authSection}>
             <Suspense fallback={
               <div style={{ padding: '40px', textAlign: 'center', color: '#667085' }}>
-                Loading CLARVO Access Portal...
+                Loading CLARVO Registration Portal...
               </div>
             }>
-              <AuthForm />
+              <AuthForm defaultTab="register" />
             </Suspense>
           </section>
 

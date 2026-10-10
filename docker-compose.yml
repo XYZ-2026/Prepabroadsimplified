@@ -22,7 +22,7 @@ services:
     container_name: abroad-simplified
 
     ports:
-      - "${APP_PORT:-4000}:3000"
+      - "${APP_PORT:-3008}:3000"
 
     restart: unless-stopped
 

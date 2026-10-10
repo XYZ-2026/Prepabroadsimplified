@@ -81,7 +81,7 @@ export async function POST(req: NextRequest) {
     await batch.commit();
 
     // Construct full URL with cryptographic token
-    const origin = req.headers.get('origin') || process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+    const origin = req.headers.get('origin') || (process.env.NEXT_PUBLIC_APP_URL && !process.env.NEXT_PUBLIC_APP_URL.includes('localhost') ? process.env.NEXT_PUBLIC_APP_URL : 'https://clarvo.in');
     const link = `${origin}/parent-assessment?token=${rawToken}&resultId=${resultId}`;
 
     return NextResponse.json({ success: true, link });

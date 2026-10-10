@@ -8,7 +8,11 @@ function getValidSiteUrl(urlInput?: string): string {
     raw = `https://${raw}`;
   }
   try {
-    return new URL(raw).origin;
+    const parsed = new URL(raw);
+    if (parsed.hostname === 'localhost' || parsed.hostname === '127.0.0.1') {
+      return fallback;
+    }
+    return parsed.origin;
   } catch {
     return fallback;
   }

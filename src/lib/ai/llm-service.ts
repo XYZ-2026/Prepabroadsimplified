@@ -1,8 +1,8 @@
 /**
  * Centralized LLM Service
  * ─────────────────────────────────────────────────────
- * Primary: Groq API (llama-3.3-70b-versatile -> llama-3.1-8b-instant)
- * Tertiary Backup: Google Gemini (gemini-1.5-flash)
+ * Primary: Groq API (openai/gpt-oss-120b -> qwen/qwen3.8-27b)
+ * Tertiary Backup: Google Gemini (gemini-2.5-flash)
  * Fallback: Deterministic Template Builder
  *
  * Features:
@@ -95,9 +95,9 @@ export async function getValidatedGroqModels(groqKey: string): Promise<string[]>
     return validatedGroqCache.groqModels;
   }
 
-  const primaryConfig = process.env.GROQ_PRIMARY_MODEL || 'llama-3.3-70b-versatile';
-  const fallbackConfig = process.env.GROQ_FALLBACK_MODEL || 'llama-3.1-8b-instant';
-  let availableList: string[] = [primaryConfig, fallbackConfig, 'mixtral-8x7b-32768'];
+  const primaryConfig = process.env.GROQ_PRIMARY_MODEL || 'openai/gpt-oss-120b';
+  const fallbackConfig = process.env.GROQ_FALLBACK_MODEL || 'qwen/qwen3.8-27b';
+  let availableList: string[] = [primaryConfig, fallbackConfig, 'openai/gpt-oss-20b'];
 
   try {
     const res = await fetch('https://api.groq.com/openai/v1/models', {
@@ -129,31 +129,42 @@ export async function getValidatedGroqModels(groqKey: string): Promise<string[]>
 
 // ─── GROQ API PIPELINE ───────────────────────────────────────────────────
 
-export async function callGroqAPI(prompt: string, systemMsg?: string): Promise<{ text: string; model: string } | null> {
+export async function callGroqAPI(prompt: string, systemMsg?: string, isJson?: boolean): Promise<{ text: string; model: string } | null> {
   const groqKey = process.env.GROQ_API_KEY || process.env.NEXT_PUBLIC_GROQ_API_KEY || '';
   if (!groqKey) return null;
 
   const groqModels = await getValidatedGroqModels(groqKey);
+  const defaultSystem = 'You are a professional psychometric report analyst. Return ONLY valid raw JSON with no markdown syntax.';
+  const resolvedSystem = systemMsg || defaultSystem;
   const messages = [
-    { role: 'system', content: systemMsg || 'You are a professional psychometric report analyst. Return ONLY valid raw JSON with no markdown syntax.' },
+    { role: 'system', content: resolvedSystem },
     { role: 'user', content: prompt }
   ];
 
+  // Groq requires the word 'json' in messages to enable json_object response format
+  const requiresJson = isJson !== undefined
+    ? isJson
+    : (resolvedSystem.toLowerCase().includes('json') || prompt.toLowerCase().includes('json'));
+
   for (const model of groqModels) {
     try {
+      const requestBody: any = {
+        model,
+        messages,
+        temperature: 0.6,
+        max_tokens: 4000,
+      };
+      if (requiresJson) {
+        requestBody.response_format = { type: 'json_object' };
+      }
+
       const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${groqKey}`,
         },
-        body: JSON.stringify({
-          model,
-          messages,
-          temperature: 0.6,
-          max_tokens: 4000,
-          response_format: { type: 'json_object' }
-        }),
+        body: JSON.stringify(requestBody),
       });
 
       if (res.ok) {
@@ -193,7 +204,7 @@ export async function callGeminiAPI(prompt: string): Promise<{ text: string; mod
   const geminiKey = process.env.GEMINI_API_KEY || '';
   if (!geminiKey) return null;
 
-  const geminiModels = ['gemini-2.0-flash', 'gemini-1.5-flash', 'gemini-1.5-pro'];
+  const geminiModels = ['gemini-2.5-flash', 'gemini-2.5-pro'];
   const genai = new GoogleGenerativeAI(geminiKey);
 
   for (const modelName of geminiModels) {

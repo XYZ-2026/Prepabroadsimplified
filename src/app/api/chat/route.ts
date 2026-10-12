@@ -44,11 +44,17 @@ export async function POST(req: Request) {
     if (groqApiKey) {
       const primaryModel = process.env.GROQ_PRIMARY_MODEL || "openai/gpt-oss-120b";
       const fallbackModel = process.env.GROQ_FALLBACK_MODEL || "qwen/qwen3.8-27b";
-      const groqModels = [
+      const tertiaryModel = process.env.GROQ_TERTIARY_MODEL || "openai/gpt-oss-20b";
+      const groqModels = Array.from(new Set([
         primaryModel,
         fallbackModel,
+        tertiaryModel,
+        "openai/gpt-oss-120b",
+        "qwen/qwen3.8-27b",
         "openai/gpt-oss-20b",
-      ];
+        "llama-3.3-70b-versatile",
+        "llama-3.1-8b-instant",
+      ]));
 
       const formattedMessages = Array.isArray(messages) && messages.length > 0
         ? messages

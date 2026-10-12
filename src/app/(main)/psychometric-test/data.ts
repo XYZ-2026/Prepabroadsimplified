@@ -998,7 +998,7 @@ export const API_URL = API_KEY.startsWith('AQ.')
   : 'https://api.groq.com/openai/v1/chat/completions';
 export const MODELS = API_KEY.startsWith('AQ.')
   ? ['gemini-2.5-flash', 'gemini-2.5-pro']
-  : ['openai/gpt-oss-120b', 'qwen/qwen3.8-27b', 'openai/gpt-oss-20b'];
+  : ['openai/gpt-oss-120b', 'qwen/qwen3.8-27b', 'openai/gpt-oss-20b', 'llama-3.3-70b-versatile', 'llama-3.1-8b-instant'];
 
 export interface JuniorPlanWeek {
   week: number;

@@ -383,8 +383,8 @@ export default function ReportViewerShell({
     }
   }, [onSwitchMode]);
 
-  // Prepare the HTML for the iframe
-  const preparedHtml = prepareReportHtml(reportHtml);
+  // Prepare the HTML for the iframe (memoized to prevent tearing down the iframe on re-renders)
+  const preparedHtml = useMemo(() => prepareReportHtml(reportHtml), [reportHtml]);
 
   // Brand colors for inline styles
   const MAROON = '#2563EB';

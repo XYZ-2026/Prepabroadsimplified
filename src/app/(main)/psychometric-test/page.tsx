@@ -1,7 +1,7 @@
 "use client";
 
 import { Brain, Star, Target, BookOpen, Briefcase, Zap, Dumbbell, TrendingUp, ClipboardList, BarChart2, Calculator, Microscope, Calendar, PenTool, X, GraduationCap, ChevronRight, Lock, CheckCircle2 } from 'lucide-react';
-import React, { useState, useEffect, useRef, useCallback, Suspense } from "react";
+import React, { useState, useEffect, useRef, useCallback, useMemo, Suspense } from "react";
 import Script from "next/script";
 import { useSearchParams, useRouter } from "next/navigation";
 import PremiumToolsCards from "@/components/PremiumToolsCards";
@@ -943,6 +943,99 @@ function getDynamicStudyAbroad(careerName: string, studentName: string) {
       "Master of Science / Arts in target specialization"
     ]
   };
+}
+
+// ─── Memoized Report Viewer Component (Prevents Iframe Reloading Loops) ─────────
+function MemoizedReportViewer({
+  assessmentType,
+  student,
+  scores,
+  reportData,
+  comparisonData,
+  viewReportMode,
+  setViewReportMode,
+  downloadPDF,
+  searchParams,
+}: {
+  assessmentType: string;
+  student: StudentInfo;
+  scores: Scores;
+  reportData: any;
+  comparisonData: any;
+  viewReportMode: 'full' | 'executive';
+  setViewReportMode: (mode: 'full' | 'executive') => void;
+  downloadPDF: (type: 'full' | 'executive') => void;
+  searchParams: any;
+}) {
+  const resolvedVariant = useMemo(() => resolveReportVariant(assessmentType, student.grade), [assessmentType, student.grade]);
+  const variantConfig = useMemo(() => getVariantConfig(resolvedVariant), [resolvedVariant]);
+
+  const stableReportId = useMemo(() => {
+    if (reportData?.id) return String(reportData.id).toUpperCase();
+    if (reportData?.resultId) return String(reportData.resultId).toUpperCase();
+    if (student.reportId) return String(student.reportId).toUpperCase();
+    const seed = (student.email || student.name || 'CAND').replace(/[^a-zA-Z0-9]/g, '').slice(0, 6).toUpperCase() || 'REPORT';
+    return `${variantConfig.reportIdPrefix}-${seed}`;
+  }, [reportData?.id, reportData?.resultId, student.reportId, student.email, student.name, variantConfig.reportIdPrefix]);
+
+  const rawGrade = student.grade || variantConfig.defaultGradeLabel;
+  const formattedGrade = rawGrade.toLowerCase().includes('class') || rawGrade.toLowerCase().includes('grade') ? rawGrade : `Class ${rawGrade}`;
+
+  const currentReportHtml = useMemo(() => {
+    const defaultAge = resolvedVariant === 'junior' ? '13' : resolvedVariant === 'senior' ? '17' : '15';
+    const editorialStudent: EditorialStudent = {
+      name: student.name || 'Candidate',
+      grade: formattedGrade,
+      age: student.age || defaultAge,
+      school: student.school || '',
+      city: student.city || 'India',
+      stream: student.stream || '',
+      email: student.email || '',
+      date: student.date || 'October 2026',
+      reportId: stableReportId,
+      parentName: student.parentName || '',
+    };
+    const personalization = reportData?.personalization || {
+      executiveSummary: reportData?.summary || '',
+      strengths: reportData?.strengths || [],
+      growthAreas: reportData?.growthAreas || []
+    };
+    const parentProfile = reportData?.parentProfile || (comparisonData as any)?.parentProfile || null;
+
+    const adaptedData = adaptReportData(
+      editorialStudent,
+      scores as any,
+      personalization,
+      comparisonData,
+      parentProfile,
+      resolvedVariant
+    );
+
+    return viewReportMode === 'executive'
+      ? buildUniversalExecutiveSummaryHTMLReport(adaptedData)
+      : buildUniversalExecutiveHTMLReport(adaptedData);
+  }, [resolvedVariant, student, formattedGrade, stableReportId, reportData, comparisonData, scores, viewReportMode]);
+
+  const source = searchParams.get('source');
+  let backHref = '/dashboard/student/assessments';
+  let backLabel = 'Back to Assessments';
+  if (source === 'admin') { backHref = '/dashboard/admin/assessments'; backLabel = 'Admin Assessments'; }
+  else if (source === 'counsellor') { backHref = '/dashboard/counsellor'; backLabel = 'Counsellor Dashboard'; }
+
+  return (
+    <ReportViewerShell
+      reportHtml={currentReportHtml}
+      mode={viewReportMode}
+      studentName={student.name || 'Candidate'}
+      studentGrade={formattedGrade}
+      reportId={stableReportId}
+      onSwitchMode={(newMode) => setViewReportMode(newMode)}
+      onDownloadFull={() => downloadPDF('full')}
+      onDownloadSummary={() => downloadPDF('executive')}
+      backHref={backHref}
+      backLabel={backLabel}
+    />
+  );
 }
 
 // ─── Main Component ───────────────────────────────────────────────────────────
@@ -2670,66 +2763,17 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
               </div>
             </div>
           ) : scores ? (
-            (() => {
-              const resolvedVariant = resolveReportVariant(assessmentType, student.grade);
-              const variantConfig = getVariantConfig(resolvedVariant);
-              const defaultAge = resolvedVariant === 'junior' ? '13' : resolvedVariant === 'senior' ? '17' : '15';
-              const rawGrade = student.grade || variantConfig.defaultGradeLabel;
-              const formattedGrade = rawGrade.toLowerCase().includes('class') || rawGrade.toLowerCase().includes('grade') ? rawGrade : `Class ${rawGrade}`;
-
-              const editorialStudent: EditorialStudent = {
-                name: student.name || 'Candidate',
-                grade: formattedGrade,
-                age: student.age || defaultAge,
-                school: student.school || '',
-                city: student.city || 'India',
-                stream: student.stream || '',
-                email: student.email || '',
-                date: student.date || new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }),
-                reportId: (reportData?.id || reportData?.resultId || `${variantConfig.reportIdPrefix}-${Math.floor(100000 + Math.random() * 90000)}`).toString().toUpperCase(),
-                parentName: student.parentName || '',
-              };
-              const personalization = reportData?.personalization || {
-                executiveSummary: reportData?.summary || '',
-                strengths: reportData?.strengths || [],
-                growthAreas: reportData?.growthAreas || []
-              };
-              const parentProfile = reportData?.parentProfile || (comparisonData as any)?.parentProfile || null;
-
-              const adaptedData = adaptReportData(
-                editorialStudent,
-                scores as any,
-                personalization,
-                comparisonData,
-                parentProfile,
-                resolvedVariant
-              );
-
-              const currentReportHtml = viewReportMode === 'executive'
-                ? buildUniversalExecutiveSummaryHTMLReport(adaptedData)
-                : buildUniversalExecutiveHTMLReport(adaptedData);
-
-              const source = searchParams.get('source');
-              let backHref = '/dashboard/student/assessments';
-              let backLabel = 'Back to Assessments';
-              if (source === 'admin') { backHref = '/dashboard/admin/assessments'; backLabel = 'Admin Assessments'; }
-              else if (source === 'counsellor') { backHref = '/dashboard/counsellor'; backLabel = 'Counsellor Dashboard'; }
-
-              return (
-                <ReportViewerShell
-                  reportHtml={currentReportHtml}
-                  mode={viewReportMode}
-                  studentName={student.name || 'Candidate'}
-                  studentGrade={editorialStudent.grade}
-                  reportId={editorialStudent.reportId}
-                  onSwitchMode={(newMode) => setViewReportMode(newMode)}
-                  onDownloadFull={() => downloadPDF('full')}
-                  onDownloadSummary={() => downloadPDF('executive')}
-                  backHref={backHref}
-                  backLabel={backLabel}
-                />
-              );
-            })()
+            <MemoizedReportViewer
+              assessmentType={assessmentType}
+              student={student}
+              scores={scores}
+              reportData={reportData}
+              comparisonData={comparisonData}
+              viewReportMode={viewReportMode}
+              setViewReportMode={setViewReportMode}
+              downloadPDF={downloadPDF}
+              searchParams={searchParams}
+            />
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '60vh', gap: '16px' }}>
               <div style={{ fontSize: '18px', fontWeight: 600, color: '#374151' }}>Unable to load assessment report.</div>

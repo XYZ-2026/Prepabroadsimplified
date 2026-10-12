@@ -21,15 +21,44 @@ export interface UserData extends StudentProfileData {
 }
 
 export default function UsersTableClient({ initialUsers }: { initialUsers: UserData[] }) {
+  const [users, setUsers] = useState<UserData[]>(initialUsers);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterType, setFilterType] = useState('all');
   const [selectedUser, setSelectedUser] = useState<UserData | null>(null);
+  const [deletingUserId, setDeletingUserId] = useState<string | null>(null);
 
   const handleSelectUser = (user: UserData) => {
     setSelectedUser(user);
   };
 
-  const filteredUsers = initialUsers.filter((user) => {
+  const handleDeleteUser = async (user: UserData) => {
+    const confirmed = window.confirm(`Are you sure you want to delete user "${user.name}" (${user.email})?\n\nThis will permanently remove their profile and allow this email address to be registered anew if needed.`);
+    if (!confirmed) return;
+
+    setDeletingUserId(user.id);
+    try {
+      const res = await fetch('/api/admin/delete-user', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId: user.id }),
+      });
+      if (res.ok) {
+        setUsers(prev => prev.filter(u => u.id !== user.id));
+        if (selectedUser?.id === user.id) {
+          setSelectedUser(null);
+        }
+      } else {
+        alert('Failed to delete user.');
+      }
+    } catch (err) {
+      console.error(err);
+      alert('An error occurred while deleting user.');
+    } finally {
+      setDeletingUserId(null);
+    }
+  };
+
+  const filteredUsers = users.filter((user) => {
     const matchesSearch = 
       user.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
       user.email.toLowerCase().includes(searchTerm.toLowerCase());
@@ -90,9 +119,30 @@ export default function UsersTableClient({ initialUsers }: { initialUsers: UserD
             </svg>
             Back to Registered Users
           </button>
-          <span style={{ fontSize: '13px', color: '#64748b' }}>
-            Viewing Profile for <strong>{selectedUser.name}</strong>
-          </span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <span style={{ fontSize: '13px', color: '#64748b' }}>
+              Viewing Profile for <strong>{selectedUser.name}</strong> ({selectedUser.email})
+            </span>
+            <button
+              type="button"
+              disabled={deletingUserId === selectedUser.id}
+              onClick={() => handleDeleteUser(selectedUser)}
+              style={{
+                padding: '6px 14px',
+                borderRadius: '8px',
+                border: '1px solid #fecaca',
+                backgroundColor: '#fef2f2',
+                color: '#dc2626',
+                fontSize: '12px',
+                fontWeight: 700,
+                cursor: deletingUserId === selectedUser.id ? 'not-allowed' : 'pointer',
+                transition: 'all 0.2s',
+                opacity: deletingUserId === selectedUser.id ? 0.6 : 1,
+              }}
+            >
+              {deletingUserId === selectedUser.id ? 'Deleting...' : 'Delete User Account'}
+            </button>
+          </div>
         </div>
 
         {/* Full-Width Redesigned Student Profile */}
@@ -182,7 +232,31 @@ export default function UsersTableClient({ initialUsers }: { initialUsers: UserD
                     <span className={styles.userSubtext}>{user.createdAtStr}</span>
                   </td>
                   <td>
-                    <button className={styles.btnEdit} onClick={() => handleSelectUser(user)}>View Details</button>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <button className={styles.btnEdit} onClick={() => handleSelectUser(user)}>
+                        View Details
+                      </button>
+                      <button
+                        type="button"
+                        disabled={deletingUserId === user.id}
+                        onClick={() => handleDeleteUser(user)}
+                        style={{
+                          padding: '6px 12px',
+                          borderRadius: '20px',
+                          border: '1px solid #fecaca',
+                          backgroundColor: '#fef2f2',
+                          color: '#dc2626',
+                          fontSize: '12px',
+                          fontWeight: 600,
+                          cursor: deletingUserId === user.id ? 'not-allowed' : 'pointer',
+                          transition: 'all 0.2s',
+                          opacity: deletingUserId === user.id ? 0.6 : 1,
+                        }}
+                        title={`Delete user account ${user.email}`}
+                      >
+                        {deletingUserId === user.id ? 'Deleting...' : 'Delete'}
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))

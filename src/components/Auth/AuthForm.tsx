@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { auth as clientAuth, db as clientDb } from '@/lib/firebase';
 import { 
@@ -98,6 +98,19 @@ export default function AuthForm({ defaultTab }: AuthFormProps = {}) {
   const [error, setError] = useState('');
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
+  const [isCheckingEmail, setIsCheckingEmail] = useState(false);
+  const isSubmittingRef = useRef(false);
+
+  // Helper to cleanly switch to sign in tab and prefill the email
+  const handleSwitchToLogin = (emailToUse?: string) => {
+    const targetEmail = (emailToUse || regEmail || loginEmail).trim().toLowerCase();
+    if (targetEmail) {
+      setLoginEmail(targetEmail);
+    }
+    setActiveTab('login');
+    setError('');
+    setMessage('');
+  };
 
   // Login form state
   const [loginEmail, setLoginEmail] = useState('');
@@ -244,17 +257,8 @@ export default function AuthForm({ defaultTab }: AuthFormProps = {}) {
         const userCredential = await signInWithEmailAndPassword(clientAuth, cleanEmail, cleanPassword);
         idToken = await userCredential.user.getIdToken();
       } catch (clientErr: any) {
-        // Fallback for admin/counsellor credentials or uninitialized Firebase Auth Identity Toolkit
-        const isConfigNotFound =
-          clientErr?.code === 'auth/configuration-not-found' ||
-          clientErr?.message?.includes('configuration-not-found') ||
-          clientErr?.message?.includes('CONFIGURATION_NOT_FOUND');
-
-        if (cleanEmail === 'admin@as.com' || cleanEmail === 'counsellor@as.com' || isConfigNotFound) {
-          console.warn('[Auth] Client auth fallback to server auth endpoint:', clientErr?.message);
-        } else {
-          throw clientErr;
-        }
+        // Fallback gracefully to server-side Firestore password verification
+        console.warn('[Auth] Client auth fallback to server auth endpoint:', clientErr?.message);
       }
 
       const response = await fetch('/api/auth/login', {
@@ -272,7 +276,7 @@ export default function AuthForm({ defaultTab }: AuthFormProps = {}) {
       const destination = loginResult.redirectUrl || (cleanEmail === 'admin@as.com' ? '/dashboard/admin/users' : '/dashboard/student/profile');
       window.location.href = destination;
     } catch (err: any) {
-      console.error(err);
+      console.error('[Login] Error:', err);
       if (err.code === 'auth/invalid-credential' || err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password') {
         setError('Invalid email or password. Please try again.');
       } else {
@@ -283,22 +287,48 @@ export default function AuthForm({ defaultTab }: AuthFormProps = {}) {
     }
   };
 
-  // Step 1 Validation & Proceed
-  const handleStep1Next = (e: React.FormEvent) => {
+  // Step 1 Validation & Proceed (with real-time email availability check)
+  const handleStep1Next = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
-    if (!regName.trim()) {
+
+    const cleanName = regName.trim();
+    const cleanEmail = regEmail.trim().toLowerCase();
+    const cleanMobile = regMobile.trim();
+
+    if (!cleanName) {
       setError('Please enter your full name');
       return;
     }
-    if (!regEmail.trim() || !regEmail.includes('@')) {
+    if (!cleanEmail || !cleanEmail.includes('@')) {
       setError('Please enter a valid email address');
       return;
     }
-    if (!regMobile.trim() || regMobile.trim().length < 8) {
+    if (!cleanMobile || cleanMobile.length < 8) {
       setError('Please enter a valid mobile number');
       return;
     }
+
+    // Real-time check if email is already registered in Firestore
+    setIsCheckingEmail(true);
+    try {
+      const checkRes = await fetch('/api/auth/check-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: cleanEmail }),
+      });
+      const checkData = await checkRes.json().catch(() => ({ exists: false }));
+      if (checkData.exists) {
+        setError('This email address is already registered. Please sign in instead.');
+        setIsCheckingEmail(false);
+        return;
+      }
+    } catch {
+      // Continue if network check fails
+    } finally {
+      setIsCheckingEmail(false);
+    }
+
     setRegStep(2);
   };
 
@@ -346,9 +376,10 @@ export default function AuthForm({ defaultTab }: AuthFormProps = {}) {
     setRegStep(4);
   };
 
-  // Final Registration Submission (Step 4)
+  // Final Registration Submission (Step 4 - Authoritative Server Route)
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (isSubmittingRef.current || loading) return;
     setError('');
 
     if (regPassword.length < 6) {
@@ -361,101 +392,38 @@ export default function AuthForm({ defaultTab }: AuthFormProps = {}) {
       return;
     }
 
+    isSubmittingRef.current = true;
     setLoading(true);
+
     const cleanEmail = regEmail.trim().toLowerCase();
     const normalizedGrade = regRole === 'student' && regGrade ? normalizeGrade(regGrade) : null;
     const finalBoard = regBoard === 'Other' && regCustomBoard.trim() ? regCustomBoard.trim() : regBoard;
     const isSenior = normalizedGrade === '11' || normalizedGrade === '12';
 
     try {
-      let registeredViaClient = false;
-
-      // 1. Attempt client-side Firebase Auth
-      try {
-        const userCredential = await createUserWithEmailAndPassword(clientAuth, cleanEmail, regPassword);
-        const user = userCredential.user;
-
-        const userProfilePayload: Record<string, any> = {
+      const serverResponse = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
           name: regName.trim(),
           email: cleanEmail,
+          password: regPassword,
           mobile: regMobile.trim(),
           role: regRole,
-          state: regState,
-          city: regCity.trim(),
-          currentSchool: regSchool.trim(),
-          schoolName: regSchool.trim(),
+          grade: normalizedGrade,
+          school: regSchool.trim(),
           board: finalBoard,
           stream: isSenior ? regStream : '',
+          state: regState,
+          city: regCity.trim(),
           goals: regGoals,
           declaredInterests: regInterests,
-          onboarding: {
-            goals: regGoals,
-            declaredInterests: regInterests,
-            registeredAt: new Date().toISOString(),
-          },
-          toolAccess: {
-            iqTest: true,
-            psychometricTest: false,
-            universityPredictor: true,
-          },
-          createdAt: serverTimestamp(),
-        };
+        }),
+      });
 
-        if (normalizedGrade) {
-          userProfilePayload.grade = normalizedGrade;
-          userProfilePayload.academicGrade = normalizedGrade;
-          userProfilePayload.studentType = isSenior ? 'Class 11/12' : `Grade ${normalizedGrade}`;
-        }
-
-        await setDoc(doc(clientDb, 'users', user.uid), userProfilePayload);
-
-        // Create session on server
-        const idToken = await user.getIdToken();
-        const response = await fetch('/api/auth/login', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ idToken }),
-        });
-
-        if (!response.ok) {
-          const errJson = await response.json().catch(() => ({}));
-          throw new Error(errJson.details || errJson.error || 'Failed to create session on server');
-        }
-
-        registeredViaClient = true;
-      } catch (clientErr: any) {
-        if (clientErr.code === 'auth/email-already-in-use') {
-          throw clientErr;
-        }
-        console.warn('[Register] Client Auth creation failed, falling back to server registration endpoint:', clientErr?.message);
-      }
-
-      // 2. Fallback to Server Registration Endpoint if client auth could not proceed
-      if (!registeredViaClient) {
-        const serverResponse = await fetch('/api/auth/register', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            name: regName.trim(),
-            email: cleanEmail,
-            password: regPassword,
-            mobile: regMobile.trim(),
-            role: regRole,
-            grade: normalizedGrade,
-            school: regSchool.trim(),
-            board: finalBoard,
-            stream: isSenior ? regStream : '',
-            state: regState,
-            city: regCity.trim(),
-            goals: regGoals,
-            declaredInterests: regInterests,
-          }),
-        });
-
-        const serverData = await serverResponse.json().catch(() => ({}));
-        if (!serverResponse.ok) {
-          throw new Error(serverData.error || serverData.details || 'Failed to complete registration on server');
-        }
+      const serverData = await serverResponse.json().catch(() => ({}));
+      if (!serverResponse.ok) {
+        throw new Error(serverData.error || serverData.details || 'Failed to complete registration on server');
       }
 
       // Resolve eligible assessment for Welcome screen
@@ -471,14 +439,15 @@ export default function AuthForm({ defaultTab }: AuthFormProps = {}) {
         router.push(regRole === 'counsellor' ? '/dashboard/counsellor' : '/dashboard/student/profile');
       }
     } catch (err: any) {
-      console.error(err);
-      if (err.code === 'auth/email-already-in-use' || err.message?.includes('already registered')) {
+      console.error('[Register] Error:', err);
+      if (err.message?.includes('already registered')) {
         setError('This email address is already registered. Please sign in instead.');
       } else {
         setError(err.message || 'Failed to complete registration');
       }
     } finally {
       setLoading(false);
+      isSubmittingRef.current = false;
     }
   };
 
@@ -528,7 +497,34 @@ export default function AuthForm({ defaultTab }: AuthFormProps = {}) {
         </div>
       )}
 
-      {error && <div className={`${styles.authError} ${styles.authErrorVisible}`}>{error}</div>}
+      {error && (
+        <div className={`${styles.authError} ${styles.authErrorVisible}`}>
+          <div>{error}</div>
+          {error.includes('already registered') && (
+            <div style={{ marginTop: '8px' }}>
+              <button
+                type="button"
+                onClick={() => handleSwitchToLogin(regEmail)}
+                style={{
+                  padding: '6px 14px',
+                  borderRadius: '6px',
+                  border: 'none',
+                  background: '#690b1b',
+                  color: '#ffffff',
+                  fontSize: '12px',
+                  fontWeight: 700,
+                  cursor: 'pointer',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                }}
+              >
+                Sign In With This Email ({regEmail.trim() || loginEmail.trim()}) →
+              </button>
+            </div>
+          )}
+        </div>
+      )}
       {message && <div className={`${styles.authMessage} ${styles.authMessageVisible}`}>{message}</div>}
 
       {/* ── POST REGISTRATION WELCOME SCREEN ── */}
@@ -776,10 +772,11 @@ export default function AuthForm({ defaultTab }: AuthFormProps = {}) {
 
               <button
                 type="submit"
+                disabled={isCheckingEmail || loading}
                 className={`${componentsStyles.btn} ${componentsStyles.btnPrimary} ${styles.btnBlock}`}
                 style={{ marginTop: '14px' }}
               >
-                Continue to Academic Profile →
+                {isCheckingEmail ? 'Verifying Email Availability...' : 'Continue to Academic Profile →'}
               </button>
 
               <div style={{ display: 'flex', alignItems: 'center', margin: '14px 0 10px 0' }}>
@@ -1053,6 +1050,29 @@ export default function AuthForm({ defaultTab }: AuthFormProps = {}) {
                   </span>
                 </div>
                 <div className={styles.profileSummaryGrid}>
+                  <div className={styles.summaryItem} style={{ gridColumn: '1 / -1', background: '#f8fafc', padding: '10px 14px', borderRadius: '8px', border: '1px solid #e2e8f0', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <div>
+                      <span className={styles.summaryItemLabel} style={{ display: 'block', fontSize: '11px', color: '#64748b' }}>Account Email & Name</span>
+                      <span className={styles.summaryItemValue} style={{ fontWeight: 700, color: '#0f172a' }}>
+                        {regName || 'Student'} · <span style={{ color: '#690b1b' }}>{regEmail}</span>
+                      </span>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setRegStep(1)}
+                      style={{
+                        background: 'none',
+                        border: 'none',
+                        color: '#690b1b',
+                        fontWeight: 700,
+                        fontSize: '12px',
+                        cursor: 'pointer',
+                        padding: '4px 8px',
+                      }}
+                    >
+                      Change Email ✎
+                    </button>
+                  </div>
                   <div className={styles.summaryItem}>
                     <span className={styles.summaryItemLabel}>Academic Stage</span>
                     <span className={styles.summaryItemValue}>
@@ -1165,7 +1185,7 @@ export default function AuthForm({ defaultTab }: AuthFormProps = {}) {
           )}
 
           <p className={styles.authFooterLink} style={{ marginTop: '14px' }}>
-            Already have an account? <a href="#" onClick={(e) => { e.preventDefault(); setActiveTab('login'); }}>Sign In →</a>
+            Already have an account? <a href="#" onClick={(e) => { e.preventDefault(); handleSwitchToLogin(); }}>Sign In →</a>
           </p>
         </div>
       )}

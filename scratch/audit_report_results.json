@@ -1,0 +1,108 @@
+{
+  "total_pages": 56,
+  "metadata": {
+    "format": "PDF 1.4",
+    "title": "CLASS 12 EXECUTIVE PSYCHOMETRIC & CAREER DOSSIER | agam",
+    "author": "",
+    "subject": "",
+    "keywords": "",
+    "creator": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36",
+    "producer": "Skia/PDF m152",
+    "creationDate": "D:20261012180300+00'00'",
+    "modDate": "D:20261012180300+00'00'",
+    "trapped": "",
+    "encryption": null
+  },
+  "checks": [
+    {
+      "name": "Page Count Exactly 56",
+      "status": "PASS",
+      "details": "Pages = 56"
+    },
+    {
+      "name": "Metadata Grade Agreement",
+      "status": "PASS",
+      "details": "Title: CLASS 12 EXECUTIVE PSYCHOMETRIC & CAREER DOSSIER | agam"
+    },
+    {
+      "name": "Cover Title Class 12",
+      "status": "PASS",
+      "details": "Found Class 12 cover banner"
+    },
+    {
+      "name": "TOC Modules 25-28 Synchronized",
+      "status": "PASS",
+      "details": "M25: True, M26: True, M27: True, M28: True"
+    },
+    {
+      "name": "Methodology 1st-99th Range Complete",
+      "status": "PASS",
+      "details": "Complete non-overlapping percentile bands present"
+    },
+    {
+      "name": "Qualified Reliability Claims",
+      "status": "PASS",
+      "details": "Transparent non-clinical reliability benchmark used"
+    },
+    {
+      "name": "Page 10 Fluid Logic & Roadmap Grounded",
+      "status": "PASS",
+      "details": "No fake high fluid claim, pre-university roadmap used"
+    },
+    {
+      "name": "Page 11 Auditory Strategy Alignment",
+      "status": "PASS",
+      "details": "Auditory recitation strategy recommended"
+    },
+    {
+      "name": "MBTI Archetypes Data-Driven",
+      "status": "PASS",
+      "details": "P17 Sensing: True, P18 Intuition: True, P19 Decision: True"
+    },
+    {
+      "name": "Module 11 Fluid Intelligence Grounded",
+      "status": "PASS",
+      "details": "Methodical reasoning archetype reflects 20% score"
+    },
+    {
+      "name": "Module 30 Synergy Score Grounded",
+      "status": "PASS",
+      "details": "Systems synergy grounded in real aptitude/conscientiousness composite"
+    },
+    {
+      "name": "Page 42 Footer Grade Correct",
+      "status": "PASS",
+      "details": "No Class 10 footer on Page 42"
+    },
+    {
+      "name": "Page 43 Parent Choices Human-Readable",
+      "status": "PASS",
+      "details": "Enums formatted to professional labels"
+    },
+    {
+      "name": "Action Plan Stage-Appropriate",
+      "status": "PASS",
+      "details": "Senior secondary / pre-university college admission actions used"
+    },
+    {
+      "name": "Pages 50-52 Three Distinct Pathways",
+      "status": "PASS",
+      "details": "P50 Env: True, P51 Data: True, P52 Software: True"
+    },
+    {
+      "name": "Study Abroad Calibrated & Verified Facts",
+      "status": "PASS",
+      "details": "Current visa facts, calibrated programs, formatted budget"
+    },
+    {
+      "name": "Page 56 Conclusion Verified",
+      "status": "PASS",
+      "details": "Official portal and support contacts verified"
+    },
+    {
+      "name": "Brand Palette Approved (No Legacy Gold)",
+      "status": "PASS",
+      "details": "Found legacy hexes: []"
+    }
+  ]
+}

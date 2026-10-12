@@ -1298,10 +1298,51 @@ export function getStudentActionPlanData(
   scores: EditorialScores
 ): StudentActionPlanData {
   const firstName = student.name.split(' ')[0];
+  const isSenior = /12|senior/i.test(student.grade || '');
   const topVarkLabel = 
     scores.topVark === 'V' ? 'Visual (Mind Maps & Diagrams)' :
     scores.topVark === 'A' ? 'Auditory (Discussion & Audio Recaps)' :
     scores.topVark === 'R' ? 'Reading/Writing (Structured Notes & Summaries)' : 'Kinesthetic (Hands-on Practice & Simulations)';
+
+  if (isSenior) {
+    return {
+      thisMonth: [
+        `Conduct a comprehensive syllabus gap audit for Class 12 Board exams and priority entrance tests (JEE / CUET / CLAT / NEET).`,
+        `Finalize target portfolio of 10 colleges divided into Reach (3), Fit (4), and Accessible (3) tiers with family and counsellor.`,
+        'Establish a non-negotiable weekly routine of two full-length timed 3-hour mock exam simulations under strict exam conditions.',
+        'Organize academic portfolio, statement of purpose drafts, and faculty recommendations.'
+      ],
+      next90Days: [
+        'Complete Class 12 Pre-Board examinations with an 88%+ benchmark across all subjects.',
+        'Submit all early and regular university admission applications along with required documentation.',
+        'Conduct a focused financial alignment review with family to confirm tuition, living expense budgets, and scholarship deadlines.',
+        'Review error logs from competitive entrance test series and revise high-weightage concepts.'
+      ],
+      thisAcademicYear: [
+        'Execute Class 12 Board Examinations with maximum focus, targeting a 90%+ aggregate.',
+        'Appear for target competitive entrance examinations with calibrated pacing and error-log discipline.',
+        'Finalize university admission acceptance, submit visa applications (if studying abroad), and prepare pre-college onboarding checklist.',
+        'Transition smoothly into undergraduate degree coursework with strong foundational mastery.'
+      ],
+      skillsToBuild: [
+        `Analytical Problem Solving (${scores.aptitude.overall}% current cognitive baseline)`,
+        `Conscientious Time Management (${scores.personality.conscientiousness}% current execution score)`,
+        `Emotional Resilience Under Exam Conditions (${scores.personality.emotionalStability}% stability score)`,
+        `${topVarkLabel} Learning Optimization`,
+        'Academic Essay & Statement of Purpose Drafting'
+      ],
+      counsellorCheckpoint: [
+        `Review college application essays and Statement of Purpose with counsellor before final submissions.`,
+        'Perform a quantitative mock test score trend analysis every 3 weeks to pinpoint conceptual gaps.',
+        'Conduct pre-departure orientation and scholarship document verification once admission offers arrive.'
+      ],
+      studentAction: [
+        'Treat mock test errors not as setbacks, but as the most valuable diagnostic indicators of what to revise next.',
+        'Protect 7.5 hours of sleep nightly during intense preparation blocks to ensure peak memory consolidation.',
+        'Focus on internal consistency rather than external peer comparisons—execution discipline wins admissions.'
+      ]
+    };
+  }
 
   return {
     thisMonth: [

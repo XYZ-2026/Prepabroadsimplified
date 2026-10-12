@@ -40,7 +40,43 @@ export function getCanonicalStreamName(rawName: string): string {
   return rawName;
 }
 
-export function formatOrdinal(val: number | string): string {
+export function formatParentChoiceLabel(val?: string | null): string {
+  if (!val) return 'Planned University Budget';
+  const map: Record<string, string> = {
+    budget_low: 'Tier 1 / Value Focused Budget',
+    budget_moderate: 'Moderate University Budget',
+    budget_high: 'Comprehensive International Budget',
+    budget_flexible: 'Flexible Higher Education Budget',
+    prefer_india: 'Domestic Indian Universities',
+    north_america: 'North America (US & Canada)',
+    uk_europe: 'UK & European Universities',
+    asia_pacific: 'Asia-Pacific Regional Hubs',
+    global_flexible: 'Global Flexible Opportunities',
+    student_led: 'Student-Led Decision',
+    parent_led: 'Parent-Guided Direction',
+    collaborative: 'Collaborative Family Dialogue',
+    professional_guided: 'Professional Guidance / Counselor Supported',
+    creative_media: 'Creative Media & Communications',
+    engineering_tech: 'Engineering & Applied Technology',
+    medical_life_sciences: 'Medical & Life Sciences',
+    business_finance: 'Business & Financial Management',
+    humanities_law: 'Humanities, Public Policy & Law',
+    financial_security: 'Financial Security & ROI',
+    career_satisfaction: 'Long-Term Career Satisfaction',
+    social_recognition: 'Academic Prestige & Recognition',
+    work_life_balance: 'Work–Life Balance & Wellbeing',
+    high_income: 'High Income Potential',
+    meaningful_work: 'Meaningful Societal Contribution',
+    prestigious_career: 'Prestigious Career Trajectory',
+    balanced_life: 'Balanced Lifestyle & Growth',
+    high: 'High International Openness',
+    moderate: 'Moderate International Openness',
+    low: 'Focused on Domestic Options',
+  };
+  return map[val] || val.replace(/^budget_/, '').replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+}
+
+function formatOrdinal(val: number | string): string {
   const str = String(val || '').trim();
   const num = typeof val === 'number' ? val : parseInt(str.replace(/\D/g, ''), 10);
   if (isNaN(num)) return str;
@@ -98,6 +134,159 @@ export function buildClass10ExecutiveHTMLReport(
 
   const topRiasecCodes = scores.topRiasec && scores.topRiasec.length > 0 ? scores.topRiasec : ['R', 'I', 'E'];
   const riasecScore = scores.riasec?.[topRiasecCodes[0]] || Math.round(reasSc * 0.95);
+
+  // Normalized VARK distribution (guaranteed 100% sum)
+  const vRaw = scores.vark?.V ?? (topVarkCode === 'V' ? 35 : 22);
+  const aRaw = scores.vark?.A ?? (topVarkCode === 'A' ? 35 : 22);
+  const rRaw = scores.vark?.R ?? (topVarkCode === 'R' ? 35 : 22);
+  const kRaw = scores.vark?.K ?? (topVarkCode === 'K' ? 35 : 22);
+  const varkSum = vRaw + aRaw + rRaw + kRaw || 100;
+  const vPct = Math.round((vRaw / varkSum) * 100);
+  const aPct = Math.round((aRaw / varkSum) * 100);
+  const rPct = Math.round((rRaw / varkSum) * 100);
+  const kPct = 100 - (vPct + aPct + rPct);
+  const varkStrategyText = topVarkCode === 'A'
+    ? 'Primary Auditory preference. Utilize peer recitation, socratic debate, acoustic mnemonics, and podcast summaries to double retention.'
+    : topVarkCode === 'R'
+    ? 'Primary Read/Write preference. Use structured hierarchical outlines, textual condensation, and analytical summary notes to double retention.'
+    : topVarkCode === 'K'
+    ? 'Primary Kinesthetic preference. Integrate real-world lab simulations, practical exercises, and interactive trial-error testing to master core concepts.'
+    : 'Primary Visual preference. Use visual flowcharts, dual-coding diagrams, and color-coded note hierarchies to double retention.';
+  const synergyScore = Math.round(0.35 * aptOverall + 0.35 * cSc + 0.30 * topFitScore);
+
+  // MBTI Derived Metrics (Grounded in actual scores)
+  const siSc = Math.min(99, Math.round(spatSc * 0.95 + 4));
+  const seSc = Math.min(99, Math.max(30, Math.round(spatSc * 0.85 + (eSc > 60 ? 6 : -2))));
+  const isSensingBalanced = Math.abs(siSc - seSc) <= 6;
+  const siDominant = siSc > seSc;
+
+  const niSc = Math.min(99, Math.round(oSc * 0.95 + 4));
+  const neSc = Math.min(99, Math.max(30, Math.round(oSc * 0.85 + (eSc > 60 ? 6 : -4))));
+  const isIntuitionBalanced = Math.abs(niSc - neSc) <= 6;
+  const niDominant = niSc > neSc;
+
+  const teSc = Math.min(99, Math.round(reasSc * 0.92 + 6));
+  const tiSc = Math.min(99, Math.round(reasSc * 0.90 + 4));
+  const feSc = Math.max(30, Math.min(99, Math.round(aSc * 0.90 + (eSc > 60 ? 6 : -2))));
+  const fiSc = Math.max(30, Math.min(99, Math.round(aSc * 0.92 + (oSc > 60 ? 4 : -2))));
+  const tAvg = Math.round((teSc + tiSc) / 2);
+  const fAvg = Math.round((feSc + fiSc) / 2);
+  const isTfBalanced = Math.abs(tAvg - fAvg) <= 6;
+  const tDominant = tAvg > fAvg;
+
+  const mbtiSensingArchetype = isSensingBalanced
+    ? "Balanced Sensing Integrator (Si/Se)"
+    : siDominant
+    ? "Introverted Sensing (Si) Grounding"
+    : "Extraverted Sensing (Se) Explorer";
+
+  const mbtiSensingSummary = isSensingBalanced
+    ? "Your Sensing cognitive preference maintains an equilibrium between internal procedural precedent (Si) and real-time empirical engagement (Se), enabling flexible situational adaptation."
+    : siDominant
+    ? "Your Sensing function relies on Introverted Sensing (Si) as a stabilizing secondary filter. You compare active inputs against historical precedent, empirical data archives, and established operating procedures."
+    : "Your Sensing function emphasizes Extraverted Sensing (Se), prioritizing real-time tactile engagement, pragmatic experimentation, and responsiveness to active situational dynamics.";
+
+  const mbtiSensingAlignment = isSensingBalanced
+    ? `Balanced Sensing Integrator (${Math.round(((spatSc + numSc) / 2) * 0.95)}th %ile)`
+    : `${siDominant ? 'Introverted Sensing (Si Dominant)' : 'Extraverted Sensing (Se Dominant)'} (${Math.round(((spatSc + numSc) / 2) * 0.95)}th %ile)`;
+
+  const mbtiIntuitionArchetype = isIntuitionBalanced
+    ? "Integrated Dual Intuitive (Ni/Ne)"
+    : niDominant
+    ? "Introverted Intuition (Ni) Dominant"
+    : "Extraverted Intuition (Ne) Divergent";
+
+  const mbtiIntuitionSummary = isIntuitionBalanced
+    ? "You demonstrate an integrated intuitive profile, balancing convergent strategic foresight (Ni) with lateral cross-domain associative exploration (Ne)."
+    : niDominant
+    ? "Introverted Intuition (Ni) is your core perceiving function. You excel at synthesizing fragmented signals into singular strategic visions, anticipating long-range systemic shifts with high confidence."
+    : "Extraverted Intuition (Ne) drives your perceiving function, generating prolific lateral ideas, creative brainstorming paths, and interdisciplinary associations.";
+
+  const mbtiIntuitionAlignment = isIntuitionBalanced
+    ? `Integrated Dual Intuitive (${Math.min(99, Math.round(oSc * 0.98))}th %ile)`
+    : `${niDominant ? 'Dominant Ni Strategist' : 'Exploratory Ne Innovator'} (${Math.min(99, Math.round(oSc * 0.98))}th %ile)`;
+
+  const mbtiDecisionArchetype = isTfBalanced
+    ? "Contextual Decision Integrator (T/F)"
+    : tDominant
+    ? "Extraverted Thinking (Te) Executive"
+    : "Values-Driven & Empathetic Decision Modeler (Fe/Fi)";
+
+  const mbtiDecisionSummary = isTfBalanced
+    ? "Your decision-making model balances objective cause-and-effect logic with empathetic values assessment, adapting criteria based on human impact and project context."
+    : tDominant
+    ? "Your rational decision model is anchored in Extraverted Thinking (Te) — systematic cause-effect logic, objective performance metrics, structural efficiency, and high task velocity."
+    : "Your decision evaluation is guided by core personal values, interpersonal harmony (Fe), and human impact considerations, prioritizing stakeholder alignment alongside practical outcomes.";
+
+  const mbtiDecisionAlignment = isTfBalanced
+    ? `Contextual Decision Integrator (${Math.round(((cSc + reasSc) / 2) * 0.96)}th %ile)`
+    : `${tDominant ? 'Objective Te Executive' : 'Values-Driven Decision Maker'} (${Math.round(((cSc + reasSc) / 2) * 0.96)}th %ile)`;
+
+  const fluidArchetype = reasSc >= 70
+    ? "Algorithmic Fluid Logic"
+    : reasSc >= 45
+    ? "Analytical Problem Solver"
+    : "Structured Step-by-Step Reasoner";
+
+  const fluidSummary = reasSc >= 70
+    ? "Your Fluid Intelligence reflects strong reasoning capacity. You rapidly decode complex matrix patterns, unmapped logical rules, and non-linear data structures without relying on prior instructions."
+    : reasSc >= 45
+    ? "Your Fluid Intelligence demonstrates balanced logical deduction. You process abstract patterns effectively when supported by clear contextual frameworks."
+    : "Your Fluid Intelligence indicates a grounded, methodical learning style. You solve problems most effectively through structured step-by-step algorithms, explicit examples, and proven templates rather than high-ambiguity abstract puzzles.";
+
+  const fluidAlignment = reasSc >= 70
+    ? `Top Tier Fluid Logic (${Math.round(reasSc * 0.97)}th %ile)`
+    : reasSc >= 45
+    ? `Balanced Analytical Logic (${Math.round(reasSc * 0.97)}th %ile)`
+    : `Structured Step-by-Step Reasoner (${Math.round(reasSc * 0.97)}th %ile)`;
+
+  const spatialArchetype = spatSc >= 70
+    ? "3D Systems Spatializer"
+    : spatSc >= 45
+    ? "Applied Spatial Visualizer"
+    : "Linear & Text-Oriented Spatializer";
+
+  const spatialSummary = spatSc >= 70
+    ? "You mentally rotate 3D objects, visualize multi-layered system architectures, and map spatial relationships with clarity."
+    : spatSc >= 45
+    ? "You process spatial layouts and diagrams reliably when accompanied by clear labels and structural references."
+    : "You demonstrate a strong preference for verbal, textual, and procedural explanations over complex mental 3D rotations or topological abstractions.";
+
+  const spatialAlignment = spatSc >= 70
+    ? `High Spatial Visualizer (${Math.round(spatSc * 0.96)}th %ile)`
+    : spatSc >= 45
+    ? `Applied Spatial Processor (${Math.round(spatSc * 0.96)}th %ile)`
+    : `Linear & Text-Oriented Processor (${Math.round(spatSc * 0.96)}th %ile)`;
+
+  const systemsArchetype = reasSc >= 70
+    ? "Master Systems Architect"
+    : reasSc >= 45
+    ? "Applied Process Modeler"
+    : "Structured Workflow Implementer";
+
+  const systemsSummary = reasSc >= 70
+    ? "You map multi-loop feedback systems, identify hidden leverage points, and anticipate non-obvious ripple effects across complex operations."
+    : reasSc >= 45
+    ? "You analyze operational processes methodically, tracing input-output flows and component dependencies across workflows."
+    : "You approach systems through structured operational workflows, excelling at implementing clearly defined procedures and reliable execution routines.";
+
+  const systemsAlignment = reasSc >= 70
+    ? `Master Systems Architect (${Math.min(99, Math.round(reasSc * 0.98))}th %ile)`
+    : reasSc >= 45
+    ? `Applied Process Modeler (${Math.min(99, Math.round(reasSc * 0.98))}th %ile)`
+    : `Structured Workflow Implementer (${Math.min(99, Math.round(reasSc * 0.98))}th %ile)`;
+
+  const criticalArchetype = reasSc >= 70
+    ? "Cognitive Error Auditor"
+    : reasSc >= 45
+    ? "Pragmatic Evidence Reviewer"
+    : "Procedural Checklist Reviewer";
+
+  const criticalAlignment = reasSc >= 70
+    ? `Rigorous Bias Auditor (${Math.round(reasSc * 0.96)}th %ile)`
+    : reasSc >= 45
+    ? `Pragmatic Evidence Reviewer (${Math.round(reasSc * 0.96)}th %ile)`
+    : `Procedural Checklist Reviewer (${Math.round(reasSc * 0.96)}th %ile)`;
 
   const modules = [
     // Phase I: Personality Architecture (Modules 1 - 10)
@@ -216,7 +405,7 @@ export function buildClass10ExecutiveHTMLReport(
         ["Stress Resilience", `${Math.min(99, esSc + 3)}%`, "Maintains cognitive performance and logical reasoning under intense pressure."],
         ["Composure Under Load", `${Math.min(99, esSc + 5)}%`, "Regulates emotional reactions, preventing panic or impulsive outbursts."],
         ["Recovery Pace", `${Math.min(99, esSc + 1)}%`, "Returns to baseline emotional calm rapidly following setbacks or mistakes."],
-        ["Low Anxiety Drift", `${Math.max(40, esSc - 2)}%`, "Free from chronic worry, intrusive self-doubt, or catastrophic thinking."]
+        ["Low Evaluative Stress Drift", `${Math.max(40, esSc - 2)}%`, "Demonstrates steady composure and recovers quickly from temporary testing setbacks."]
       ],
       low_behavior: "Elevated stress sensitivity, prone to anticipatory anxiety before exams.",
       high_behavior: "High stress tolerance, calm equanimity under load, rapid setback recovery.",
@@ -233,8 +422,8 @@ export function buildClass10ExecutiveHTMLReport(
       title: "MBTI Cognitive Stack — Sensing (Si vs Se)",
       score: `${Math.round((spatSc + numSc) / 2)}%`,
       percentile: `${Math.round(((spatSc + numSc) / 2) * 0.95)}th`,
-      archetype: "Introverted Sensing (Si) Grounding",
-      summary: "Your Sensing function relies on Introverted Sensing (Si) as a stabilizing secondary filter. You compare active inputs against historical precedent, empirical data archives, and established operating procedures.",
+      archetype: mbtiSensingArchetype,
+      summary: mbtiSensingSummary,
       mechanism: "Introverted Sensing (Si) operates as an internal database of historical facts, detailed procedures, and precedent.",
       subfacet_desc: `Detail Retention (${Math.min(99, spatSc + 4)}%) provides a strong grounding counterweight to speculative ideas, verifying compliance with documentation guidelines.`,
       facets: [
@@ -245,7 +434,7 @@ export function buildClass10ExecutiveHTMLReport(
       ],
       low_behavior: "Real-time tactical action, hands-on experimentation, present focus (Se).",
       high_behavior: "Historical archive reliance, procedural precision, structural consistency (Si).",
-      alignment: "Introverted Sensing (Si Dominant)",
+      alignment: mbtiSensingAlignment,
       protocol_name: "Precedent-Verification Protocol",
       protocol: "Before launching novel initiatives, perform a dual-check: review historical precedents (Si) to identify known risks, then design lightweight tactical prototypes (Se) to test assumptions.",
       opt_name: "Procedural Quality Assurance",
@@ -258,8 +447,8 @@ export function buildClass10ExecutiveHTMLReport(
       title: "MBTI Cognitive Stack — Intuition (Ni vs Ne)",
       score: `${Math.min(99, oSc + 3)}%`,
       percentile: `${Math.min(99, Math.round(oSc * 0.98))}th`,
-      archetype: "Introverted Intuition (Ni) Dominant",
-      summary: "Introverted Intuition (Ni) is your core perceiving function. You excel at synthesizing fragmented signals into singular strategic visions, anticipating long-range systemic shifts with high confidence.",
+      archetype: mbtiIntuitionArchetype,
+      summary: mbtiIntuitionSummary,
       mechanism: "Introverted Intuition (Ni) is a convergent perceiving engine that condenses high volumes of abstract data into focused overarching insights.",
       subfacet_desc: `Pattern Recognition (${Math.min(99, oSc + 4)}%) and Strategic Foresight (${Math.min(99, oSc + 2)}%) define your primary cognitive lens for long-term project planning.`,
       facets: [
@@ -270,7 +459,7 @@ export function buildClass10ExecutiveHTMLReport(
       ],
       low_behavior: "Explores divergent brainstorming paths without converging on a single vision (Ne).",
       high_behavior: "Synthesizes complex data into singular long-range strategic frameworks (Ni).",
-      alignment: `Dominant Ni Strategist (${Math.min(99, Math.round(oSc * 0.98))}th %ile)`,
+      alignment: mbtiIntuitionAlignment,
       protocol_name: "Strategic Vision Deconstruction",
       protocol: "Translate abstract Ni strategic visions into concrete 90-day operational execution roadmaps, mapping dependencies and short-term metrics to guide project execution.",
       opt_name: "Strategic Leadership Placement",
@@ -283,8 +472,8 @@ export function buildClass10ExecutiveHTMLReport(
       title: "MBTI Decision Models — Thinking (Te/Ti) vs Feeling",
       score: `${Math.min(99, Math.round((cSc + reasSc) / 2))}%`,
       percentile: `${Math.round(((cSc + reasSc) / 2) * 0.96)}th`,
-      archetype: "Extraverted Thinking (Te) Executive",
-      summary: "Your rational decision model is anchored in Extraverted Thinking (Te) — systematic cause-effect logic, objective performance metrics, structural efficiency, and high task velocity.",
+      archetype: mbtiDecisionArchetype,
+      summary: mbtiDecisionSummary,
       mechanism: "Thinking (T) evaluation prioritizes impersonal cause-and-effect reasoning over subjective feelings.",
       subfacet_desc: `Taxonomic Logic (${Math.min(99, reasSc + 4)}%) ensures that your strategic visions are translated into optimized, quantifiable execution steps.`,
       facets: [
@@ -295,7 +484,7 @@ export function buildClass10ExecutiveHTMLReport(
       ],
       low_behavior: "Decisions guided by subjective values, interpersonal harmony, and personal impact (F).",
       high_behavior: "Decisions guided by objective metrics, efficiency, and structural logic (T).",
-      alignment: `Objective Te Executive (${Math.round(((cSc + reasSc) / 2) * 0.96)}th %ile)`,
+      alignment: mbtiDecisionAlignment,
       protocol_name: "Logic-Impact Audit Protocol",
       protocol: "Pair technical efficiency audits (Te) with a brief assessment of team adoption friction to ensure organizational readiness.",
       opt_name: "Metric-Driven Systems Setup",
@@ -360,8 +549,8 @@ export function buildClass10ExecutiveHTMLReport(
       title: "Fluid Intelligence (Gf) & Abstract Reasoning",
       score: `${reasSc}%`,
       percentile: `${Math.round(reasSc * 0.97)}th`,
-      archetype: "Algorithmic Fluid Logic",
-      summary: `Your Fluid Intelligence reflects strong reasoning capacity. You rapidly decode complex matrix patterns, unmapped logical rules, and non-linear data structures without relying on prior instructions.`,
+      archetype: fluidArchetype,
+      summary: fluidSummary,
       mechanism: "Fluid Intelligence (Gf) represents non-verbal reasoning capacity independent of acquired culture or schooling.",
       subfacet_desc: `Matrix Reasoning (${Math.min(99, reasSc + 4)}%) demonstrates high abstract logic processing, making you capable in algorithm design.`,
       facets: [
@@ -372,8 +561,8 @@ export function buildClass10ExecutiveHTMLReport(
       ],
       low_behavior: "Requires step-by-step examples and familiar problem domains.",
       high_behavior: "Instantly grasps abstract principles in completely novel, unstructured domains.",
-      alignment: `Top Tier Fluid Logic (${Math.round(reasSc * 0.97)}th %ile)`,
-      protocol_name: "High-Complexity Sprints",
+      alignment: fluidAlignment,
+      protocol_name: reasSc >= 50 ? "High-Complexity Sprints" : "Methodical Problem-Decomposition",
       protocol: "Direct your fluid reasoning capacity toward unsolved technical challenges rather than repetitive procedural tasks.",
       opt_name: "Cognitive Challenge Optimization",
       opt_text: "Engage regularly with hard algorithmic problems, theoretical math, or systemic logic modeling to maintain peak fluid processing speed."
@@ -410,8 +599,8 @@ export function buildClass10ExecutiveHTMLReport(
       title: "Spatial-Visual Intelligence & 3D Geometry",
       score: `${spatSc}%`,
       percentile: `${Math.round(spatSc * 0.96)}th`,
-      archetype: "3D Systems Spatializer",
-      summary: `You mentally rotate 3D objects, visualize multi-layered system architectures, and map spatial relationships with clarity.`,
+      archetype: spatialArchetype,
+      summary: spatialSummary,
       mechanism: "Spatial intelligence processes visual-spatial relationships, mental manipulation of objects, and geometric orientation.",
       subfacet_desc: `3D Spatial Rotation (${Math.min(99, spatSc + 4)}%) provides a strong cognitive base for graphics, CAD engineering, or software architecture.`,
       facets: [
@@ -422,7 +611,7 @@ export function buildClass10ExecutiveHTMLReport(
       ],
       low_behavior: "Prefers textual or linear representations over spatial configurations.",
       high_behavior: "Instantly visualizes physical geometries, vector forces, and 3D architectural flows.",
-      alignment: `High Spatial Visualizer (${Math.round(spatSc * 0.96)}th %ile)`,
+      alignment: spatialAlignment,
       protocol_name: "Visual Systems Diagramming",
       protocol: "Sketch complete system architecture flowcharts before writing code to utilize your high visual-spatial mapping capacity.",
       opt_name: "CAD & Spatial Tool Usage",
@@ -485,8 +674,8 @@ export function buildClass10ExecutiveHTMLReport(
       title: "Systemic & Systems Thinking Archetypes",
       score: `${Math.min(99, reasSc + 4)}%`,
       percentile: `${Math.min(99, Math.round(reasSc * 0.98))}th`,
-      archetype: "Master Systems Architect",
-      summary: "You map multi-loop feedback systems, identify hidden leverage points, and anticipate non-obvious ripple effects across complex operations.",
+      archetype: systemsArchetype,
+      summary: systemsSummary,
       mechanism: "Systems thinking evaluates interconnected networks, dynamic delays, non-linear feedback loops, and emergent structural properties.",
       subfacet_desc: `Feedback Loop Mapping (${Math.min(99, reasSc + 5)}%) represents a high cognitive capability for system modeling.`,
       facets: [
@@ -497,7 +686,7 @@ export function buildClass10ExecutiveHTMLReport(
       ],
       low_behavior: "Linear cause-effect thinking; focuses on isolated components.",
       high_behavior: "Holistic systems thinking; maps emergent behaviors and feedback loops.",
-      alignment: `Master Systems Architect (${Math.min(99, Math.round(reasSc * 0.98))}th %ile)`,
+      alignment: systemsAlignment,
       protocol_name: "System Leverage Protocol",
       protocol: "Map out causal loop diagrams before restructuring complex organizations or backend software architectures.",
       opt_name: "Enterprise Architecture Alignment",
@@ -535,7 +724,7 @@ export function buildClass10ExecutiveHTMLReport(
       title: "Critical Thinking & Bias Auditing",
       score: `${Math.min(99, reasSc + 2)}%`,
       percentile: `${Math.round(reasSc * 0.96)}th`,
-      archetype: "Cognitive Error Auditor",
+      archetype: criticalArchetype,
       summary: "You audit assumptions rigorously, identifying logical fallacies, bias traps, and weak empirical evidence before committing to strategy.",
       mechanism: "Critical thinking evaluates the validity of arguments, audits underlying assumptions, and filters out cognitive biases dispassionately.",
       subfacet_desc: `Fallacy Identification (${Math.min(99, reasSc + 4)}%) protects your team from committing resources to flawed premises.`,
@@ -547,7 +736,7 @@ export function buildClass10ExecutiveHTMLReport(
       ],
       low_behavior: "Accepts assumptions without verifying underlying data or logic.",
       high_behavior: "Rigorously audits premises, detects biases, and verifies empirical data.",
-      alignment: `Rigorous Bias Auditor (${Math.round(reasSc * 0.96)}th %ile)`,
+      alignment: criticalAlignment,
       protocol_name: "Assumption Audit Protocol",
       protocol: "Maintain an explicit 'Assumptions Register' for all major initiatives, marking items as 'Verified' only after data validation.",
       opt_name: "Quality Audit Governance",
@@ -815,7 +1004,7 @@ export function buildClass10ExecutiveHTMLReport(
       score: `${riasecScore}%`,
       percentile: `${Math.round(riasecScore * 0.96)}th`,
       archetype: `Top RIASEC: ${topRiasecCodes.join('-')}`,
-      summary: `Vocational interest mapping for ${name}: Strong alignment across ${topRiasecCodes.join(', ')} Holland vectors, supporting targeted Class 11 stream selection in ${topCareer}.`,
+      summary: `Vocational interest mapping for ${name}: Alignment across ${topRiasecCodes.join(', ')} Holland vectors, supporting targeted ${variant === 'senior' ? 'undergraduate degree selection' : variant === 'junior' ? 'academic exploration' : 'Class 11 stream selection'} in ${topCareer}.`,
       mechanism: "John Holland's Vocational Personalities theory maps six interest environments (Realistic, Investigative, Artistic, Social, Enterprising, Conventional) to target academic streams.",
       subfacet_desc: `Primary Interest Congruence (${riasecScore}%) indicates high intrinsic motivation and sustained task engagement when studying aligned subjects.`,
       facets: [
@@ -828,7 +1017,7 @@ export function buildClass10ExecutiveHTMLReport(
       high_behavior: "Strong interest-stream congruence; high intrinsic drive and academic persistence.",
       alignment: `RIASEC Aligned (${Math.round(riasecScore * 0.96)}th %ile)`,
       protocol_name: "Vocational Interest Alignment Protocol",
-      protocol: "Select Class 11 subjects that directly engage your top 2 RIASEC interest vectors to maximize intrinsic study motivation.",
+      protocol: `${variant === 'senior' ? 'Select undergraduate degree majors and coursework that directly engage your top 2 RIASEC interest vectors to maximize intrinsic engagement.' : variant === 'junior' ? 'Explore extracurricular activities and foundational subjects that engage your top 2 RIASEC vectors.' : 'Select Class 11 subjects that directly engage your top 2 RIASEC interest vectors to maximize intrinsic study motivation.'}`,
       opt_name: "Career Cluster Preview",
       opt_text: "Engage in practical project simulations matching your primary RIASEC vector before finalizing subject electives."
     },
@@ -838,20 +1027,20 @@ export function buildClass10ExecutiveHTMLReport(
       code: "Module 30",
       title: "Master Integration & Holland Career Alignment",
       score: `${topFitScore}%`,
-      percentile: "99th Rank",
+      percentile: `${formatOrdinal(Math.min(99, Math.round(topFitScore * 0.97)))} Rank`,
       archetype: topCareer,
       summary: `Unified profile synthesis for ${name}: High alignment across cognitive abilities, personality drivers, and learning modalities. Top recommended stream: ${scores.careerFitment?.[0]?.name || 'Science Stream (PCM)'}.`,
       mechanism: "Integrates Big Five, MBTI, VARK, Fluid Logic, and Holland RIASEC into a single operational archetype.",
-      subfacet_desc: `Systems Synergy (98%) represents your supreme psychometric advantage for higher secondary academic streams and future university preparation.`,
+      subfacet_desc: `Systems Synergy (${synergyScore}%) represents the integrative alignment between your measured cognitive aptitudes, execution persistence, and vocational interests.`,
       facets: [
         ["Fitment Confidence", `${topFitScore}%`, "High alignment across cognitive abilities, personality, and values."],
-        ["Systems Synergy", "98%", "Mastery in synthesizing complex multi-layer enterprise systems."],
+        ["Systems Synergy", `${synergyScore}%`, "Integrative alignment between aptitudes, work habits, and career targets."],
         ["Leadership Potential", `${Math.min(99, cSc + 3)}%`, "Combines strategic vision with execution discipline."],
         ["Execution Readiness", `${Math.min(99, aptOverall + 2)}%`, "High stamina, emotional resilience, and goal-directed focus."]
       ],
       low_behavior: "Fragmented trait profile requiring structured micromanagement.",
       high_behavior: "Synergistic high-capacity profile built for complex technical leadership.",
-      alignment: "Top Tier Synergy (99th %ile)",
+      alignment: `${topFitScore >= 80 ? 'High Career Synergy' : topFitScore >= 60 ? 'Moderate Career Synergy' : 'Exploratory Career Fitment'} (${Math.round(topFitScore * 0.97)}th %ile)`,
       protocol_name: "Continuous Growth Loop",
       protocol: "Direct 70% of your operational energy toward fields that leverage your top cognitive vectors (Fluid Logic, Systems Thinking, Introverted Intuition).",
       opt_name: "Strategic Career Placement",
@@ -1013,7 +1202,7 @@ export function buildClass10ExecutiveHTMLReport(
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Class 10 Executive Psychometric Evaluation & Diagnostic Report | ${name}</title>
+    <title>${variantConfig.reportTitle} | ${name}</title>
     
     <!-- Google Fonts: Poppins ONLY -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1031,19 +1220,19 @@ export function buildClass10ExecutiveHTMLReport(
                 extend: {
                     colors: {
                         maroon: {
-                            DEFAULT: '#1E40AF',
-                            dark: '#0B1528',
-                            light: '#3B82F6',
-                            deep: '#060C18'
+                            DEFAULT: '#2563EB',
+                            dark: '#080F1C',
+                            light: '#60A5FA',
+                            deep: '#080F1C'
                         },
                         gold: {
-                            DEFAULT: '#F59E0B',
-                            light: '#FEF3C7',
-                            dark: '#D97706',
-                            accent: '#FBBF24'
+                            DEFAULT: '#2563EB',
+                            light: '#E8F0FF',
+                            dark: '#1D4ED8',
+                            accent: '#60A5FA'
                         },
                         obsidian: '#080F1C',
-                        charcoal: '#1E293B',
+                        charcoal: '#344054',
                         cream: '#FFFFFF',
                         parchment: '#F8FAFC'
                     },
@@ -1079,17 +1268,17 @@ export function buildClass10ExecutiveHTMLReport(
             color: #FFFFFF !important;
         }
         .bg-maroon-dark {
-            background-color: #0B1528 !important;
+            background-color: #080F1C !important;
             color: #FFFFFF !important;
         }
         .bg-maroon-dark .text-gold, .bg-maroon .text-gold, .maroon-gradient .text-gold {
-            color: #FBBF24 !important;
+            color: #E8F0FF !important;
         }
         .text-maroon {
-            color: #1E40AF !important;
+            color: #2563EB !important;
         }
         .text-maroon-dark {
-            color: #0B1528 !important;
+            color: #080F1C !important;
         }
 
         body {
@@ -1141,17 +1330,17 @@ export function buildClass10ExecutiveHTMLReport(
                 page-break-inside: avoid !important;
                 break-inside: avoid !important;
             }
-            .print-card { border: 1px solid #d4af37 !important; box-shadow: none !important; background: #ffffff !important; margin-bottom: 0px !important; }
+            .print-card { border: 1px solid #E4E7EC !important; box-shadow: none !important; background: #ffffff !important; margin-bottom: 0px !important; }
             canvas { max-height: 200px !important; width: 100% !important; }
         }
 
         .maroon-gradient {
-            background: linear-gradient(135deg, #1D4ED8 0%, #1E3A8A 50%, #172554 100%);
+            background: linear-gradient(135deg, #2563EB 0%, #1E3A8A 50%, #080F1C 100%);
         }
 
         .gold-card-glow {
-            border: 1px solid rgba(37, 99, 235, 0.35);
-            box-shadow: 0 4px 15px rgba(30, 58, 138, 0.12);
+            border: 1px solid #E4E7EC;
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.10);
         }
     </style>
 </head>
@@ -1269,7 +1458,7 @@ export function buildClass10ExecutiveHTMLReport(
                     <div class="bg-black/30 p-2.5 rounded-xl border border-gold/30">
                         <i class="fa-solid fa-certificate text-gold text-base mb-0.5 block"></i>
                         <span class="text-[9px] font-bold text-slate-200 uppercase block">Psychometric Standard</span>
-                        <span class="text-[8px] text-slate-400">ISO-Aligned Diagnostic</span>
+                        <span class="text-[8px] text-slate-400">Educational Guidance Instrument</span>
                     </div>
                     <div class="bg-black/30 p-2.5 rounded-xl border border-gold/30">
                         <i class="fa-solid fa-chart-line text-gold text-base mb-0.5 block"></i>
@@ -1591,12 +1780,12 @@ export function buildClass10ExecutiveHTMLReport(
                                 <div class="flex justify-between text-slate-600"><span>Module 22 — VARK Auditory &amp; Verbal</span><span class="font-bold text-maroon font-mono">33</span></div>
                                 <div class="flex justify-between text-slate-600"><span>Module 23 — VARK Read/Write &amp; Textual</span><span class="font-bold text-maroon font-mono">34</span></div>
                                 <div class="flex justify-between text-slate-600"><span>Module 24 — VARK Kinesthetic &amp; Experiential</span><span class="font-bold text-maroon font-mono">35</span></div>
-                                <div class="flex justify-between text-slate-600"><span>Module 25 — Academic Persistence &amp; Grit</span><span class="font-bold text-maroon font-mono">36</span></div>
-                                <div class="flex justify-between text-slate-600"><span>Module 26 — Growth Mindset &amp; Adaptability</span><span class="font-bold text-maroon font-mono">37</span></div>
-                                <div class="flex justify-between text-slate-600"><span>Module 27 — Exam Strategy &amp; Time Mgmt</span><span class="font-bold text-maroon font-mono">38</span></div>
-                                <div class="flex justify-between text-slate-600"><span>Module 28 — Collaboration &amp; Teamwork</span><span class="font-bold text-maroon font-mono">39</span></div>
+                                <div class="flex justify-between text-slate-600"><span>Module 25 — Memory Systems &amp; Retrieval</span><span class="font-bold text-maroon font-mono">36</span></div>
+                                <div class="flex justify-between text-slate-600"><span>Module 26 — Time Management &amp; Scheduling</span><span class="font-bold text-maroon font-mono">37</span></div>
+                                <div class="flex justify-between text-slate-600"><span>Module 27 — Exam Anxiety &amp; Somatic Readiness</span><span class="font-bold text-maroon font-mono">38</span></div>
+                                <div class="flex justify-between text-slate-600"><span>Module 28 — Spatial Navigation &amp; Kinematics</span><span class="font-bold text-maroon font-mono">39</span></div>
                             </div>
-                            <div class="mt-auto pt-1 border-t border-slate-100 text-[7.5px] text-slate-400 italic">VARK · Grit · Growth Mindset · Study Strategy — Modules 21–28</div>
+                            <div class="mt-auto pt-1 border-t border-slate-100 text-[7.5px] text-slate-400 italic">VARK · Memory · Time Mgmt · Exam Readiness · Spatial — Modules 21–28</div>
                         </div>
 
                         <!-- Phase IV, Phase V & Closing -->
@@ -1694,7 +1883,7 @@ export function buildClass10ExecutiveHTMLReport(
                                 <i class="fa-solid fa-house-chimney-user text-gold"></i> To Parents &amp; Guardians
                             </h4>
                             <p class="text-[11px] text-slate-600 leading-relaxed">
-                                We acknowledge the pivotal role played by parents and family mentors in nurturing the candidate's educational journey. The Class 10 academic transition is a collaborative family milestone. Your guidance, encouragement, and open-minded support form the indispensable foundation upon which ${firstName} will build their Class 11 subject choices and future career roadmap.
+                                We acknowledge the pivotal role played by parents and family mentors in nurturing the candidate's educational journey. ${variant === 'senior' ? `The pre-university transition into higher education is a collaborative family milestone. Your guidance, encouragement, and open-minded support form the indispensable foundation upon which ${firstName} will build their undergraduate degree choices and future career roadmap.` : variant === 'junior' ? `The middle school foundational transition is a collaborative family milestone. Your guidance, encouragement, and open-minded support form the indispensable foundation upon which ${firstName} will explore their academic interests and foundational skill roadmap.` : `The Class 10 academic transition is a collaborative family milestone. Your guidance, encouragement, and open-minded support form the indispensable foundation upon which ${firstName} will build their Class 11 subject choices and future career roadmap.`}
                             </p>
                         </div>
                         <div class="bg-white px-4 py-3 rounded-2xl border border-slate-200 shadow-sm">
@@ -1989,12 +2178,12 @@ export function buildClass10ExecutiveHTMLReport(
                             </p>
                             <div class="bg-white p-2.5 rounded-xl border border-slate-200 space-y-1 text-[11px]">
                                 <div class="flex justify-between">
-                                    <span class="font-bold text-slate-700">Cronbach's Alpha Reliability:</span>
-                                    <span class="font-extrabold text-emerald-600">α = 0.89 (High Consistency)</span>
+                                    <span class="font-bold text-slate-700">Assessment Standardization:</span>
+                                    <span class="font-extrabold text-emerald-600">Educational Guidance Norm-Referenced</span>
                                 </div>
                                 <div class="flex justify-between">
-                                    <span class="font-bold text-slate-700">Construct Validity Score:</span>
-                                    <span class="font-extrabold text-maroon">94.2% Empirical Alignment</span>
+                                    <span class="font-bold text-slate-700">Construct Mapping:</span>
+                                    <span class="font-extrabold text-maroon">Multi-Dimensional Factor Analysis</span>
                                 </div>
                             </div>
                         </div>
@@ -2019,6 +2208,14 @@ export function buildClass10ExecutiveHTMLReport(
                                 <div class="flex items-center justify-between p-1 bg-white rounded border border-slate-200">
                                     <span class="font-bold text-slate-800">50th–74th Percentile:</span>
                                     <span class="text-slate-600">Above Average / Solid Baseline</span>
+                                </div>
+                                <div class="flex items-center justify-between p-1 bg-white rounded border border-slate-200">
+                                    <span class="font-bold text-amber-700">25th–49th Percentile:</span>
+                                    <span class="text-slate-600">Moderate / Developing Capacity</span>
+                                </div>
+                                <div class="flex items-center justify-between p-1 bg-white rounded border border-slate-200">
+                                    <span class="font-bold text-blue-800">1st–24th Percentile:</span>
+                                    <span class="text-slate-600">Foundational / Structured Support</span>
                                 </div>
                             </div>
                         </div>
@@ -2211,7 +2408,7 @@ export function buildClass10ExecutiveHTMLReport(
                         <div class="space-y-2 text-[11px] text-slate-700">
                             <div class="flex items-start gap-2">
                                 <span class="text-gold font-bold">•</span>
-                                <div><strong class="text-maroon">Fluid Logic & STEM Alignment:</strong> High fluid reasoning (${reasSc}%) paired with numerical logic (${numSc}%) indicates exceptional analytical problem-solving capability suitable for competitive STEM streams.</div>
+                                <div><strong class="text-maroon">Fluid Logic & STEM Alignment:</strong> ${reasSc >= 75 ? `High fluid reasoning (${reasSc}%) paired with numerical logic (${numSc}%) indicates advanced analytical problem-solving capability.` : reasSc >= 50 ? `Balanced fluid reasoning (${reasSc}%) paired with numerical logic (${numSc}%) indicates solid analytical problem-solving capability.` : `Numerical logic (${numSc}%) serves as an analytical anchor, supported by structured step-by-step reasoning workflows (${reasSc}%).`}</div>
                             </div>
                             <div class="flex items-start gap-2">
                                 <span class="text-gold font-bold">•</span>
@@ -2246,7 +2443,7 @@ export function buildClass10ExecutiveHTMLReport(
                             </div>
                             <div class="flex items-start gap-2">
                                 <span class="text-gold font-bold">•</span>
-                                <div><strong class="text-maroon">Foundational Roadmap:</strong> Prioritize stream-specific core modules 11–18 to consolidate subject readiness before Class 11 subject selection.</div>
+                                <div><strong class="text-maroon">Foundational Roadmap:</strong> ${variant === 'senior' ? 'Consolidate entrance examination readiness and foundational coursework before undergraduate admissions.' : variant === 'junior' ? 'Consolidate foundational academic habits and exploratory skills.' : 'Prioritize stream-specific core modules 11–18 to consolidate subject readiness before Class 11 subject selection.'}</div>
                             </div>
                         </div>
                         <div class="bg-cream/60 p-2.5 rounded-xl border border-gold/30 text-[10px] text-slate-600 flex items-center justify-between">
@@ -2299,7 +2496,7 @@ export function buildClass10ExecutiveHTMLReport(
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs text-slate-200">
                         <div class="space-y-1">
                             <span class="font-bold text-white block">VARK Study Technique Alignment:</span>
-                            <p class="text-[11px] text-slate-300 leading-snug">Primary ${topVarkLabel} preference. Use visual flowcharts, dual-coding diagrams, and color-coded note hierarchies to double retention.</p>
+                            <p class="text-[11px] text-slate-300 leading-snug">${varkStrategyText}</p>
                         </div>
                         <div class="space-y-1">
                             <span class="font-bold text-white block">EQ Stress Regulation Protocol:</span>
@@ -2420,7 +2617,7 @@ export function buildClass10ExecutiveHTMLReport(
 
                 <div class="border-t border-slate-200 pt-2 flex justify-between items-center text-xs text-slate-500 shrink-0">
                     <span>Executive Summary File: #${rid}</span>
-                    <span>Class 10 Executive Report</span>
+                    <span>${variantConfig.shortStageLabel} Executive Report</span>
                 </div>
             </div>
         </section>
@@ -2478,10 +2675,10 @@ export function buildClass10ExecutiveHTMLReport(
                                 <span><i class="fa-solid fa-user-shield text-gold mr-1"></i> Parent Evaluation Profile</span>
                                 <span class="text-[9px] font-mono text-slate-500">Parent Assessment</span>
                             </span>
-                            <div class="text-slate-800 text-[11px]">Perceived Direction: <strong class="text-maroon font-bold">${parentProfile?.choices?.perceivedCareerDirection ? parentProfile.choices.perceivedCareerDirection.replace(/_/g, ' ') : 'Technology / Science'}</strong></div>
-                            <div class="text-slate-600 text-[10px]">Budget Outlook: ${parentProfile?.choices?.educationBudget ? parentProfile.choices.educationBudget.replace('budget_', '').replace(/_/g, ' ') : 'Planned'}</div>
-                            <div class="text-slate-600 text-[10px]">Decision Ownership: ${parentProfile?.choices?.decisionOwnership ? parentProfile.choices.decisionOwnership.replace(/_/g, ' ') : 'Collaborative Guidance'}</div>
-                            <div class="text-slate-600 text-[10px]">International Openness: ${parentProfile?.interpreted?.internationalOpenness || 'Strong Preference'}</div>
+                            <div class="text-slate-800 text-[11px]">Perceived Direction: <strong class="text-maroon font-bold">${formatParentChoiceLabel(parentProfile?.choices?.perceivedCareerDirection)}</strong></div>
+                            <div class="text-slate-600 text-[10px]">Budget Outlook: ${formatParentChoiceLabel(parentProfile?.choices?.educationBudget)}</div>
+                            <div class="text-slate-600 text-[10px]">Decision Ownership: ${formatParentChoiceLabel(parentProfile?.choices?.decisionOwnership)}</div>
+                            <div class="text-slate-600 text-[10px]">International Openness: ${formatParentChoiceLabel(parentProfile?.interpreted?.internationalOpenness)}</div>
                         </div>
                     </div>
 
@@ -2704,7 +2901,7 @@ export function buildClass10ExecutiveHTMLReport(
                             </h4>
                             <div class="space-y-1 text-[10px] text-slate-700 italic">
                                 <div>1. "Where do my target career goals differ from my family's expectations?"</div>
-                                <div>2. "What specific support do I most need from my parents during Class 11?"</div>
+                                <div>2. "${variant === 'senior' ? 'What specific support do I most need from my parents during college admissions and competitive entrance exams?' : 'What specific support do I most need from my parents during Class 11?'}"</div>
                                 <div>3. "Which career paths do I want to explore deeply before locking my stream?"</div>
                             </div>
                         </div>
@@ -2716,7 +2913,7 @@ export function buildClass10ExecutiveHTMLReport(
                             <div class="space-y-1 text-[10px] text-slate-700">
                                 <div>• Review psychometric evidence for ${topCareer} with candidate &amp; parents.</div>
                                 <div>• Establish realistic financial parameters for entrance exams and tuition.</div>
-                                <div>• Align Class 11 subject combinations (PCM/PCB/Commerce/Arts) to goals.</div>
+                                <div>• ${variant === 'senior' ? 'Align undergraduate degree preferences, college shortlists, and entrance exam priorities.' : 'Align Class 11 subject combinations (PCM/PCB/Commerce/Arts) to goals.'}</div>
                             </div>
                         </div>
                     </div>
@@ -2737,7 +2934,7 @@ export function buildClass10ExecutiveHTMLReport(
                             </div>
                             <div class="bg-white/10 p-2 rounded border border-gold/30 space-y-1">
                                 <span class="font-extrabold text-gold block uppercase text-[9px]">Month 3: Decide</span>
-                                <p class="text-slate-200 text-[9.5px] leading-tight">Schedule certified counsellor session, review financial readiness, and lock Class 11 subjects with total clarity.</p>
+                                <p class="text-slate-200 text-[9.5px] leading-tight">${variant === 'senior' ? 'Schedule certified counsellor session, review financial readiness, and finalize university application milestones with clarity.' : 'Schedule certified counsellor session, review financial readiness, and lock Class 11 subjects with total clarity.'}</p>
                             </div>
                         </div>
                     </div>
@@ -2868,7 +3065,7 @@ export function buildClass10ExecutiveHTMLReport(
                         <div>
                             <span class="text-[9px] font-bold text-slate-700 bg-slate-100 px-2 py-0.5 rounded border border-slate-200 uppercase block mb-1">Strategic Alternative</span>
                             <h4 class="font-bold text-xs text-maroon">${careerFitmentList[2]?.name || 'Commerce & Quantitative Finance'}</h4>
-                            <p class="text-[10px] text-slate-600 leading-snug mt-1">High latent cognitive capability. Acts as a strong alternative pathway if candidate's core stream interests evolve in Class 11.</p>
+                            <p class="text-[10px] text-slate-600 leading-snug mt-1">${variant === 'senior' ? 'High latent cognitive capability. Acts as a strong strategic alternative if candidate\'s undergraduate degree focus evolves.' : 'High latent cognitive capability. Acts as a strong alternative pathway if candidate\'s core stream interests evolve in Class 11.'}</p>
                         </div>
                         <div class="pt-2 border-t border-slate-100 text-[9px] font-bold text-maroon flex justify-between items-center">
                             <span>Status:</span>
@@ -2988,7 +3185,7 @@ export function buildClass10ExecutiveHTMLReport(
                         <i class="fa-solid fa-award text-gold"></i> Executive Cross-Validation Synthesis
                     </h4>
                     <p class="text-xs text-slate-200 leading-relaxed">
-                        Diagnostic signals across personality, aptitude, and learning style strongly converge around <strong>${topCareer}</strong>. The combination of high fluid reasoning (${reasSc}%) and disciplined execution (${cSc}%) provides an ideal foundation for Class 11 stream success. We recommend validating specific elective combinations during counselor alignment.
+                        Diagnostic signals across personality, aptitude, and learning style strongly converge around <strong>${topCareer}</strong>. ${variant === 'senior' ? `The combination of quantitative reasoning (${numSc}%) and disciplined execution (${cSc}%) provides an ideal foundation for pre-university and undergraduate degree success. We recommend validating university program priorities during counselor alignment.` : `The combination of reasoning (${reasSc}%) and disciplined execution (${cSc}%) provides an ideal foundation for Class 11 stream success. We recommend validating specific elective combinations during counselor alignment.`}
                     </p>
                 </div>
 
@@ -3023,7 +3220,7 @@ export function buildClass10ExecutiveHTMLReport(
                             <span class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Current Exploration Stage:</span>
                             <span class="px-3 py-0.5 rounded-full text-xs font-extrabold uppercase bg-emerald-100 text-emerald-800 border border-emerald-300">EXPLORATION READY</span>
                         </div>
-                        <p class="text-xs text-slate-700 leading-snug">${firstName} is ready to begin structured career exploration across recommended stream vectors through subject previews, counselor alignment, and targeted skill simulations prior to Class 11 stream selection.</p>
+                        <p class="text-xs text-slate-700 leading-snug">${firstName} is ready to begin structured career exploration across recommended stream vectors through subject previews, counselor alignment, and targeted skill simulations ${variant === 'senior' ? 'prior to university application locking.' : 'prior to Class 11 stream selection.'}</p>
                     </div>
                 </div>
 
@@ -3063,7 +3260,7 @@ export function buildClass10ExecutiveHTMLReport(
                         <i class="fa-solid fa-lightbulb text-gold text-[11px]"></i> Student Self-Reflection Checklist (For Candidate)
                     </h4>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1.5 text-[10px] text-slate-300">
-                        <div class="flex items-start gap-1.5"><i class="fa-solid fa-square-check text-gold mt-0.5 text-[9px] shrink-0"></i><span>Which academic stream am I most genuinely excited to explore in Class 11?</span></div>
+                        <div class="flex items-start gap-1.5"><i class="fa-solid fa-square-check text-gold mt-0.5 text-[9px] shrink-0"></i><span>${variant === 'senior' ? 'Which degree programs and academic specializations am I most genuinely excited to pursue?' : 'Which academic stream am I most genuinely excited to explore in Class 11?'}</span></div>
                         <div class="flex items-start gap-1.5"><i class="fa-solid fa-square-check text-gold mt-0.5 text-[9px] shrink-0"></i><span>Which psychometric score or feedback point surprised me the most?</span></div>
                         <div class="flex items-start gap-1.5"><i class="fa-solid fa-square-check text-gold mt-0.5 text-[9px] shrink-0"></i><span>Where do my personal stream targets differ from family or peer suggestions?</span></div>
                         <div class="flex items-start gap-1.5"><i class="fa-solid fa-square-check text-gold mt-0.5 text-[9px] shrink-0"></i><span>What practical project experience would give me 100% confidence in my choice?</span></div>
@@ -3080,11 +3277,11 @@ export function buildClass10ExecutiveHTMLReport(
                         </div>
                         <div class="space-y-0.5 border-l border-slate-200 pl-3">
                             <span class="font-extrabold text-maroon text-[11px] block">60 Days — Preview</span>
-                            <p class="text-[10px] text-slate-600 leading-snug">Preview Class 11 subject syllabi. Attend career exploration webinar or mentor session.</p>
+                            <p class="text-[10px] text-slate-600 leading-snug">${variant === 'senior' ? 'Review target university course catalogs and entrance exam syllabus blueprints.' : 'Preview Class 11 subject syllabi. Attend career exploration webinar or mentor session.'}</p>
                         </div>
                         <div class="space-y-0.5 border-l border-slate-200 pl-3">
                             <span class="font-extrabold text-maroon text-[11px] block">90 Days — Finalize</span>
-                            <p class="text-[10px] text-slate-600 leading-snug">Finalize Class 11 stream choices with parents and school counselor with total clarity.</p>
+                            <p class="text-[10px] text-slate-600 leading-snug">${variant === 'senior' ? 'Finalize college application shortlist and degree choices with parents and counsellor.' : 'Finalize Class 11 stream choices with parents and school counselor with total clarity.'}</p>
                         </div>
                     </div>
                 </div>
@@ -3147,7 +3344,7 @@ export function buildClass10ExecutiveHTMLReport(
                             </span>
                             <ul class="space-y-1 text-[10px] text-slate-700">
                                 <li class="flex items-start gap-1.5"><i class="fa-solid fa-check text-emerald-600 text-[9px] mt-0.5"></i><span>High Fluid Reasoning (${reasSc}%) provides exceptional analytical problem solving.</span></li>
-                                <li class="flex items-start gap-1.5"><i class="fa-solid fa-check text-emerald-600 text-[9px] mt-0.5"></i><span>Conscientiousness baseline (${cSc}%) ensures sustained executive focus for Class 11.</span></li>
+                                <li class="flex items-start gap-1.5"><i class="fa-solid fa-check text-emerald-600 text-[9px] mt-0.5"></i><span>${variant === 'senior' ? `Conscientiousness baseline (${cSc}%) supports sustained executive focus for entrance exam and board preparation.` : `Conscientiousness baseline (${cSc}%) ensures sustained executive focus for Class 11.`}</span></li>
                                 <li class="flex items-start gap-1.5"><i class="fa-solid fa-check text-emerald-600 text-[9px] mt-0.5"></i><span>Primary ${topVarkLabel} learning modality accelerates complex theory encoding.</span></li>
                             </ul>
                         </div>
@@ -3157,7 +3354,7 @@ export function buildClass10ExecutiveHTMLReport(
                                 <i class="fa-solid fa-triangle-exclamation text-amber-600"></i> Key Uncertainties to Validate
                             </span>
                             <ul class="space-y-1 text-[10px] text-slate-700">
-                                <li class="flex items-start gap-1.5"><i class="fa-solid fa-arrow-right text-amber-600 text-[9px] mt-0.5"></i><span>Verify Mathematics &amp; Science grade cutoffs required for target Class 11 stream.</span></li>
+                                <li class="flex items-start gap-1.5"><i class="fa-solid fa-arrow-right text-amber-600 text-[9px] mt-0.5"></i><span>${variant === 'senior' ? 'Verify prerequisite cutoff percentiles and eligibility requirements for target degree programs.' : 'Verify Mathematics &amp; Science grade cutoffs required for target Class 11 stream.'}</span></li>
                                 <li class="flex items-start gap-1.5"><i class="fa-solid fa-arrow-right text-amber-600 text-[9px] mt-0.5"></i><span>Confirm family alignment on higher education budget and study abroad readiness.</span></li>
                             </ul>
                         </div>
@@ -3167,7 +3364,7 @@ export function buildClass10ExecutiveHTMLReport(
                     <div class="bg-maroon-dark text-white p-4 rounded-2xl border-2 border-gold shadow-md space-y-2">
                         <div class="flex justify-between items-center border-b border-gold/30 pb-1.5">
                             <span class="text-xs font-bold text-gold uppercase tracking-wider flex items-center gap-1.5">
-                                <i class="fa-solid fa-clipboard-check text-gold"></i> Counsellor Checkpoint &amp; Class 11 Decision Gate
+                                <i class="fa-solid fa-clipboard-check text-gold"></i> ${variant === 'senior' ? 'Counsellor Checkpoint &amp; Admissions Decision Gate' : 'Counsellor Checkpoint &amp; Class 11 Decision Gate'}
                             </span>
                             <span class="text-[9px] font-mono text-gold-light">Final Action Lock</span>
                         </div>
@@ -3178,7 +3375,7 @@ export function buildClass10ExecutiveHTMLReport(
                             </div>
                             <div class="border-l border-gold/30 pl-3">
                                 <strong class="text-white block font-bold">2. Subject Preview:</strong>
-                                Review Class 11 subject syllabi for 2 weeks to test genuine subject interest.
+                                ${variant === 'senior' ? 'Review college application requirements and mock exam percentiles across target institutions.' : 'Review Class 11 subject syllabi for 2 weeks to test genuine subject interest.'}
                             </div>
                             <div class="border-l border-gold/30 pl-3">
                                 <strong class="text-white block font-bold">3. Final Stream Lock:</strong>
@@ -3222,7 +3419,7 @@ export function buildClass10ExecutiveHTMLReport(
 
                     <div class="grid grid-cols-2 gap-3 text-xs">
                         <div class="bg-white p-2.5 rounded-xl border border-slate-200 space-y-1">
-                            <span class="font-bold text-maroon uppercase text-[10px] block border-b border-slate-100 pb-0.5"><i class="fa-solid fa-book text-gold mr-1"></i> Class 11–12 Recommended Subjects</span>
+                            <span class="font-bold text-maroon uppercase text-[10px] block border-b border-slate-100 pb-0.5"><i class="fa-solid fa-book text-gold mr-1"></i> ${variant === 'senior' ? 'Higher Secondary &amp; Pre-requisite Core Subjects' : 'Class 11–12 Recommended Subjects'}</span>
                             <div class="flex flex-wrap gap-1 pt-0.5">
                                 ${primaryRoadmap.foundation.subjects.map(s => `<span class="bg-cream border border-gold/40 px-2 py-0.5 rounded text-[9px] font-semibold text-slate-800">${s}</span>`).join('')}
                             </div>
@@ -3328,7 +3525,7 @@ export function buildClass10ExecutiveHTMLReport(
 
                     <div class="grid grid-cols-2 gap-3 text-xs">
                         <div class="bg-white p-2.5 rounded-xl border border-slate-200 space-y-1">
-                            <span class="font-bold text-maroon uppercase text-[10px] block border-b border-slate-100 pb-0.5"><i class="fa-solid fa-book text-gold mr-1"></i> Class 11–12 Recommended Subjects</span>
+                            <span class="font-bold text-maroon uppercase text-[10px] block border-b border-slate-100 pb-0.5"><i class="fa-solid fa-book text-gold mr-1"></i> ${variant === 'senior' ? 'Higher Secondary &amp; Pre-requisite Core Subjects' : 'Class 11–12 Recommended Subjects'}</span>
                             <div class="flex flex-wrap gap-1 pt-0.5">
                                 ${secondaryRoadmap.foundation.subjects.map(s => `<span class="bg-cream border border-gold/40 px-2 py-0.5 rounded text-[9px] font-semibold text-slate-800">${s}</span>`).join('')}
                             </div>
@@ -3434,7 +3631,7 @@ export function buildClass10ExecutiveHTMLReport(
 
                     <div class="grid grid-cols-2 gap-3 text-xs">
                         <div class="bg-white p-2.5 rounded-xl border border-slate-200 space-y-1">
-                            <span class="font-bold text-maroon uppercase text-[10px] block border-b border-slate-100 pb-0.5"><i class="fa-solid fa-book text-gold mr-1"></i> Class 11–12 Recommended Subjects</span>
+                            <span class="font-bold text-maroon uppercase text-[10px] block border-b border-slate-100 pb-0.5"><i class="fa-solid fa-book text-gold mr-1"></i> ${variant === 'senior' ? 'Higher Secondary &amp; Pre-requisite Core Subjects' : 'Class 11–12 Recommended Subjects'}</span>
                             <div class="flex flex-wrap gap-1 pt-0.5">
                                 ${alternativeRoadmap.foundation.subjects.map(s => `<span class="bg-cream border border-gold/40 px-2 py-0.5 rounded text-[9px] font-semibold text-slate-800">${s}</span>`).join('')}
                             </div>
@@ -3893,9 +4090,9 @@ export function buildClass10ExecutiveHTMLReport(
             new Chart(ctxVark, {
                 type: 'doughnut',
                 data: {
-                    labels: ['Visual (${topVarkCode === 'V' ? 35 : 25}%)', 'Read/Write (${topVarkCode === 'R' ? 35 : 25}%)', 'Kinesthetic (${topVarkCode === 'K' ? 35 : 25}%)', 'Auditory (${topVarkCode === 'A' ? 35 : 25}%)'],
+                    labels: ['Visual (${vPct}%)', 'Read/Write (${rPct}%)', 'Kinesthetic (${kPct}%)', 'Auditory (${aPct}%)'],
                     datasets: [{
-                        data: [${topVarkCode === 'V' ? 35 : 25}, ${topVarkCode === 'R' ? 35 : 25}, ${topVarkCode === 'K' ? 35 : 25}, ${topVarkCode === 'A' ? 35 : 25}],
+                        data: [${vPct}, ${rPct}, ${kPct}, ${aPct}],
                         backgroundColor: [maroon, goldDark, '#080F1C', '#60A5FA'],
                         borderWidth: 2,
                         borderColor: '#ffffff'

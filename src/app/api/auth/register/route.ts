@@ -110,6 +110,7 @@ export async function POST(request: NextRequest) {
         psychometricTest: false, // Psychometric test requires admin access activation
         universityPredictor: true,
       },
+      accessRequests: ['psychometricTest'], // Automatically route access permission request to admin
       passwordHash,
       createdAt: new Date(),
       updatedAt: new Date(),

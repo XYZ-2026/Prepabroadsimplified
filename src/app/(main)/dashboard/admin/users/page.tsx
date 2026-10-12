@@ -28,8 +28,13 @@ export default async function AdminUsersPage() {
         const data = doc.data();
         let createdAtStr = 'Unknown';
         if (data.createdAt) {
-          const date = data.createdAt.toDate();
-          createdAtStr = date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+          if (typeof data.createdAt.toDate === 'function') {
+            const date = data.createdAt.toDate();
+            createdAtStr = date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+          } else {
+            const date = new Date(data.createdAt);
+            createdAtStr = isNaN(date.getTime()) ? 'Unknown' : date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+          }
         }
 
         const assignedCId = data.assignedCounsellor;
@@ -66,9 +71,8 @@ export default async function AdminUsersPage() {
     // Continue with empty array if there's an error (e.g., credentials missing during migration)
   }
 
-
-
   const activeStatesCount = new Set(initialUsers.map(u => u.state.toLowerCase()).filter(s => s && s !== 'unknown')).size;
+  const pendingApprovalsCount = initialUsers.filter(u => u.toolAccess?.psychometricTest !== true).length;
 
   return (
     <div className={styles.adminContent}>
@@ -101,9 +105,11 @@ export default async function AdminUsersPage() {
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><polyline points="14 2 14 8 20 8" /><line x1="16" y1="13" x2="8" y2="13" /><line x1="16" y1="17" x2="8" y2="17" /><polyline points="10 9 9 9 8 9" /></svg>
           </div>
           <div className={styles.statContent}>
-            <h3>0</h3>
-            <p>New Applications</p>
-            <div className={styles.statTrend} style={{ color: '#FF9800' }}>Requires review</div>
+            <h3 style={{ color: pendingApprovalsCount > 0 ? '#ea580c' : undefined }}>{pendingApprovalsCount}</h3>
+            <p>Pending Test Approvals</p>
+            <div className={styles.statTrend} style={{ color: '#FF9800' }}>
+              <a href="/dashboard/admin/tool-access" style={{ color: '#d97706', textDecoration: 'underline' }}>Manage Access →</a>
+            </div>
           </div>
         </div>
       </div>

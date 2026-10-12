@@ -455,6 +455,7 @@ export default function AuthForm({ defaultTab }: AuthFormProps = {}) {
               psychometricTest: false,
               universityPredictor: true,
             },
+            accessRequests: ['psychometricTest'],
             createdAt: serverTimestamp(),
           }, { merge: true });
         } catch (clientFsErr: any) {

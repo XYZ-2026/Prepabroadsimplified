@@ -4,7 +4,7 @@
  * Generates a 15-Page Curated Executive Career Edition derived deterministically
  * from the authoritative 56-Page Psychometric Report snapshot.
  *
- * Uses the exact same visual design system (burgundy/gold/cream palette, Poppins font,
+ * Uses the exact same visual design system (executive navy/indigo/gold palette, Poppins font,
  * Tailwind CSS, FontAwesome icons, cards, and page styling) as the 56-page full report.
  *
  * ZERO Groq / AI overhead on generation. 100% Data Fidelity.
@@ -132,20 +132,21 @@ export function buildClass10ExecutiveSummaryHTMLReport(
           extend: {
             colors: {
               maroon: {
-                DEFAULT: '#690B1B',
-                dark: '#4A0712',
-                light: '#8B1229',
+                DEFAULT: '#1E40AF',
+                dark: '#0B1528',
+                light: '#3B82F6',
               },
               gold: {
-                DEFAULT: '#C9A55D',
-                light: '#E6C687',
-                dark: '#A3803C',
+                DEFAULT: '#F59E0B',
+                light: '#FEF3C7',
+                dark: '#D97706',
+                accent: '#FBBF24',
               },
               cream: {
-                DEFAULT: '#FFF8F8',
-                dark: '#F5EBEB',
+                DEFAULT: '#FFFFFF',
+                dark: '#F8FAFC',
               },
-              obsidian: '#111827',
+              obsidian: '#080F1C',
             },
             fontFamily: {
               sans: ['Poppins', 'sans-serif'],
@@ -156,6 +157,34 @@ export function buildClass10ExecutiveSummaryHTMLReport(
     </script>
     
     <style>
+        /* Strict icon font specificity so icons never get overwritten by Poppins */
+        i[class*="fa-"], span[class*="fa-"], .fa, .fas, .far, .fal, .fad, .fab, .fa-solid, .fa-regular, .fa-brands {
+            font-family: "Font Awesome 6 Free", "Font Awesome 6 Brands", sans-serif !important;
+            font-weight: 900 !important;
+            font-style: normal !important;
+            display: inline-block !important;
+            line-height: 1 !important;
+        }
+
+        /* High-contrast clarity rules for badges and dark headers */
+        .bg-maroon, .bg-blue-600 {
+            background-color: #2563EB !important;
+            color: #FFFFFF !important;
+        }
+        .bg-maroon-dark {
+            background-color: #0B1528 !important;
+            color: #FFFFFF !important;
+        }
+        .bg-maroon-dark .text-gold, .bg-maroon .text-gold, .maroon-gradient .text-gold {
+            color: #FBBF24 !important;
+        }
+        .text-maroon {
+            color: #1E40AF !important;
+        }
+        .text-maroon-dark {
+            color: #0B1528 !important;
+        }
+
         @page {
             size: A4 portrait;
             margin: 0;
@@ -163,8 +192,8 @@ export function buildClass10ExecutiveSummaryHTMLReport(
 
         body {
             font-family: 'Poppins', sans-serif;
-            color: #1e293b;
-            background-color: #f8fafc;
+            color: #344054;
+            background-color: #F8FAFC;
             margin: 0;
             padding: 0;
             -webkit-print-color-adjust: exact !important;
@@ -209,7 +238,7 @@ export function buildClass10ExecutiveSummaryHTMLReport(
         }
 
         .maroon-gradient {
-            background: linear-gradient(135deg, #690B1B 0%, #4A0712 100%);
+            background: linear-gradient(135deg, #1D4ED8 0%, #1E3A8A 100%);
         }
     </style>
 </head>

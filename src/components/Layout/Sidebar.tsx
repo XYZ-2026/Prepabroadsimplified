@@ -233,7 +233,12 @@ export default function Sidebar({ userRole, userName, userEmail }: SidebarProps)
               </Link>
             </div>
             <div style={{ marginTop: '6px' }}>
-              <Link href="/book-a-demo" onClick={handleLinkClick} className={`${styles.sidebarActionBtn}`} style={{ background: '#2563EB', color: '#ffffff', border: 'none', borderRadius: '10px', justifyContent: 'center' }}>
+              <Link 
+                href="/book-a-demo" 
+                onClick={handleLinkClick} 
+                className={`${styles.sidebarActionBtn}`} 
+                style={{ background: '#2563EB', color: '#ffffff', border: 'none', borderRadius: '10px', justifyContent: 'center' }}
+              >
                 <span style={{ fontWeight: 700, fontSize: '13px' }}>Book a Demo</span>
               </Link>
             </div>
@@ -301,6 +306,9 @@ export default function Sidebar({ userRole, userName, userEmail }: SidebarProps)
                 </svg>
               </button>
               <div className={styles.navSubLinks}>
+                <Link href="/dashboard/admin/enquiries" onClick={handleLinkClick} className={`${styles.navSubLink} ${isActive('/dashboard/admin/enquiries') ? styles.navSubLinkActive : ''}`}>
+                  Enquiries
+                </Link>
                 <Link href="/dashboard/admin/users" onClick={handleLinkClick} className={`${styles.navSubLink} ${isActive('/dashboard/admin/users') ? styles.navSubLinkActive : ''}`}>
                   Users
                 </Link>
@@ -377,7 +385,12 @@ export default function Sidebar({ userRole, userName, userEmail }: SidebarProps)
           )}
 
           {/* Quick Action - Book a Demo */}
-          <Link href="/book-a-demo" onClick={handleLinkClick} className={`${styles.sidebarActionBtn}`} style={{ background: '#2563EB', color: '#ffffff', border: 'none', margin: '0 16px 12px 16px', borderRadius: '12px', justifyContent: 'center' }}>
+          <Link 
+            href="/book-a-demo" 
+            onClick={handleLinkClick} 
+            className={`${styles.sidebarActionBtn}`} 
+            style={{ background: '#2563EB', color: '#ffffff', border: 'none', margin: '0 16px 12px 16px', borderRadius: '12px', justifyContent: 'center' }}
+          >
             <span style={{ fontWeight: 700, fontSize: '14px' }}>Book a Demo</span>
           </Link>
 

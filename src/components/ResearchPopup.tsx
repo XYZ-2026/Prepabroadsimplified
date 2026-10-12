@@ -38,7 +38,7 @@ export default function ResearchPopup() {
         
         <div className="text-center mb-6 mt-12 md:mt-4">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 tracking-tight leading-tight">
-            Accelerate Your <span className="text-[#65151E]">Study Abroad</span> Journey
+            Accelerate Your <span className="text-[#2563EB]">Study Abroad</span> Journey
           </h2>
           <p className="mt-3 text-gray-600 max-w-2xl mx-auto">
             Explore our premium platforms designed to help ambitious students build their legacy and reach top global universities.

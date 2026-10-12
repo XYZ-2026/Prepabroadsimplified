@@ -14,16 +14,60 @@ export default function SampleReportsHubPage() {
     previewUrl: '',
   });
 
-  const handleDownload = (reportName: string, previewUrl: string) => {
-    // In accordance with asset integrity requirements, check if a static pre-compiled PDF exists.
-    // As verified in repository inspection, static PDF assets are not bundled in repository storage.
-    // Rather than generating a 404 or broken file download, provide an explicit, helpful asset notification
-    // with direct access to the high-fidelity interactive report engine and browser print/export.
-    setMissingAssetNotice({
-      isOpen: true,
-      reportName,
-      previewUrl,
-    });
+  const [downloadingReport, setDownloadingReport] = useState<string | null>(null);
+
+  const handleDownload = async (reportName: string, previewUrl: string) => {
+    const isExecutive = previewUrl.includes('executive');
+    setDownloadingReport(reportName);
+    try {
+      const res = await fetch('/api/psychometric-test/pdf', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          isSample: true,
+          reportType: isExecutive ? 'executive' : 'full',
+          assessmentType: 'grade10',
+          variant: 'grade10',
+          student: {
+            name: 'Aarav Sharma (Sample)',
+            grade: 'Class 10',
+            school: 'Delhi Public School, R.K. Puram',
+            city: 'New Delhi',
+            date: 'October 11, 2026',
+            reportId: 'SAMPLE-10-DEMO',
+          },
+          scores: {
+            aptitude: { verbal: 82, numerical: 88, reasoning: 84, spatial: 79, overall: 83 },
+            personality: { openness: 76, conscientiousness: 80, extraversion: 68, agreeableness: 74, emotionalStability: 72 },
+            topRiasec: ['Investigative', 'Realistic', 'Artistic'],
+            careerFitment: [
+              { name: 'Computer Science & Software Systems', score: 95 },
+              { name: 'Data Science & AI Engineering', score: 92 },
+            ],
+          },
+        }),
+      });
+
+      if (!res.ok) {
+        throw new Error('Failed to generate PDF');
+      }
+
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = isExecutive
+        ? 'Sample_Class10_Executive_Career_Summary.pdf'
+        : 'Sample_Class10_Full_Psychometric_Report.pdf';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(() => URL.revokeObjectURL(url), 15000);
+    } catch {
+      window.location.href = previewUrl;
+    } finally {
+      setDownloadingReport(null);
+    }
   };
 
   const closeNotice = () => {

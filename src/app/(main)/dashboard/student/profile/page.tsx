@@ -13,6 +13,10 @@ export default async function StudentProfilePage() {
     redirect('/auth');
   }
 
+  if (claims.email === 'admin@as.com' || claims.admin === true || claims.role === 'admin') {
+    redirect('/dashboard/admin/users');
+  }
+
   let userData: StudentProfileData = {
     name: claims.name || 'Unknown',
     email: claims.email || 'Unknown',

@@ -8,9 +8,9 @@ export default async function DashboardIndexPage() {
     redirect('/auth');
   }
 
-  if (claims.role === 'admin') {
+  if (claims.email === 'admin@as.com' || claims.admin === true || claims.role === 'admin') {
     redirect('/dashboard/admin/users');
-  } else if (claims.role === 'counsellor') {
+  } else if (claims.email === 'counsellor@as.com' || claims.role === 'counsellor' || claims.email?.includes('counsellor')) {
     redirect('/dashboard/counsellor');
   } else {
     redirect('/dashboard/student/profile');

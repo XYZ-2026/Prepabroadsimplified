@@ -6,19 +6,39 @@ import { getWorkflowState } from '@/lib/assessment-workflow';
 export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     const resolvedParams = await params;
-    const docRef = await adminDb.collection('psychometric_results').doc(resolvedParams.id).get();
-    
-    if (!docRef.exists) {
+    let resultData: any = null;
+
+    try {
+      const docRef = await adminDb.collection('psychometric_results').doc(resolvedParams.id).get();
+      if (docRef.exists) {
+        resultData = { id: docRef.id, ...docRef.data() };
+      }
+    } catch (dbErr) {
+      console.warn('[Get Result Route] Firestore fetch warning:', dbErr);
+    }
+
+    if (!resultData) {
+      const gCache = (globalThis as any).__psychometricResultsCache;
+      if (gCache && gCache.has(resolvedParams.id)) {
+        resultData = gCache.get(resolvedParams.id);
+      }
+    }
+
+    if (!resultData) {
       return NextResponse.json({ success: false, message: 'Result not found' }, { status: 404 });
     }
 
     const role: any = await getUserRole();
     const isAdmin = role === 'admin' || role === 'counsellor';
-    
-    const resultData: any = { id: docRef.id, ...docRef.data() };
-    
+
     // Workflow state check
-    const workflowState = await getWorkflowState(resolvedParams.id);
+    let workflowState = 'parent_pending';
+    try {
+      workflowState = await getWorkflowState(resolvedParams.id);
+    } catch (wfErr) {
+      console.warn('[Get Result Route] Workflow state fetch warning:', wfErr);
+    }
+
     const reportLocked = !isAdmin && workflowState !== 'report_unlocked';
 
     if (reportLocked) {
@@ -43,9 +63,13 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
     // Fetch comparison data if it exists and report is unlocked
     let comparisonData = null;
     if (workflowState === 'report_unlocked' || isAdmin) {
-      const compSnap = await adminDb.collection('assessment_comparisons').doc(resolvedParams.id).get();
-      if (compSnap.exists) {
-        comparisonData = compSnap.data();
+      try {
+        const compSnap = await adminDb.collection('assessment_comparisons').doc(resolvedParams.id).get();
+        if (compSnap.exists) {
+          comparisonData = compSnap.data();
+        }
+      } catch (compErr) {
+        console.warn('[Get Result Route] Comparison fetch warning:', compErr);
       }
     }
 

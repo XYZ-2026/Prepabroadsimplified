@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import ReportNavigationSidebar from './ReportNavigationSidebar';
 
 /* ────────────────────────────────────────────────────────────
@@ -68,6 +68,34 @@ function prepareReportHtml(html: string): string {
       }
       /* Smooth scrolling inside iframe */
       html { scroll-behavior: smooth; }
+
+      /* Strict icon font specificity so icons render accurately in iframe */
+      i[class*="fa-"], span[class*="fa-"], .fa, .fas, .far, .fal, .fad, .fab, .fa-solid, .fa-regular, .fa-brands {
+        font-family: "Font Awesome 6 Free", "Font Awesome 6 Brands", sans-serif !important;
+        font-weight: 900 !important;
+        font-style: normal !important;
+        display: inline-block !important;
+        line-height: 1 !important;
+      }
+
+      /* Contrast overrides for dark headers and badges */
+      .bg-maroon-dark .text-gold, .bg-maroon .text-gold, .maroon-gradient .text-gold {
+        color: #FBBF24 !important;
+      }
+      .bg-maroon-dark {
+        background-color: #0B1528 !important;
+        color: #FFFFFF !important;
+      }
+      .bg-maroon, .bg-blue-600 {
+        background-color: #2563EB !important;
+        color: #FFFFFF !important;
+      }
+      .text-maroon {
+        color: #1E40AF !important;
+      }
+      .text-maroon-dark {
+        color: #0B1528 !important;
+      }
 
       @media screen and (max-width: 820px) {
         body {
@@ -359,10 +387,85 @@ export default function ReportViewerShell({
   const preparedHtml = prepareReportHtml(reportHtml);
 
   // Brand colors for inline styles
-  const MAROON = '#690B1B';
-  const MAROON_DARK = '#4A0E17';
-  const GOLD = '#C9A55D';
-  const CREAM = '#FAF8F5';
+  const MAROON = '#2563EB';
+  const MAROON_DARK = '#1D4ED8';
+  const GOLD = '#2563EB';
+  const CREAM = '#FFFFFF';
+
+  // Download loading bar state
+  const [downloadingFull, setDownloadingFull] = useState(false);
+  const [downloadingExec, setDownloadingExec] = useState(false);
+  const [fullProgress, setFullProgress] = useState(0);
+  const [execProgress, setExecProgress] = useState(0);
+  const fullIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const execIntervalRef = useRef<NodeJS.Timeout | null>(null);
+
+  const startProgress = useCallback((setProgress: (v: number) => void, intervalRef: React.MutableRefObject<NodeJS.Timeout | null>) => {
+    let progress = 0;
+    setProgress(0);
+    if (intervalRef.current) clearInterval(intervalRef.current);
+    intervalRef.current = setInterval(() => {
+      const remaining = 90 - progress;
+      const increment = Math.max(0.3, remaining * 0.08 + Math.random() * 2);
+      progress = Math.min(90, progress + increment);
+      setProgress(Math.round(progress));
+    }, 150);
+  }, []);
+
+  const finishProgress = useCallback((setProgress: (v: number) => void, intervalRef: React.MutableRefObject<NodeJS.Timeout | null>, setDownloading: (v: boolean) => void) => {
+    if (intervalRef.current) clearInterval(intervalRef.current);
+    setProgress(100);
+    setTimeout(() => {
+      setDownloading(false);
+      setProgress(0);
+    }, 800);
+  }, []);
+
+  const handleFullWithProgress = useCallback(async () => {
+    if (downloadingFull) return;
+    setDownloadingFull(true);
+    startProgress(setFullProgress, fullIntervalRef);
+    let completed = false;
+    const onComplete = () => {
+      if (completed) return;
+      completed = true;
+      finishProgress(setFullProgress, fullIntervalRef, setDownloadingFull);
+      window.removeEventListener('pdf-download-complete', onComplete);
+    };
+    window.addEventListener('pdf-download-complete', onComplete);
+    try {
+      await Promise.resolve(onDownloadFull());
+    } catch {
+      onComplete();
+    }
+    setTimeout(() => {
+      onComplete();
+    }, 60000);
+  }, [downloadingFull, onDownloadFull, startProgress, finishProgress]);
+
+  const handleExecWithProgress = useCallback(async () => {
+    if (downloadingExec) return;
+    setDownloadingExec(true);
+    startProgress(setExecProgress, execIntervalRef);
+    let completed = false;
+    const onComplete = () => {
+      if (completed) return;
+      completed = true;
+      finishProgress(setExecProgress, execIntervalRef, setDownloadingExec);
+      window.removeEventListener('pdf-download-complete', onComplete);
+      window.removeEventListener('summary-download-complete', onComplete);
+    };
+    window.addEventListener('pdf-download-complete', onComplete);
+    window.addEventListener('summary-download-complete', onComplete);
+    try {
+      await Promise.resolve(onDownloadSummary());
+    } catch {
+      onComplete();
+    }
+    setTimeout(() => {
+      onComplete();
+    }, 60000);
+  }, [downloadingExec, onDownloadSummary, startProgress, finishProgress]);
 
   if (isMobile) {
     return (
@@ -503,7 +606,8 @@ export default function ReportViewerShell({
             </button>
             <button
               type="button"
-              onClick={mode === 'full' ? onDownloadFull : onDownloadSummary}
+              onClick={mode === 'full' ? handleFullWithProgress : handleExecWithProgress}
+              disabled={downloadingFull || downloadingExec}
               style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -774,8 +878,7 @@ export default function ReportViewerShell({
             <span>{backLabel}</span>
           </a>
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <span style={{ color: MAROON, fontWeight: 800, fontSize: '14px' }}>Abroad</span>
-            <span style={{ color: '#0f172a', fontWeight: 800, fontSize: '14px' }}>Simplified</span>
+            <span style={{ color: '#2563EB', fontWeight: 800, fontSize: '15px' }}>CLARVO</span>
             <span style={{
               fontSize: '9px', fontWeight: 700, padding: '2px 7px', borderRadius: '10px',
               background: '#e0f2fe', color: '#0369a1', textTransform: 'uppercase' as const,
@@ -810,15 +913,15 @@ export default function ReportViewerShell({
               fontSize: '11.5px',
               fontWeight: mode === 'full' ? 800 : 600,
               letterSpacing: '0.3px',
-              border: mode === 'full' ? '1px solid rgba(201, 165, 93, 0.5)' : '1px solid transparent',
+              border: mode === 'full' ? '1px solid #1D4ED8' : '1px solid transparent',
               cursor: 'pointer',
               transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
-              background: mode === 'full' ? 'linear-gradient(135deg, #690B1B 0%, #4A0E17 100%)' : 'transparent',
+              background: mode === 'full' ? '#2563EB' : 'transparent',
               color: mode === 'full' ? '#ffffff' : '#475569',
-              boxShadow: mode === 'full' ? '0 2px 8px rgba(105,11,27,0.35), inset 0 1px 0 rgba(255,255,255,0.15)' : 'none',
+              boxShadow: mode === 'full' ? '0 2px 8px rgba(37,99,235,0.3)' : 'none',
             }}
           >
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={mode === 'full' ? '#C9A55D' : 'currentColor'} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={mode === 'full' ? '#ffffff' : 'currentColor'} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><polyline points="14 2 14 8 20 8" />
             </svg>
             <span>FULL REPORT (56P)</span>
@@ -835,73 +938,103 @@ export default function ReportViewerShell({
               fontSize: '11.5px',
               fontWeight: mode === 'executive' ? 800 : 600,
               letterSpacing: '0.3px',
-              border: mode === 'executive' ? '1px solid rgba(201, 165, 93, 0.5)' : '1px solid transparent',
+              border: mode === 'executive' ? '1px solid #1D4ED8' : '1px solid transparent',
               cursor: 'pointer',
               transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
-              background: mode === 'executive' ? 'linear-gradient(135deg, #690B1B 0%, #4A0E17 100%)' : 'transparent',
+              background: mode === 'executive' ? '#2563EB' : 'transparent',
               color: mode === 'executive' ? '#ffffff' : '#475569',
-              boxShadow: mode === 'executive' ? '0 2px 8px rgba(105,11,27,0.35), inset 0 1px 0 rgba(255,255,255,0.15)' : 'none',
+              boxShadow: mode === 'executive' ? '0 2px 8px rgba(37,99,235,0.3)' : 'none',
             }}
           >
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={mode === 'executive' ? '#C9A55D' : 'currentColor'} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={mode === 'executive' ? '#ffffff' : 'currentColor'} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
               <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
             </svg>
             <span>EXECUTIVE EDITION (15P)</span>
           </button>
         </div>
 
-        {/* Right: Download buttons */}
+        {/* Right: Download buttons with loading bars */}
+        <style>{`
+          .vs-dl-wrapper { position: relative; overflow: hidden; border-radius: 10px; }
+          .vs-dl-bar { position: absolute; bottom: 0; left: 0; height: 3px; background: linear-gradient(90deg, #93C5FD 0%, #FFFFFF 100%); transition: width 0.15s ease-out; border-radius: 0 2px 2px 0; z-index: 2; }
+          .vs-dl-bar-alt { position: absolute; bottom: 0; left: 0; height: 3px; background: linear-gradient(90deg, #2563EB 0%, #60A5FA 100%); transition: width 0.15s ease-out; border-radius: 0 2px 2px 0; z-index: 2; }
+          .vs-spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: vsSpin 0.7s linear infinite; }
+          .vs-spinner-alt { display: inline-block; width: 14px; height: 14px; border: 2px solid rgba(37,99,235,0.2); border-top-color: #2563EB; border-radius: 50%; animation: vsSpin 0.7s linear infinite; }
+          @keyframes vsSpin { to { transform: rotate(360deg); } }
+        `}</style>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
-          <button
-            type="button"
-            onClick={onDownloadFull}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '7px',
-              padding: '7px 16px',
-              borderRadius: '10px',
-              fontSize: '12px',
-              fontWeight: 700,
-              letterSpacing: '0.2px',
-              cursor: 'pointer',
-              transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
-              background: 'linear-gradient(135deg, #690B1B 0%, #4A0E17 100%)',
-              color: '#ffffff',
-              border: '1px solid #851224',
-              boxShadow: '0 2px 8px rgba(105, 11, 27, 0.3), 0 1px 2px rgba(0,0,0,0.1)',
-            }}
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#C9A55D" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line x1="12" y1="15" x2="12" y2="3" />
-            </svg>
-            <span>Download Full PDF</span>
-          </button>
-          <button
-            type="button"
-            onClick={onDownloadSummary}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '7px',
-              padding: '7px 16px',
-              borderRadius: '10px',
-              fontSize: '12px',
-              fontWeight: 700,
-              letterSpacing: '0.2px',
-              cursor: 'pointer',
-              transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
-              background: 'linear-gradient(135deg, #FAF8F5 0%, #FFFFFF 100%)',
-              color: '#690B1B',
-              border: '1.5px solid #C9A55D',
-              boxShadow: '0 2px 8px rgba(201, 165, 93, 0.2), inset 0 1px 0 rgba(255,255,255,0.8)',
-            }}
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#C9A55D" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-            </svg>
-            <span>Download Summary PDF</span>
-          </button>
+          <div className="vs-dl-wrapper">
+            <button
+              type="button"
+              onClick={handleFullWithProgress}
+              disabled={downloadingFull}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '7px',
+                padding: '7px 16px',
+                borderRadius: '10px',
+                fontSize: '12px',
+                fontWeight: 700,
+                letterSpacing: '0.2px',
+                cursor: downloadingFull ? 'not-allowed' : 'pointer',
+                transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+                background: downloadingFull ? '#1D4ED8' : '#2563EB',
+                color: '#ffffff',
+                border: '1px solid #1D4ED8',
+                boxShadow: '0 2px 8px rgba(37, 99, 235, 0.3), 0 1px 2px rgba(0,0,0,0.1)',
+                opacity: downloadingFull ? 0.9 : 1,
+                position: 'relative',
+                overflow: 'hidden',
+              }}
+            >
+              {downloadingFull ? (
+                <span className="vs-spinner" />
+              ) : (
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line x1="12" y1="15" x2="12" y2="3" />
+                </svg>
+              )}
+              <span>{downloadingFull ? `Generating… ${fullProgress}%` : 'Download Full PDF'}</span>
+            </button>
+            {downloadingFull && <div className="vs-dl-bar" style={{ width: `${fullProgress}%` }} />}
+          </div>
+          <div className="vs-dl-wrapper">
+            <button
+              type="button"
+              onClick={handleExecWithProgress}
+              disabled={downloadingExec}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '7px',
+                padding: '7px 16px',
+                borderRadius: '10px',
+                fontSize: '12px',
+                fontWeight: 700,
+                letterSpacing: '0.2px',
+                cursor: downloadingExec ? 'not-allowed' : 'pointer',
+                transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+                background: downloadingExec ? '#F1F5F9' : '#FFFFFF',
+                color: downloadingExec ? '#1D4ED8' : '#080F1C',
+                border: '1.5px solid #E4E7EC',
+                boxShadow: '0 1px 3px rgba(0, 0, 0, 0.06)',
+                opacity: downloadingExec ? 0.9 : 1,
+                position: 'relative',
+                overflow: 'hidden',
+              }}
+            >
+              {downloadingExec ? (
+                <span className="vs-spinner-alt" />
+              ) : (
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2563EB" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                </svg>
+              )}
+              <span>{downloadingExec ? `Generating… ${execProgress}%` : 'Download Summary PDF'}</span>
+            </button>
+            {downloadingExec && <div className="vs-dl-bar-alt" style={{ width: `${execProgress}%` }} />}
+          </div>
         </div>
       </div>
 

@@ -66,7 +66,7 @@ export default function PsychometricLandingPage({ variant, onStart, eligibility,
   }, [config.reportPagesPreview.length]);
 
   return (
-    <div className="min-h-screen bg-[#fdfbf7] text-slate-900 font-sans flex flex-col selection:bg-[#690b1b] selection:text-white">
+    <div className="min-h-screen bg-[#fdfbf7] text-slate-900 font-sans flex flex-col selection:bg-[#2563EB] selection:text-white">
       
       {/* ── 1. STICKY HEADER NAVBAR ── */}
       <header className="sticky top-0 z-50 bg-[#fdfbf7]/90 backdrop-blur-md border-b border-slate-200/80 px-4 md:px-8 py-3.5">
@@ -74,21 +74,21 @@ export default function PsychometricLandingPage({ variant, onStart, eligibility,
           
           {/* Brand Logo */}
           <Link href="/" className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-xl bg-[#690b1b] text-white font-black text-xs flex items-center justify-center shadow-md">
+            <div className="w-8 h-8 rounded-xl bg-[#2563EB] text-white font-black text-xs flex items-center justify-center shadow-md">
               CS
             </div>
             <span className="font-display font-extrabold text-base tracking-tight text-slate-900">
-              Career <span className="text-[#690b1b]">Simplified</span>
+              Career <span className="text-[#2563EB]">Simplified</span>
             </span>
           </Link>
 
           {/* Navigation Links (Desktop) */}
           <nav className="hidden lg:flex items-center gap-6 text-xs font-semibold text-slate-600">
-            <a href="#why" className="hover:text-[#690b1b] transition-colors">Why This Assessment</a>
-            <a href="#discover" className="hover:text-[#690b1b] transition-colors">What You'll Discover</a>
-            <a href="#how-it-works" className="hover:text-[#690b1b] transition-colors">How It Works</a>
-            <a href="#deliverables" className="hover:text-[#690b1b] transition-colors">Deliverables</a>
-            <a href="#faq" className="hover:text-[#690b1b] transition-colors">FAQ</a>
+            <a href="#why" className="hover:text-[#2563EB] transition-colors">Why This Assessment</a>
+            <a href="#discover" className="hover:text-[#2563EB] transition-colors">What You'll Discover</a>
+            <a href="#how-it-works" className="hover:text-[#2563EB] transition-colors">How It Works</a>
+            <a href="#deliverables" className="hover:text-[#2563EB] transition-colors">Deliverables</a>
+            <a href="#faq" className="hover:text-[#2563EB] transition-colors">FAQ</a>
           </nav>
 
           {/* Age Variant Switcher Tabs & CTA */}
@@ -96,19 +96,19 @@ export default function PsychometricLandingPage({ variant, onStart, eligibility,
             <div className="hidden sm:flex items-center p-1 rounded-xl bg-slate-100 border border-slate-200 text-xs font-bold">
               <Link
                 href="/psychometric-test?type=junior"
-                className={`px-3 py-1.5 rounded-lg transition-all ${activeTab === '7-9' ? 'bg-[#690b1b] text-white shadow-sm' : 'text-slate-600 hover:text-slate-900'}`}
+                className={`px-3 py-1.5 rounded-lg transition-all ${activeTab === '7-9' ? 'bg-[#2563EB] text-white shadow-sm' : 'text-slate-600 hover:text-slate-900'}`}
               >
                 Class 7–9
               </Link>
               <Link
                 href="/psychometric-test?type=grade10"
-                className={`px-3 py-1.5 rounded-lg transition-all ${activeTab === '10' ? 'bg-[#690b1b] text-white shadow-sm' : 'text-slate-600 hover:text-slate-900'}`}
+                className={`px-3 py-1.5 rounded-lg transition-all ${activeTab === '10' ? 'bg-[#2563EB] text-white shadow-sm' : 'text-slate-600 hover:text-slate-900'}`}
               >
                 Class 10
               </Link>
               <Link
                 href="/psychometric-test?type=grade12"
-                className={`px-3 py-1.5 rounded-lg transition-all ${activeTab === '12' ? 'bg-[#690b1b] text-white shadow-sm' : 'text-slate-600 hover:text-slate-900'}`}
+                className={`px-3 py-1.5 rounded-lg transition-all ${activeTab === '12' ? 'bg-[#2563EB] text-white shadow-sm' : 'text-slate-600 hover:text-slate-900'}`}
               >
                 Class 12
               </Link>
@@ -124,7 +124,7 @@ export default function PsychometricLandingPage({ variant, onStart, eligibility,
             ) : isEligible ? (
               <button
                 onClick={onStart}
-                className="px-5 py-2.5 rounded-xl bg-[#690b1b] hover:bg-[#830e22] text-white font-extrabold text-xs shadow-md shadow-[#690b1b]/20 transition-all cursor-pointer"
+                className="px-5 py-2.5 rounded-xl bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-extrabold text-xs shadow-md shadow-[#2563EB]/20 transition-all cursor-pointer"
               >
                 START ASSESSMENT
               </button>
@@ -138,7 +138,7 @@ export default function PsychometricLandingPage({ variant, onStart, eligibility,
             ) : (
               <Link
                 href={eligibility?.eligibleHref || '#'}
-                className="px-4 py-2 rounded-xl bg-[#690b1b] hover:bg-[#830e22] text-white font-extrabold text-xs shadow-md transition-all"
+                className="px-4 py-2 rounded-xl bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-extrabold text-xs shadow-md transition-all"
               >
                 MY ASSESSMENT →
               </Link>
@@ -149,11 +149,11 @@ export default function PsychometricLandingPage({ variant, onStart, eligibility,
       </header>
 
       {/* ── 2. MICRO TRUST STRIP ── */}
-      <section className="bg-[#560916] border-b border-amber-900/40 py-3.5 px-4 md:px-8">
+      <section className="bg-[#080F1C] border-b border-slate-800 py-3.5 px-4 md:px-8">
         <div className="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-4 text-center text-white">
           {config.microStats.map((item, idx) => (
             <div key={idx} className="flex flex-col items-center">
-              <div className="font-display font-extrabold text-sm md:text-base text-amber-300 tracking-tight">
+              <div className="font-display font-extrabold text-sm md:text-base text-blue-400 tracking-tight">
                 {item.value}
               </div>
               <div className="text-[10px] font-bold uppercase tracking-wider text-slate-200 mt-0.5">
@@ -167,21 +167,21 @@ export default function PsychometricLandingPage({ variant, onStart, eligibility,
       {/* ── 3. HERO SECTION (EDITORIAL & LIGHT LUXURY) ── */}
       <section className="bg-gradient-to-b from-[#fdfbf7] via-[#faf8f3] to-[#f7f3eb] pt-12 pb-20 px-4 md:px-8 relative overflow-hidden border-b border-slate-200/80">
         {/* Ambient Glow Effects */}
-        <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-[#690b1b]/5 rounded-full blur-[140px] pointer-events-none" />
+        <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-[#2563EB]/5 rounded-full blur-[140px] pointer-events-none" />
         <div className="absolute top-1/3 right-1/4 w-[500px] h-[500px] bg-amber-500/8 rounded-full blur-[130px] pointer-events-none" />
 
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10">
           
           {/* HERO LEFT COLUMN */}
           <div className="lg:col-span-6 flex flex-col text-left">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-purple-50 border border-purple-200/80 text-[#690b1b] text-[11px] font-extrabold tracking-widest uppercase mb-6 w-fit shadow-sm">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-purple-50 border border-purple-200/80 text-[#2563EB] text-[11px] font-extrabold tracking-widest uppercase mb-6 w-fit shadow-sm">
               <Sparkles className="w-3.5 h-3.5 text-amber-600" />
               {config.badge}
             </div>
 
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-display font-extrabold tracking-tight leading-[1.1] text-slate-900 mb-6">
               {config.heroHeadlineLine1} <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#690b1b] via-[#830e22] to-[#b45309]">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#2563EB] to-[#1D4ED8]">
                 {config.heroHeadlineLine2}
               </span> <br />
               {config.heroHeadlineLine3}
@@ -202,7 +202,7 @@ export default function PsychometricLandingPage({ variant, onStart, eligibility,
                 <div className="flex flex-wrap items-center gap-3">
                   <Link
                     href={`/psychometric-test?resultId=${existingResultId}`}
-                    className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-[#690b1b] hover:bg-[#830e22] text-white font-extrabold text-xs shadow-md shadow-[#690b1b]/20 transition-all"
+                    className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-extrabold text-xs shadow-md shadow-[#2563EB]/20 transition-all"
                   >
                     VIEW YOUR COMPLETED REPORT →
                   </Link>
@@ -218,13 +218,13 @@ export default function PsychometricLandingPage({ variant, onStart, eligibility,
               <div className="flex flex-col sm:flex-row items-center gap-4 mb-8">
                 <button
                   onClick={onStart}
-                  className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-[#690b1b] hover:bg-[#830e22] text-white font-extrabold text-sm tracking-wide shadow-xl shadow-[#690b1b]/20 flex items-center justify-center gap-2.5 transition-all transform hover:-translate-y-0.5 cursor-pointer ring-1 ring-amber-400/30"
+                  className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-extrabold text-sm tracking-wide shadow-xl shadow-[#2563EB]/20 flex items-center justify-center gap-2.5 transition-all transform hover:-translate-y-0.5 cursor-pointer ring-1 ring-blue-400/30"
                 >
                   {config.primaryCtaText}
                 </button>
                 <Link
                   href={config.sampleReportHref}
-                  className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-white hover:bg-slate-50 border border-slate-300/80 text-[#690b1b] font-bold text-sm text-center shadow-sm transition-all flex items-center justify-center gap-2"
+                  className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-white hover:bg-slate-50 border border-slate-300/80 text-[#2563EB] font-bold text-sm text-center shadow-sm transition-all flex items-center justify-center gap-2"
                 >
                   {config.secondaryCtaText}
                 </Link>
@@ -239,7 +239,7 @@ export default function PsychometricLandingPage({ variant, onStart, eligibility,
                 </p>
                 <Link
                   href="/dashboard/student/update-profile"
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#690b1b] hover:bg-[#830e22] text-white font-extrabold text-xs shadow-md transition-all"
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-extrabold text-xs shadow-md transition-all"
                 >
                   Complete Profile &amp; Select Grade →
                 </Link>
@@ -255,7 +255,7 @@ export default function PsychometricLandingPage({ variant, onStart, eligibility,
                 {eligibility?.eligibleHref && (
                   <Link
                     href={eligibility.eligibleHref}
-                    className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#690b1b] hover:bg-[#830e22] text-white font-extrabold text-xs shadow-md shadow-[#690b1b]/20 transition-all"
+                    className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-extrabold text-xs shadow-md shadow-[#2563EB]/20 transition-all"
                   >
                     GO TO MY ASSESSMENT ({eligibility.eligibleTestName || 'My Assessment'}) →
                   </Link>
@@ -266,15 +266,15 @@ export default function PsychometricLandingPage({ variant, onStart, eligibility,
             {/* Quick Feature Pills */}
             <div className="flex flex-wrap items-center gap-4 text-xs font-semibold text-slate-500 pt-4 border-t border-slate-200">
               <div className="flex items-center gap-1.5">
-                <CheckCircle2 className="w-4 h-4 text-[#690b1b]" />
+                <CheckCircle2 className="w-4 h-4 text-[#2563EB]" />
                 <span>30 Diagnostic Modules</span>
               </div>
               <div className="flex items-center gap-1.5">
-                <CheckCircle2 className="w-4 h-4 text-[#690b1b]" />
+                <CheckCircle2 className="w-4 h-4 text-[#2563EB]" />
                 <span>Parent Expectation Matrix</span>
               </div>
               <div className="flex items-center gap-1.5">
-                <CheckCircle2 className="w-4 h-4 text-[#690b1b]" />
+                <CheckCircle2 className="w-4 h-4 text-[#2563EB]" />
                 <span>Downloadable PDF</span>
               </div>
             </div>
@@ -283,12 +283,12 @@ export default function PsychometricLandingPage({ variant, onStart, eligibility,
           {/* HERO RIGHT COLUMN: INTERACTIVE ANIMATED REPORT STACK */}
           <div className="lg:col-span-6 flex justify-center">
             <div className="w-full max-w-lg relative py-4">
-              <div className="bg-white/95 backdrop-blur-md rounded-3xl border border-slate-200/90 p-6 shadow-2xl shadow-[#690b1b]/10 relative z-10">
+              <div className="bg-white/95 backdrop-blur-md rounded-3xl border border-slate-200/90 p-6 shadow-2xl shadow-[#2563EB]/10 relative z-10">
                 
                 {/* Header Badge */}
                 <div className="flex items-center justify-between pb-3 border-b border-slate-100 mb-4">
                   <div className="flex items-center gap-2">
-                    <FileText className="w-4 h-4 text-[#690b1b]" />
+                    <FileText className="w-4 h-4 text-[#2563EB]" />
                     <span className="text-xs font-bold text-slate-900 uppercase tracking-wider">
                       FULL DIAGNOSTIC REPORT PREVIEW
                     </span>
@@ -310,7 +310,7 @@ export default function PsychometricLandingPage({ variant, onStart, eligibility,
                   >
                     <div>
                       <div className="flex items-center justify-between mb-2">
-                        <span className="text-[10px] font-mono font-bold text-[#690b1b] uppercase">
+                        <span className="text-[10px] font-mono font-bold text-[#2563EB] uppercase">
                           {config.reportPagesPreview[reportPageIdx].pageNum}
                         </span>
                         <span className="text-[10px] font-bold text-slate-400">Sample Diagnostic Page</span>
@@ -323,7 +323,7 @@ export default function PsychometricLandingPage({ variant, onStart, eligibility,
                       </p>
                     </div>
 
-                    <div className="pt-3 border-t border-purple-200/60 flex items-center justify-between text-xs font-bold text-[#690b1b]">
+                    <div className="pt-3 border-t border-purple-200/60 flex items-center justify-between text-xs font-bold text-[#2563EB]">
                       <span>Live Evidence & Analysis</span>
                       <ChevronRight className="w-4 h-4" />
                     </div>
@@ -336,7 +336,7 @@ export default function PsychometricLandingPage({ variant, onStart, eligibility,
                     <button
                       key={i}
                       onClick={() => setReportPageIdx(i)}
-                      className={`h-2 rounded-full transition-all cursor-pointer ${i === reportPageIdx ? 'w-6 bg-[#690b1b]' : 'w-2 bg-slate-200'}`}
+                      className={`h-2 rounded-full transition-all cursor-pointer ${i === reportPageIdx ? 'w-6 bg-[#2563EB]' : 'w-2 bg-slate-200'}`}
                       aria-label={`Go to page ${i + 1}`}
                     />
                   ))}
@@ -405,7 +405,7 @@ export default function PsychometricLandingPage({ variant, onStart, eligibility,
       {/* ── 5. SECTION — WHAT THIS ASSESSMENT ACTUALLY IS ── */}
       <section id="discover" className="py-20 px-4 md:px-8 max-w-7xl mx-auto">
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <span className="text-xs font-extrabold text-[#690b1b] uppercase tracking-widest mb-2 block">
+          <span className="text-xs font-extrabold text-[#2563EB] uppercase tracking-widest mb-2 block">
             MULTIDIMENSIONAL EVIDENCE
           </span>
           <h2 className="text-3xl md:text-5xl font-display font-extrabold text-slate-900 tracking-tight">
@@ -421,10 +421,10 @@ export default function PsychometricLandingPage({ variant, onStart, eligibility,
             <div key={dim.id} className="bg-white rounded-3xl border border-slate-200/80 p-6 shadow-sm flex flex-col justify-between">
               <div>
                 <div className="flex items-center justify-between mb-4">
-                  <span className="text-[10px] font-bold text-[#690b1b] bg-purple-50 px-2.5 py-1 rounded-full border border-purple-100">
+                  <span className="text-[10px] font-bold text-[#2563EB] bg-purple-50 px-2.5 py-1 rounded-full border border-purple-100">
                     {dim.category}
                   </span>
-                  <div className="w-8 h-8 rounded-lg bg-slate-100 text-[#690b1b] flex items-center justify-center">
+                  <div className="w-8 h-8 rounded-lg bg-slate-100 text-[#2563EB] flex items-center justify-center">
                     {dim.iconName === 'Brain' && <Brain className="w-4 h-4" />}
                     {dim.iconName === 'Compass' && <Compass className="w-4 h-4" />}
                     {dim.iconName === 'BookOpen' && <BookOpen className="w-4 h-4" />}
@@ -440,7 +440,7 @@ export default function PsychometricLandingPage({ variant, onStart, eligibility,
                 <p className="text-xs text-slate-500 leading-relaxed font-medium mb-4">{dim.description}</p>
               </div>
 
-              <div className="pt-3 border-t border-slate-100 text-[10px] font-bold text-[#690b1b]">
+              <div className="pt-3 border-t border-slate-100 text-[10px] font-bold text-[#2563EB]">
                 Standardized Evaluation
               </div>
             </div>
@@ -453,7 +453,7 @@ export default function PsychometricLandingPage({ variant, onStart, eligibility,
         <div className="max-w-7xl mx-auto">
           
           <div className="text-center max-w-3xl mx-auto mb-16">
-            <span className="text-xs font-extrabold text-[#690b1b] uppercase tracking-widest mb-2 block">
+            <span className="text-xs font-extrabold text-[#2563EB] uppercase tracking-widest mb-2 block">
               WORKFLOW PIPELINE
             </span>
             <h2 className="text-3xl md:text-5xl font-display font-extrabold text-slate-900 tracking-tight">
@@ -463,31 +463,31 @@ export default function PsychometricLandingPage({ variant, onStart, eligibility,
 
           <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
             <div className="bg-white rounded-3xl border border-slate-200/80 p-6 shadow-sm flex flex-col justify-between">
-              <span className="text-2xl font-display font-extrabold text-[#690b1b] mb-2">01</span>
+              <span className="text-2xl font-display font-extrabold text-[#2563EB] mb-2">01</span>
               <h3 className="text-sm font-bold text-slate-900 mb-2">Student Completes Assessment</h3>
               <p className="text-xs text-slate-500 font-medium">30 interactive modules covering cognitive reasoning and personality traits.</p>
             </div>
 
             <div className="bg-white rounded-3xl border border-slate-200/80 p-6 shadow-sm flex flex-col justify-between">
-              <span className="text-2xl font-display font-extrabold text-[#690b1b] mb-2">02</span>
+              <span className="text-2xl font-display font-extrabold text-[#2563EB] mb-2">02</span>
               <h3 className="text-sm font-bold text-slate-900 mb-2">Parent Completes Perspective</h3>
               <p className="text-xs text-slate-500 font-medium">Structured questionnaire capturing financial, location, and career expectations.</p>
             </div>
 
             <div className="bg-white rounded-3xl border border-slate-200/80 p-6 shadow-sm flex flex-col justify-between">
-              <span className="text-2xl font-display font-extrabold text-[#690b1b] mb-2">03</span>
+              <span className="text-2xl font-display font-extrabold text-[#2563EB] mb-2">03</span>
               <h3 className="text-sm font-bold text-slate-900 mb-2">Profile Is Analyzed</h3>
               <p className="text-xs text-slate-500 font-medium">Cross-matching scores against 15+ career fields and 500+ global universities.</p>
             </div>
 
             <div className="bg-white rounded-3xl border border-slate-200/80 p-6 shadow-sm flex flex-col justify-between">
-              <span className="text-2xl font-display font-extrabold text-[#690b1b] mb-2">04</span>
+              <span className="text-2xl font-display font-extrabold text-[#2563EB] mb-2">04</span>
               <h3 className="text-sm font-bold text-slate-900 mb-2">Perspectives Are Compared</h3>
               <p className="text-xs text-slate-500 font-medium">Generating student-parent expectation alignment matrix.</p>
             </div>
 
             <div className="bg-white rounded-3xl border border-slate-200/80 p-6 shadow-sm flex flex-col justify-between">
-              <span className="text-2xl font-display font-extrabold text-[#690b1b] mb-2">05</span>
+              <span className="text-2xl font-display font-extrabold text-[#2563EB] mb-2">05</span>
               <h3 className="text-sm font-bold text-slate-900 mb-2">Report & Roadmap Delivered</h3>
               <p className="text-xs text-slate-500 font-medium">Downloadable PDF reports and counsellor consultation strategy.</p>
             </div>
@@ -499,7 +499,7 @@ export default function PsychometricLandingPage({ variant, onStart, eligibility,
       {/* ── 7. SECTION — DELIVERABLES SHOWCASE ── */}
       <section id="deliverables" className="py-20 px-4 md:px-8 max-w-7xl mx-auto">
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <span className="text-xs font-extrabold text-[#690b1b] uppercase tracking-widest mb-2 block">
+          <span className="text-xs font-extrabold text-[#2563EB] uppercase tracking-widest mb-2 block">
             WHAT YOU RECEIVE
           </span>
           <h2 className="text-3xl md:text-5xl font-display font-extrabold text-slate-900 tracking-tight">
@@ -515,7 +515,7 @@ export default function PsychometricLandingPage({ variant, onStart, eligibility,
                   {del.badge}
                 </span>
                 <h3 className="font-display font-bold text-lg text-slate-900 mb-1">{del.title}</h3>
-                <span className="text-xs font-extrabold text-[#690b1b] block mb-3">{del.pages}</span>
+                <span className="text-xs font-extrabold text-[#2563EB] block mb-3">{del.pages}</span>
                 <p className="text-xs text-slate-500 leading-relaxed font-medium mb-4">{del.description}</p>
               </div>
 
@@ -529,7 +529,7 @@ export default function PsychometricLandingPage({ variant, onStart, eligibility,
         {/* View Sample Report Bar */}
         <div className="mt-10 p-6 rounded-3xl bg-gradient-to-r from-purple-50 via-amber-50/50 to-purple-50 border border-purple-200/80 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-[#690b1b] text-white flex items-center justify-center font-bold text-sm shrink-0">
+            <div className="w-10 h-10 rounded-2xl bg-[#2563EB] text-white flex items-center justify-center font-bold text-sm shrink-0">
               <FileText className="w-5 h-5 text-amber-300" />
             </div>
             <div>
@@ -539,7 +539,7 @@ export default function PsychometricLandingPage({ variant, onStart, eligibility,
           </div>
           <Link
             href={config.sampleReportHref}
-            className="px-6 py-3 rounded-xl bg-[#690b1b] hover:bg-[#830e22] text-white font-extrabold text-xs shadow-md flex items-center gap-2 transition-all shrink-0"
+            className="px-6 py-3 rounded-xl bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-extrabold text-xs shadow-md flex items-center gap-2 transition-all shrink-0"
           >
             VIEW SAMPLE REPORT →
           </Link>
@@ -551,7 +551,7 @@ export default function PsychometricLandingPage({ variant, onStart, eligibility,
         <div className="max-w-7xl mx-auto">
           
           <div className="text-center max-w-3xl mx-auto mb-16">
-            <span className="text-xs font-extrabold text-[#690b1b] uppercase tracking-widest mb-2 block">
+            <span className="text-xs font-extrabold text-[#2563EB] uppercase tracking-widest mb-2 block">
               STRENGTH-BASED PATHWAYS
             </span>
             <h2 className="text-3xl md:text-5xl font-display font-extrabold text-slate-900 tracking-tight">
@@ -564,7 +564,7 @@ export default function PsychometricLandingPage({ variant, onStart, eligibility,
               <div key={i} className="bg-white rounded-3xl border border-slate-200/80 p-6 shadow-sm flex flex-col justify-between">
                 <div>
                   <div className="flex items-center justify-between mb-3">
-                    <span className={`text-[10px] font-bold px-2.5 py-1 rounded-full ${path.type === 'PRIMARY' ? 'bg-[#690b1b] text-white' : 'bg-slate-100 text-slate-700'}`}>
+                    <span className={`text-[10px] font-bold px-2.5 py-1 rounded-full ${path.type === 'PRIMARY' ? 'bg-[#2563EB] text-white' : 'bg-slate-100 text-slate-700'}`}>
                       {path.type} PATHWAY
                     </span>
                     <span className="text-[10px] font-bold text-amber-700">{path.growthIndex}</span>
@@ -595,7 +595,7 @@ export default function PsychometricLandingPage({ variant, onStart, eligibility,
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           
           <div className="lg:col-span-6">
-            <span className="text-xs font-extrabold text-[#690b1b] uppercase tracking-widest mb-2 block">
+            <span className="text-xs font-extrabold text-[#2563EB] uppercase tracking-widest mb-2 block">
               FAMILY ALIGNMENT
             </span>
             <h2 className="text-3xl md:text-5xl font-display font-extrabold text-slate-900 tracking-tight leading-tight mb-6">
@@ -606,11 +606,11 @@ export default function PsychometricLandingPage({ variant, onStart, eligibility,
             </p>
             <div className="space-y-3">
               <div className="flex items-start gap-3">
-                <CheckCircle2 className="w-5 h-5 text-[#690b1b] shrink-0 mt-0.5" />
+                <CheckCircle2 className="w-5 h-5 text-[#2563EB] shrink-0 mt-0.5" />
                 <span className="text-xs md:text-sm text-slate-700 font-semibold">Captures budget, safety, location, and country preferences.</span>
               </div>
               <div className="flex items-start gap-3">
-                <CheckCircle2 className="w-5 h-5 text-[#690b1b] shrink-0 mt-0.5" />
+                <CheckCircle2 className="w-5 h-5 text-[#2563EB] shrink-0 mt-0.5" />
                 <span className="text-xs md:text-sm text-slate-700 font-semibold">Generates a side-by-side alignment matrix to trigger healthy family discussions.</span>
               </div>
             </div>
@@ -695,7 +695,7 @@ export default function PsychometricLandingPage({ variant, onStart, eligibility,
         <div className="max-w-4xl mx-auto">
           
           <div className="text-center mb-14">
-            <HelpCircle className="w-10 h-10 text-[#690b1b] mx-auto mb-3" />
+            <HelpCircle className="w-10 h-10 text-[#2563EB] mx-auto mb-3" />
             <h2 className="text-3xl md:text-5xl font-display font-extrabold text-slate-900 tracking-tight">
               Frequently Asked Questions
             </h2>
@@ -714,9 +714,9 @@ export default function PsychometricLandingPage({ variant, onStart, eligibility,
       </section>
 
       {/* ── 13. FINAL HIGH-IMPACT DARK CTA ── */}
-      <section className="bg-[#690b1b] text-white py-20 px-4 md:px-8 text-center relative overflow-hidden">
+      <section className="bg-[#2563EB] text-white py-20 px-4 md:px-8 text-center relative overflow-hidden">
         <div className="max-w-4xl mx-auto relative z-10">
-          <Target className="w-12 h-12 text-amber-400 mx-auto mb-4" />
+          <Target className="w-12 h-12 text-blue-400 mx-auto mb-4" />
           <h2 className="text-3xl md:text-5xl font-display font-extrabold text-white tracking-tight mb-4">
             {config.finalCtaHeadline}
           </h2>
@@ -728,21 +728,21 @@ export default function PsychometricLandingPage({ variant, onStart, eligibility,
             {isEligible ? (
               <button
                 onClick={onStart}
-                className="w-full sm:w-auto px-10 py-4.5 rounded-2xl bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-slate-950 font-extrabold text-base shadow-2xl flex items-center justify-center gap-2.5 transition-all transform hover:-translate-y-0.5 cursor-pointer"
+                className="w-full sm:w-auto px-10 py-4.5 rounded-2xl bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-extrabold text-base shadow-2xl flex items-center justify-center gap-2.5 transition-all transform hover:-translate-y-0.5 cursor-pointer"
               >
                 {config.primaryCtaText}
               </button>
             ) : eligibility?.status === 'PROFILE_INCOMPLETE' ? (
               <Link
                 href="/dashboard/student/update-profile"
-                className="w-full sm:w-auto px-10 py-4.5 rounded-2xl bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-slate-950 font-extrabold text-base shadow-2xl flex items-center justify-center gap-2.5 transition-all transform hover:-translate-y-0.5 cursor-pointer"
+                className="w-full sm:w-auto px-10 py-4.5 rounded-2xl bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-extrabold text-base shadow-2xl flex items-center justify-center gap-2.5 transition-all transform hover:-translate-y-0.5 cursor-pointer"
               >
                 Complete Profile &amp; Select Grade →
               </Link>
             ) : (
               <Link
                 href={eligibility?.eligibleHref || '#'}
-                className="w-full sm:w-auto px-10 py-4.5 rounded-2xl bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-slate-950 font-extrabold text-base shadow-2xl flex items-center justify-center gap-2.5 transition-all transform hover:-translate-y-0.5 cursor-pointer"
+                className="w-full sm:w-auto px-10 py-4.5 rounded-2xl bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-extrabold text-base shadow-2xl flex items-center justify-center gap-2.5 transition-all transform hover:-translate-y-0.5 cursor-pointer"
               >
                 Go to My Assessment ({eligibility?.eligibleTestName || 'My Assessment'}) →
               </Link>

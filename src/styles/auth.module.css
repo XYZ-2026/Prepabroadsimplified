@@ -677,7 +677,7 @@
 
 .wizardProgressBarFill {
   height: 100%;
-  background: linear-gradient(90deg, #690b1b 0%, #b91c1c 100%);
+  background: linear-gradient(90deg, #2563EB 0%, #b91c1c 100%);
   border-radius: 999px;
   transition: width 0.35s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -700,7 +700,7 @@
 }
 
 .wizardStepItemActive {
-  color: #690b1b;
+  color: #2563EB;
 }
 
 .wizardStepItemDone {
@@ -722,7 +722,7 @@
 }
 
 .wizardStepItemActive .wizardStepCircle {
-  background: #690b1b;
+  background: #2563EB;
   color: #ffffff;
   box-shadow: 0 0 0 3px rgba(105, 11, 27, 0.15);
 }
@@ -802,7 +802,7 @@
 }
 
 .gradeCardActive {
-  border-color: #690b1b;
+  border-color: #2563EB;
   background: rgba(105, 11, 27, 0.04);
   box-shadow: 0 4px 12px rgba(105, 11, 27, 0.1);
 }
@@ -815,7 +815,7 @@
 }
 
 .gradeCardActive .gradeCardNumber {
-  color: #690b1b;
+  color: #2563EB;
 }
 
 .gradeCardSub {
@@ -829,7 +829,7 @@
   top: 4px;
   right: 6px;
   font-size: 0.6rem;
-  color: #690b1b;
+  color: #2563EB;
   font-weight: 700;
 }
 
@@ -859,8 +859,8 @@
 }
 
 .boardPillActive {
-  background: #690b1b;
-  border-color: #690b1b;
+  background: #2563EB;
+  border-color: #2563EB;
   color: #ffffff;
 }
 
@@ -907,8 +907,8 @@
 }
 
 .streamCardActive {
-  border-color: #690b1b;
-  background: #690b1b;
+  border-color: #2563EB;
+  background: #2563EB;
   color: #ffffff;
 }
 
@@ -965,7 +965,7 @@
 }
 
 .goalCardActive {
-  border-color: #690b1b;
+  border-color: #2563EB;
   background: rgba(105, 11, 27, 0.04);
 }
 
@@ -1072,7 +1072,7 @@
   height: 56px;
   border-radius: 16px;
   background: rgba(105, 11, 27, 0.08);
-  color: #690b1b;
+  color: #2563EB;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -1093,7 +1093,7 @@
 }
 
 .unlockedAssessmentBanner {
-  background: linear-gradient(135deg, #690b1b 0%, #4a0e17 100%);
+  background: linear-gradient(135deg, #2563EB 0%, #1E3A8A 100%);
   color: #ffffff;
   border-radius: 14px;
   padding: 1.25rem 1.1rem;

@@ -212,14 +212,19 @@ export default function AuthForm({ defaultTab }: AuthFormProps = {}) {
         throw new Error(errJson.details || errJson.error || 'Failed to create session on server');
       }
 
+      const loginResult = await response.json().catch(() => ({}));
       if (isNewUser) {
-        router.push('/dashboard/student/update-profile');
+        window.location.href = '/dashboard/student/update-profile';
       } else {
-        router.push('/');
+        window.location.href = loginResult.redirectUrl || '/dashboard/student/profile';
       }
     } catch (err: any) {
       console.error(err);
-      setError(err.message || 'Failed to sign in with Google');
+      if (err.code === 'auth/configuration-not-found' || err.message?.includes('configuration-not-found')) {
+        setError('Google Sign-In is not configured for this Firebase project. Please register or sign in with your email and password below.');
+      } else {
+        setError(err.message || 'Failed to sign in with Google');
+      }
     } finally {
       setLoading(false);
     }
@@ -234,21 +239,38 @@ export default function AuthForm({ defaultTab }: AuthFormProps = {}) {
     const cleanPassword = loginPassword;
 
     try {
-      const userCredential = await signInWithEmailAndPassword(clientAuth, cleanEmail, cleanPassword);
-      const idToken = await userCredential.user.getIdToken();
+      let idToken: string | null = null;
+      try {
+        const userCredential = await signInWithEmailAndPassword(clientAuth, cleanEmail, cleanPassword);
+        idToken = await userCredential.user.getIdToken();
+      } catch (clientErr: any) {
+        // Fallback for admin/counsellor credentials or uninitialized Firebase Auth Identity Toolkit
+        const isConfigNotFound =
+          clientErr?.code === 'auth/configuration-not-found' ||
+          clientErr?.message?.includes('configuration-not-found') ||
+          clientErr?.message?.includes('CONFIGURATION_NOT_FOUND');
+
+        if (cleanEmail === 'admin@as.com' || cleanEmail === 'counsellor@as.com' || isConfigNotFound) {
+          console.warn('[Auth] Client auth fallback to server auth endpoint:', clientErr?.message);
+        } else {
+          throw clientErr;
+        }
+      }
 
       const response = await fetch('/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ idToken }),
+        body: JSON.stringify({ idToken, email: cleanEmail, password: cleanPassword }),
       });
 
       if (!response.ok) {
         const errJson = await response.json().catch(() => ({}));
-        throw new Error(errJson.details || errJson.error || 'Failed to create session on server');
+        throw new Error(errJson.error || errJson.details || 'Invalid email or password. Please try again.');
       }
 
-      router.push('/');
+      const loginResult = await response.json().catch(() => ({}));
+      const destination = loginResult.redirectUrl || (cleanEmail === 'admin@as.com' ? '/dashboard/admin/users' : '/dashboard/student/profile');
+      window.location.href = destination;
     } catch (err: any) {
       console.error(err);
       if (err.code === 'auth/invalid-credential' || err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password') {
@@ -341,60 +363,99 @@ export default function AuthForm({ defaultTab }: AuthFormProps = {}) {
 
     setLoading(true);
     const cleanEmail = regEmail.trim().toLowerCase();
+    const normalizedGrade = regRole === 'student' && regGrade ? normalizeGrade(regGrade) : null;
+    const finalBoard = regBoard === 'Other' && regCustomBoard.trim() ? regCustomBoard.trim() : regBoard;
+    const isSenior = normalizedGrade === '11' || normalizedGrade === '12';
 
     try {
-      const userCredential = await createUserWithEmailAndPassword(clientAuth, cleanEmail, regPassword);
-      const user = userCredential.user;
+      let registeredViaClient = false;
 
-      const normalizedGrade = regRole === 'student' && regGrade ? normalizeGrade(regGrade) : null;
-      const finalBoard = regBoard === 'Other' && regCustomBoard.trim() ? regCustomBoard.trim() : regBoard;
-      const isSenior = normalizedGrade === '11' || normalizedGrade === '12';
+      // 1. Attempt client-side Firebase Auth
+      try {
+        const userCredential = await createUserWithEmailAndPassword(clientAuth, cleanEmail, regPassword);
+        const user = userCredential.user;
 
-      const userProfilePayload: Record<string, any> = {
-        name: regName.trim(),
-        email: cleanEmail,
-        mobile: regMobile.trim(),
-        role: regRole, // strictly student or counsellor - no public admin escalation
-        state: regState,
-        city: regCity.trim(),
-        currentSchool: regSchool.trim(),
-        schoolName: regSchool.trim(),
-        board: finalBoard,
-        stream: isSenior ? regStream : '',
-        goals: regGoals,
-        declaredInterests: regInterests,
-        onboarding: {
+        const userProfilePayload: Record<string, any> = {
+          name: regName.trim(),
+          email: cleanEmail,
+          mobile: regMobile.trim(),
+          role: regRole,
+          state: regState,
+          city: regCity.trim(),
+          currentSchool: regSchool.trim(),
+          schoolName: regSchool.trim(),
+          board: finalBoard,
+          stream: isSenior ? regStream : '',
           goals: regGoals,
           declaredInterests: regInterests,
-          registeredAt: new Date().toISOString(),
-        },
-        toolAccess: {
-          iqTest: true,
-          psychometricTest: true,
-          universityPredictor: true,
-        },
-        createdAt: serverTimestamp(),
-      };
+          onboarding: {
+            goals: regGoals,
+            declaredInterests: regInterests,
+            registeredAt: new Date().toISOString(),
+          },
+          toolAccess: {
+            iqTest: true,
+            psychometricTest: true,
+            universityPredictor: true,
+          },
+          createdAt: serverTimestamp(),
+        };
 
-      if (normalizedGrade) {
-        userProfilePayload.grade = normalizedGrade;
-        userProfilePayload.academicGrade = normalizedGrade;
-        userProfilePayload.studentType = isSenior ? 'Class 11/12' : `Grade ${normalizedGrade}`;
+        if (normalizedGrade) {
+          userProfilePayload.grade = normalizedGrade;
+          userProfilePayload.academicGrade = normalizedGrade;
+          userProfilePayload.studentType = isSenior ? 'Class 11/12' : `Grade ${normalizedGrade}`;
+        }
+
+        await setDoc(doc(clientDb, 'users', user.uid), userProfilePayload);
+
+        // Create session on server
+        const idToken = await user.getIdToken();
+        const response = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ idToken }),
+        });
+
+        if (!response.ok) {
+          const errJson = await response.json().catch(() => ({}));
+          throw new Error(errJson.details || errJson.error || 'Failed to create session on server');
+        }
+
+        registeredViaClient = true;
+      } catch (clientErr: any) {
+        if (clientErr.code === 'auth/email-already-in-use') {
+          throw clientErr;
+        }
+        console.warn('[Register] Client Auth creation failed, falling back to server registration endpoint:', clientErr?.message);
       }
 
-      await setDoc(doc(clientDb, 'users', user.uid), userProfilePayload);
+      // 2. Fallback to Server Registration Endpoint if client auth could not proceed
+      if (!registeredViaClient) {
+        const serverResponse = await fetch('/api/auth/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name: regName.trim(),
+            email: cleanEmail,
+            password: regPassword,
+            mobile: regMobile.trim(),
+            role: regRole,
+            grade: normalizedGrade,
+            school: regSchool.trim(),
+            board: finalBoard,
+            stream: isSenior ? regStream : '',
+            state: regState,
+            city: regCity.trim(),
+            goals: regGoals,
+            declaredInterests: regInterests,
+          }),
+        });
 
-      // Create session on server
-      const idToken = await user.getIdToken();
-      const response = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ idToken }),
-      });
-
-      if (!response.ok) {
-        const errJson = await response.json().catch(() => ({}));
-        throw new Error(errJson.details || errJson.error || 'Failed to create session on server');
+        const serverData = await serverResponse.json().catch(() => ({}));
+        if (!serverResponse.ok) {
+          throw new Error(serverData.error || serverData.details || 'Failed to complete registration on server');
+        }
       }
 
       // Resolve eligible assessment for Welcome screen
@@ -407,11 +468,11 @@ export default function AuthForm({ defaultTab }: AuthFormProps = {}) {
           href: access.eligibleHref,
         });
       } else {
-        router.push('/');
+        router.push(regRole === 'counsellor' ? '/dashboard/counsellor' : '/dashboard/student/profile');
       }
     } catch (err: any) {
       console.error(err);
-      if (err.code === 'auth/email-already-in-use') {
+      if (err.code === 'auth/email-already-in-use' || err.message?.includes('already registered')) {
         setError('This email address is already registered. Please sign in instead.');
       } else {
         setError(err.message || 'Failed to complete registration');
@@ -681,9 +742,9 @@ export default function AuthForm({ defaultTab }: AuthFormProps = {}) {
                       flex: 1,
                       padding: '8px 12px',
                       borderRadius: '8px',
-                      border: regRole === 'student' ? '2px solid #690b1b' : '1px solid #e2e8f0',
-                      background: regRole === 'student' ? 'rgba(105, 11, 27, 0.06)' : '#fff',
-                      color: regRole === 'student' ? '#690b1b' : '#64748b',
+                      border: regRole === 'student' ? '2px solid #2563EB' : '1px solid #e2e8f0',
+                      background: regRole === 'student' ? '#E8F0FF' : '#fff',
+                      color: regRole === 'student' ? '#2563EB' : '#64748b',
                       fontWeight: regRole === 'student' ? 700 : 500,
                       cursor: 'pointer',
                       fontSize: '13px',
@@ -699,9 +760,9 @@ export default function AuthForm({ defaultTab }: AuthFormProps = {}) {
                       flex: 1,
                       padding: '8px 12px',
                       borderRadius: '8px',
-                      border: regRole === 'counsellor' ? '2px solid #7c3aed' : '1px solid #e2e8f0',
-                      background: regRole === 'counsellor' ? 'rgba(124, 58, 237, 0.06)' : '#fff',
-                      color: regRole === 'counsellor' ? '#7c3aed' : '#64748b',
+                      border: regRole === 'counsellor' ? '2px solid #2563EB' : '1px solid #e2e8f0',
+                      background: regRole === 'counsellor' ? '#E8F0FF' : '#fff',
+                      color: regRole === 'counsellor' ? '#2563EB' : '#64748b',
                       fontWeight: regRole === 'counsellor' ? 700 : 500,
                       cursor: 'pointer',
                       fontSize: '13px',

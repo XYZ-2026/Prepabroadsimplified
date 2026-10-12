@@ -1,0 +1,26 @@
+[
+  {
+    "parentName": "Sunita Kapoor",
+    "phone": "+91 98201 54321",
+    "email": "sunita.kapoor@example.com",
+    "studentName": "Vivaan Kapoor",
+    "academicLevel": "High School (Grades 9-12)",
+    "developmentAreas": [
+      "Career Guidance & Future Planning",
+      "Strength Identification"
+    ],
+    "clarvoExploration": [
+      "Psychometric Assessment and Student Insights",
+      "Academic and Career Guidance"
+    ],
+    "preferredTimeFrame": "Weekend",
+    "notes": "Looking for Class 10 stream selection guidance between Science PCM and Commerce.",
+    "consent": true,
+    "sourcePage": "/book-a-demo",
+    "id": "enq_1791786791046_sv10t",
+    "status": "contacted",
+    "createdAt": "2026-10-12T06:33:11.042Z",
+    "updatedAt": "2026-10-12T06:41:28.289Z",
+    "adminNotes": "Called parent on 12th Oct, confirmed demo for Saturday 4 PM"
+  }
+]

@@ -57,19 +57,19 @@ export default function IQAssessmentLandingPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#fdfbf7] text-slate-900 font-sans flex flex-col selection:bg-[#690b1b] selection:text-white">
+    <div className="min-h-screen bg-[#F8FAFC] text-slate-900 font-sans flex flex-col selection:bg-[#2563EB] selection:text-white">
       
       {/* ── 1. STICKY NAVBAR ── */}
-      <header className="sticky top-0 z-40 bg-[#690b1b]/95 backdrop-blur-md border-b border-amber-900/30 text-white px-4 md:px-8 py-4 flex items-center justify-between shadow-md">
+      <header className="sticky top-0 z-40 bg-[#080F1C]/95 backdrop-blur-md border-b border-slate-800 text-white px-4 md:px-8 py-4 flex items-center justify-between shadow-md">
         <Link href="/" className="flex items-center gap-2 group">
-          <div className="w-9 h-9 rounded-xl bg-amber-500/20 border border-amber-400/40 flex items-center justify-center text-amber-300 group-hover:scale-105 transition-transform">
+          <div className="w-9 h-9 rounded-xl bg-[#2563EB]/20 border border-[#2563EB]/40 flex items-center justify-center text-[#38BDF8] group-hover:scale-105 transition-transform">
             <Brain className="w-5 h-5" />
           </div>
           <div>
             <span className="font-display font-extrabold text-sm md:text-base tracking-tight text-white uppercase block leading-none">
               CLARVO
             </span>
-            <span className="text-[10px] text-amber-300/80 font-mono font-semibold tracking-widest uppercase block mt-0.5">
+            <span className="text-[10px] text-[#38BDF8] font-mono font-semibold tracking-widest uppercase block mt-0.5">
               Cognitive Division
             </span>
           </div>
@@ -77,16 +77,16 @@ export default function IQAssessmentLandingPage() {
 
         {/* Center Nav Links */}
         <nav className="hidden md:flex items-center gap-8 text-xs font-semibold tracking-wide text-slate-200">
-          <a href="#how-it-works" className="hover:text-amber-300 transition-colors">How It Works</a>
-          <a href="#what-we-measure" className="hover:text-amber-300 transition-colors">What You Measure</a>
-          <a href="#results" className="hover:text-amber-300 transition-colors">Results</a>
-          <a href="#faq" className="hover:text-amber-300 transition-colors">FAQ</a>
+          <a href="#how-it-works" className="hover:text-[#38BDF8] transition-colors">How It Works</a>
+          <a href="#what-we-measure" className="hover:text-[#38BDF8] transition-colors">What You Measure</a>
+          <a href="#results" className="hover:text-[#38BDF8] transition-colors">Results</a>
+          <a href="#faq" className="hover:text-[#38BDF8] transition-colors">FAQ</a>
         </nav>
 
         {/* Right CTA */}
         <Link
           href="/iq-test/instructions"
-          className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-extrabold text-xs tracking-wide shadow-lg shadow-amber-950/40 transition-all transform hover:-translate-y-0.5"
+          className="px-5 py-2.5 rounded-xl bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-extrabold text-xs tracking-wide shadow-lg shadow-blue-900/40 transition-all transform hover:-translate-y-0.5"
         >
           START IQ ASSESSMENT
         </Link>
@@ -94,11 +94,11 @@ export default function IQAssessmentLandingPage() {
 
       <main className="flex-1">
 
-        {/* ── 2. HERO SECTION (DARK BURGUNDY) ── */}
-        <section className="bg-gradient-to-b from-[#690b1b] via-[#560916] to-[#3d060f] text-white pt-16 pb-24 px-4 md:px-8 relative overflow-hidden">
+        {/* ── 2. HERO SECTION (DEEP NAVY) ── */}
+        <section className="bg-gradient-to-b from-[#080F1C] via-[#0B1528] to-[#080F1C] text-white pt-16 pb-24 px-4 md:px-8 relative overflow-hidden">
           {/* Subtle Ambient Glow */}
-          <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-amber-500/10 rounded-full blur-[140px] pointer-events-none" />
-          <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-purple-600/10 rounded-full blur-[120px] pointer-events-none" />
+          <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-blue-600/15 rounded-full blur-[140px] pointer-events-none" />
+          <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-sky-500/10 rounded-full blur-[120px] pointer-events-none" />
 
           <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10">
             
@@ -108,9 +108,9 @@ export default function IQAssessmentLandingPage() {
                 initial={{ opacity: 0, y: -15 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
-                className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-400/10 border border-amber-400/30 text-amber-300 text-[11px] font-extrabold tracking-widest uppercase mb-6 w-fit"
+                className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#2563EB]/15 border border-[#2563EB]/35 text-[#38BDF8] text-[11px] font-extrabold tracking-widest uppercase mb-6 w-fit"
               >
-                <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+                <Sparkles className="w-3.5 h-3.5 text-[#38BDF8]" />
                 {IQ_ASSESSMENT_CONFIG.questionCount}-QUESTION COGNITIVE ASSESSMENT
               </motion.div>
 
@@ -121,7 +121,7 @@ export default function IQAssessmentLandingPage() {
                 className="text-4xl md:text-6xl lg:text-7xl font-display font-extrabold tracking-tight leading-[1.08] mb-6 text-white"
               >
                 <span className="text-white">DISCOVER</span> <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-amber-400 to-amber-100">
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-300 via-sky-200 to-white">
                   HOW YOUR MIND
                 </span> <br />
                 <span className="text-white">THINKS.</span>
@@ -144,7 +144,7 @@ export default function IQAssessmentLandingPage() {
               >
                 <Link
                   href="/iq-test/instructions"
-                  className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-extrabold text-sm tracking-wide shadow-xl shadow-amber-950/50 flex items-center justify-center gap-2.5 transition-all transform hover:-translate-y-0.5 cursor-pointer"
+                  className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-extrabold text-sm tracking-wide shadow-xl shadow-blue-900/40 flex items-center justify-center gap-2.5 transition-all transform hover:-translate-y-0.5 cursor-pointer"
                 >
                   START IQ ASSESSMENT
                   <ArrowRight className="w-4 h-4" />
@@ -160,15 +160,15 @@ export default function IQAssessmentLandingPage() {
               {/* Trust Indicators */}
               <div className="flex items-center gap-6 text-xs text-slate-300 font-medium pt-4 border-t border-white/10">
                 <div className="flex items-center gap-1.5">
-                  <CheckCircle2 className="w-4 h-4 text-amber-400" />
+                  <CheckCircle2 className="w-4 h-4 text-[#38BDF8]" />
                   <span>45 Questions</span>
                 </div>
                 <div className="flex items-center gap-1.5">
-                  <CheckCircle2 className="w-4 h-4 text-amber-400" />
+                  <CheckCircle2 className="w-4 h-4 text-[#38BDF8]" />
                   <span>5 Domains</span>
                 </div>
                 <div className="flex items-center gap-1.5">
-                  <CheckCircle2 className="w-4 h-4 text-amber-400" />
+                  <CheckCircle2 className="w-4 h-4 text-[#38BDF8]" />
                   <span>Instant Result</span>
                 </div>
               </div>
@@ -180,16 +180,16 @@ export default function IQAssessmentLandingPage() {
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.7, delay: 0.2 }}
-                className="w-full max-w-lg bg-slate-900/90 rounded-3xl border border-white/15 p-6 shadow-2xl backdrop-blur-xl relative overflow-hidden text-slate-100"
+                className="w-full max-w-lg bg-[#0B1528] rounded-3xl border border-slate-800 p-6 shadow-2xl backdrop-blur-xl relative overflow-hidden text-slate-100"
               >
                 {/* Mockup Top Shell Header */}
                 <div className="flex items-center justify-between pb-4 border-b border-slate-800 mb-6">
                   <div className="flex items-center gap-2">
-                    <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping" />
+                    <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping" />
                     <span className="text-[11px] font-mono font-bold text-slate-300">LIVE TEST INTERFACE</span>
                   </div>
                   <div className="flex items-center gap-4 text-xs font-mono">
-                    <span className="px-3 py-1 rounded-full bg-purple-950/80 border border-purple-500/40 text-purple-300 font-bold">16 / 45</span>
+                    <span className="px-3 py-1 rounded-full bg-blue-950/80 border border-blue-500/40 text-blue-300 font-bold">16 / 45</span>
                     <span className="text-amber-400 font-bold flex items-center gap-1">
                       <Clock className="w-3.5 h-3.5" /> 12:45
                     </span>
@@ -198,7 +198,7 @@ export default function IQAssessmentLandingPage() {
 
                 {/* Section Badge */}
                 <div className="mb-3">
-                  <span className="text-[10px] font-extrabold tracking-widest uppercase px-2.5 py-1 rounded-md bg-purple-900/40 border border-purple-500/30 text-purple-300">
+                  <span className="text-[10px] font-extrabold tracking-widest uppercase px-2.5 py-1 rounded-md bg-blue-900/40 border border-blue-500/30 text-blue-300">
                     SECTION 2: SPATIAL / FIGURE REASONING
                   </span>
                 </div>
@@ -210,9 +210,9 @@ export default function IQAssessmentLandingPage() {
 
                 {/* Visual Matrix Vector Box */}
                 <div className="mb-6 p-4 bg-slate-950/80 rounded-2xl border border-slate-800 flex items-center justify-center">
-                  <div className="w-24 h-24 bg-slate-900 rounded-xl border border-purple-500/30 p-2 flex items-center justify-center">
+                  <div className="w-24 h-24 bg-slate-900 rounded-xl border border-blue-500/30 p-2 flex items-center justify-center">
                     <svg viewBox="0 0 100 100" className="w-full h-full">
-                      <path d="M30 20 L30 80 L80 80 L80 60 L50 60 L50 20 Z" fill="#8b5cf6" />
+                      <path d="M30 20 L30 80 L80 80 L80 60 L50 60 L50 20 Z" fill="#38BDF8" />
                     </svg>
                   </div>
                 </div>
@@ -223,10 +223,10 @@ export default function IQAssessmentLandingPage() {
                     <span className="w-5 h-5 rounded bg-slate-800 text-slate-300 font-bold text-[10px] flex items-center justify-center">A</span>
                     <span className="text-slate-300 font-medium">Upright L</span>
                   </div>
-                  <div className="p-3 rounded-xl border border-purple-500/80 bg-purple-950/40 ring-1 ring-purple-500/50 flex items-center gap-2 text-xs">
-                    <span className="w-5 h-5 rounded bg-purple-600 text-white font-bold text-[10px] flex items-center justify-center">B</span>
-                    <span className="text-purple-200 font-bold">90° Rotated</span>
-                    <CheckCircle2 className="w-3.5 h-3.5 text-purple-400 ml-auto" />
+                  <div className="p-3 rounded-xl border border-blue-500/80 bg-blue-950/40 ring-1 ring-blue-500/50 flex items-center gap-2 text-xs">
+                    <span className="w-5 h-5 rounded bg-[#2563EB] text-white font-bold text-[10px] flex items-center justify-center">B</span>
+                    <span className="text-blue-200 font-bold">90° Rotated</span>
+                    <CheckCircle2 className="w-3.5 h-3.5 text-[#38BDF8] ml-auto" />
                   </div>
                   <div className="p-3 rounded-xl border border-slate-800 bg-slate-950/50 flex items-center gap-2 text-xs">
                     <span className="w-5 h-5 rounded bg-slate-800 text-slate-300 font-bold text-[10px] flex items-center justify-center">C</span>
@@ -244,17 +244,17 @@ export default function IQAssessmentLandingPage() {
         </section>
 
         {/* ── 3. TRUST METRIC STRIP ── */}
-        <section className="bg-[#560916] border-y border-amber-900/40 py-8 px-4 md:px-8">
+        <section className="bg-[#0B1528] border-y border-slate-800 py-8 px-4 md:px-8">
           <div className="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6 text-center text-white">
             {IQ_ASSESSMENT_CONFIG.trustMetrics.map((item, idx) => (
               <div key={idx} className="flex flex-col items-center p-2">
-                <div className="font-display font-extrabold text-3xl md:text-4xl text-amber-300 tracking-tight">
+                <div className="font-display font-extrabold text-3xl md:text-4xl text-[#38BDF8] tracking-tight">
                   {item.value}
                 </div>
                 <div className="text-xs font-bold uppercase tracking-wider text-slate-200 mt-1">
                   {item.label}
                 </div>
-                <div className="text-[11px] text-amber-200/70 font-medium mt-0.5">
+                <div className="text-[11px] text-slate-400 font-medium mt-0.5">
                   {item.subtitle}
                 </div>
               </div>
@@ -268,7 +268,7 @@ export default function IQAssessmentLandingPage() {
             
             {/* Left Copy */}
             <div className="lg:col-span-6 flex flex-col text-left">
-              <span className="text-xs font-extrabold text-[#690b1b] uppercase tracking-widest mb-2 block">
+              <span className="text-xs font-extrabold text-[#2563EB] uppercase tracking-widest mb-2 block">
                 WHY TAKE THIS ASSESSMENT?
               </span>
               <h2 className="text-3xl md:text-5xl font-display font-extrabold text-slate-900 tracking-tight leading-tight mb-6">
@@ -279,15 +279,15 @@ export default function IQAssessmentLandingPage() {
               </p>
               <div className="space-y-3">
                 <div className="flex items-start gap-3">
-                  <CheckCircle2 className="w-5 h-5 text-[#690b1b] shrink-0 mt-0.5" />
+                  <CheckCircle2 className="w-5 h-5 text-[#2563EB] shrink-0 mt-0.5" />
                   <span className="text-xs md:text-sm text-slate-700 font-semibold">Identifies natural cognitive strengths in spatial, numerical, or abstract reasoning.</span>
                 </div>
                 <div className="flex items-start gap-3">
-                  <CheckCircle2 className="w-5 h-5 text-[#690b1b] shrink-0 mt-0.5" />
+                  <CheckCircle2 className="w-5 h-5 text-[#2563EB] shrink-0 mt-0.5" />
                   <span className="text-xs md:text-sm text-slate-700 font-semibold">Provides objective baseline data for academic strategy & career path conversations.</span>
                 </div>
                 <div className="flex items-start gap-3">
-                  <CheckCircle2 className="w-5 h-5 text-blue-600 shrink-0 mt-0.5" />
+                  <CheckCircle2 className="w-5 h-5 text-[#2563EB] shrink-0 mt-0.5" />
                   <span className="text-xs md:text-sm text-slate-700 font-semibold">Integrates seamlessly with CLARVO psychometric profile tools.</span>
                 </div>
               </div>
@@ -295,10 +295,10 @@ export default function IQAssessmentLandingPage() {
 
             {/* Right Cognitive Profile Visualization */}
             <div className="lg:col-span-6 flex justify-center">
-              <div className="w-full max-w-md bg-white rounded-3xl border border-purple-100 p-6 shadow-xl shadow-purple-900/5">
+              <div className="w-full max-w-md bg-white rounded-3xl border border-slate-200 p-6 shadow-xl shadow-slate-200/50">
                 <div className="flex items-center justify-between mb-4 border-b border-slate-100 pb-3">
-                  <span className="text-xs font-extrabold text-[#690b1b] uppercase tracking-wider">Sample Cognitive Balance Profile</span>
-                  <span className="text-[10px] font-bold px-2.5 py-1 rounded-full bg-purple-50 text-purple-700 border border-purple-200">5 Domains</span>
+                  <span className="text-xs font-extrabold text-[#080F1C] uppercase tracking-wider">Sample Cognitive Balance Profile</span>
+                  <span className="text-[10px] font-bold px-2.5 py-1 rounded-full bg-[#E8F0FF] text-[#2563EB] border border-blue-200">5 Domains</span>
                 </div>
 
                 <div className="w-full h-64">
@@ -307,7 +307,7 @@ export default function IQAssessmentLandingPage() {
                       <PolarGrid stroke="#e2e8f0" />
                       <PolarAngleAxis dataKey="subject" tick={{ fill: '#334155', fontSize: 11, fontWeight: 700 }} />
                       <PolarRadiusAxis angle={30} domain={[0, 100]} stroke="#cbd5e1" />
-                      <Radar name="Cognitive Profile" dataKey="A" stroke="#690b1b" fill="#690b1b" fillOpacity={0.35} />
+                      <Radar name="Cognitive Profile" dataKey="A" stroke="#2563EB" fill="#2563EB" fillOpacity={0.25} />
                     </RadarChart>
                   </ResponsiveContainer>
                 </div>
@@ -322,11 +322,11 @@ export default function IQAssessmentLandingPage() {
         </section>
 
         {/* ── 5. SECTION — WHAT DOES YOUR SCORE MEAN? ── */}
-        <section className="bg-slate-100/70 py-20 px-4 md:px-8 border-y border-slate-200/80">
+        <section className="bg-[#F8FAFC] py-20 px-4 md:px-8 border-y border-slate-200/80">
           <div className="max-w-7xl mx-auto">
             
             <div className="text-center max-w-3xl mx-auto mb-14">
-              <span className="text-xs font-extrabold text-[#690b1b] uppercase tracking-widest mb-2 block">
+              <span className="text-xs font-extrabold text-[#2563EB] uppercase tracking-widest mb-2 block">
                 SCORE INTERPRETATION FRAMEWORK
               </span>
               <h2 className="text-3xl md:text-5xl font-display font-extrabold text-slate-900 tracking-tight">
@@ -346,7 +346,7 @@ export default function IQAssessmentLandingPage() {
                 >
                   <div>
                     <div className="flex items-center justify-between mb-3">
-                      <span className="text-xs font-extrabold text-[#690b1b] bg-purple-50 px-2.5 py-1 rounded-lg border border-purple-100">
+                      <span className="text-xs font-extrabold text-[#2563EB] bg-[#E8F0FF] px-2.5 py-1 rounded-lg border border-blue-200">
                         {band.level}
                       </span>
                       <span className="text-xs font-mono font-bold text-slate-400">{band.range}</span>
@@ -364,7 +364,7 @@ export default function IQAssessmentLandingPage() {
         {/* ── 6. SECTION — WHAT YOUR RESULT REVEALS ── */}
         <section className="py-20 px-4 md:px-8 max-w-7xl mx-auto">
           <div className="text-center max-w-3xl mx-auto mb-14">
-            <span className="text-xs font-extrabold text-[#690b1b] uppercase tracking-widest mb-2 block">
+            <span className="text-xs font-extrabold text-[#2563EB] uppercase tracking-widest mb-2 block">
               5 COGNITIVE DOMAINS
             </span>
             <h2 className="text-3xl md:text-5xl font-display font-extrabold text-slate-900 tracking-tight">
@@ -379,11 +379,11 @@ export default function IQAssessmentLandingPage() {
             {IQ_ASSESSMENT_CONFIG.domains.map((domain) => (
               <div 
                 key={domain.id} 
-                className="bg-white rounded-3xl border border-purple-100 p-6 shadow-md hover:shadow-xl transition-all flex flex-col justify-between group"
+                className="bg-white rounded-3xl border border-slate-200 p-6 shadow-sm hover:shadow-xl hover:border-blue-300 transition-all flex flex-col justify-between group"
               >
                 <div>
                   <div className="flex items-center justify-between mb-4">
-                    <div className="w-10 h-10 rounded-xl bg-purple-50 border border-purple-100 flex items-center justify-center text-[#690b1b] group-hover:scale-110 transition-transform">
+                    <div className="w-10 h-10 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center text-[#2563EB] group-hover:scale-110 transition-transform">
                       {domain.id === 1 && <Grid className="w-5 h-5" />}
                       {domain.id === 2 && <Compass className="w-5 h-5" />}
                       {domain.id === 3 && <Hash className="w-5 h-5" />}
@@ -400,7 +400,7 @@ export default function IQAssessmentLandingPage() {
                 </div>
 
                 <div className="pt-3 border-t border-slate-100">
-                  <span className="text-[11px] font-bold text-[#690b1b] block">Impact for Students:</span>
+                  <span className="text-[11px] font-bold text-[#2563EB] block">Impact for Students:</span>
                   <span className="text-xs text-slate-600 font-medium">{domain.reveals}</span>
                 </div>
               </div>
@@ -408,12 +408,12 @@ export default function IQAssessmentLandingPage() {
           </div>
         </section>
 
-        {/* ── 7. SECTION — HOW THE 45-QUESTION ASSESSMENT WORKS (DARK BURGUNDY) ── */}
-        <section id="how-it-works" className="bg-[#690b1b] text-white py-20 px-4 md:px-8 relative overflow-hidden">
+        {/* ── 7. SECTION — HOW THE 45-QUESTION ASSESSMENT WORKS (DARK NAVY) ── */}
+        <section id="how-it-works" className="bg-[#080F1C] text-white py-20 px-4 md:px-8 relative overflow-hidden">
           <div className="max-w-7xl mx-auto relative z-10">
             
             <div className="text-center max-w-3xl mx-auto mb-16">
-              <span className="text-xs font-extrabold text-amber-300 uppercase tracking-widest mb-2 block">
+              <span className="text-xs font-extrabold text-[#38BDF8] uppercase tracking-widest mb-2 block">
                 THREE-STEP PROCESS
               </span>
               <h2 className="text-3xl md:text-5xl font-display font-extrabold text-white tracking-tight">
@@ -422,41 +422,41 @@ export default function IQAssessmentLandingPage() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <div className="bg-slate-900/60 rounded-3xl border border-amber-500/20 p-8 flex flex-col justify-between relative backdrop-blur-md">
+              <div className="bg-[#0B1528] rounded-3xl border border-slate-800 p-8 flex flex-col justify-between relative backdrop-blur-md">
                 <div>
-                  <div className="text-4xl font-display font-extrabold text-amber-400 mb-4">01</div>
+                  <div className="text-4xl font-display font-extrabold text-[#38BDF8] mb-4">01</div>
                   <h3 className="text-xl font-display font-bold text-white mb-3">SOLVE</h3>
                   <p className="text-xs md:text-sm text-slate-300 leading-relaxed font-medium">
                     Complete 45 original visual and analytical questions across 5 sections within the 15-minute standardized test session.
                   </p>
                 </div>
-                <div className="mt-6 pt-4 border-t border-white/10 text-xs font-bold text-amber-300">
+                <div className="mt-6 pt-4 border-t border-white/10 text-xs font-bold text-blue-300">
                   Visual Matrix • Spatial • Quantitative
                 </div>
               </div>
 
-              <div className="bg-slate-900/60 rounded-3xl border border-amber-500/20 p-8 flex flex-col justify-between relative backdrop-blur-md">
+              <div className="bg-[#0B1528] rounded-3xl border border-slate-800 p-8 flex flex-col justify-between relative backdrop-blur-md">
                 <div>
-                  <div className="text-4xl font-display font-extrabold text-amber-400 mb-4">02</div>
+                  <div className="text-4xl font-display font-extrabold text-[#38BDF8] mb-4">02</div>
                   <h3 className="text-xl font-display font-bold text-white mb-3">MEASURE</h3>
                   <p className="text-xs md:text-sm text-slate-300 leading-relaxed font-medium">
                     Your responses are scored using an authoritative deterministic algorithm that calculates domain-weighted scores and Z-scores.
                   </p>
                 </div>
-                <div className="mt-6 pt-4 border-t border-white/10 text-xs font-bold text-amber-300">
+                <div className="mt-6 pt-4 border-t border-white/10 text-xs font-bold text-blue-300">
                   Deterministic • Standardized Model
                 </div>
               </div>
 
-              <div className="bg-slate-900/60 rounded-3xl border border-amber-500/20 p-8 flex flex-col justify-between relative backdrop-blur-md">
+              <div className="bg-[#0B1528] rounded-3xl border border-slate-800 p-8 flex flex-col justify-between relative backdrop-blur-md">
                 <div>
-                  <div className="text-4xl font-display font-extrabold text-amber-400 mb-4">03</div>
+                  <div className="text-4xl font-display font-extrabold text-[#38BDF8] mb-4">03</div>
                   <h3 className="text-xl font-display font-bold text-white mb-3">UNDERSTAND</h3>
                   <p className="text-xs md:text-sm text-slate-300 leading-relaxed font-medium">
                     Receive your Estimated IQ Score, percentile rank, domain radar profile, and an official downloadable PDF certificate.
                   </p>
                 </div>
-                <div className="mt-6 pt-4 border-t border-white/10 text-xs font-bold text-amber-300">
+                <div className="mt-6 pt-4 border-t border-white/10 text-xs font-bold text-blue-300">
                   Instant Dashboard & PDF Download
                 </div>
               </div>
@@ -465,10 +465,10 @@ export default function IQAssessmentLandingPage() {
           </div>
         </section>
 
-        {/* ── 8. SECTION — WHAT YOU RECEIVE (WARM CREAM) ── */}
-        <section id="results" className="bg-[#fdfbf7] py-20 px-4 md:px-8 max-w-7xl mx-auto">
+        {/* ── 8. SECTION — WHAT YOU RECEIVE ── */}
+        <section id="results" className="bg-white py-20 px-4 md:px-8 max-w-7xl mx-auto">
           <div className="text-center max-w-3xl mx-auto mb-14">
-            <span className="text-xs font-extrabold text-[#690b1b] uppercase tracking-widest mb-2 block">
+            <span className="text-xs font-extrabold text-[#2563EB] uppercase tracking-widest mb-2 block">
               COMPLETE OUTPUT PACKAGE
             </span>
             <h2 className="text-3xl md:text-5xl font-display font-extrabold text-slate-900 tracking-tight">
@@ -478,7 +478,7 @@ export default function IQAssessmentLandingPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <div className="bg-white rounded-3xl border border-slate-200/80 p-6 shadow-sm flex items-start gap-4">
-              <div className="w-10 h-10 rounded-xl bg-purple-50 text-[#690b1b] flex items-center justify-center shrink-0">
+              <div className="w-10 h-10 rounded-xl bg-blue-50 border border-blue-100 text-[#2563EB] flex items-center justify-center shrink-0">
                 <BarChart3 className="w-5 h-5" />
               </div>
               <div>
@@ -488,7 +488,7 @@ export default function IQAssessmentLandingPage() {
             </div>
 
             <div className="bg-white rounded-3xl border border-slate-200/80 p-6 shadow-sm flex items-start gap-4">
-              <div className="w-10 h-10 rounded-xl bg-purple-50 text-[#690b1b] flex items-center justify-center shrink-0">
+              <div className="w-10 h-10 rounded-xl bg-blue-50 border border-blue-100 text-[#2563EB] flex items-center justify-center shrink-0">
                 <Award className="w-5 h-5" />
               </div>
               <div>
@@ -498,7 +498,7 @@ export default function IQAssessmentLandingPage() {
             </div>
 
             <div className="bg-white rounded-3xl border border-slate-200/80 p-6 shadow-sm flex items-start gap-4">
-              <div className="w-10 h-10 rounded-xl bg-purple-50 text-[#690b1b] flex items-center justify-center shrink-0">
+              <div className="w-10 h-10 rounded-xl bg-blue-50 border border-blue-100 text-[#2563EB] flex items-center justify-center shrink-0">
                 <Grid className="w-5 h-5" />
               </div>
               <div>
@@ -508,7 +508,7 @@ export default function IQAssessmentLandingPage() {
             </div>
 
             <div className="bg-white rounded-3xl border border-slate-200/80 p-6 shadow-sm flex items-start gap-4">
-              <div className="w-10 h-10 rounded-xl bg-purple-50 text-[#690b1b] flex items-center justify-center shrink-0">
+              <div className="w-10 h-10 rounded-xl bg-blue-50 border border-blue-100 text-[#2563EB] flex items-center justify-center shrink-0">
                 <Target className="w-5 h-5" />
               </div>
               <div>
@@ -518,7 +518,7 @@ export default function IQAssessmentLandingPage() {
             </div>
 
             <div className="bg-white rounded-3xl border border-slate-200/80 p-6 shadow-sm flex items-start gap-4">
-              <div className="w-10 h-10 rounded-xl bg-purple-50 text-[#690b1b] flex items-center justify-center shrink-0">
+              <div className="w-10 h-10 rounded-xl bg-blue-50 border border-blue-100 text-[#2563EB] flex items-center justify-center shrink-0">
                 <FileText className="w-5 h-5" />
               </div>
               <div>
@@ -528,7 +528,7 @@ export default function IQAssessmentLandingPage() {
             </div>
 
             <div className="bg-white rounded-3xl border border-slate-200/80 p-6 shadow-sm flex items-start gap-4">
-              <div className="w-10 h-10 rounded-xl bg-purple-50 text-[#690b1b] flex items-center justify-center shrink-0">
+              <div className="w-10 h-10 rounded-xl bg-blue-50 border border-blue-100 text-[#2563EB] flex items-center justify-center shrink-0">
                 <GraduationCap className="w-5 h-5" />
               </div>
               <div>
@@ -540,10 +540,10 @@ export default function IQAssessmentLandingPage() {
         </section>
 
         {/* ── 9. SECTION — BUILT FOR STUDENTS ── */}
-        <section className="bg-slate-900 text-white py-20 px-4 md:px-8">
+        <section className="bg-[#080F1C] text-white py-20 px-4 md:px-8">
           <div className="max-w-7xl mx-auto text-center">
             
-            <span className="text-xs font-extrabold text-amber-400 uppercase tracking-widest mb-2 block">
+            <span className="text-xs font-extrabold text-[#38BDF8] uppercase tracking-widest mb-2 block">
               STUDENT ROADMAP INTEGRATION
             </span>
             <h2 className="text-3xl md:text-5xl font-display font-extrabold text-white tracking-tight mb-4">
@@ -555,22 +555,22 @@ export default function IQAssessmentLandingPage() {
 
             {/* Visual Step Flow */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4 max-w-5xl mx-auto">
-              <div className="p-6 rounded-2xl bg-slate-800/80 border border-slate-700 flex flex-col items-center">
-                <Brain className="w-8 h-8 text-amber-400 mb-3" />
+              <div className="p-6 rounded-2xl bg-[#0B1528] border border-slate-800 flex flex-col items-center">
+                <Brain className="w-8 h-8 text-[#38BDF8] mb-3" />
                 <span className="text-xs font-extrabold uppercase tracking-wider text-slate-300">1. COGNITIVE ABILITY</span>
                 <span className="text-[11px] text-slate-400 font-medium mt-1">45-Item Assessment</span>
               </div>
-              <div className="p-6 rounded-2xl bg-slate-800/80 border border-slate-700 flex flex-col items-center">
-                <FileText className="w-8 h-8 text-purple-400 mb-3" />
+              <div className="p-6 rounded-2xl bg-[#0B1528] border border-slate-800 flex flex-col items-center">
+                <FileText className="w-8 h-8 text-sky-400 mb-3" />
                 <span className="text-xs font-extrabold uppercase tracking-wider text-slate-300">2. PSYCHOMETRIC PROFILE</span>
                 <span className="text-[11px] text-slate-400 font-medium mt-1">Interests & Personality</span>
               </div>
-              <div className="p-6 rounded-2xl bg-slate-800/80 border border-slate-700 flex flex-col items-center">
+              <div className="p-6 rounded-2xl bg-[#0B1528] border border-slate-800 flex flex-col items-center">
                 <Compass className="w-8 h-8 text-emerald-400 mb-3" />
                 <span className="text-xs font-extrabold uppercase tracking-wider text-slate-300">3. CAREER EXPLORATION</span>
                 <span className="text-[11px] text-slate-400 font-medium mt-1">Field & Stream Alignment</span>
               </div>
-              <div className="p-6 rounded-2xl bg-slate-800/80 border border-slate-700 flex flex-col items-center">
+              <div className="p-6 rounded-2xl bg-[#0B1528] border border-slate-800 flex flex-col items-center">
                 <UserCheck className="w-8 h-8 text-amber-400 mb-3" />
                 <span className="text-xs font-extrabold uppercase tracking-wider text-slate-300">4. COUNSELLOR GUIDANCE</span>
                 <span className="text-[11px] text-slate-400 font-medium mt-1">Actionable Roadmap</span>
@@ -583,7 +583,7 @@ export default function IQAssessmentLandingPage() {
         {/* ── 10. SECTION — WHY THIS ASSESSMENT ── */}
         <section className="py-20 px-4 md:px-8 max-w-7xl mx-auto">
           <div className="text-center max-w-3xl mx-auto mb-14">
-            <span className="text-xs font-extrabold text-[#690b1b] uppercase tracking-widest mb-2 block">
+            <span className="text-xs font-extrabold text-[#2563EB] uppercase tracking-widest mb-2 block">
               PRODUCT ARCHITECTURE
             </span>
             <h2 className="text-3xl md:text-5xl font-display font-extrabold text-slate-900 tracking-tight">
@@ -593,7 +593,7 @@ export default function IQAssessmentLandingPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <div className="p-6 rounded-3xl bg-white border border-slate-200/80 shadow-sm">
-              <div className="w-10 h-10 rounded-xl bg-purple-50 text-[#690b1b] flex items-center justify-center mb-4">
+              <div className="w-10 h-10 rounded-xl bg-blue-50 border border-blue-100 text-[#2563EB] flex items-center justify-center mb-4">
                 <ShieldCheck className="w-5 h-5" />
               </div>
               <h3 className="font-display font-bold text-base text-slate-900 mb-2">STRUCTURED</h3>
@@ -603,7 +603,7 @@ export default function IQAssessmentLandingPage() {
             </div>
 
             <div className="p-6 rounded-3xl bg-white border border-slate-200/80 shadow-sm">
-              <div className="w-10 h-10 rounded-xl bg-purple-50 text-[#690b1b] flex items-center justify-center mb-4">
+              <div className="w-10 h-10 rounded-xl bg-blue-50 border border-blue-100 text-[#2563EB] flex items-center justify-center mb-4">
                 <Eye className="w-5 h-5" />
               </div>
               <h3 className="font-display font-bold text-base text-slate-900 mb-2">VISUAL-FIRST</h3>
@@ -613,7 +613,7 @@ export default function IQAssessmentLandingPage() {
             </div>
 
             <div className="p-6 rounded-3xl bg-white border border-slate-200/80 shadow-sm">
-              <div className="w-10 h-10 rounded-xl bg-purple-50 text-[#690b1b] flex items-center justify-center mb-4">
+              <div className="w-10 h-10 rounded-xl bg-blue-50 border border-blue-100 text-[#2563EB] flex items-center justify-center mb-4">
                 <Layers className="w-5 h-5" />
               </div>
               <h3 className="font-display font-bold text-base text-slate-900 mb-2">MULTI-DOMAIN</h3>
@@ -623,7 +623,7 @@ export default function IQAssessmentLandingPage() {
             </div>
 
             <div className="p-6 rounded-3xl bg-white border border-slate-200/80 shadow-sm">
-              <div className="w-10 h-10 rounded-xl bg-purple-50 text-[#690b1b] flex items-center justify-center mb-4">
+              <div className="w-10 h-10 rounded-xl bg-blue-50 border border-blue-100 text-[#2563EB] flex items-center justify-center mb-4">
                 <GraduationCap className="w-5 h-5" />
               </div>
               <h3 className="font-display font-bold text-base text-slate-900 mb-2">STUDENT-CENTRIC</h3>
@@ -635,11 +635,11 @@ export default function IQAssessmentLandingPage() {
         </section>
 
         {/* ── 11. SECTION — REAL TEST EXPERIENCE ── */}
-        <section className="bg-slate-100/70 py-20 px-4 md:px-8 border-y border-slate-200/80">
+        <section className="bg-[#F8FAFC] py-20 px-4 md:px-8 border-y border-slate-200/80">
           <div className="max-w-7xl mx-auto">
             
             <div className="text-center max-w-3xl mx-auto mb-14">
-              <span className="text-xs font-extrabold text-[#690b1b] uppercase tracking-widest mb-2 block">
+              <span className="text-xs font-extrabold text-[#2563EB] uppercase tracking-widest mb-2 block">
                 AUTHENTIC PRODUCT INTERFACE
               </span>
               <h2 className="text-3xl md:text-5xl font-display font-extrabold text-slate-900 tracking-tight">
@@ -654,21 +654,21 @@ export default function IQAssessmentLandingPage() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {/* Card 1: Visual Matrix Item */}
               <div className="bg-white rounded-3xl border border-slate-200/80 p-5 shadow-sm">
-                <span className="text-[10px] font-extrabold text-purple-700 bg-purple-50 px-2.5 py-1 rounded-full uppercase tracking-wider block w-fit mb-3">
+                <span className="text-[10px] font-extrabold text-[#2563EB] bg-[#E8F0FF] px-2.5 py-1 rounded-full uppercase tracking-wider block w-fit mb-3 border border-blue-200">
                   Visual Matrix Question
                 </span>
                 <div className="aspect-video bg-slate-950 rounded-2xl p-4 flex items-center justify-center mb-3">
                   <div className="grid grid-cols-2 gap-2 w-28">
                     <div className="w-full aspect-square bg-slate-900 border border-slate-800 rounded flex items-center justify-center">
-                      <div className="w-4 h-4 rounded-full bg-[#8b5cf6]" />
+                      <div className="w-4 h-4 rounded-full bg-[#2563EB]" />
                     </div>
                     <div className="w-full aspect-square bg-slate-900 border border-slate-800 rounded flex items-center justify-center">
-                      <div className="w-4 h-4 rounded-full border border-[#8b5cf6]" />
+                      <div className="w-4 h-4 rounded-full border border-[#2563EB]" />
                     </div>
                     <div className="w-full aspect-square bg-slate-900 border border-slate-800 rounded flex items-center justify-center">
-                      <div className="w-4 h-4 bg-[#8b5cf6]" />
+                      <div className="w-4 h-4 bg-[#2563EB]" />
                     </div>
-                    <div className="w-full aspect-square bg-slate-900 border border-purple-500/50 rounded flex items-center justify-center text-amber-400 font-bold">
+                    <div className="w-full aspect-square bg-slate-900 border border-blue-500/50 rounded flex items-center justify-center text-[#38BDF8] font-bold">
                       ?
                     </div>
                   </div>
@@ -679,16 +679,16 @@ export default function IQAssessmentLandingPage() {
 
               {/* Card 2: Result Radar Chart */}
               <div className="bg-white rounded-3xl border border-slate-200/80 p-5 shadow-sm">
-                <span className="text-[10px] font-extrabold text-purple-700 bg-purple-50 px-2.5 py-1 rounded-full uppercase tracking-wider block w-fit mb-3">
+                <span className="text-[10px] font-extrabold text-[#2563EB] bg-[#E8F0FF] px-2.5 py-1 rounded-full uppercase tracking-wider block w-fit mb-3 border border-blue-200">
                   Result Dashboard
                 </span>
-                <div className="aspect-video bg-purple-950/20 rounded-2xl p-2 flex items-center justify-center mb-3">
+                <div className="aspect-video bg-blue-950/20 rounded-2xl p-2 flex items-center justify-center mb-3">
                   <div className="w-full h-full">
                     <ResponsiveContainer width="100%" height="100%">
                       <RadarChart cx="50%" cy="50%" outerRadius="70%" data={radarSampleData}>
                         <PolarGrid stroke="#cbd5e1" />
                         <PolarAngleAxis dataKey="subject" tick={{ fill: '#475569', fontSize: 9 }} />
-                        <Radar name="Profile" dataKey="A" stroke="#690b1b" fill="#690b1b" fillOpacity={0.4} />
+                        <Radar name="Profile" dataKey="A" stroke="#2563EB" fill="#2563EB" fillOpacity={0.25} />
                       </RadarChart>
                     </ResponsiveContainer>
                   </div>
@@ -699,13 +699,13 @@ export default function IQAssessmentLandingPage() {
 
               {/* Card 3: Certificate Preview */}
               <div className="bg-white rounded-3xl border border-slate-200/80 p-5 shadow-sm">
-                <span className="text-[10px] font-extrabold text-purple-700 bg-purple-50 px-2.5 py-1 rounded-full uppercase tracking-wider block w-fit mb-3">
+                <span className="text-[10px] font-extrabold text-[#2563EB] bg-[#E8F0FF] px-2.5 py-1 rounded-full uppercase tracking-wider block w-fit mb-3 border border-blue-200">
                   Official PDF Certificate
                 </span>
-                <div className="aspect-video bg-amber-50/60 rounded-2xl border border-amber-200 p-4 flex flex-col justify-between mb-3 text-center">
-                  <div className="text-[8.5px] font-extrabold text-[#690b1b] uppercase tracking-widest whitespace-nowrap overflow-hidden">SIMPLIFIED CENTER FOR COGNITIVE SCIENCES</div>
+                <div className="aspect-video bg-blue-50/50 rounded-2xl border border-blue-200 p-4 flex flex-col justify-between mb-3 text-center">
+                  <div className="text-[8.5px] font-extrabold text-[#080F1C] uppercase tracking-widest whitespace-nowrap overflow-hidden">SIMPLIFIED CENTER FOR COGNITIVE SCIENCES</div>
                   <div className="text-xs font-display font-extrabold text-slate-900">Cognitive Assessment Certificate</div>
-                  <div className="text-[10px] font-mono text-amber-800 font-bold">Estimated IQ: 124 • 95th Percentile</div>
+                  <div className="text-[10px] font-mono text-[#2563EB] font-bold">Estimated IQ: 124 • 95th Percentile</div>
                 </div>
                 <h4 className="font-display font-bold text-sm text-slate-900">PDF Certificate Download</h4>
                 <p className="text-xs text-slate-500 mt-1 font-medium">Direct downloadable PDF with unique verification ID.</p>
@@ -718,7 +718,7 @@ export default function IQAssessmentLandingPage() {
         {/* ── 12. SECTION — TESTIMONIALS / GUIDANCE FEEDBACK ── */}
         <section className="py-20 px-4 md:px-8 max-w-7xl mx-auto">
           <div className="text-center max-w-3xl mx-auto mb-14">
-            <span className="text-xs font-extrabold text-[#690b1b] uppercase tracking-widest mb-2 block">
+            <span className="text-xs font-extrabold text-[#2563EB] uppercase tracking-widest mb-2 block">
               GUIDANCE EXPERIENCE
             </span>
             <h2 className="text-3xl md:text-5xl font-display font-extrabold text-slate-900 tracking-tight">
@@ -732,7 +732,7 @@ export default function IQAssessmentLandingPage() {
                 "The 45-question format was fast and structured. Understanding my strongest area in spatial reasoning gave my counsellor and me clear direction when selecting STEM streams."
               </p>
               <div className="flex items-center gap-3 pt-4 border-t border-slate-100">
-                <div className="w-10 h-10 rounded-full bg-purple-100 text-[#690b1b] font-bold text-xs flex items-center justify-center">
+                <div className="w-10 h-10 rounded-full bg-blue-100 text-[#2563EB] font-bold text-xs flex items-center justify-center">
                   S
                 </div>
                 <div>
@@ -760,11 +760,11 @@ export default function IQAssessmentLandingPage() {
         </section>
 
         {/* ── 13. ACCORDION FAQ ── */}
-        <section id="faq" className="bg-slate-100/70 py-20 px-4 md:px-8 border-t border-slate-200/80">
+        <section id="faq" className="bg-white py-20 px-4 md:px-8 border-t border-slate-200/80">
           <div className="max-w-4xl mx-auto">
             
             <div className="text-center mb-14">
-              <HelpCircle className="w-10 h-10 text-[#690b1b] mx-auto mb-3 opacity-90" />
+              <HelpCircle className="w-10 h-10 text-[#2563EB] mx-auto mb-3 opacity-90" />
               <h2 className="text-3xl md:text-5xl font-display font-extrabold text-slate-900 tracking-tight">
                 Frequently Asked Questions
               </h2>
@@ -778,10 +778,10 @@ export default function IQAssessmentLandingPage() {
                 >
                   <button
                     onClick={() => toggleFaq(idx)}
-                    className="w-full p-5 text-left flex items-center justify-between gap-4 font-display font-bold text-sm md:text-base text-slate-900 hover:text-[#690b1b] transition-colors"
+                    className="w-full p-5 text-left flex items-center justify-between gap-4 font-display font-bold text-sm md:text-base text-slate-900 hover:text-[#2563EB] transition-colors"
                   >
                     <span>{faq.question}</span>
-                    <ChevronDown className={`w-5 h-5 text-slate-400 shrink-0 transition-transform ${openFaqIndex === idx ? 'rotate-180 text-[#690b1b]' : ''}`} />
+                    <ChevronDown className={`w-5 h-5 text-slate-400 shrink-0 transition-transform ${openFaqIndex === idx ? 'rotate-180 text-[#2563EB]' : ''}`} />
                   </button>
                   <AnimatePresence>
                     {openFaqIndex === idx && (
@@ -803,9 +803,9 @@ export default function IQAssessmentLandingPage() {
         </section>
 
         {/* ── 14. FINAL CTA ── */}
-        <section className="bg-[#690b1b] text-white py-20 px-4 md:px-8 text-center relative overflow-hidden">
+        <section className="bg-gradient-to-br from-[#080F1C] via-[#0B1528] to-[#1E3A8A] text-white py-20 px-4 md:px-8 text-center relative overflow-hidden">
           <div className="max-w-4xl mx-auto relative z-10">
-            <Target className="w-14 h-14 text-amber-400 mx-auto mb-6" />
+            <Target className="w-14 h-14 text-[#38BDF8] mx-auto mb-6" />
             <h2 className="text-4xl md:text-6xl font-display font-extrabold text-white tracking-tight mb-4">
               READY TO DISCOVER YOUR COGNITIVE PROFILE?
             </h2>
@@ -815,13 +815,13 @@ export default function IQAssessmentLandingPage() {
 
             <Link
               href="/iq-test/instructions"
-              className="inline-flex px-10 py-4.5 rounded-2xl bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-slate-950 font-extrabold text-base shadow-2xl shadow-amber-950/60 items-center gap-3 transition-all transform hover:-translate-y-0.5"
+              className="inline-flex px-10 py-4.5 rounded-2xl bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-extrabold text-base shadow-2xl shadow-blue-950/60 items-center gap-3 transition-all transform hover:-translate-y-0.5 cursor-pointer"
             >
               START THE IQ ASSESSMENT
               <ArrowRight className="w-5 h-5" />
             </Link>
 
-            <div className="flex items-center justify-center gap-6 text-xs text-amber-200/80 font-bold uppercase tracking-wider mt-8">
+            <div className="flex items-center justify-center gap-6 text-xs text-blue-200/80 font-bold uppercase tracking-wider mt-8">
               <span>~15 Minutes</span>
               <span>•</span>
               <span>45 Questions</span>
@@ -853,27 +853,27 @@ export default function IQAssessmentLandingPage() {
           <div>
             <div className="font-bold text-white uppercase tracking-wider mb-3">Product</div>
             <ul className="space-y-2 font-medium">
-              <li><Link href="/iq-test" className="hover:text-amber-400 transition-colors">IQ Assessment Home</Link></li>
-              <li><Link href="/iq-test/instructions" className="hover:text-amber-400 transition-colors">Assessment Instructions</Link></li>
-              <li><a href="#results" className="hover:text-amber-400 transition-colors">Result Features</a></li>
-              <li><a href="#what-we-measure" className="hover:text-amber-400 transition-colors">5 Cognitive Domains</a></li>
+              <li><Link href="/iq-test" className="hover:text-[#38BDF8] transition-colors">IQ Assessment Home</Link></li>
+              <li><Link href="/iq-test/instructions" className="hover:text-[#38BDF8] transition-colors">Assessment Instructions</Link></li>
+              <li><a href="#results" className="hover:text-[#38BDF8] transition-colors">Result Features</a></li>
+              <li><a href="#what-we-measure" className="hover:text-[#38BDF8] transition-colors">5 Cognitive Domains</a></li>
             </ul>
           </div>
 
           <div>
             <div className="font-bold text-white uppercase tracking-wider mb-3">Platform</div>
             <ul className="space-y-2 font-medium">
-              <li><Link href="/psychometric-test" className="hover:text-amber-400 transition-colors">Psychometric Assessment</Link></li>
-              <li><Link href="/parent-assessment" className="hover:text-amber-400 transition-colors">Parent Assessment</Link></li>
-              <li><Link href="/university-finder" className="hover:text-amber-400 transition-colors">University Finder</Link></li>
-              <li><Link href="/dashboard/student" className="hover:text-amber-400 transition-colors">Student Dashboard</Link></li>
+              <li><Link href="/psychometric-test" className="hover:text-[#38BDF8] transition-colors">Psychometric Assessment</Link></li>
+              <li><Link href="/parent-assessment" className="hover:text-[#38BDF8] transition-colors">Parent Assessment</Link></li>
+              <li><Link href="/university-finder" className="hover:text-[#38BDF8] transition-colors">University Finder</Link></li>
+              <li><Link href="/dashboard/student" className="hover:text-[#38BDF8] transition-colors">Student Dashboard</Link></li>
             </ul>
           </div>
 
           <div>
             <div className="font-bold text-white uppercase tracking-wider mb-3">Support & Legal</div>
             <ul className="space-y-2 font-medium">
-              <li><a href="#faq" className="hover:text-amber-400 transition-colors">FAQ</a></li>
+              <li><a href="#faq" className="hover:text-[#38BDF8] transition-colors">FAQ</a></li>
               <li><span className="text-slate-500">Privacy Policy</span></li>
               <li><span className="text-slate-500">Terms of Service</span></li>
               <li><span className="text-slate-500">Simplified Center for Cognitive Sciences</span></li>

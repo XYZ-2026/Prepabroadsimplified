@@ -280,26 +280,26 @@ export default function IQTestRunnerPage() {
 
   if (loading || stage === 'prep') {
     return (
-      <div className="min-h-screen bg-[#faf8fc] flex flex-col justify-center items-center gap-5 px-6 text-center">
+      <div className="min-h-screen bg-[#F8FAFC] flex flex-col justify-center items-center gap-5 px-6 text-center">
         <div className="relative">
-          <div className="w-20 h-20 rounded-3xl bg-[#690b1b]/10 flex items-center justify-center text-[#690b1b] animate-pulse">
+          <div className="w-20 h-20 rounded-3xl bg-[#2563EB]/10 flex items-center justify-center text-[#2563EB] animate-pulse">
             <BrainCircuit className="w-10 h-10" />
           </div>
-          <Loader2 className="w-8 h-8 text-[#690b1b] animate-spin absolute -top-2 -right-2" />
+          <Loader2 className="w-8 h-8 text-[#2563EB] animate-spin absolute -top-2 -right-2" />
         </div>
         <h2 className="text-2xl font-display font-extrabold text-slate-900">Preparing Cognitive Assessment</h2>
         <div className="flex flex-col gap-2 max-w-sm w-full text-xs font-semibold text-slate-500">
           <div className="flex items-center justify-between p-2.5 bg-white rounded-xl border border-slate-200/60 shadow-sm">
             <span>Assessment structure (45 items)</span>
-            {prepStatus === 'INITIALIZING' ? <Loader2 className="w-4 h-4 text-purple-600 animate-spin" /> : <Check className="w-4 h-4 text-emerald-600" />}
+            {prepStatus === 'INITIALIZING' ? <Loader2 className="w-4 h-4 text-[#2563EB] animate-spin" /> : <Check className="w-4 h-4 text-emerald-600" />}
           </div>
           <div className="flex items-center justify-between p-2.5 bg-white rounded-xl border border-slate-200/60 shadow-sm">
             <span>Visual Matrix & Spatial Engines</span>
-            {['INITIALIZING'].includes(prepStatus) ? <Loader2 className="w-4 h-4 text-purple-600 animate-spin" /> : <Check className="w-4 h-4 text-emerald-600" />}
+            {['INITIALIZING'].includes(prepStatus) ? <Loader2 className="w-4 h-4 text-[#2563EB] animate-spin" /> : <Check className="w-4 h-4 text-emerald-600" />}
           </div>
           <div className="flex items-center justify-between p-2.5 bg-white rounded-xl border border-slate-200/60 shadow-sm">
             <span>Standardized Scoring Model</span>
-            {prepStatus === 'READY' ? <Check className="w-4 h-4 text-emerald-600" /> : <Loader2 className="w-4 h-4 text-purple-600 animate-spin" />}
+            {prepStatus === 'READY' ? <Check className="w-4 h-4 text-emerald-600" /> : <Loader2 className="w-4 h-4 text-[#2563EB] animate-spin" />}
           </div>
         </div>
       </div>
@@ -309,10 +309,10 @@ export default function IQTestRunnerPage() {
   if (error || prepStatus === 'FAILED') {
     return (
       <div className="min-h-screen bg-slate-50 flex flex-col justify-center items-center gap-4 px-6 text-center">
-        <AlertCircle className="w-12 h-12 text-[#690b1b]" />
+        <AlertCircle className="w-12 h-12 text-[#2563EB]" />
         <h1 className="text-xl font-bold text-slate-900">Session Initialization Error</h1>
         <p className="text-sm text-slate-500 max-w-md">{error || 'Failed to initialize cognitive assessment.'}</p>
-        <button onClick={() => window.location.reload()} className="px-6 py-2.5 bg-[#690b1b] text-white rounded-xl text-xs font-bold shadow-md">
+        <button onClick={() => window.location.reload()} className="px-6 py-2.5 bg-[#2563EB] hover:bg-[#1D4ED8] text-white rounded-xl text-xs font-bold shadow-md">
           Retry Session
         </button>
       </div>
@@ -324,10 +324,10 @@ export default function IQTestRunnerPage() {
   const answeredCount = questions.filter(q => q.userOption !== null && q.userOption !== undefined).length;
 
   return (
-    <div className="min-h-screen bg-[#f8f6fb] text-slate-900 font-sans flex flex-col select-none relative overflow-x-hidden">
+    <div className="min-h-screen bg-[#F8FAFC] text-slate-900 font-sans flex flex-col select-none relative overflow-x-hidden">
       
       {/* ── TOP HEADER SHELL ── */}
-      <header className="sticky top-0 z-30 bg-white/90 backdrop-blur-md border-b border-purple-100/60 px-4 md:px-8 py-3.5 flex items-center justify-between shadow-sm">
+      <header className="sticky top-0 z-30 bg-white/90 backdrop-blur-md border-b border-slate-200/80 px-4 md:px-8 py-3.5 flex items-center justify-between shadow-sm">
         {/* Back Button */}
         <button 
           onClick={() => {
@@ -335,23 +335,23 @@ export default function IQTestRunnerPage() {
               router.push('/iq-test');
             }
           }}
-          className="flex items-center gap-1.5 text-xs font-bold text-slate-600 hover:text-[#690b1b] transition-colors bg-slate-100/70 hover:bg-slate-100 px-3 py-2 rounded-xl"
+          className="flex items-center gap-1.5 text-xs font-bold text-slate-600 hover:text-[#2563EB] transition-colors bg-slate-100/70 hover:bg-slate-100 px-3 py-2 rounded-xl"
         >
           <ChevronLeft className="w-4 h-4" />
           <span className="hidden sm:inline">Exit to IQ Home</span>
         </button>
 
         {/* Center Progress Counter */}
-        <div className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-purple-50 border border-purple-200/60">
-          <span className="text-sm font-display font-extrabold text-[#690b1b]">{currentIndex + 1}</span>
-          <span className="text-xs font-bold text-purple-400">/ 45</span>
+        <div className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#E8F0FF] border border-blue-200/80">
+          <span className="text-sm font-display font-extrabold text-[#2563EB]">{currentIndex + 1}</span>
+          <span className="text-xs font-bold text-blue-400">/ 45</span>
         </div>
 
         {/* Right Timer */}
         <div className={`flex items-center gap-2 px-3.5 py-1.5 rounded-xl border text-xs font-mono font-bold transition-colors ${
           timeLeft < 180 ? 'bg-red-50 border-red-300 text-red-600 animate-pulse' : 'bg-slate-50 border-slate-200 text-slate-700'
         }`}>
-          <Clock className="w-4 h-4 text-purple-600" />
+          <Clock className="w-4 h-4 text-[#2563EB]" />
           <span>{formatTime(timeLeft)}</span>
         </div>
       </header>
@@ -362,7 +362,7 @@ export default function IQTestRunnerPage() {
         {/* Section Header Badge */}
         <div className="mb-6 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <span className="px-3 py-1 rounded-lg bg-[#690b1b]/10 text-[#690b1b] text-[10px] font-extrabold tracking-widest uppercase">
+            <span className="px-3 py-1 rounded-lg bg-[#E8F0FF] text-[#2563EB] border border-blue-200 text-[10px] font-extrabold tracking-widest uppercase">
               SECTION {currentQ.section} OF 5
             </span>
             <span className="text-xs font-bold text-slate-600 hidden sm:inline">
@@ -375,25 +375,25 @@ export default function IQTestRunnerPage() {
         </div>
 
         {/* Question Card Frame */}
-        <div className="bg-white rounded-3xl border border-purple-100 p-6 md:p-10 shadow-xl shadow-purple-900/5 mb-8 flex-1 flex flex-col justify-between relative overflow-hidden">
+        <div className="bg-white rounded-3xl border border-slate-200 p-6 md:p-10 shadow-xl shadow-slate-200/50 mb-8 flex-1 flex flex-col justify-between relative overflow-hidden">
           
           <div>
             {/* Question Prompt */}
             <h2 className="text-lg md:text-xl font-display font-bold text-slate-900 leading-snug mb-6">
-              <span className="text-[#690b1b] mr-2">Q{currentIndex + 1}.</span> {currentQ.prompt}
+              <span className="text-[#2563EB] mr-2">Q{currentIndex + 1}.</span> {currentQ.prompt}
             </h2>
 
-            {/* SVG Visual Puzzle Frame (Comprehensive for ALL visual types including Q15 svg_analogy) */}
+            {/* SVG Visual Puzzle Frame */}
             {currentQ.svgData && (
-              <div className="mb-8 p-6 bg-purple-50/40 rounded-2xl border border-purple-100/80 flex items-center justify-center">
+              <div className="mb-8 p-6 bg-[#E8F0FF]/30 rounded-2xl border border-blue-100 flex items-center justify-center">
                 
                 {/* 2x2 Matrix */}
                 {(currentQ.svgData.matrixType === '2x2' || (currentQ.questionType === 'svg_matrix' && currentQ.svgData.gridCells?.length === 4)) && (
                   <div className="grid grid-cols-2 gap-3 max-w-[260px] w-full">
                     {currentQ.svgData.gridCells?.map((cellSvg, idx) => (
-                      <div key={idx} className="w-full aspect-square bg-white rounded-xl border border-purple-200/80 flex items-center justify-center p-2 shadow-sm">
+                      <div key={idx} className="w-full aspect-square bg-white rounded-xl border border-blue-100 flex items-center justify-center p-2 shadow-sm">
                         {cellSvg === '?' ? (
-                          <div className="text-2xl font-bold text-[#690b1b] animate-bounce">?</div>
+                          <div className="text-2xl font-bold text-[#2563EB] animate-bounce">?</div>
                         ) : (
                           <svg viewBox="0 0 100 100" className="w-full h-full" dangerouslySetInnerHTML={{ __html: cellSvg }} />
                         )}
@@ -406,9 +406,9 @@ export default function IQTestRunnerPage() {
                 {(currentQ.svgData.matrixType === '3x3' || (currentQ.questionType === 'svg_matrix' && currentQ.svgData.gridCells?.length === 9)) && (
                   <div className="grid grid-cols-3 gap-2 max-w-[320px] w-full">
                     {currentQ.svgData.gridCells?.map((cellSvg, idx) => (
-                      <div key={idx} className="w-full aspect-square bg-white rounded-lg border border-purple-200/80 flex items-center justify-center p-1.5 shadow-sm">
+                      <div key={idx} className="w-full aspect-square bg-white rounded-lg border border-blue-100 flex items-center justify-center p-1.5 shadow-sm">
                         {cellSvg === '?' ? (
-                          <div className="text-xl font-bold text-[#690b1b] animate-bounce">?</div>
+                          <div className="text-xl font-bold text-[#2563EB] animate-bounce">?</div>
                         ) : (
                           <svg viewBox="0 0 100 100" className="w-full h-full" dangerouslySetInnerHTML={{ __html: cellSvg }} />
                         )}
@@ -417,32 +417,32 @@ export default function IQTestRunnerPage() {
                   </div>
                 )}
 
-                {/* Figure Analogy (Q15 and Analogy items: 4 cells [A, B, C, ?]) */}
+                {/* Figure Analogy */}
                 {currentQ.questionType === 'svg_analogy' && currentQ.svgData.gridCells && (
                   <div className="flex flex-col gap-3 max-w-[320px] w-full">
                     <div className="flex items-center justify-center gap-3">
-                      <div className="w-1/2 aspect-square bg-white rounded-xl border border-purple-200 p-2 flex flex-col items-center justify-center shadow-sm relative">
+                      <div className="w-1/2 aspect-square bg-white rounded-xl border border-blue-200 p-2 flex flex-col items-center justify-center shadow-sm relative">
                         <span className="absolute top-1 left-2 text-[9px] font-bold text-slate-400">Fig A</span>
                         <svg viewBox="0 0 100 100" className="w-full h-full" dangerouslySetInnerHTML={{ __html: currentQ.svgData.gridCells[0] || '' }} />
                       </div>
-                      <span className="text-xs font-bold text-purple-600">IS TO</span>
-                      <div className="w-1/2 aspect-square bg-white rounded-xl border border-purple-200 p-2 flex flex-col items-center justify-center shadow-sm relative">
+                      <span className="text-xs font-bold text-[#2563EB]">IS TO</span>
+                      <div className="w-1/2 aspect-square bg-white rounded-xl border border-blue-200 p-2 flex flex-col items-center justify-center shadow-sm relative">
                         <span className="absolute top-1 left-2 text-[9px] font-bold text-slate-400">Fig B</span>
                         <svg viewBox="0 0 100 100" className="w-full h-full" dangerouslySetInnerHTML={{ __html: currentQ.svgData.gridCells[1] || '' }} />
                       </div>
                     </div>
 
-                    <div className="text-center text-[10px] font-extrabold tracking-widest text-purple-400 uppercase">AS</div>
+                    <div className="text-center text-[10px] font-extrabold tracking-widest text-blue-400 uppercase">AS</div>
 
                     <div className="flex items-center justify-center gap-3">
-                      <div className="w-1/2 aspect-square bg-white rounded-xl border border-purple-200 p-2 flex flex-col items-center justify-center shadow-sm relative">
+                      <div className="w-1/2 aspect-square bg-white rounded-xl border border-blue-200 p-2 flex flex-col items-center justify-center shadow-sm relative">
                         <span className="absolute top-1 left-2 text-[9px] font-bold text-slate-400">Fig C</span>
                         <svg viewBox="0 0 100 100" className="w-full h-full" dangerouslySetInnerHTML={{ __html: currentQ.svgData.gridCells[2] || '' }} />
                       </div>
-                      <span className="text-xs font-bold text-purple-600">IS TO</span>
-                      <div className="w-1/2 aspect-square bg-white rounded-xl border border-purple-200 p-2 flex flex-col items-center justify-center shadow-sm relative">
+                      <span className="text-xs font-bold text-[#2563EB]">IS TO</span>
+                      <div className="w-1/2 aspect-square bg-white rounded-xl border border-blue-200 p-2 flex flex-col items-center justify-center shadow-sm relative">
                         <span className="absolute top-1 left-2 text-[9px] font-bold text-slate-400">?</span>
-                        <div className="text-2xl font-bold text-[#690b1b] animate-bounce">?</div>
+                        <div className="text-2xl font-bold text-[#2563EB] animate-bounce">?</div>
                       </div>
                     </div>
                   </div>
@@ -450,7 +450,7 @@ export default function IQTestRunnerPage() {
 
                 {/* Spatial Figure */}
                 {currentQ.questionType === 'svg_spatial' && currentQ.svgData.gridCells && (
-                  <div className="w-full max-w-[200px] aspect-square bg-white rounded-2xl border border-purple-200 p-3 flex items-center justify-center shadow-sm">
+                  <div className="w-full max-w-[200px] aspect-square bg-white rounded-2xl border border-blue-200 p-3 flex items-center justify-center shadow-sm">
                     <svg viewBox="0 0 100 100" className="w-full h-full" dangerouslySetInnerHTML={{ __html: currentQ.svgData.gridCells[0] || '' }} />
                   </div>
                 )}
@@ -459,9 +459,9 @@ export default function IQTestRunnerPage() {
                 {currentQ.questionType === 'svg_sequence' && currentQ.svgData.gridCells && (
                   <div className="flex items-center justify-center gap-2 max-w-[340px] w-full overflow-x-auto p-1">
                     {currentQ.svgData.gridCells.map((cellSvg, idx) => (
-                      <div key={idx} className="w-16 h-16 aspect-square bg-white rounded-xl border border-purple-200 flex items-center justify-center p-1 shadow-sm shrink-0">
+                      <div key={idx} className="w-16 h-16 aspect-square bg-white rounded-xl border border-blue-200 flex items-center justify-center p-1 shadow-sm shrink-0">
                         {cellSvg === '?' ? (
-                          <div className="text-xl font-bold text-[#690b1b] animate-bounce">?</div>
+                          <div className="text-xl font-bold text-[#2563EB] animate-bounce">?</div>
                         ) : (
                           <svg viewBox="0 0 100 100" className="w-full h-full" dangerouslySetInnerHTML={{ __html: cellSvg }} />
                         )}
@@ -493,17 +493,17 @@ export default function IQTestRunnerPage() {
                     onClick={() => handleSelectOption(opt.label)}
                     className={`w-full p-4 rounded-2xl border text-left flex flex-col justify-between transition-all cursor-pointer ${
                       isSelected 
-                        ? 'bg-[#690b1b]/5 border-[#690b1b] ring-2 ring-[#690b1b]/20 shadow-md' 
-                        : 'bg-white border-slate-200 hover:border-purple-300 hover:bg-purple-50/30 shadow-sm'
+                        ? 'bg-[#E8F0FF]/70 border-[#2563EB] ring-2 ring-[#2563EB]/25 shadow-md' 
+                        : 'bg-white border-slate-200 hover:border-blue-300 hover:bg-blue-50/30 shadow-sm'
                     }`}
                   >
                     <div className="flex items-center justify-between w-full mb-2">
                       <span className={`w-7 h-7 rounded-lg flex items-center justify-center text-xs font-bold ${
-                        isSelected ? 'bg-[#690b1b] text-white' : 'bg-slate-100 text-slate-600'
+                        isSelected ? 'bg-[#2563EB] text-white' : 'bg-slate-100 text-slate-600'
                       }`}>
                         {opt.label}
                       </span>
-                      {isSelected && <Check className="w-4 h-4 text-[#690b1b]" />}
+                      {isSelected && <Check className="w-4 h-4 text-[#2563EB]" />}
                     </div>
 
                     {/* Option SVG (if option has SVG diagram) */}
@@ -538,7 +538,7 @@ export default function IQTestRunnerPage() {
               {currentIndex < questions.length - 1 ? (
                 <button
                   onClick={goNext}
-                  className="px-5 py-2.5 min-h-[44px] rounded-xl bg-purple-50 text-[#690b1b] hover:bg-purple-100 text-xs font-bold flex items-center justify-center gap-1.5 transition-colors"
+                  className="px-5 py-2.5 min-h-[44px] rounded-xl bg-[#E8F0FF] text-[#2563EB] hover:bg-blue-100 text-xs font-bold flex items-center justify-center gap-1.5 transition-colors"
                 >
                   Next Question
                   <ChevronRight className="w-4 h-4" />
@@ -547,7 +547,7 @@ export default function IQTestRunnerPage() {
 
               <button
                 onClick={handleFinishAttemptClick}
-                className="px-6 py-2.5 min-h-[44px] rounded-xl bg-[#690b1b] text-white hover:bg-[#520815] text-xs font-bold shadow-md transition-colors flex items-center justify-center gap-1.5"
+                className="px-6 py-2.5 min-h-[44px] rounded-xl bg-[#2563EB] text-white hover:bg-[#1D4ED8] text-xs font-bold shadow-md shadow-blue-600/20 transition-colors flex items-center justify-center gap-1.5"
               >
                 <span>Finish & Calculate Result</span>
                 <Sparkles className="w-4 h-4" />
@@ -574,7 +574,7 @@ export default function IQTestRunnerPage() {
             </div>
 
             <p className="text-xs text-slate-600 leading-relaxed font-medium">
-              You still have <strong className="text-[#690b1b]">{45 - answeredCount} unanswered questions</strong>. We recommend attempting all questions for the most accurate cognitive evaluation.
+              You still have <strong className="text-[#2563EB]">{45 - answeredCount} unanswered questions</strong>. We recommend attempting all questions for the most accurate cognitive evaluation.
             </p>
 
             <div className="flex items-center justify-end gap-3 pt-2">
@@ -589,7 +589,7 @@ export default function IQTestRunnerPage() {
                   setShowIncompleteModal(false);
                   setStage('distraction_check');
                 }}
-                className="px-4 py-2.5 rounded-xl bg-[#690b1b] text-white text-xs font-bold shadow-md hover:bg-[#520815]"
+                className="px-4 py-2.5 rounded-xl bg-[#2563EB] text-white text-xs font-bold shadow-md hover:bg-[#1D4ED8]"
               >
                 Submit Anyway
               </button>
@@ -604,14 +604,14 @@ export default function IQTestRunnerPage() {
           <motion.div 
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="bg-white rounded-3xl max-w-lg w-full p-8 shadow-2xl border border-purple-100 text-center flex flex-col items-center gap-6"
+            className="bg-white rounded-3xl max-w-lg w-full p-8 shadow-2xl border border-slate-200 text-center flex flex-col items-center gap-6"
           >
-            <div className="w-16 h-16 rounded-2xl bg-[#690b1b]/10 text-[#690b1b] flex items-center justify-center">
+            <div className="w-16 h-16 rounded-2xl bg-[#E8F0FF] text-[#2563EB] flex items-center justify-center">
               <HelpCircle className="w-8 h-8" />
             </div>
 
             <div>
-              <span className="text-[10px] font-extrabold tracking-widest text-purple-600 uppercase mb-1 block">Test Environment Check</span>
+              <span className="text-[10px] font-extrabold tracking-widest text-[#2563EB] uppercase mb-1 block">Test Environment Check</span>
               <h3 className="text-xl font-display font-extrabold text-slate-900">Did you experience significant external distractions?</h3>
               <p className="text-xs text-slate-500 mt-2 max-w-sm mx-auto leading-relaxed">
                 External interruptions during a timed cognitive assessment may impact focus and accuracy. This helps calibrate environmental test reliability.
@@ -621,7 +621,7 @@ export default function IQTestRunnerPage() {
             <div className="flex flex-col sm:flex-row gap-3 w-full max-w-xs">
               <button
                 onClick={() => submitFinalAssessment('No')}
-                className="flex-1 py-3 px-4 rounded-xl bg-[#690b1b] text-white font-bold text-xs shadow-md hover:bg-[#520815] transition-colors"
+                className="flex-1 py-3 px-4 rounded-xl bg-[#2563EB] text-white font-bold text-xs shadow-md hover:bg-[#1D4ED8] transition-colors"
               >
                 No, Test Was Distraction-Free
               </button>
@@ -638,22 +638,22 @@ export default function IQTestRunnerPage() {
 
       {/* ── CALCULATING / SCORING STAGE ── */}
       {stage === 'calculating' && (
-        <div className="fixed inset-0 z-50 bg-[#FAF8FC] flex flex-col items-center justify-center p-6 text-center">
+        <div className="fixed inset-0 z-50 bg-[#F8FAFC] flex flex-col items-center justify-center p-6 text-center">
           <div className="relative mb-6">
-            <div className="w-24 h-24 rounded-3xl bg-[#690b1b]/10 flex items-center justify-center text-[#690b1b] animate-pulse">
+            <div className="w-24 h-24 rounded-3xl bg-[#2563EB]/10 flex items-center justify-center text-[#2563EB] animate-pulse">
               <BrainCircuit className="w-12 h-12" />
             </div>
-            <Loader2 className="w-10 h-10 text-[#690b1b] animate-spin absolute -top-3 -right-3" />
+            <Loader2 className="w-10 h-10 text-[#2563EB] animate-spin absolute -top-3 -right-3" />
           </div>
 
-          <span className="text-xs font-extrabold tracking-widest text-[#690b1b] uppercase mb-1">Standardized Psychometric Processing</span>
+          <span className="text-xs font-extrabold tracking-widest text-[#2563EB] uppercase mb-1">Standardized Psychometric Processing</span>
           <h2 className="text-2xl font-display font-extrabold text-slate-900 mb-2">Calculating Your Cognitive Profile</h2>
           <p className="text-xs text-slate-500 max-w-sm mb-6">
             Evaluating 45 item responses across 5 cognitive domains using standardized normal distribution metrics.
           </p>
 
           <div className="w-full max-w-xs h-2 bg-slate-200 rounded-full overflow-hidden mb-2">
-            <div className="h-full bg-[#690b1b] transition-all duration-300 rounded-full" style={{ width: `${calcProgress}%` }} />
+            <div className="h-full bg-[#2563EB] transition-all duration-300 rounded-full" style={{ width: `${calcProgress}%` }} />
           </div>
           <span className="text-xs font-bold text-slate-400">{calcProgress}% Complete</span>
         </div>

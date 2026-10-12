@@ -66,9 +66,9 @@ export default function Topbar() {
           <Link href="/about-us" className="hover:text-blue-600 transition-colors" style={{ textDecoration: 'none' }}>
             About Us
           </Link>
-          <Link href="/book-a-demo" className="hover:text-blue-600 transition-colors" style={{ textDecoration: 'none' }}>
+          <a href="#programs" className="hover:text-blue-600 transition-colors" style={{ textDecoration: 'none' }}>
             Academic Excellence
-          </Link>
+          </a>
           <Link href="/career-roadmap" className="hover:text-blue-600 transition-colors" style={{ textDecoration: 'none' }}>
             Research & Profile Building
           </Link>

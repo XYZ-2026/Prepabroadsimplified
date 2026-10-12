@@ -17,13 +17,57 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
     const requestedType = searchParams.get('type'); // e.g. 'junior', 'grade10', 'senior'
 
-    // Fetch user's completed psychometric results
-    const snapshot = await adminDb
-      .collection('psychometric_results')
-      .where('userId', '==', claims.uid)
-      .get();
+    const results: Array<{
+      resultId: string;
+      testName: string;
+      assessmentType: string;
+      assessmentVariant: string;
+      createdAt: string;
+      reportUrl: string;
+    }> = [];
 
-    if (snapshot.empty) {
+    // Fetch user's completed psychometric results from Firestore
+    try {
+      const snapshot = await adminDb
+        .collection('psychometric_results')
+        .where('userId', '==', claims.uid)
+        .get();
+
+      if (!snapshot.empty) {
+        snapshot.docs.forEach(doc => {
+          const d = doc.data();
+          results.push({
+            resultId: doc.id,
+            testName: d.testName || 'Psychometric Assessment',
+            assessmentType: d.assessmentType || (d.testType || 'senior'),
+            assessmentVariant: d.assessmentVariant || '',
+            createdAt: d.createdAt || '',
+            reportUrl: `/psychometric-test?resultId=${doc.id}`,
+          });
+        });
+      }
+    } catch (dbErr) {
+      console.warn('[User Status Route] Firestore fetch fallback:', dbErr);
+    }
+
+    // Also check memory cache fallback
+    const gCache = (globalThis as any).__psychometricResultsCache;
+    if (gCache) {
+      for (const [id, d] of gCache.entries()) {
+        if (d.userId === claims.uid && !results.some(r => r.resultId === id)) {
+          results.push({
+            resultId: id,
+            testName: d.testName || 'Psychometric Assessment',
+            assessmentType: d.assessmentType || (d.testType || 'senior'),
+            assessmentVariant: d.assessmentVariant || '',
+            createdAt: d.createdAt || '',
+            reportUrl: `/psychometric-test?resultId=${id}`,
+          });
+        }
+      }
+    }
+
+    if (results.length === 0) {
       return NextResponse.json({
         authenticated: true,
         hasCompletedTest: false,
@@ -32,18 +76,6 @@ export async function GET(request: Request) {
         latestResultId: null,
       });
     }
-
-    const results = snapshot.docs.map(doc => {
-      const d = doc.data();
-      return {
-        resultId: doc.id,
-        testName: d.testName || 'Psychometric Assessment',
-        assessmentType: d.assessmentType || (d.testType || 'senior'),
-        assessmentVariant: d.assessmentVariant || '',
-        createdAt: d.createdAt || '',
-        reportUrl: `/psychometric-test?resultId=${doc.id}`,
-      };
-    });
 
     // Sort most recent first
     results.sort((a, b) => {
@@ -92,8 +124,8 @@ export async function GET(request: Request) {
   } catch (error: any) {
     console.error('Error fetching psychometric user status:', error);
     return NextResponse.json(
-      { authenticated: false, hasCompletedTest: false, error: error.message },
-      { status: 500 }
+      { authenticated: false, hasCompletedTest: false, results: [], resultsByType: {} },
+      { status: 200 }
     );
   }
 }

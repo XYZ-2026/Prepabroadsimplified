@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { adminDb } from '@/lib/firebase-admin';
+import { createEnquiry } from '@/lib/enquiry-service';
 
-// Simple in-memory rate-limiter / deduplication cache for demo enquiries (email+phone -> timestamp)
+// In-memory rate-limiter / deduplication cache for demo enquiries (phone -> timestamp)
 const recentSubmissions = new Map<string, number>();
 
 function isValidEmail(email: string): boolean {
@@ -9,29 +9,44 @@ function isValidEmail(email: string): boolean {
 }
 
 function isValidPhone(phone: string): boolean {
-  // Allow international prefix (+), numbers, spaces, hyphens, min 8 digits, max 16 digits
+  // Allow international prefix (+), numbers, spaces, hyphens, min 7 digits, max 16 digits
   const cleaned = phone.replace(/[\s\-\(\)]/g, '');
-  return /^\+?[0-9]{8,15}$/.test(cleaned);
+  return /^\+?[0-9]{7,16}$/.test(cleaned);
 }
 
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { name, phone, email, consent, sourcePage, campaignParams } = body;
+    const {
+      parentName,
+      phone,
+      email,
+      studentName,
+      academicLevel,
+      developmentAreas = [],
+      clarvoExploration = [],
+      preferredTimeFrame,
+      notes = '',
+      consent,
+      sourcePage = '/book-a-demo',
+    } = body;
 
     // 1. Validation
     const errors: Record<string, string> = {};
 
-    if (!name || typeof name !== 'string' || name.trim().length < 2) {
-      errors.name = 'Please provide your full name (at least 2 characters).';
+    const cleanParentName = typeof parentName === 'string' ? parentName.trim() : '';
+    if (!cleanParentName || cleanParentName.length < 2) {
+      errors.parentName = 'Please enter the Parent / Guardian name (at least 2 characters).';
     }
 
-    if (!email || typeof email !== 'string' || !isValidEmail(email)) {
+    const cleanPhone = typeof phone === 'string' ? phone.trim() : '';
+    if (!cleanPhone || !isValidPhone(cleanPhone)) {
+      errors.phone = 'Please provide a valid contact phone number (7–15 digits).';
+    }
+
+    const cleanEmail = typeof email === 'string' ? email.trim().toLowerCase() : '';
+    if (cleanEmail && !isValidEmail(cleanEmail)) {
       errors.email = 'Please provide a valid email address.';
-    }
-
-    if (!phone || typeof phone !== 'string' || !isValidPhone(phone)) {
-      errors.phone = 'Please provide a valid contact phone number (8–15 digits).';
     }
 
     if (!consent) {
@@ -45,61 +60,48 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // 2. Prevent rapid duplicate submissions (within 3 minutes)
-    const dedupeKey = `${email.trim().toLowerCase()}_${phone.replace(/\D/g, '')}`;
+    // 2. Prevent duplicate rapid submissions (within 2 minutes)
+    const dedupeKey = `${cleanPhone.replace(/\D/g, '')}_${cleanEmail}`;
     const now = Date.now();
     const lastSub = recentSubmissions.get(dedupeKey);
-    if (lastSub && now - lastSub < 3 * 60 * 1000) {
+    if (lastSub && now - lastSub < 2 * 60 * 1000) {
       return NextResponse.json(
         {
           success: false,
           error: 'Duplicate submission detected',
-          message: 'An enquiry with this email and phone number was recently received. Our advisors will be in touch shortly.'
+          message: 'An enquiry with this phone number was recently received. Our advisors will be in touch shortly.'
         },
         { status: 429 }
       );
     }
 
-    const enquiryData = {
-      name: name.trim(),
-      email: email.trim().toLowerCase(),
-      phone: phone.trim(),
+    // 3. Save enquiry to Firestore and local storage
+    const newEnquiry = await createEnquiry({
+      parentName: cleanParentName,
+      phone: cleanPhone,
+      email: cleanEmail || undefined,
+      studentName: typeof studentName === 'string' ? studentName.trim() : undefined,
+      academicLevel: academicLevel || 'High School (Grades 9-12)',
+      developmentAreas: Array.isArray(developmentAreas) ? developmentAreas : [],
+      clarvoExploration: Array.isArray(clarvoExploration) ? clarvoExploration : [],
+      preferredTimeFrame: preferredTimeFrame || 'Flexible',
+      notes: typeof notes === 'string' ? notes.trim() : '',
       consent: true,
-      sourcePage: sourcePage || '/book-a-demo',
-      campaignParams: campaignParams || {},
-      status: 'pending',
-      createdAt: new Date().toISOString(),
-      userAgent: req.headers.get('user-agent') || 'unknown',
-    };
+      sourcePage,
+    });
 
-    let enquiryId = `demo_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
-
-    // 3. Persist to Firestore if available
-    try {
-      if (adminDb) {
-        const docRef = await adminDb.collection('demo_enquiries').add(enquiryData);
-        enquiryId = docRef.id;
-      } else {
-        console.warn('[Book a Demo API] Firestore adminDb is unavailable, recorded in runtime log.');
-      }
-    } catch (dbErr) {
-      console.error('[Book a Demo API] Database write warning:', dbErr);
-      // Gracefully continue so user is not blocked if Firestore emulator/credentials are missing in local dev
-    }
-
-    // Record submission for rate-limiting
     recentSubmissions.set(dedupeKey, now);
 
     return NextResponse.json({
       success: true,
-      enquiryId,
-      message: "Thank you! Your enquiry has been received. Our team will connect with you to understand your child's needs and explain how CLARVO can help."
+      enquiryId: newEnquiry.id,
+      message: "Thank you! Your enquiry has been recorded. Our educational guidance team will contact you shortly to schedule your demo."
     });
 
   } catch (err: any) {
     console.error('[Book a Demo API] Server error:', err);
     return NextResponse.json(
-      { success: false, error: 'Failed to submit enquiry. Please try again or reach out to support@collegesimplified.in.' },
+      { success: false, error: 'Failed to submit enquiry. Please try again or reach out to support@clarvo.in.' },
       { status: 500 }
     );
   }

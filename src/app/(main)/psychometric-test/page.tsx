@@ -613,9 +613,9 @@ function computeScores(answers: Record<number, number>, questions: typeof FBQ, s
 
     careerFitment = [
       { name: "Humanities & Creative Arts Stream", score: humScore, color: "#7E3AF2" },
-      { name: "Science Stream – Engineering & Tech Track (PCM)", score: pcmScore, color: "#690B1B" },
+      { name: "Science Stream – Engineering & Tech Track (PCM)", score: pcmScore, color: "#2563EB" },
       { name: "Science Stream – Medical & Life Sciences Track (PCB)", score: pcbScore, color: "#057A55" },
-      { name: "Commerce, Business & Management Stream", score: commScore, color: "#C9A55D" }
+      { name: "Commerce, Business & Management Stream", score: commScore, color: "#0284C7" }
     ].sort((a, b) => b.score - a.score);
   } else {
     careerFitment = careerFitment.sort((a, b) => b.score - a.score);
@@ -694,7 +694,7 @@ function getStreamTestDetails(stream: string, type: string) {
     {
       title: 'Aptitude Assessment',
       icon: '🧠',
-      color: '#690B1B',
+      color: '#2563EB',
       badge: isJunior ? 'Junior Focus' : isGrade10 ? 'Class 10 Focus' : isPCM ? 'PCM Focus' : isPCB ? 'PCB Focus' : isPCMB ? 'PCMB Focus' : isComm ? 'Commerce Focus' : isHum ? 'Humanities Focus' : 'Core Aptitude',
       desc: isJunior
         ? 'Basic verbal, numerical, and reasoning aptitude designed for middle school development.'
@@ -751,7 +751,7 @@ function getStreamTestDetails(stream: string, type: string) {
     {
       title: 'Learning Style',
       icon: '📚',
-      color: '#C9A55D',
+      color: '#0284C7',
       badge: 'VARK Model',
       desc: isPCM || isPCB || isPCMB
         ? 'Study strategies tailored for highly technical scientific and numerical courses.'
@@ -1002,7 +1002,7 @@ function AssessmentPageContent() {
   const [userAccess, setUserAccess] = useState<any>(null);
 
   useEffect(() => {
-    if (screen === "questions" || screen === "loading-r") {
+    if (screen === "questions" || screen === "loading-q" || screen === "loading-r" || screen === "details") {
       document.body.classList.add("test-active");
     } else {
       document.body.classList.remove("test-active");
@@ -1993,7 +1993,7 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
 
     mkChart("ch-apt", "radar", {
       labels: ["Verbal", "Numerical", "Reasoning", "Spatial"],
-      datasets: [{ label: "Aptitude", data: [sc.aptitude.verbal, sc.aptitude.numerical, sc.aptitude.reasoning, sc.aptitude.spatial], backgroundColor: "rgba(105,11,27,.15)", borderColor: "#690B1B", pointBackgroundColor: "#690B1B", borderWidth: 2, pointRadius: 5 }],
+      datasets: [{ label: "Aptitude", data: [sc.aptitude.verbal, sc.aptitude.numerical, sc.aptitude.reasoning, sc.aptitude.spatial], backgroundColor: "rgba(37, 99, 235,.15)", borderColor: "#2563EB", pointBackgroundColor: "#2563EB", borderWidth: 2, pointRadius: 5 }],
     }, {
       scales: {
         r: {
@@ -2010,7 +2010,7 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
 
     mkChart("ch-per", "bar", {
       labels: ["Openness", "Conscientious", "Extraversion", "Agreeableness", "Stability"],
-      datasets: [{ data: [sc.personality.openness, sc.personality.conscientiousness, sc.personality.extraversion, sc.personality.agreeableness, sc.personality.emotionalStability], backgroundColor: ["#7E3AF2CC", "#057A55CC", "#690B1BCC", "#C9A55DCC", "#0694A2CC"], borderRadius: 8, borderWidth: 0 }],
+      datasets: [{ data: [sc.personality.openness, sc.personality.conscientiousness, sc.personality.extraversion, sc.personality.agreeableness, sc.personality.emotionalStability], backgroundColor: ["#7E3AF2CC", "#057A55CC", "#2563EBCC", "#0284C7CC", "#0694A2CC"], borderRadius: 8, borderWidth: 0 }],
     }, {
       indexAxis: "y",
       scales: {
@@ -2039,7 +2039,7 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
 
     mkChart("ch-vk", "doughnut", {
       labels: ["Visual", "Auditory", "Read/Write", "Kinesthetic"],
-      datasets: [{ data: [sc.vark.V, sc.vark.A, sc.vark.R, sc.vark.K], backgroundColor: ["#690B1B", "#7E3AF2", "#057A55", "#C9A55D"], borderWidth: 0, spacing: 4 }],
+      datasets: [{ data: [sc.vark.V, sc.vark.A, sc.vark.R, sc.vark.K], backgroundColor: ["#2563EB", "#7E3AF2", "#057A55", "#0284C7"], borderWidth: 0, spacing: 4 }],
     }, {
       cutout: "65%",
       plugins: {
@@ -2053,7 +2053,7 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
     const sv = Object.entries(sc.values).sort((a, b) => b[1] - a[1]).slice(0, 6);
     mkChart("ch-val", "bar", {
       labels: sv.map((v) => v[0].charAt(0).toUpperCase() + v[0].slice(1)),
-      datasets: [{ data: sv.map((v) => v[1]), backgroundColor: ["#690B1BCC", "#7E3AF2CC", "#057A55CC", "#C9A55DCC", "#0694A2CC", "#690B1BAA"], borderRadius: 8, borderWidth: 0 }],
+      datasets: [{ data: sv.map((v) => v[1]), backgroundColor: ["#2563EBCC", "#7E3AF2CC", "#057A55CC", "#0284C7CC", "#0694A2CC", "#2563EBAA"], borderRadius: 8, borderWidth: 0 }],
     }, {
       scales: {
         y: { min: 0, max: 100, ticks: { color: textColor, font: tickFont }, grid: { color: gridColor } },
@@ -2067,6 +2067,8 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
   async function downloadPDF(reportType: 'full' | 'executive' = 'full') {
     if (!student.name || !scores || !reportData) {
       showToast("Please complete the assessment first");
+      window.dispatchEvent(new CustomEvent('pdf-download-complete'));
+      window.dispatchEvent(new CustomEvent('summary-download-complete'));
       return;
     }
 
@@ -2138,11 +2140,21 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
-      URL.revokeObjectURL(url);
+      setTimeout(() => URL.revokeObjectURL(url), 15000);
       showToast(isExec ? "Executive Career Summary PDF downloaded successfully!" : "Full Psychometric Report PDF downloaded successfully!");
     } catch (e: any) {
       console.error("Direct Chromium PDF generation error:", e);
-      showToast(`PDF Export Notice: ${e.message || 'Generation failed'}`);
+      const iframe = document.querySelector('iframe');
+      if (iframe && iframe.contentWindow) {
+        showToast("Opening print dialog to Save as PDF...");
+        iframe.contentWindow.focus();
+        iframe.contentWindow.print();
+      } else {
+        showToast(`PDF Export Notice: ${e.message || 'Generation failed'}`);
+      }
+    } finally {
+      window.dispatchEvent(new CustomEvent('pdf-download-complete'));
+      window.dispatchEvent(new CustomEvent('summary-download-complete'));
     }
   }
 
@@ -2291,7 +2303,7 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
                   <div className="as-stream-card" data-stream="science" onClick={() => setStreamStep('science')}>
                     <div className="as-stream-card-glow" />
                     <div className="as-stream-card-top">
-                      <div className="as-stream-card-icon" style={{ background: 'linear-gradient(135deg,#690B1B,#A01428)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <div className="as-stream-card-icon" style={{ background: 'linear-gradient(135deg,#2563EB,#1D4ED8)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                         <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M9 3v4.615l-5.615 9.4A2 2 0 0 0 5 21h14a2 2 0 0 0 1.615-3.985L15 7.615V3"></path><path d="M9 3h6"></path><path d="M5.5 16h13"></path></svg>
                       </div>
                       <div className="as-stream-card-arrow">›</div>
@@ -2300,9 +2312,9 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
                     <div className="as-stream-card-sub">Physics · Chemistry · Maths / Biology</div>
                     <div className="as-stream-card-desc">Engineering, Medical, Research, and Technology tracks tailored to your subjects.</div>
                     <div className="as-stream-card-tags">
-                      <span className="as-stream-tag" style={{ background:'rgba(105,11,27,.1)', color:'#690B1B' }}>PCM</span>
-                      <span className="as-stream-tag" style={{ background:'rgba(105,11,27,.1)', color:'#690B1B' }}>PCB</span>
-                      <span className="as-stream-tag" style={{ background:'rgba(105,11,27,.1)', color:'#690B1B' }}>PCMB</span>
+                      <span className="as-stream-tag" style={{ background:'rgba(37, 99, 235,.1)', color:'#2563EB' }}>PCM</span>
+                      <span className="as-stream-tag" style={{ background:'rgba(37, 99, 235,.1)', color:'#2563EB' }}>PCB</span>
+                      <span className="as-stream-tag" style={{ background:'rgba(37, 99, 235,.1)', color:'#2563EB' }}>PCMB</span>
                     </div>
                     <div className="as-stream-card-cta">Select Stream →</div>
                   </div>
@@ -2360,20 +2372,20 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
                   <button className="as-stream-back-btn" onClick={() => setStreamStep('main')}>
                     ← Back to streams
                   </button>
-                  <div className="as-stream-hd-badge" style={{ background:'rgba(105,11,27,.08)', color:'#690B1B' }}>🔬 Step 2 of 2</div>
-                  <h2>Choose your <span style={{ color:'#690B1B' }}>Science</span> combination</h2>
+                  <div className="as-stream-hd-badge" style={{ background:'rgba(37, 99, 235,.08)', color:'#2563EB' }}>🔬 Step 2 of 2</div>
+                  <h2>Choose your <span style={{ color:'#2563EB' }}>Science</span> combination</h2>
                   <p>Your subject combination determines your entrance exam eligibility and engineering/medical roadmap.</p>
                 </div>
 
                 <div className="as-stream-sub-grid">
                   {/* PCM */}
                   <div className="as-stream-sub-card" onClick={() => startAssessmentWithStream('science-pcm')}>
-                    <div className="as-stream-sub-card-glow" style={{ background: 'radial-gradient(circle at 80% 20%, rgba(105,11,27,.12), transparent 60%)' }} />
+                    <div className="as-stream-sub-card-glow" style={{ background: 'radial-gradient(circle at 80% 20%, rgba(37, 99, 235,.12), transparent 60%)' }} />
                     <div className="as-stream-sub-header">
-                      <div className="as-stream-sub-icon" style={{ background:'linear-gradient(135deg,#690B1B,#A01428)', boxShadow:'0 8px 24px rgba(105,11,27,.3)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <div className="as-stream-sub-icon" style={{ background:'linear-gradient(135deg,#2563EB,#1D4ED8)', boxShadow:'0 8px 24px rgba(37, 99, 235,.3)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path></svg>
                       </div>
-                      <div className="as-stream-sub-badge" style={{ background:'rgba(105,11,27,.1)', color:'#690B1B' }}>PCM</div>
+                      <div className="as-stream-sub-badge" style={{ background:'rgba(37, 99, 235,.1)', color:'#2563EB' }}>PCM</div>
                     </div>
                     <div className="as-stream-sub-name">Physics, Chemistry &amp; Mathematics</div>
                     <div className="as-stream-sub-subjects">
@@ -2386,7 +2398,7 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
                         <span>JEE Main</span><span>JEE Adv</span><span>CUET</span><span>CETs</span>
                       </div>
                     </div>
-                    <div className="as-stream-sub-cta" style={{ color:'#690B1B' }}>Start PCM Assessment →</div>
+                    <div className="as-stream-sub-cta" style={{ color:'#2563EB' }}>Start PCM Assessment →</div>
                   </div>
 
                   {/* PCB */}
@@ -2416,7 +2428,7 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
                   <div className="as-stream-sub-card" onClick={() => startAssessmentWithStream('science-pcmb')}>
                     <div className="as-stream-sub-card-glow" style={{ background: 'radial-gradient(circle at 80% 20%, rgba(201,165,93,.14), transparent 60%)' }} />
                     <div className="as-stream-sub-header">
-                      <div className="as-stream-sub-icon" style={{ background:'linear-gradient(135deg,#C9A55D,#D4AF37)', boxShadow:'0 8px 24px rgba(201,165,93,.3)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <div className="as-stream-sub-icon" style={{ background:'linear-gradient(135deg,#0284C7,#D4AF37)', boxShadow:'0 8px 24px rgba(201,165,93,.3)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path><path d="M2 12h20"></path></svg>
                       </div>
                       <div className="as-stream-sub-badge" style={{ background:'rgba(201,165,93,.15)', color:'#8B6914' }}>PCMB</div>
@@ -2587,7 +2599,7 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
                   }
                 }}
                 className="as-btn as-btn-primary"
-                style={{ width: '100%', padding: '1rem', fontSize: '1.1rem', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px', background: '#690B1B' }}
+                style={{ width: '100%', padding: '1rem', fontSize: '1.1rem', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px', background: '#2563EB' }}
               >
                 Start Parent Psychometric Test →
               </button>
@@ -2634,23 +2646,23 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
                 {/* Premium Card */}
                 <div 
                   onClick={() => setPayModalOpen(true)}
-                  style={{ flex: '1 1 300px', background: '#fff', borderRadius: '24px', padding: '32px', border: '2px solid #690B1B', cursor: 'pointer', transition: 'all 0.3s', display: 'flex', flexDirection: 'column', position: 'relative', overflow: 'hidden' }}
-                  onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = '0 20px 40px rgba(105, 11, 27, 0.15)'; }}
+                  style={{ flex: '1 1 300px', background: '#fff', borderRadius: '24px', padding: '32px', border: '2px solid #2563EB', cursor: 'pointer', transition: 'all 0.3s', display: 'flex', flexDirection: 'column', position: 'relative', overflow: 'hidden' }}
+                  onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = '0 20px 40px rgba(37, 99, 235, 0.15)'; }}
                   onMouseLeave={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = 'none'; }}
                 >
-                  <div style={{ position: 'absolute', top: 0, right: 0, background: '#690B1B', color: '#fff', padding: '6px 16px', borderBottomLeftRadius: '16px', fontSize: '11px', fontWeight: 800, letterSpacing: '0.5px' }}>RECOMMENDED</div>
+                  <div style={{ position: 'absolute', top: 0, right: 0, background: '#2563EB', color: '#fff', padding: '6px 16px', borderBottomLeftRadius: '16px', fontSize: '11px', fontWeight: 800, letterSpacing: '0.5px' }}>RECOMMENDED</div>
                   <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: '#FFF5F5', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px' }}>
-                    <Star size={24} color="#690B1B" />
+                    <Star size={24} color="#2563EB" />
                   </div>
                   <h3 style={{ fontSize: '24px', fontWeight: 700, marginBottom: '12px', color: '#111827' }}>Detailed Dossier</h3>
                   <p style={{ color: '#6B7280', fontSize: '15px', lineHeight: 1.6, flexGrow: 1 }}>Unlock your complete 360° psychological profile, step-by-step career roadmaps, and university finder.</p>
                   <ul style={{ margin: '24px 0', padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '14px', fontSize: '14px', color: '#4B5563', fontWeight: 500 }}>
-                    <li style={{ display: 'flex', gap: '10px', alignItems: 'center' }}><CheckCircle2 size={18} color="#690B1B" /> Full Big-Five & RIASEC Analysis</li>
-                    <li style={{ display: 'flex', gap: '10px', alignItems: 'center' }}><CheckCircle2 size={18} color="#690B1B" /> Interactive Career Roadmaps</li>
-                    <li style={{ display: 'flex', gap: '10px', alignItems: 'center' }}><CheckCircle2 size={18} color="#690B1B" /> Global Study Abroad Finder</li>
-                    <li style={{ display: 'flex', gap: '10px', alignItems: 'center' }}><CheckCircle2 size={18} color="#690B1B" /> Detailed Action Plans & Milestones</li>
+                    <li style={{ display: 'flex', gap: '10px', alignItems: 'center' }}><CheckCircle2 size={18} color="#2563EB" /> Full Big-Five & RIASEC Analysis</li>
+                    <li style={{ display: 'flex', gap: '10px', alignItems: 'center' }}><CheckCircle2 size={18} color="#2563EB" /> Interactive Career Roadmaps</li>
+                    <li style={{ display: 'flex', gap: '10px', alignItems: 'center' }}><CheckCircle2 size={18} color="#2563EB" /> Global Study Abroad Finder</li>
+                    <li style={{ display: 'flex', gap: '10px', alignItems: 'center' }}><CheckCircle2 size={18} color="#2563EB" /> Detailed Action Plans & Milestones</li>
                   </ul>
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', fontSize: '15px', fontWeight: 700, color: '#fff', textAlign: 'center', padding: '14px', background: 'linear-gradient(to right, #690B1B, #8A1226)', borderRadius: '12px', marginTop: 'auto' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', fontSize: '15px', fontWeight: 700, color: '#fff', textAlign: 'center', padding: '14px', background: 'linear-gradient(to right, #2563EB, #1D4ED8)', borderRadius: '12px', marginTop: 'auto' }}>
                     <Lock size={18} /> Unlock for ₹49
                   </div>
                 </div>
@@ -2721,7 +2733,7 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '60vh', gap: '16px' }}>
               <div style={{ fontSize: '18px', fontWeight: 600, color: '#374151' }}>Unable to load assessment report.</div>
-              <button className="as-btn as-btn-primary" onClick={restartApp} style={{ background: '#690B1B', color: '#fff', padding: '10px 24px', borderRadius: '8px' }}>
+              <button className="as-btn as-btn-primary" onClick={restartApp} style={{ background: '#2563EB', color: '#fff', padding: '10px 24px', borderRadius: '8px' }}>
                 Retake Assessment
               </button>
             </div>
@@ -2733,7 +2745,7 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
       {juniorGradeSelectorOpen && (
         <div className="as-crm-overlay" style={{ zIndex: 1001 }}>
           <div className="as-crm-modal" style={{ maxWidth: '420px', borderRadius: '16px', overflow: 'hidden', padding: 0, boxShadow: '0 20px 60px rgba(0,0,0,0.4)', border: '1px solid rgba(255,255,255,0.1)' }}>
-            <div style={{ background: 'linear-gradient(135deg, #690B1B, #690b1b)', color: '#fff', padding: '28px 24px', position: 'relative', textAlign: 'center' }}>
+            <div style={{ background: 'linear-gradient(135deg, #2563EB, #2563EB)', color: '#fff', padding: '28px 24px', position: 'relative', textAlign: 'center' }}>
               <button 
                 onClick={() => setJuniorGradeSelectorOpen(false)}
                 style={{ position: 'absolute', top: '16px', right: '16px', background: 'transparent', border: 'none', color: 'rgba(255,255,255,0.7)', cursor: 'pointer', padding: '4px', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '50%' }}
@@ -2779,10 +2791,10 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
                       overflow: 'hidden'
                     }}
                     onMouseEnter={(e) => {
-                      e.currentTarget.style.borderColor = '#690b1b';
+                      e.currentTarget.style.borderColor = '#2563EB';
                       e.currentTarget.style.background = '#FFF5F5';
                       e.currentTarget.style.transform = 'translateY(-2px)';
-                      e.currentTarget.style.boxShadow = '0 4px 12px rgba(105, 11, 27, 0.1)';
+                      e.currentTarget.style.boxShadow = '0 4px 12px rgba(37, 99, 235, 0.1)';
                       const arrow = e.currentTarget.querySelector('.arrow-icon');
                       if (arrow) (arrow as HTMLElement).style.transform = 'translateX(4px)';
                     }}
@@ -2799,7 +2811,7 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
                       <div style={{ fontSize: '16px', fontWeight: 700, color: '#111827' }}>{g.label}</div>
                       <div style={{ fontSize: '13px', color: '#6B7280', marginTop: '4px' }}>{g.sub}</div>
                     </div>
-                    <div className="arrow-icon" style={{ color: '#690b1b', transition: 'transform 0.2s', display: 'flex', alignItems: 'center' }}>
+                    <div className="arrow-icon" style={{ color: '#2563EB', transition: 'transform 0.2s', display: 'flex', alignItems: 'center' }}>
                       <ChevronRight size={20} />
                     </div>
                   </button>
@@ -2815,7 +2827,7 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
       {payModalOpen && (
         <div className="as-crm-overlay" style={{ zIndex: 1000 }}>
           <div className="as-crm-modal" style={{ maxWidth: '420px', borderRadius: '16px', overflow: 'hidden', padding: 0 }}>
-            <div style={{ background: '#690B1B', color: '#fff', padding: '20px 24px', position: 'relative' }}>
+            <div style={{ background: '#2563EB', color: '#fff', padding: '20px 24px', position: 'relative' }}>
               <div style={{ fontSize: '10px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.8px', color: 'rgba(255,255,255,0.7)', marginBottom: '4px' }}>Secure Payment Gateway</div>
               <h3 style={{ fontSize: '18px', fontWeight: 700, margin: 0 }}>CLARVO</h3>
               <button 
@@ -2829,7 +2841,7 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
             <div style={{ padding: '24px', background: 'var(--card)' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'var(--bg)', border: '1px solid var(--border)', borderRadius: '8px', padding: '12px 16px', marginBottom: '20px' }}>
                 <span style={{ fontSize: '14px', color: 'var(--t2)', fontWeight: 500 }}>Unlock Complete Dossier</span>
-                <span style={{ fontSize: '16px', fontWeight: 800, color: '#690B1B' }}>₹49.00</span>
+                <span style={{ fontSize: '16px', fontWeight: 800, color: '#2563EB' }}>₹49.00</span>
               </div>
               
               <div style={{ marginBottom: '20px' }}>
@@ -2843,7 +2855,7 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
                         alignItems: 'center',
                         gap: '10px',
                         padding: '12px',
-                        border: idx === 0 ? '1.5px solid #690B1B' : '1.5px solid var(--border)',
+                        border: idx === 0 ? '1.5px solid #2563EB' : '1.5px solid var(--border)',
                         borderRadius: '10px',
                         background: 'var(--bg)',
                         fontSize: '13px',
@@ -2852,8 +2864,8 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
                         cursor: 'pointer'
                       }}
                     >
-                      <div style={{ width: '16px', height: '16px', borderRadius: '50%', border: '2px solid #690B1B', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        {idx === 0 && <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#690B1B' }} />}
+                      <div style={{ width: '16px', height: '16px', borderRadius: '50%', border: '2px solid #2563EB', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        {idx === 0 && <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#2563EB' }} />}
                       </div>
                       {method}
                     </div>
@@ -2871,7 +2883,7 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
                   showToast("🎉 Payment successful! Full dossier unlocked.");
                 }}
                 style={{
-                  background: '#690B1B',
+                  background: '#2563EB',
                   color: '#fff',
                   width: '100%',
                   padding: '14px',
@@ -2879,7 +2891,7 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
                   fontSize: '14px',
                   fontWeight: 700,
                   border: 'none',
-                  boxShadow: '0 4px 12px rgba(105, 11, 27, 0.3)',
+                  boxShadow: '0 4px 12px rgba(37, 99, 235, 0.3)',
                   cursor: 'pointer'
                 }}
               >

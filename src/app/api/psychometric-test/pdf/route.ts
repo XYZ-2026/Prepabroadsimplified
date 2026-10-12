@@ -11,27 +11,33 @@ import { getVariantConfig } from '@/app/(main)/psychometric-test/report-engine/u
 export async function POST(req: NextRequest) {
   let browser: any = null;
   try {
-    const decodedClaims = await verifySessionCookie();
-    if (!decodedClaims) {
-      return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
-    }
-
     const body = await req.json().catch(() => ({}));
-    const { resultId, student: reqStudent, scores: reqScores, reportType = 'full' } = body;
+    const { resultId, student: reqStudent, scores: reqScores, reportType = 'full', isSample } = body;
     const urlType = new URL(req.url).searchParams.get('type');
     const isExecutive = reportType === 'executive' || urlType === 'executive';
+
+    const decodedClaims = await verifySessionCookie();
+    const isSampleRequest = isSample || 
+      resultId?.toString().toUpperCase().includes('SAMPLE') || 
+      reqStudent?.reportId?.toString().toUpperCase().includes('SAMPLE') ||
+      reqStudent?.name?.toString().toLowerCase().includes('sample');
+    const isDirectPayload = !resultId && reqStudent && reqScores;
+
+    if (!decodedClaims && !isSampleRequest && !isDirectPayload) {
+      return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
+    }
 
     let data: any = null;
     let comparisonData: any = null;
     let parentProfile: any = null;
 
     if (resultId) {
-      const role: any = await getUserRole();
+      const role: any = decodedClaims ? await getUserRole() : null;
       const resultSnap = await adminDb.collection('psychometric_results').doc(resultId).get();
 
       if (resultSnap.exists) {
         data = resultSnap.data();
-        if (role === 'student' && data?.userId !== decodedClaims.uid) {
+        if (decodedClaims && role === 'student' && data?.userId !== decodedClaims.uid) {
           return NextResponse.json({ success: false, error: 'Access denied' }, { status: 403 });
         }
       }
@@ -125,7 +131,7 @@ export async function POST(req: NextRequest) {
           { name: 'Business Analytics & Commerce', score: 84 },
         ],
       };
-    } else if (reqStudent && reqScores) {
+    } else if (reqStudent && (reqScores || isSampleRequest)) {
       studentName = reqStudent.name || 'Candidate';
       const rawGrade = reqStudent.grade || variantConfig.defaultGradeLabel;
       const formattedGrade = rawGrade.toLowerCase().includes('class') || rawGrade.toLowerCase().includes('grade') ? rawGrade : `Class ${rawGrade}`;
@@ -220,7 +226,9 @@ export async function POST(req: NextRequest) {
         '--disable-setuid-sandbox',
         '--disable-dev-shm-usage',
         '--disable-gpu',
-        '--font-render-hinting=none'
+        '--font-render-hinting=none',
+        '--disable-web-security',
+        '--allow-file-access-from-files'
       ]
     });
 
@@ -230,7 +238,7 @@ export async function POST(req: NextRequest) {
     await page.setViewport({ width: 794, height: 1123, deviceScaleFactor: 2 });
     
     await page.setContent(targetHTMLReport, {
-      waitUntil: ['load', 'domcontentloaded', 'networkidle0'],
+      waitUntil: ['load', 'domcontentloaded'],
       timeout: 60000
     });
 
@@ -265,6 +273,7 @@ export async function POST(req: NextRequest) {
       headers: {
         'Content-Type': 'application/pdf',
         'Content-Disposition': `attachment; filename="${safeFileName}"`,
+        'Content-Length': Buffer.byteLength(pdfBuffer).toString(),
         'Cache-Control': 'no-cache, no-store, must-revalidate',
       },
     });

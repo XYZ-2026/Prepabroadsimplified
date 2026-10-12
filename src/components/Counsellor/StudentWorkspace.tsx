@@ -128,11 +128,14 @@ export default function StudentWorkspace({
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
+      setTimeout(() => URL.revokeObjectURL(url), 15000);
     } catch (e) {
       console.error('Download error:', e);
       alert('Failed to download PDF. Please try again.');
     } finally {
       setIsDownloading(null);
+      window.dispatchEvent(new CustomEvent('pdf-download-complete'));
+      window.dispatchEvent(new CustomEvent('summary-download-complete'));
     }
   };
 

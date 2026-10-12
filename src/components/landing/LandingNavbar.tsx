@@ -26,7 +26,7 @@ export default function LandingNavbar() {
     { label: 'Assessments', targetId: 'assessments', href: '#assessments' },
     { label: 'The Journey', targetId: 'journey', href: '#journey' },
     { label: 'Features', targetId: 'features', href: '#features' },
-    { label: 'AI Advisor', targetId: 'ai-advisor', href: '#ai-advisor' },
+    { label: 'Student Stories', targetId: 'testimonials', href: '#testimonials' },
     { label: 'About Us', targetId: 'about-us', href: '/about-us', isPage: true },
   ];
 

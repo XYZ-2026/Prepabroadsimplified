@@ -978,7 +978,7 @@ export function buildClass10ExecutiveHTMLReport(
 
   // Career Fitment List
   const careerFitmentList = scores.careerFitment || [
-    { name: "Science Stream – Engineering & Tech Track (PCM)", score: 95, color: "#690B1B" },
+    { name: "Science Stream – Engineering & Tech Track (PCM)", score: 95, color: "#2563EB" },
     { name: "Commerce, Business & Management Stream", score: 88, color: "#C9A55D" },
     { name: "Science Stream – Medical & Life Sciences Track (PCB)", score: 82, color: "#057A55" },
     { name: "Humanities & Creative Arts Stream", score: 78, color: "#7E3AF2" }
@@ -1031,21 +1031,21 @@ export function buildClass10ExecutiveHTMLReport(
                 extend: {
                     colors: {
                         maroon: {
-                            DEFAULT: '#6B0919',
-                            dark: '#4A0E17',
-                            light: '#8D1225',
-                            deep: '#36050D'
+                            DEFAULT: '#1E40AF',
+                            dark: '#0B1528',
+                            light: '#3B82F6',
+                            deep: '#060C18'
                         },
                         gold: {
-                            DEFAULT: '#D4AF37',
-                            light: '#F3E5AB',
-                            dark: '#AA820A',
-                            accent: '#C5A059'
+                            DEFAULT: '#F59E0B',
+                            light: '#FEF3C7',
+                            dark: '#D97706',
+                            accent: '#FBBF24'
                         },
-                        obsidian: '#0F0F14',
-                        charcoal: '#1E1E28',
-                        cream: '#FAF8F5',
-                        parchment: '#F2EBDC'
+                        obsidian: '#080F1C',
+                        charcoal: '#1E293B',
+                        cream: '#FFFFFF',
+                        parchment: '#F8FAFC'
                     },
                     fontFamily: {
                         sans: ['Poppins', 'sans-serif'],
@@ -1060,17 +1060,41 @@ export function buildClass10ExecutiveHTMLReport(
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <style>
-        body, p, h1, h2, h3, h4, h5, h6, span, div, table, th, td, button, a, nav, header, footer, section {
+        body, p, h1, h2, h3, h4, h5, h6, table, th, td, button, a, nav, header, footer, section {
             font-family: 'Poppins', sans-serif !important;
         }
 
-        .fa, .fas, .far, .fal, .fad, .fab, .fa-solid, .fa-regular, .fa-brands {
+        /* Strict icon font specificity so icons never get overwritten by Poppins */
+        i[class*="fa-"], span[class*="fa-"], .fa, .fas, .far, .fal, .fad, .fab, .fa-solid, .fa-regular, .fa-brands {
             font-family: "Font Awesome 6 Free", "Font Awesome 6 Brands", sans-serif !important;
+            font-weight: 900 !important;
+            font-style: normal !important;
+            display: inline-block !important;
+            line-height: 1 !important;
+        }
+
+        /* High-contrast clarity rules for badges and dark headers */
+        .bg-maroon, .bg-blue-600 {
+            background-color: #2563EB !important;
+            color: #FFFFFF !important;
+        }
+        .bg-maroon-dark {
+            background-color: #0B1528 !important;
+            color: #FFFFFF !important;
+        }
+        .bg-maroon-dark .text-gold, .bg-maroon .text-gold, .maroon-gradient .text-gold {
+            color: #FBBF24 !important;
+        }
+        .text-maroon {
+            color: #1E40AF !important;
+        }
+        .text-maroon-dark {
+            color: #0B1528 !important;
         }
 
         body {
-            background-color: #FAF8F5;
-            color: #1E1E28;
+            background-color: #F8FAFC;
+            color: #344054;
             margin: 0;
             padding: 0;
             -webkit-print-color-adjust: exact !important;
@@ -1090,7 +1114,7 @@ export function buildClass10ExecutiveHTMLReport(
             max-height: 297mm;
             padding: 12mm;
             box-sizing: border-box;
-            background: #FAF8F5;
+            background: #FFFFFF;
             position: relative;
             display: flex;
             flex-direction: column;
@@ -1122,12 +1146,12 @@ export function buildClass10ExecutiveHTMLReport(
         }
 
         .maroon-gradient {
-            background: linear-gradient(135deg, #36050D 0%, #4A0E17 50%, #6B0919 100%);
+            background: linear-gradient(135deg, #1D4ED8 0%, #1E3A8A 50%, #172554 100%);
         }
 
         .gold-card-glow {
-            border: 1px solid rgba(212, 175, 55, 0.35);
-            box-shadow: 0 4px 15px rgba(107, 9, 25, 0.08);
+            border: 1px solid rgba(37, 99, 235, 0.35);
+            box-shadow: 0 4px 15px rgba(30, 58, 138, 0.12);
         }
     </style>
 </head>
@@ -1830,18 +1854,24 @@ export function buildClass10ExecutiveHTMLReport(
 
         <!-- PAGE 7: ABOUT THIS ASSESSMENT PAGE -->
         <section class="as-report-page avoid-break" id="page-7" data-page="7">
-            <div class="bg-white p-6 rounded-3xl border-2 border-gold shadow-xl flex flex-col justify-between h-full space-y-4">
+            <div class="bg-white p-6 rounded-3xl border-2 border-blue-200 shadow-xl flex flex-col justify-between h-full space-y-4">
                 <!-- Header -->
-                <div class="border-b-2 border-maroon/20 pb-3 flex items-center justify-between shrink-0">
+                <div class="border-b-2 border-blue-100 pb-3 flex items-center justify-between shrink-0">
                     <div class="flex items-center space-x-3">
-                        <div class="w-9 h-9 rounded-xl bg-maroon text-gold font-extrabold flex items-center justify-center text-base shadow">
+                        <div class="w-10 h-10 rounded-xl bg-blue-600 text-amber-300 font-extrabold flex items-center justify-center text-base shadow">
                             <i class="fa-solid fa-circle-info"></i>
                         </div>
                         <div>
-                            <h2 class="text-lg font-extrabold text-maroon-dark uppercase tracking-wider">
+                            <h2 class="text-lg font-extrabold text-slate-900 uppercase tracking-wider">
                                 About This Psychometric Assessment Matrix
                             </h2>
-                            <p class="text-[11px] text-slate-600">Arc                <!-- 4 Diagnostic Phases Grid -->
+                            <p class="text-[11px] text-slate-500 font-medium">Architectural Diagnostic Matrix &amp; Multi-Phase Evaluation Framework</p>
+                        </div>
+                    </div>
+                    <span class="text-[11px] font-extrabold text-blue-700 bg-blue-50 border border-blue-200 px-2.5 py-0.5 rounded-full uppercase">Page 07</span>
+                </div>
+
+                <!-- 4 Diagnostic Phases Grid -->
                 <div class="space-y-3 my-auto text-xs shrink-0">
                     <div class="text-slate-600 leading-relaxed text-[11px]">
                         ${variantConfig.assessmentDescription}
@@ -1849,50 +1879,58 @@ export function buildClass10ExecutiveHTMLReport(
 
                     <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
                         <!-- Phase I -->
-                        <div class="bg-cream p-3.5 rounded-xl border border-gold/40 space-y-1.5 flex flex-col justify-between shadow-sm">
+                        <div class="bg-slate-50/70 p-3.5 rounded-xl border border-slate-200 space-y-1.5 flex flex-col justify-between shadow-sm">
                             <div>
-                                <div class="w-7 h-7 rounded-lg bg-maroon text-gold font-bold flex items-center justify-center text-[11px] mb-1">P1</div>
-                                <h4 class="font-extrabold text-maroon text-[11px] uppercase">Phase I: Personality</h4>
+                                <div class="w-8 h-8 rounded-lg bg-blue-600 text-white font-extrabold flex items-center justify-center text-xs shadow-sm mb-1.5">
+                                    <i class="fa-solid fa-user-astronaut text-amber-300 mr-1 text-[11px]"></i>P1
+                                </div>
+                                <h4 class="font-extrabold text-blue-800 text-[11px] uppercase tracking-wide">Phase I: Personality</h4>
                                 <p class="text-[10px] text-slate-600 mt-0.5 leading-tight">Evaluates Big Five dimensions (Openness, Conscientiousness, Extraversion, Agreeableness, Emotional Stability) &amp; behavioral drivers.</p>
                             </div>
-                            <span class="text-[9px] font-bold text-gold-dark bg-gold/20 px-1.5 py-0.5 rounded text-center block mt-1">Modules 01–10</span>
+                            <span class="text-[9px] font-bold text-blue-700 bg-blue-100/70 border border-blue-200 px-2 py-0.5 rounded text-center block mt-1">Modules 01–10</span>
                         </div>
 
                         <!-- Phase II -->
-                        <div class="bg-cream p-3.5 rounded-xl border border-gold/40 space-y-1.5 flex flex-col justify-between shadow-sm">
+                        <div class="bg-slate-50/70 p-3.5 rounded-xl border border-slate-200 space-y-1.5 flex flex-col justify-between shadow-sm">
                             <div>
-                                <div class="w-7 h-7 rounded-lg bg-maroon text-gold font-bold flex items-center justify-center text-[11px] mb-1">P2</div>
-                                <h4 class="font-extrabold text-maroon text-[11px] uppercase">Phase II: Cognitive</h4>
+                                <div class="w-8 h-8 rounded-lg bg-indigo-600 text-white font-extrabold flex items-center justify-center text-xs shadow-sm mb-1.5">
+                                    <i class="fa-solid fa-brain text-amber-300 mr-1 text-[11px]"></i>P2
+                                </div>
+                                <h4 class="font-extrabold text-indigo-800 text-[11px] uppercase tracking-wide">Phase II: Cognitive</h4>
                                 <p class="text-[10px] text-slate-600 mt-0.5 leading-tight">Measures Fluid Logic (Gf), Quantitative Reasoning, Verbal Comprehension, Spatial Visualization, and Working Memory.</p>
                             </div>
-                            <span class="text-[9px] font-bold text-gold-dark bg-gold/20 px-1.5 py-0.5 rounded text-center block mt-1">Modules 11–20</span>
+                            <span class="text-[9px] font-bold text-indigo-700 bg-indigo-100/70 border border-indigo-200 px-2 py-0.5 rounded text-center block mt-1">Modules 11–20</span>
                         </div>
 
                         <!-- Phase III -->
-                        <div class="bg-cream p-3.5 rounded-xl border border-gold/40 space-y-1.5 flex flex-col justify-between shadow-sm">
+                        <div class="bg-slate-50/70 p-3.5 rounded-xl border border-slate-200 space-y-1.5 flex flex-col justify-between shadow-sm">
                             <div>
-                                <div class="w-7 h-7 rounded-lg bg-maroon text-gold font-bold flex items-center justify-center text-[11px] mb-1">P3</div>
-                                <h4 class="font-extrabold text-maroon text-[11px] uppercase">Phase III: Execution</h4>
+                                <div class="w-8 h-8 rounded-lg bg-cyan-700 text-white font-extrabold flex items-center justify-center text-xs shadow-sm mb-1.5">
+                                    <i class="fa-solid fa-bolt text-amber-300 mr-1 text-[11px]"></i>P3
+                                </div>
+                                <h4 class="font-extrabold text-cyan-900 text-[11px] uppercase tracking-wide">Phase III: Execution</h4>
                                 <p class="text-[10px] text-slate-600 mt-0.5 leading-tight">Identifies VARK sensory study modalities, Grit, Time Blocking, Exam Arousal Optimization, and Spatial Kinematics.</p>
                             </div>
-                            <span class="text-[9px] font-bold text-gold-dark bg-gold/20 px-1.5 py-0.5 rounded text-center block mt-1">Modules 21–28</span>
+                            <span class="text-[9px] font-bold text-cyan-800 bg-cyan-100/70 border border-cyan-200 px-2 py-0.5 rounded text-center block mt-1">Modules 21–28</span>
                         </div>
 
                         <!-- Phase IV -->
-                        <div class="bg-cream p-3.5 rounded-xl border border-gold/40 space-y-1.5 flex flex-col justify-between shadow-sm">
+                        <div class="bg-slate-50/70 p-3.5 rounded-xl border border-slate-200 space-y-1.5 flex flex-col justify-between shadow-sm">
                             <div>
-                                <div class="w-7 h-7 rounded-lg bg-maroon text-gold font-bold flex items-center justify-center text-[11px] mb-1">P4</div>
-                                <h4 class="font-extrabold text-maroon text-[11px] uppercase">Phase IV: Alignment</h4>
+                                <div class="w-8 h-8 rounded-lg bg-slate-800 text-white font-extrabold flex items-center justify-center text-xs shadow-sm mb-1.5">
+                                    <i class="fa-solid fa-compass text-amber-300 mr-1 text-[11px]"></i>P4
+                                </div>
+                                <h4 class="font-extrabold text-slate-900 text-[11px] uppercase tracking-wide">Phase IV: Alignment</h4>
                                 <p class="text-[10px] text-slate-600 mt-0.5 leading-tight">${variant === 'senior' ? 'Holland RIASEC Interest Mapping & Degree Specialization across STEM, Business, Law, Design, and Social Sciences.' : variant === 'junior' ? 'Holland RIASEC Interest Mapping & Foundational Vectors across STEM Discovery, Creative Arts, and Interdisciplinary Inquiry.' : 'Holland RIASEC Interest Mapping & Master Stream Integration across PCM, PCB, Commerce, and Humanities pathways.'}</p>
                             </div>
-                            <span class="text-[9px] font-bold text-gold-dark bg-gold/20 px-1.5 py-0.5 rounded text-center block mt-1">Modules 29–30</span>
+                            <span class="text-[9px] font-bold text-slate-800 bg-slate-200/70 border border-slate-300 px-2 py-0.5 rounded text-center block mt-1">Modules 29–30</span>
                         </div>
                     </div>
 
                     <!-- Strategic Utility Box -->
-                    <div class="bg-maroon-dark text-white p-4 rounded-2xl border-2 border-gold shadow-lg space-y-2">
-                        <h3 class="font-extrabold text-xs text-gold uppercase tracking-wider flex items-center gap-1.5">
-                            <i class="fa-solid fa-bullseye text-gold"></i> Strategic Value for ${variantConfig.shortStageLabel} Candidates
+                    <div class="bg-[#0B1528] text-white p-4 rounded-2xl border border-blue-400/30 shadow-lg space-y-2">
+                        <h3 class="font-extrabold text-xs text-amber-400 uppercase tracking-wider flex items-center gap-2">
+                            <i class="fa-solid fa-bullseye text-amber-400"></i> Strategic Value for ${variantConfig.shortStageLabel} Candidates
                         </h3>
                         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs text-slate-200">
                             <div class="space-y-0.5">
@@ -3786,9 +3824,9 @@ export function buildClass10ExecutiveHTMLReport(
     <!-- Chart.js Setup with Poppins Font -->
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            const maroon = '#6B0919';
-            const gold = '#D4AF37';
-            const goldDark = '#AA820A';
+            const maroon = '#2563EB';
+            const gold = '#080F1C';
+            const goldDark = '#1D4ED8';
 
             Chart.defaults.font.family = 'Poppins';
 
@@ -3801,11 +3839,11 @@ export function buildClass10ExecutiveHTMLReport(
                     datasets: [{
                         label: '${name} Profile',
                         data: [${oSc}, ${cSc}, ${eSc}, ${aSc}, ${esSc}, ${reasSc}, ${topVarkCode === 'V' ? 90 : 75}, ${aSc}],
-                        backgroundColor: 'rgba(107, 9, 25, 0.25)',
+                        backgroundColor: 'rgba(37, 99, 235, 0.15)',
                         borderColor: maroon,
                         borderWidth: 3,
-                        pointBackgroundColor: gold,
-                        pointBorderColor: maroon,
+                        pointBackgroundColor: '#2563EB',
+                        pointBorderColor: '#080F1C',
                         pointRadius: 4
                     }]
                 },
@@ -3818,7 +3856,7 @@ export function buildClass10ExecutiveHTMLReport(
                             suggestedMin: 0,
                             suggestedMax: 100,
                             ticks: { stepSize: 20, font: { family: 'Poppins', size: 8.5 } },
-                            pointLabels: { font: { family: 'Poppins', size: 9, weight: '600' }, color: '#1E1E28' }
+                            pointLabels: { font: { family: 'Poppins', size: 9, weight: '600' }, color: '#080F1C' }
                         }
                     },
                     plugins: { legend: { display: false } }
@@ -3858,7 +3896,7 @@ export function buildClass10ExecutiveHTMLReport(
                     labels: ['Visual (${topVarkCode === 'V' ? 35 : 25}%)', 'Read/Write (${topVarkCode === 'R' ? 35 : 25}%)', 'Kinesthetic (${topVarkCode === 'K' ? 35 : 25}%)', 'Auditory (${topVarkCode === 'A' ? 35 : 25}%)'],
                     datasets: [{
                         data: [${topVarkCode === 'V' ? 35 : 25}, ${topVarkCode === 'R' ? 35 : 25}, ${topVarkCode === 'K' ? 35 : 25}, ${topVarkCode === 'A' ? 35 : 25}],
-                        backgroundColor: [maroon, gold, '#1E1E28', '#C5A059'],
+                        backgroundColor: [maroon, goldDark, '#080F1C', '#60A5FA'],
                         borderWidth: 2,
                         borderColor: '#ffffff'
                     }]
@@ -3881,10 +3919,10 @@ export function buildClass10ExecutiveHTMLReport(
                     datasets: [{
                         data: [${aSc}, ${esSc}, ${aSc}, ${eSc}],
                         backgroundColor: [
-                            'rgba(107, 9, 25, 0.75)',
-                            'rgba(212, 175, 55, 0.75)',
-                            'rgba(30, 30, 40, 0.75)',
-                            'rgba(197, 160, 89, 0.75)'
+                            'rgba(37, 99, 235, 0.75)',
+                            'rgba(8, 15, 28, 0.75)',
+                            'rgba(52, 64, 84, 0.75)',
+                            'rgba(96, 165, 250, 0.75)'
                         ]
                     }]
                 },

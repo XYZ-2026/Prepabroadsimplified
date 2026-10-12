@@ -1,6 +1,6 @@
 .greetingBox {
   background: white;
-  border-left: 5px solid var(--color-red-deep, #690b1b);
+  border-left: 5px solid var(--color-red-deep, #2563EB);
   border-radius: 12px;
   padding: 16px 24px;
   display: flex;
@@ -12,11 +12,11 @@
   color: var(--text-heading, #111827);
 }
 .greetingName {
-  color: var(--color-red-deep, #690b1b);
+  color: var(--color-red-deep, #2563EB);
 }
 
 .heroCard {
-  background: linear-gradient(135deg, var(--color-red-deep, #690b1b) 0%, #b31616 100%);
+  background: linear-gradient(135deg, var(--color-red-deep, #2563EB) 0%, #b31616 100%);
   border-radius: 20px;
   padding: 40px;
   color: white;
@@ -101,14 +101,14 @@
   transition: all 0.3s ease;
 }
 .stepCircleActive {
-  background: var(--color-red-deep, #690b1b);
+  background: var(--color-red-deep, #2563EB);
   color: white;
   box-shadow: 0 4px 12px rgba(105, 11, 27, 0.3);
 }
 .stepCircleDone {
   background: white;
-  color: var(--color-red-deep, #690b1b);
-  border-color: var(--color-red-deep, #690b1b);
+  color: var(--color-red-deep, #2563EB);
+  border-color: var(--color-red-deep, #2563EB);
 }
 .stepLabel {
   font-size: 11px;
@@ -164,7 +164,7 @@
 
 .inputGroup input:focus,
 .inputGroup select:focus {
-  border-color: var(--color-red-deep, #690b1b);
+  border-color: var(--color-red-deep, #2563EB);
   background: #ffffff;
   box-shadow: 0 0 0 4px rgba(105, 11, 27, 0.08);
 }

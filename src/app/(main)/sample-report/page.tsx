@@ -32,7 +32,7 @@ function injectSampleWatermark(html: string): string {
         font-size: 72px;
         font-weight: 900;
         font-family: 'Poppins', sans-serif;
-        color: rgba(105, 11, 27, 0.06);
+        color: rgba(8, 15, 28, 0.06);
         letter-spacing: 12px;
         pointer-events: none;
         z-index: 999;
@@ -84,10 +84,57 @@ function SampleReportViewerContent() {
   // Inject watermark
   const watermarkedHtml = injectSampleWatermark(reportHtml);
 
-  // Upsell handler for download buttons
-  const handleDownloadUpsell = useCallback(() => {
-    setShowUpsellModal(true);
-  }, []);
+  // Direct PDF download handler for sample reports
+  const handleDownload = useCallback(async (downloadMode: 'full' | 'executive') => {
+    try {
+      const res = await fetch('/api/psychometric-test/pdf', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          isSample: true,
+          reportType: downloadMode,
+          assessmentType: variant,
+          variant: variant,
+          student: {
+            name: `${student.name} (Sample)`,
+            grade: gradeLabel,
+            school: student.school,
+            city: student.city,
+            date: student.date,
+            reportId: student.reportId,
+          },
+          scores: SAMPLE_SCORES,
+        }),
+      });
+
+      if (!res.ok) {
+        throw new Error(`Failed to generate sample PDF (Status: ${res.status})`);
+      }
+
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      const fileTag = variant === 'junior' ? 'Junior' : variant === 'senior' ? 'Class12' : 'Class10';
+      a.download = downloadMode === 'executive'
+        ? `Sample_${fileTag}_Executive_Career_Summary.pdf`
+        : `Sample_${fileTag}_Full_Psychometric_Report.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(() => URL.revokeObjectURL(url), 15000);
+    } catch (err) {
+      console.warn('Backend sample PDF generation fallback to print:', err);
+      const iframe = document.querySelector('iframe');
+      if (iframe && iframe.contentWindow) {
+        iframe.contentWindow.focus();
+        iframe.contentWindow.print();
+      }
+    } finally {
+      window.dispatchEvent(new CustomEvent('pdf-download-complete'));
+      window.dispatchEvent(new CustomEvent('summary-download-complete'));
+    }
+  }, [variant, student, gradeLabel]);
 
   const backHref = `/psychometric-test?type=${type === 'junior' ? 'junior' : type === 'grade12' ? 'grade12' : 'grade10'}`;
 
@@ -101,8 +148,8 @@ function SampleReportViewerContent() {
         studentGrade={gradeLabel}
         reportId={student.reportId}
         onSwitchMode={(newMode) => setViewMode(newMode)}
-        onDownloadFull={handleDownloadUpsell}
-        onDownloadSummary={handleDownloadUpsell}
+        onDownloadFull={() => handleDownload('full')}
+        onDownloadSummary={() => handleDownload('executive')}
         backHref={backHref}
         backLabel={`Back to ${gradeLabel} Assessment`}
       />
@@ -128,7 +175,7 @@ function SampleReportViewerContent() {
         </div>
       </div>
 
-      {/* ── Upsell Modal (shown when user tries to download) ── */}
+      {/* ── Upsell Modal (shown when user wants custom dossier) ── */}
       {showUpsellModal && (
         <div className="sr-upsell-overlay" onClick={() => setShowUpsellModal(false)}>
           <div className="sr-upsell-modal" onClick={(e) => e.stopPropagation()}>
@@ -141,17 +188,16 @@ function SampleReportViewerContent() {
             </button>
 
             <div className="sr-upsell-icon-wrap">
-              <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#690B1B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#2563EB" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
                 <path d="M7 11V7a5 5 0 0 1 10 0v4" />
               </svg>
             </div>
 
-            <h3 className="sr-upsell-title">Download Your Own Report</h3>
+            <h3 className="sr-upsell-title">Personalised Student Report</h3>
 
             <p className="sr-upsell-desc">
-              Sample reports cannot be downloaded. Take the {gradeLabel} Psychometric Assessment
-              to receive your own personalised, downloadable PDF report.
+              Take the {gradeLabel} Psychometric Assessment to receive your own customized, official dossier with psychologist advisory metrics.
             </p>
 
             <div className="sr-upsell-features">
@@ -176,6 +222,17 @@ function SampleReportViewerContent() {
             <a href={backHref} className="sr-upsell-cta-btn">
               START YOUR ASSESSMENT →
             </a>
+
+            <button
+              className="sr-upsell-cta-btn"
+              style={{ background: '#F1F5F9', color: '#2563EB', border: '1.5px solid #CBD5E1', marginTop: '10px' }}
+              onClick={() => {
+                setShowUpsellModal(false);
+                handleDownload(viewMode);
+              }}
+            >
+              📥 Download Sample {viewMode === 'executive' ? '15P Summary' : '56P Report'} PDF
+            </button>
 
             <button
               className="sr-upsell-dismiss"

@@ -1,11 +1,11 @@
 /* ============================================================
    ASSESSMENT PAGE STYLES
    Color theme mapped to project palette:
-   #690B1B = primary red (was #DC2626)
-   #7A1022 = dark red hover (was #B91C1C)
-   #FFF0F2 = light red tint (was #FEF2F2)
-   #C9A55D = gold/amber accent (was #D97706)
-   #F6F4F2 = background (was #F9FAFB)
+   #2563EB = primary blue (Clarvo brand)
+   #1D4ED8 = dark blue hover
+   #E8F0FF = light blue tint
+   #2563EB = accent blue
+   #F8FAFC = background
    ============================================================ */
 
 body.test-active .topbar,
@@ -14,33 +14,36 @@ body.test-active .sidebar-overlay {
   display: none !important;
 }
 
-body.test-active .main-content {
+body.test-active .main-content,
+body.test-active .footer {
   margin-left: 0 !important;
   padding-top: 0 !important;
+  width: 100% !important;
+  max-width: 100% !important;
 }
 
 
 .assessment-root {
-  --red: #690B1B;
-  --red-d: #7A1022;
-  --red-l: #FFF0F2;
-  --purple: #7E3AF2;
-  --green: #057A55;
-  --green-l: #F3FAF7;
-  --amber: #C9A55D;
-  --teal: #0694A2;
-  --bg: #F6F4F2;
+  --red: #2563EB;
+  --red-d: #1D4ED8;
+  --red-l: #E8F0FF;
+  --purple: #6366F1;
+  --green: #16A34A;
+  --green-l: #F0FDF4;
+  --amber: #F59E0B;
+  --teal: #0284C7;
+  --bg: #F8FAFC;
   --bg2: #FFFFFF;
   --card: #FFFFFF;
-  --border: #E5E7EB;
-  --border2: #D1D5DB;
-  --t1: #111111;
-  --t2: #374151;
-  --t3: #6B7280;
-  --t4: #9CA3AF;
-  --sh: 0 1px 3px rgba(0,0,0,.08);
-  --sh-md: 0 4px 12px rgba(0,0,0,.09);
-  --sh-lg: 0 10px 40px rgba(0,0,0,.11);
+  --border: #E4E7EC;
+  --border2: #D0D5DD;
+  --t1: #080F1C;
+  --t2: #344054;
+  --t3: #667085;
+  --t4: #98A2B3;
+  --sh: 0 1px 3px rgba(0,0,0,.06);
+  --sh-md: 0 4px 12px rgba(0,0,0,.07);
+  --sh-lg: 0 10px 40px rgba(0,0,0,.08);
   --r: 12px;
   --rl: 20px;
   --font: var(--font-primary);
@@ -375,15 +378,15 @@ body.test-active .main-content {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  background: rgba(105,11,27,.07);
-  color: #690B1B;
+  background: #E8F0FF;
+  color: #2563EB;
   font-size: 11px;
   font-weight: 700;
   padding: 5px 14px;
   border-radius: 100px;
   letter-spacing: .5px;
   text-transform: uppercase;
-  border: 1px solid rgba(105,11,27,.15);
+  border: 1px solid rgba(37,99,235,.2);
 }
 
 .as-details-overview-hd h2 {
@@ -1018,7 +1021,7 @@ body.test-active .main-content {
   line-height: 1.7;
   opacity: .82;
   font-style: italic;
-  border-left: 3px solid #690B1B;
+  border-left: 3px solid #2563EB;
   padding-left: 14px;
   margin: 16px 0;
 }
@@ -1377,11 +1380,11 @@ body.test-active .main-content {
   overflow: hidden;
 }
 
-.as-psych-card::before { content: ''; position: absolute; top: -60px; right: -60px; width: 240px; height: 240px; background: rgba(105,11,27,.08); border-radius: 50%; }
-.as-psych-card::after { content: ''; position: absolute; bottom: -60px; left: -40px; width: 200px; height: 200px; background: rgba(105,11,27,.05); border-radius: 50%; }
-.as-psych-badge { display: inline-flex; background: rgba(105,11,27,.2); border: 1px solid rgba(105,11,27,.4); color: #FCA5A5; font-size: 11px; font-weight: 700; padding: 4px 14px; border-radius: 100px; margin-bottom: 16px; letter-spacing: .5px; text-transform: uppercase; }
+.as-psych-card::before { content: ''; position: absolute; top: -60px; right: -60px; width: 240px; height: 240px; background: rgba(37,99,235,.08); border-radius: 50%; }
+.as-psych-card::after { content: ''; position: absolute; bottom: -60px; left: -40px; width: 200px; height: 200px; background: rgba(37,99,235,.05); border-radius: 50%; }
+.as-psych-badge { display: inline-flex; background: #E8F0FF; border: 1px solid rgba(37,99,235,.3); color: #2563EB; font-size: 11px; font-weight: 700; padding: 4px 14px; border-radius: 100px; margin-bottom: 16px; letter-spacing: .5px; text-transform: uppercase; }
 .as-psych-title { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 900; margin-bottom: 8px; letter-spacing: -.5px; }
-.as-psych-title .r { color: #690B1B; }
+.as-psych-title .r { color: #2563EB; }
 .as-psych-sub { font-size: 14px; opacity: .6; margin-bottom: 28px; }
 .as-psych-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; position: relative; z-index: 1; }
 .as-psych-block { background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.1); border-radius: 12px; padding: 20px; }
@@ -1425,7 +1428,7 @@ body.test-active .main-content {
   left: 0;
   width: 100%;
   height: 4px;
-  background: linear-gradient(90deg, #690B1B, #C9A55D);
+  background: linear-gradient(90deg, #2563EB, #1D4ED8);
   opacity: 0;
   transition: opacity 0.3s ease;
 }
@@ -1453,8 +1456,8 @@ body.test-active .main-content {
 .as-abroad-code {
   font-size: 10.5px;
   font-weight: 850;
-  color: #690B1B;
-  background: rgba(105,11,27,0.06);
+  color: #2563EB;
+  background: #E8F0FF;
   padding: 2.5px 8px;
   border-radius: 6px;
   letter-spacing: 0.5px;
@@ -1567,8 +1570,8 @@ body.test-active .main-content {
   display: inline-flex;
   align-items: center;
   gap: 7px;
-  background: rgba(105,11,27,.07);
-  color: #690B1B;
+  background: rgba(37,99,235,.07);
+  color: #2563EB;
   font-size: 12px;
   font-weight: 700;
   padding: 5px 16px;
@@ -1705,7 +1708,7 @@ body.test-active .main-content {
   font-weight: 300;
 }
 
-.as-stream-card[data-stream="science"]:hover   .as-stream-card-arrow { background: #690B1B; border-color: #690B1B; color: #fff; transform: translateX(4px); }
+.as-stream-card[data-stream="science"]:hover   .as-stream-card-arrow { background: #2563EB; border-color: #2563EB; color: #fff; transform: translateX(4px); }
 .as-stream-card[data-stream="commerce"]:hover  .as-stream-card-arrow { background: #057A55; border-color: #057A55; color: #fff; transform: translateX(4px); }
 .as-stream-card[data-stream="humanities"]:hover .as-stream-card-arrow { background: #7E3AF2; border-color: #7E3AF2; color: #fff; transform: translateX(4px); }
 
@@ -1762,7 +1765,7 @@ body.test-active .main-content {
   gap: 6px;
 }
 
-.as-stream-card[data-stream="science"]:hover   .as-stream-card-cta { color: #690B1B; }
+.as-stream-card[data-stream="science"]:hover   .as-stream-card-cta { color: #2563EB; }
 .as-stream-card[data-stream="commerce"]:hover  .as-stream-card-cta { color: #057A55; }
 .as-stream-card[data-stream="humanities"]:hover .as-stream-card-cta { color: #7E3AF2; }
 
@@ -2051,22 +2054,22 @@ body.test-active .main-content {
 
 .as-nv-hdr { display: flex; justify-content: space-between; align-items: center; }
 .as-nv-hdr-left { display: flex; align-items: center; gap: 10px; }
-.as-nv-hdr-logo { width: 34px; height: 34px; background: #690B1B; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 900; color: #fff; flex-shrink: 0; }
+.as-nv-hdr-logo { width: 34px; height: 34px; background: #2563EB; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 900; color: #fff; flex-shrink: 0; }
 .as-nv-hdr-brand { font-size: 14px; font-weight: 800; color: #111; letter-spacing: -.3px; }
 .as-nv-hdr-eng { font-size: 9px; color: #9CA3AF; font-weight: 600; letter-spacing: .5px; text-transform: uppercase; margin-top: 1px; }
 .as-nv-hdr-right { text-align: right; }
-.as-nv-hdr-pill { display: inline-block; background: #690B1B; color: #fff; font-size: 9px; font-weight: 800; padding: 3px 10px; border-radius: 4px; letter-spacing: .4px; margin-bottom: 4px; }
+.as-nv-hdr-pill { display: inline-block; background: #2563EB; color: #fff; font-size: 9px; font-weight: 800; padding: 3px 10px; border-radius: 4px; letter-spacing: .4px; margin-bottom: 4px; }
 .as-nv-hdr-rid { font-size: 10px; color: #6B7280; font-weight: 700; letter-spacing: .3px; }
-.as-nv-score-big { font-family: 'Playfair Display', Georgia, serif; font-size: 56px; font-weight: 900; color: #690B1B; line-height: 1; }
+.as-nv-score-big { font-family: 'Playfair Display', Georgia, serif; font-size: 56px; font-weight: 900; color: #2563EB; line-height: 1; }
 .as-nv-score-lbl { font-size: 11px; color: #6B7280; font-weight: 600; margin-top: 8px; }
-.as-nv-score-desc-box { border-left: 3px solid #690B1B; background: #FFF8F8; border-radius: 0 8px 8px 0; padding: 16px; font-size: 12px; color: #374151; line-height: 1.7; display: flex; align-items: center; }
+.as-nv-score-desc-box { border-left: 3px solid #2563EB; background: #E8F0FF; border-radius: 0 8px 8px 0; padding: 16px; font-size: 12px; color: #374151; line-height: 1.7; display: flex; align-items: center; }
 .as-nv-resp-table { width: 100%; border-collapse: collapse; border-radius: 8px; overflow: hidden; border: 1.5px solid #E5E7EB; }
-.as-nv-resp-q { padding: 10px 14px; font-size: 11px; font-weight: 700; color: #690B1B; border-bottom: 1px solid #E5E7EB; background: #FFF8F8; width: 44%; line-height: 1.4; }
+.as-nv-resp-q { padding: 10px 14px; font-size: 11px; font-weight: 700; color: #2563EB; border-bottom: 1px solid #E5E7EB; background: #E8F0FF; width: 44%; line-height: 1.4; }
 .as-nv-resp-a { padding: 10px 14px; font-size: 11.5px; color: #374151; border-bottom: 1px solid #E5E7EB; background: #fff; line-height: 1.4; }
 .as-nv-career-item { border: 1.5px solid #E5E7EB; border-radius: 10px; padding: 14px 16px; margin-bottom: 10px; }
-.as-nv-career-arrow-num { font-size: 13px; font-weight: 900; color: #690B1B; }
+.as-nv-career-arrow-num { font-size: 13px; font-weight: 900; color: #2563EB; }
 .as-nv-career-name { font-size: 14px; font-weight: 900; color: #111; }
-.as-nv-rm-icon { width: 42px; height: 42px; border-radius: 50%; background: #690B1B; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 900; flex-shrink: 0; }
+.as-nv-rm-icon { width: 42px; height: 42px; border-radius: 50%; background: #2563EB; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 900; flex-shrink: 0; }
 .as-nv-pg-heading { font-family: 'Poppins', sans-serif; font-size: 30px; font-weight: 900; color: #111; letter-spacing: -.6px; margin-bottom: 3px; }
 .as-nv-pg-sub { font-size: 12px; color: #9CA3AF; font-weight: 500; margin-bottom: 20px; }
 

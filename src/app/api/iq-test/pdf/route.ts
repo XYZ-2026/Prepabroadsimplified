@@ -60,8 +60,8 @@ export async function GET(request: Request) {
     .certificate-frame {
       width: 100%;
       height: 100%;
-      border: 4px solid #690b1b;
-      outline: 2px solid #d97706;
+      border: 4px solid #2563EB;
+      outline: 2px solid #38BDF8;
       outline-offset: -10px;
       padding: 12mm 16mm;
       background: #ffffff;
@@ -70,14 +70,14 @@ export async function GET(request: Request) {
       flex-direction: column;
       justify-content: space-between;
       text-align: center;
-      box-shadow: inset 0 0 40px rgba(105, 11, 27, 0.04);
+      box-shadow: inset 0 0 40px rgba(37, 99, 235, 0.04);
     }
     
     .corner-decor {
       position: absolute;
       width: 24px;
       height: 24px;
-      border: 3px solid #d97706;
+      border: 3px solid #38BDF8;
     }
     .top-left { top: 12px; left: 12px; border-right: none; border-bottom: none; }
     .top-right { top: 12px; right: 12px; border-left: none; border-bottom: none; }
@@ -92,7 +92,7 @@ export async function GET(request: Request) {
       font-family: 'Cinzel', serif;
       font-size: 18.5px;
       font-weight: 800;
-      color: #690b1b;
+      color: #2563EB;
       letter-spacing: 2px;
       text-transform: uppercase;
       white-space: nowrap;
@@ -101,7 +101,7 @@ export async function GET(request: Request) {
     .subtitle {
       font-size: 11px;
       font-weight: 600;
-      color: #b45309;
+      color: #0284C7;
       letter-spacing: 2px;
       text-transform: uppercase;
       margin-top: 4px;
@@ -115,7 +115,7 @@ export async function GET(request: Request) {
       font-family: 'Cinzel', serif;
       font-size: 28px;
       font-weight: 700;
-      color: #0f172a;
+      color: #080F1C;
       letter-spacing: 2px;
       text-transform: uppercase;
     }
@@ -133,9 +133,9 @@ export async function GET(request: Request) {
       font-family: 'Cinzel', serif;
       font-size: 32px;
       font-weight: 800;
-      color: #690b1b;
+      color: #080F1C;
       margin: 10px 0;
-      border-bottom: 2px solid #f1f5f9;
+      border-bottom: 2px solid #E8F0FF;
       display: inline-block;
       padding-bottom: 4px;
     }
@@ -167,7 +167,7 @@ export async function GET(request: Request) {
       font-family: 'Cinzel', serif;
       font-size: 26px;
       font-weight: 800;
-      color: #690b1b;
+      color: #2563EB;
     }
     
     .score-card-lbl {

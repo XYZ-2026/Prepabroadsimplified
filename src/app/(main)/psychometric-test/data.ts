@@ -1,6 +1,6 @@
 // ============================================================
 // ASSESSMENT DATA — extracted from PSY.html
-// Color theme mapped to project palette (#690B1B, #C9A55D)
+// Color theme mapped to project palette (#2563EB, #1D4ED8)
 // ============================================================
 
 export interface Question {
@@ -49,7 +49,7 @@ export interface SectionMeta {
 
 export const SEC_META: SectionMeta[] = [
   {
-    id: 1, name: 'Aptitude Assessment', icon: '🧠', color: '#690B1B', type: 'mcq',
+    id: 1, name: 'Aptitude Assessment', icon: '🧠', color: '#2563EB', type: 'mcq',
     desc: 'Tests your cognitive abilities and problem-solving skills.',
     why: 'Aptitude scores reveal your natural cognitive strengths — verbal, numerical, reasoning, and spatial — that predict academic and career success across disciplines.',
     whyPoints: [
@@ -95,7 +95,7 @@ export const SEC_META: SectionMeta[] = [
     ]
   },
   {
-    id: 5, name: 'Career Values Explorer', icon: '💼', color: '#690B1B', type: 'choice',
+    id: 5, name: 'Career Values Explorer', icon: '💼', color: '#2563EB', type: 'choice',
     desc: 'Clarifies what matters most to you in a career through structured value prioritisation.',
     why: 'Career values are the invisible compass that determines long-term job satisfaction. Research shows that value-job alignment is a stronger predictor of fulfillment than salary or prestige alone.',
     whyPoints: [
@@ -111,7 +111,7 @@ export const FBQ: { sections: Section[] } = {
   sections: [
     // ─── SECTION 1 — APTITUDE (20 MCQ, Grade 8-12 depth) ───────────────────────
     {
-      id: 1, name: 'Aptitude Assessment', icon: '🧠', color: '#690B1B', type: 'mcq',
+      id: 1, name: 'Aptitude Assessment', icon: '🧠', color: '#2563EB', type: 'mcq',
       description: 'Tests cognitive abilities and problem-solving skills.',
       questions: [
         // VERBAL (5)
@@ -232,7 +232,7 @@ export const FBQ: { sections: Section[] } = {
 
     // ─── SECTION 5 — CAREER VALUES (20 choice, Grade 8-12 depth) ────────────────
     {
-      id: 5, name: 'Career Values Explorer', icon: '💼', color: '#690B1B', type: 'choice',
+      id: 5, name: 'Career Values Explorer', icon: '💼', color: '#2563EB', type: 'choice',
       description: 'Career values prioritisation.',
       questions: [
         { id: 81, text: 'Which long-term career vision resonates most deeply with who you want to become?', options: ['Building products that fundamentally reshape how society lives and creates', 'Dedicating your entire career to uplifting the lives of the most vulnerable', 'Achieving complete financial independence and freedom before the age of 40', 'Rising to a position of genuine authority where you shape national policy'], option_types: ['creativity', 'helping', 'financial', 'leadership'], correct: -1, trait: 'values' },
@@ -261,43 +261,43 @@ export const FBQ: { sections: Section[] } = {
 };
 
 export const CAREER_CLUSTERS: CareerCluster[] = [
-  { name: 'Software Engineering & IT', codes: ['I', 'R', 'C'], color: '#690B1B', streams: ['science-pcm', 'science-pcmb'] },
+  { name: 'Software Engineering & IT', codes: ['I', 'R', 'C'], color: '#2563EB', streams: ['science-pcm', 'science-pcmb'] },
   { name: 'Data Science & AI', codes: ['I', 'C', 'R'], color: '#7E3AF2', streams: ['science-pcm', 'science-pcmb'] },
   { name: 'Mechanical Engineering', codes: ['R', 'I', 'C'], color: '#057A55', streams: ['science-pcm', 'science-pcmb'] },
   { name: 'Civil Engineering & Architecture', codes: ['R', 'A', 'I'], color: '#C9A55D', streams: ['science-pcm', 'science-pcmb'] },
   { name: 'Electrical & Electronics Eng.', codes: ['R', 'I', 'C'], color: '#0694A2', streams: ['science-pcm', 'science-pcmb'] },
-  { name: 'Aerospace & Defence', codes: ['R', 'I', 'E'], color: '#690B1B', streams: ['science-pcm', 'science-pcmb'] },
+  { name: 'Aerospace & Defence', codes: ['R', 'I', 'E'], color: '#2563EB', streams: ['science-pcm', 'science-pcmb'] },
   { name: 'Robotics & Automation', codes: ['R', 'I', 'C'], color: '#7E3AF2', streams: ['science-pcm', 'science-pcmb'] },
   { name: 'Pure Science & Research', codes: ['I', 'R', 'A'], color: '#057A55', streams: ['science-pcm', 'science-pcb', 'science-pcmb'] },
-  { name: 'Medicine & Surgery', codes: ['I', 'S', 'R'], color: '#690B1B', streams: ['science-pcb', 'science-pcmb'] },
+  { name: 'Medicine & Surgery', codes: ['I', 'S', 'R'], color: '#2563EB', streams: ['science-pcb', 'science-pcmb'] },
   { name: 'Pharmacy & Drug Research', codes: ['I', 'R', 'C'], color: '#0694A2', streams: ['science-pcb', 'science-pcmb'] },
   { name: 'Biotechnology & Genetics', codes: ['I', 'R', 'A'], color: '#7E3AF2', streams: ['science-pcb', 'science-pcmb'] },
   { name: 'Nursing & Allied Health', codes: ['S', 'I', 'R'], color: '#057A55', streams: ['science-pcb', 'science-pcmb'] },
   { name: 'Dental Sciences', codes: ['I', 'R', 'S'], color: '#C9A55D', streams: ['science-pcb', 'science-pcmb'] },
   { name: 'Agriculture & Veterinary', codes: ['R', 'I', 'S'], color: '#057A55', streams: ['science-pcb', 'science-pcmb'] },
   { name: 'Environmental Science', codes: ['I', 'R', 'S'], color: '#0694A2', streams: ['science-pcm', 'science-pcb', 'science-pcmb'] },
-  { name: 'Chartered Accountancy & Audit', codes: ['C', 'I', 'E'], color: '#690B1B', streams: ['commerce-maths', 'commerce-without-maths'] },
+  { name: 'Chartered Accountancy & Audit', codes: ['C', 'I', 'E'], color: '#2563EB', streams: ['commerce-maths', 'commerce-without-maths'] },
   { name: 'Finance & Investment Banking', codes: ['C', 'E', 'I'], color: '#7E3AF2', streams: ['commerce-maths', 'commerce-without-maths'] },
   { name: 'Economics & Policy', codes: ['I', 'S', 'E'], color: '#057A55', streams: ['commerce-maths', 'humanities'] },
   { name: 'Business Management & MBA', codes: ['E', 'C', 'S'], color: '#C9A55D', streams: ['commerce-maths', 'commerce-without-maths'] },
-  { name: 'Marketing & Advertising', codes: ['E', 'A', 'S'], color: '#690B1B', streams: ['commerce-maths', 'commerce-without-maths', 'humanities'] },
+  { name: 'Marketing & Advertising', codes: ['E', 'A', 'S'], color: '#2563EB', streams: ['commerce-maths', 'commerce-without-maths', 'humanities'] },
   { name: 'Human Resources & OB', codes: ['S', 'E', 'C'], color: '#0694A2', streams: ['commerce-maths', 'commerce-without-maths'] },
   { name: 'Actuarial Science & Risk', codes: ['C', 'I', 'R'], color: '#7E3AF2', streams: ['commerce-maths'] },
   { name: 'Supply Chain & Operations', codes: ['C', 'R', 'E'], color: '#057A55', streams: ['commerce-maths', 'commerce-without-maths'] },
   { name: 'Law & Legal Services', codes: ['I', 'S', 'E'], color: '#C9A55D', streams: ['humanities', 'commerce-without-maths'] },
-  { name: 'Civil Services & Governance', codes: ['S', 'E', 'I'], color: '#690B1B', streams: ['humanities', 'commerce-maths'] },
+  { name: 'Civil Services & Governance', codes: ['S', 'E', 'I'], color: '#2563EB', streams: ['humanities', 'commerce-maths'] },
   { name: 'Journalism & Mass Media', codes: ['A', 'S', 'E'], color: '#7E3AF2', streams: ['humanities'] },
   { name: 'Psychology & Counselling', codes: ['S', 'I', 'A'], color: '#057A55', streams: ['humanities'] },
   { name: 'Education & Teaching', codes: ['S', 'A', 'C'], color: '#0694A2', streams: ['humanities', 'science-pcm', 'science-pcb', 'science-pcmb'] },
-  { name: 'Social Work & NGO', codes: ['S', 'A', 'E'], color: '#690B1B', streams: ['humanities'] },
+  { name: 'Social Work & NGO', codes: ['S', 'A', 'E'], color: '#2563EB', streams: ['humanities'] },
   { name: 'Fashion & Textile Design', codes: ['A', 'R', 'E'], color: '#7E3AF2', streams: ['humanities'] },
   { name: 'Graphic & UI/UX Design', codes: ['A', 'I', 'R'], color: '#C9A55D', streams: ['humanities', 'science-pcm'] },
-  { name: 'Film Making & Visual Arts', codes: ['A', 'S', 'E'], color: '#690B1B', streams: ['humanities'] },
+  { name: 'Film Making & Visual Arts', codes: ['A', 'S', 'E'], color: '#2563EB', streams: ['humanities'] },
   { name: 'Hospitality & Hotel Mgmt.', codes: ['S', 'E', 'R'], color: '#057A55', streams: ['humanities', 'commerce-without-maths'] },
   { name: 'Sports Management & Fitness', codes: ['R', 'S', 'E'], color: '#0694A2', streams: ['humanities', 'science-pcb'] },
   { name: 'Interior & Product Design', codes: ['A', 'R', 'I'], color: '#C9A55D', streams: ['humanities', 'science-pcm'] },
   { name: 'Animation & Game Design', codes: ['A', 'I', 'R'], color: '#7E3AF2', streams: ['humanities', 'science-pcm'] },
-  { name: 'Entrepreneurship & Startups', codes: ['E', 'A', 'S'], color: '#690B1B', streams: ['commerce-maths', 'commerce-without-maths', 'science-pcm', 'humanities'] },
+  { name: 'Entrepreneurship & Startups', codes: ['E', 'A', 'S'], color: '#2563EB', streams: ['commerce-maths', 'commerce-without-maths', 'science-pcm', 'humanities'] },
   { name: 'International Business & Trade', codes: ['E', 'C', 'I'], color: '#0694A2', streams: ['commerce-maths', 'commerce-without-maths'] },
   { name: 'Cybersecurity & Networking', codes: ['I', 'R', 'C'], color: '#057A55', streams: ['science-pcm', 'science-pcmb'] },
   { name: 'Petroleum & Mining Eng.', codes: ['R', 'I', 'C'], color: '#C9A55D', streams: ['science-pcm', 'science-pcmb'] },
@@ -640,7 +640,7 @@ export const GRADE_10_VALUES_QUESTIONS: Question[] = [
 export const FBQ_GRADE10: { sections: Section[] } = {
   sections: [
     {
-      id: 1, name: "Aptitude Assessment 🧠", icon: "🧠", color: "#690B1B", type: "mcq",
+      id: 1, name: "Aptitude Assessment 🧠", icon: "🧠", color: "#2563EB", type: "mcq",
       description: "Tests cognitive abilities, reasoning, and problem-solving skills across 30 foundational questions.",
       questions: [
         { id: 1, text: "Your class teacher asks for a volunteer to lead a science exhibition team. What would you most likely do?", options: ["Volunteer to lead the team.", "Join the team and support the leader.", "Help only if someone asks me.", "Observe first before deciding."], correct: 0, trait: "verbal" },
@@ -861,7 +861,7 @@ export const FBQ_JUNIOR: { sections: Section[] } = {
   sections: [
     // ── SECTION 1 — APTITUDE (20 simple MCQ for Grade 7-9) ──────────────────
     {
-      id: 1, name: 'Brain Puzzles & Patterns', icon: '🧠', color: '#690B1B', type: 'mcq',
+      id: 1, name: 'Brain Puzzles & Patterns', icon: '🧠', color: '#2563EB', type: 'mcq',
       description: 'Fun patterns, matching pairs, and brain teasers to test how you think!',
       questions: JUNIOR_APTITUDE_QUESTIONS,
     },
@@ -957,7 +957,7 @@ export const FBQ_JUNIOR: { sections: Section[] } = {
 
     // ── SECTION 5 — CAREER VALUES (20 simple choice for Grade 7-9) ───────────
     {
-      id: 5, name: 'What Matters to You? 💼', icon: '💼', color: '#690B1B', type: 'choice',
+      id: 5, name: 'What Matters to You? 💼', icon: '💼', color: '#2563EB', type: 'choice',
       description: 'Pick the option that feels most "YOU" — there are no wrong answers!',
       questions: [
         { id: 81, text: '🌟 When you grow up, what is the most important thing you want from your job?', options: ['To create something amazing and new 🎨', 'To help and take care of people 💛', 'To earn lots of money 💰', 'To be a respected leader or boss 👑'], option_types: ['creativity', 'helping', 'financial', 'leadership'], correct: -1, trait: 'values' },

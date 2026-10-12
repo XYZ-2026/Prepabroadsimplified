@@ -295,6 +295,15 @@ h5, h6 {
   animation: pageSlideIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
+/* Ensure fixed viewports like report viewer and assessment shells are not trapped in transform containing block */
+.page-transition:has(.report-viewer-shell),
+body:has(.report-viewer-shell) .page-transition,
+.page-transition:has([data-fixed-viewport="true"]) {
+  animation: none !important;
+  transform: none !important;
+  min-height: 100vh;
+}
+
 @keyframes pageSlideIn {
   from {
     opacity: 0;
@@ -302,7 +311,7 @@ h5, h6 {
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: none;
   }
 }
 
@@ -431,13 +440,13 @@ h5, h6 {
 }
 
 .report-btn-print {
-  background: var(--color-red-deep, #690b1b);
+  background: var(--color-red-deep, #2563EB);
   color: #ffffff;
 }
 
 .report-btn-print:hover {
-  background: #4a0713;
-  box-shadow: 0 2px 6px rgba(105, 11, 27, 0.25);
+  background: #1D4ED8;
+  box-shadow: 0 2px 6px rgba(37, 99, 235, 0.25);
 }
 
 .report-btn-close {

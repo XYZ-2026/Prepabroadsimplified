@@ -51,7 +51,15 @@ export async function verifySessionCookie() {
           const payload = JSON.parse(Buffer.from(parts[1], 'base64').toString('utf-8'));
           const now = Math.floor(Date.now() / 1000);
           if (payload.exp && payload.exp > now) {
-            return payload;
+            const claims = payload.claims || {};
+            return {
+              uid: payload.uid || payload.sub || 'user',
+              email: payload.email || claims.email || '',
+              role: payload.role || claims.role || '',
+              admin: payload.admin || claims.admin || false,
+              ...claims,
+              ...payload,
+            };
           }
         }
       } catch {}

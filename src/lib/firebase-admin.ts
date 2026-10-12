@@ -18,11 +18,23 @@ let adminDb: Firestore;
 
 try {
   if (!getApps().length) {
-    let rawKey = process.env.FIREBASE_ADMIN_PRIVATE_KEY || '';
-    if (rawKey.startsWith('"') && rawKey.endsWith('"')) {
-      rawKey = rawKey.slice(1, -1);
+    let rawKey = (process.env.FIREBASE_ADMIN_PRIVATE_KEY || '').trim();
+    
+    // Check if base64 encoded
+    if (!rawKey.includes('-----BEGIN') && rawKey.length > 80) {
+      try {
+        const decoded = Buffer.from(rawKey, 'base64').toString('utf-8');
+        if (decoded.includes('-----BEGIN')) {
+          rawKey = decoded.trim();
+        }
+      } catch {}
     }
-    const privateKey = rawKey.replace(/\\n/g, '\n');
+
+    // Strip wrapping double or single quotes
+    if ((rawKey.startsWith('"') && rawKey.endsWith('"')) || (rawKey.startsWith("'") && rawKey.endsWith("'"))) {
+      rawKey = rawKey.slice(1, -1).trim();
+    }
+    const privateKey = rawKey.replace(/\\n/g, '\n').replace(/\r\n/g, '\n');
 
     // Safe diagnostics (never log actual secrets)
     console.log('[Firebase Admin] Project ID configured:', !!process.env.FIREBASE_ADMIN_PROJECT_ID);

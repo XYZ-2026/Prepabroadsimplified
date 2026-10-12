@@ -31,7 +31,7 @@ export async function POST(request: NextRequest) {
           admin: true,
           updatedAt: new Date(),
         }, { merge: true });
-      } catch {}
+      } catch { }
     } else if (cleanEmail === 'counsellor@as.com' && password === 'counsellor123') {
       // Direct Counsellor Demo Authentication
       const { adminAuth } = await import('@/lib/firebase-admin');
@@ -74,8 +74,8 @@ export async function POST(request: NextRequest) {
     try {
       const { adminDb } = await import('@/lib/firebase-admin');
       const { autoAllotAllUnassignedStudents } = await import('@/lib/sjf-allotment');
-      autoAllotAllUnassignedStudents(adminDb).catch(() => {});
-    } catch {}
+      autoAllotAllUnassignedStudents(adminDb).catch(() => { });
+    } catch { }
 
     // Resolve target redirect from verified cookie claims
     let redirectUrl = '/dashboard/student/profile';
@@ -94,7 +94,7 @@ export async function POST(request: NextRequest) {
           redirectUrl = '/dashboard/counsellor';
         }
       }
-    } catch {}
+    } catch { }
 
     // Create the response
     const response = NextResponse.json({ success: true, redirectUrl }, { status: 200 });

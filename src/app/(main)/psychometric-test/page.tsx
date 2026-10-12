@@ -890,7 +890,7 @@ function getDynamicStudyAbroad(careerName: string, studentName: string) {
         rationale: `${stdName} can gain international legal perspective and credentials by studying law abroad. An international law degree provides pathways to global arbitration, corporate law, and diplomacy.`,
         countries: [
           { flag: "🇬🇧", name: "United Kingdom", reason: "The cradle of Common Law. Oxford, Cambridge, and LSE offer highly prestigious LLB programs that are directly applicable to corporate law and international arbitration." },
-          { flag: "🇺🇸", name: "United States", reason: "Offers top-tier Juris Doctor (JD) and LLM programs at Ivy League law schools, providing access to international corporate law firms and human rights organizations." },
+          { flag: "🇺🇸", name: "United States", reason: "Offers top-tier Juris Doctor (JD) and LLM programs at premier law schools, providing access to top corporate law firms and international legal organizations." },
           { flag: "🇸🇬", name: "Singapore", reason: "A primary international arbitration hub in Asia. NUS and SMU Law schools offer world-class programs in international business law and dispute resolution." }
         ],
         scholarships: [

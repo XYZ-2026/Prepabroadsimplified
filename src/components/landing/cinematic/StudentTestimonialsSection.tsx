@@ -345,18 +345,15 @@ export default function StudentTestimonialsSection() {
         </motion.div>
 
         {/* Section Bottom CTA Strip */}
-        <motion.div
-          initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 25 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: shouldReduceMotion ? 0.05 : 0.6 }}
-          className="mt-14 sm:mt-16 bg-gradient-to-r from-[#080F1C] via-[#1E3A8A] to-[#2563EB] rounded-3xl p-8 sm:p-10 text-white flex flex-col md:flex-row items-center justify-between gap-6 shadow-xl"
-        >
+        <div className="mt-14 sm:mt-16 bg-gradient-to-r from-[#080F1C] via-[#1E3A8A] to-[#2563EB] rounded-3xl p-8 sm:p-10 text-white flex flex-col md:flex-row items-center justify-between gap-6 shadow-xl">
           <div className="max-w-2xl text-center md:text-left">
             <span className="inline-block px-3 py-1 rounded-full bg-white/10 text-blue-200 text-[11px] font-bold tracking-widest uppercase mb-3 backdrop-blur-xs">
               EXPERIENCE THE CLARVO ADVANTAGE
             </span>
-            <h3 className="text-xl sm:text-2xl md:text-3xl font-black tracking-tight leading-snug">
+            <h3
+              className="text-xl sm:text-2xl md:text-3xl font-black tracking-tight leading-snug text-white"
+              style={{ color: '#FFFFFF' }}
+            >
               Give your student the clarity they need before making high-stakes decisions.
             </h3>
             <p className="text-blue-100 text-sm sm:text-base mt-2 font-normal">
@@ -364,11 +361,7 @@ export default function StudentTestimonialsSection() {
             </p>
           </div>
 
-          <motion.div
-            whileHover={shouldReduceMotion ? {} : { scale: 1.03 }}
-            whileTap={shouldReduceMotion ? {} : { scale: 0.98 }}
-            className="shrink-0 w-full md:w-auto"
-          >
+          <div className="shrink-0 w-full md:w-auto">
             <Link
               href={BOOK_A_DEMO_URL}
               className="w-full md:w-auto h-13 px-8 rounded-xl bg-white text-[#1E3A8A] font-extrabold text-[15px] inline-flex items-center justify-center gap-2.5 shadow-lg hover:bg-blue-50 transition-all cursor-pointer"
@@ -376,8 +369,8 @@ export default function StudentTestimonialsSection() {
               <span>Book a Demo</span>
               <ArrowRight className="w-4 h-4 text-[#1E3A8A]" />
             </Link>
-          </motion.div>
-        </motion.div>
+          </div>
+        </div>
       </div>
     </section>
   );

@@ -6,7 +6,6 @@ import StatsStrip from './StatsStrip';
 import AssessmentMatrixSection from './AssessmentMatrixSection';
 import StudentJourneySection from './StudentJourneySection';
 import AcademicPillarsSection from './AcademicPillarsSection';
-import PlatformFeaturesSection from './PlatformFeaturesSection';
 import StudentTestimonialsSection from './StudentTestimonialsSection';
 import FAQSection from './FAQSection';
 import PreFooterCTA from './PreFooterCTA';
@@ -29,10 +28,7 @@ export default function CinematicLandingExperience() {
       {/* 5. Grade-Specific Pathways & Academic Pillars */}
       <AcademicPillarsSection />
 
-      {/* 6. Platform Capabilities (Bento Grid) */}
-      <PlatformFeaturesSection />
-
-      {/* 7. Student Testimonials (Real students from real schools without photos) */}
+      {/* 6. Student Testimonials (Real students from real schools without photos) */}
       <StudentTestimonialsSection />
 
       {/* 8. Frequently Asked Questions */}

@@ -37,7 +37,7 @@ const FEATURES = [
   {
     num: '05',
     title: 'Global University Matcher',
-    desc: 'Admit odds calculations and program shortlisting across 500+ Ivy League, Russell Group, and international institutes.',
+    desc: 'Admit odds calculations and program shortlisting across 500+ top universities, premier colleges, and institutes.',
     href: '/university-finder',
     linkText: 'Explore Universities →',
   },

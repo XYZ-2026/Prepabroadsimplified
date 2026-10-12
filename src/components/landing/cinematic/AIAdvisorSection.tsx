@@ -25,7 +25,7 @@ const SCENARIOS: Scenario[] = [
   },
   {
     tag: 'Digital SAT 1500+ Strategy',
-    studentMsg: "My current baseline on diagnostic tests is 1380. How do I bridge the gap to 1530+ for Ivy League and top US universities?",
+    studentMsg: "My current baseline on diagnostic tests is 1380. How do I bridge the gap to 1530+ for top universities and premier competitive programs?",
     stream: 'Adaptive Module Mastery (Desmos + Vocabulary Inference)',
     spike: 'Focused 1-on-1 pacing diagnostics identifying second-stage hard module triggers',
     target: 'Aim for 780 Math / 750+ Reading & Writing',
@@ -80,7 +80,7 @@ export default function AIAdvisorSection() {
           </h2>
 
           <p className="mt-6 text-[#94A3B8] text-[15px] md:text-[17px] leading-relaxed max-w-[500px]">
-            Ask anything from stream selection after Grade 10 to SAT target timelines and Ivy League profile building. Our AI provides honest, data-backed guidance without guesswork.
+            Ask anything from stream selection after Grade 10 to SAT target timelines and premier college & career profile building. Our AI provides honest, data-backed guidance without guesswork.
           </p>
 
           {/* Interactive Scenario Chips */}

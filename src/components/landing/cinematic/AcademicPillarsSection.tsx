@@ -12,10 +12,9 @@ const PILLARS = [
   { code: 'SAT', badge: 'DIGITAL SAT', name: 'Digital SAT 1500+ Prep', count: 'Adaptive Mastery', desc: 'Diagnostic adaptive mock tests, question banks, and 1-on-1 expert coaching.', href: '/iq-test' },
   { code: 'RES', badge: 'RESEARCH', name: 'Research & Publications', count: 'Peer-Reviewed Journals', desc: 'Mentored academic research papers published in indexed high school journals.', href: '/discover' },
   { code: '1-ON-1', badge: 'TUTORING', name: '1-to-1 Private Tutoring', count: 'Elite Subject Experts', desc: 'Personalized tutoring across IB, Cambridge (IGCSE/A-Levels), CBSE & ICSE curricula.', href: '/book-a-demo' },
-  { code: 'PSY', badge: 'DIAGNOSTICS', name: 'Psychometric Battery', count: '30 Dimensions Assessed', desc: 'Cognitive agility, Big Five personality traits, RIASEC codes, and learning styles.', href: '/psychometric-test' },
   { code: 'ROAD', badge: 'STRATEGY', name: 'AI Career Roadmap', count: 'Multi-Year Milestones', desc: 'Dynamic step-by-step roadmap from Grade 8 through graduation, internships & admissions.', href: '/career-roadmap' },
-  { code: 'UNI', badge: 'PREDICTOR', name: 'Global University Matcher', count: '500+ Top Global Colleges', desc: 'Data-driven admit chance estimations for Ivy League, Russell Group & top STEM institutes.', href: '/university-finder' },
-  { code: 'ADV', badge: 'ADVISORY', name: 'Parent & Counselor Advisory', count: 'Strategic Sessions', desc: 'Direct consultations with educational psychologists and Ivy League alumni.', href: '/book-a-demo' },
+  { code: 'UNI', badge: 'PREDICTOR', name: 'Global University Matcher', count: '500+ Top Colleges', desc: 'Data-driven admit chance estimations for top domestic & global universities and premier institutes.', href: '/university-finder' },
+  { code: 'ADV', badge: 'ADVISORY', name: 'Parent & Counselor Advisory', count: 'Strategic Sessions', desc: 'Direct consultations with certified educational psychologists and senior career mentors.', href: '/book-a-demo' },
 ];
 
 export default function AcademicPillarsSection() {
@@ -52,7 +51,7 @@ export default function AcademicPillarsSection() {
           </Link>
         </motion.div>
 
-        {/* 10 Pillar Cards Grid */}
+        {/* 9 Pillar Cards Grid (3x3) */}
         <motion.div
           initial="hidden"
           whileInView="visible"
@@ -63,7 +62,7 @@ export default function AcademicPillarsSection() {
               transition: { staggerChildren: shouldReduceMotion ? 0 : 0.05 },
             },
           }}
-          className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-4 sm:gap-5"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6"
         >
           {PILLARS.map((item) => (
             <motion.div

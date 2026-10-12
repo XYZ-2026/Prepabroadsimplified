@@ -76,7 +76,7 @@ export const HOME_PAGE_CONFIG = {
       code: 'USA',
       flag: '🇺🇸',
       universityCount: '180+ Universities',
-      description: 'Ivy League & top STEM research institutions with OPT work authorization opportunities.',
+      description: 'Premier universities & top STEM research institutions with extensive academic and career opportunities.',
       keyFeature: 'Flexible Majors & OPT Work Extension',
       link: '/university-finder?country=USA'
     },

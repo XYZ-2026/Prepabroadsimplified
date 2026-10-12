@@ -40,9 +40,9 @@ const JOURNEY_STEPS = [
   },
   {
     num: '05',
-    title: 'Global Admissions',
-    desc: 'Shortlisting top global universities & applications',
-    fullDesc: 'Predictive admissions odds, financial scholarship strategies, and strategic application dossiers for Ivy League, Russell Group, and top STEM institutes.',
+    title: 'College & Career Pathways',
+    desc: 'Shortlisting top colleges, universities & career directions',
+    fullDesc: 'Predictive admissions odds, scholarship strategies, and strategic application dossiers for premier colleges, top universities, and competitive degree programs.',
     link: '/university-finder',
     actionText: 'University Matcher',
   },
@@ -67,7 +67,7 @@ export default function StudentJourneySection() {
           </div>
 
           <h2 className="text-[28px] sm:text-[38px] md:text-[48px] font-black tracking-[-0.04em] text-[#080F1C] max-w-4xl mx-auto leading-tight">
-            From self-discovery to Ivy League &amp; top university acceptance
+            From self-discovery to premier college admissions &amp; career success
           </h2>
           <p className="mt-4 text-[14px] sm:text-[16px] text-[#667085] max-w-2xl mx-auto">
             A coherent multi-year framework designed to guide secondary school students through critical academic turning points without guesswork.

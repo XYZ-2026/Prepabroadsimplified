@@ -30,14 +30,14 @@ const PREVIEW_PROFILES: MetricPreview[] = [
   },
   {
     id: 'grade12',
-    label: 'Class 12 · Global Admissions',
+    label: 'Class 12 · College & Career Admissions',
     pathway: 'Robotics Engineering & Applied Mathematics',
     fitScore: '97%',
-    studentCohort: 'Class of 2025 · Ivy League & STEM Shortlist',
+    studentCohort: 'Class of 2025 · Premier College & STEM Shortlist',
     metrics: [
       { title: 'Digital SAT Projected Score', score: '1540', width: '96%' },
       { title: 'Academic Research Publication Index', score: 'Top 3%', width: '97%' },
-      { title: 'Global University Match (US/UK)', score: 'Tier 1 Fit', width: '93%' },
+      { title: 'University & College Match', score: 'Tier 1 Fit', width: '93%' },
       { title: 'Extracurricular Spike Cohesion', score: '95%', width: '95%' },
     ],
   },

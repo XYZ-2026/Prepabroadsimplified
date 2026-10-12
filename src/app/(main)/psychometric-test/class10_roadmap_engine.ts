@@ -410,7 +410,7 @@ export function getStudyAbroadGuideData(
         {
           flag: '🇺🇸',
           name: 'United States',
-          reason: 'Pioneer of the Liberal Arts system. Top colleges (Ashoka partners, Ivy League, Seven Sisters) offer flexible double majors combining psychology, economics, and design.',
+          reason: 'Pioneer of the Liberal Arts system. Top liberal arts colleges and universities offer flexible double majors combining psychology, economics, and design.',
           academicRoute: '4-Year B.A. / B.S. (Holistic Admission)',
           costCategory: 'High (Need-Based Financial Aid Available)'
         },

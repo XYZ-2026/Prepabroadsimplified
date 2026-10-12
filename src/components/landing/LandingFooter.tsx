@@ -81,7 +81,7 @@ export default function LandingFooter() {
               {[
                 { label: 'About Simplified Eduventures', href: '/about-us' },
                 { label: 'The Student Journey', href: '/#journey' },
-                { label: 'Platform Features', href: '/#features' },
+                { label: 'Academic Pathways', href: '/#programs' },
                 { label: 'Frequently Asked Questions', href: '/#faq' },
                 { label: 'Book Advisory Session', href: '/book-a-demo' },
               ].map((item) => (

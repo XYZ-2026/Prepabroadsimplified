@@ -202,7 +202,7 @@ export default function UpdateCounsellorProfileForm({ initialData }: { initialDa
                 name="specialization"
                 value={formData.specialization}
                 onChange={handleChange}
-                placeholder="e.g. US Ivy League, UK Universities, STEM Degrees"
+                placeholder="e.g. Top National & Global Colleges, Career Guidance, STEM & Commerce"
               />
             </div>
             <div className={styles.formGroup}>

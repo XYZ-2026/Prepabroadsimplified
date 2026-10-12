@@ -624,6 +624,27 @@ export default function ReportViewerShell({
             >
               📥 PDF
             </button>
+            <a
+              href={`/submit-review?report=${mode}&reportId=${reportId}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '3px',
+                padding: '6px 9px',
+                borderRadius: '8px',
+                fontSize: '11px',
+                fontWeight: 700,
+                background: '#FFFBEB',
+                color: '#92400E',
+                border: '1px solid #FCD34D',
+                textDecoration: 'none',
+              }}
+              title="Rate this report"
+            >
+              ⭐ Review
+            </a>
           </div>
         </div>
 
@@ -1035,6 +1056,36 @@ export default function ReportViewerShell({
             </button>
             {downloadingExec && <div className="vs-dl-bar-alt" style={{ width: `${execProgress}%` }} />}
           </div>
+
+          {/* Rate & Review Button */}
+          <a
+            href={`/submit-review?report=${mode}&reportId=${reportId}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              padding: '7px 15px',
+              borderRadius: '10px',
+              fontSize: '12px',
+              fontWeight: 700,
+              letterSpacing: '0.2px',
+              cursor: 'pointer',
+              transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+              background: 'linear-gradient(135deg, #FFFBEB 0%, #FEF3C7 100%)',
+              color: '#92400E',
+              border: '1.5px solid #FCD34D',
+              boxShadow: '0 1px 3px rgba(245, 158, 11, 0.15)',
+              textDecoration: 'none',
+            }}
+            title="Share your review and rating of this report"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="#F59E0B" stroke="#D97706" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+            </svg>
+            <span>Rate &amp; Review</span>
+          </a>
         </div>
       </div>
 

@@ -188,7 +188,7 @@ export default function AuthForm({ defaultTab }: AuthFormProps = {}) {
           city: '',
           toolAccess: {
             iqTest: true,
-            psychometricTest: true,
+            psychometricTest: false,
             universityPredictor: true,
           },
           createdAt: serverTimestamp(),
@@ -395,7 +395,7 @@ export default function AuthForm({ defaultTab }: AuthFormProps = {}) {
           },
           toolAccess: {
             iqTest: true,
-            psychometricTest: true,
+            psychometricTest: false,
             universityPredictor: true,
           },
           createdAt: serverTimestamp(),

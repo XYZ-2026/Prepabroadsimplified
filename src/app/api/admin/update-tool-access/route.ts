@@ -10,10 +10,10 @@ export async function POST(request: Request) {
 
     // 2. Parse request body
     const body = await request.json();
-    const { userId, toolAccess } = body;
+    const { userId, userIds, toolAccess } = body;
 
-    if (!userId || !toolAccess) {
-      return NextResponse.json({ success: false, message: 'Missing userId or toolAccess' }, { status: 400 });
+    if ((!userId && !userIds) || !toolAccess) {
+      return NextResponse.json({ success: false, message: 'Missing userId(s) or toolAccess' }, { status: 400 });
     }
 
     // Determine which tools are granted to remove them from requests
@@ -30,13 +30,23 @@ export async function POST(request: Request) {
       updateData.accessRequests = FieldValue.arrayRemove(...grantedTools);
     }
 
-    // 3. Update Firestore document
+    // Support batch update if userIds array is provided
+    if (userIds && Array.isArray(userIds) && userIds.length > 0) {
+      const batch = adminDb.batch();
+      for (const uid of userIds) {
+        batch.set(adminDb.collection('users').doc(uid), updateData, { merge: true });
+      }
+      await batch.commit();
+      return NextResponse.json({ success: true, count: userIds.length, message: `Updated access for ${userIds.length} users` });
+    }
+
+    // 3. Update single Firestore document
     await adminDb.collection('users').doc(userId).set(updateData, { merge: true });
 
     return NextResponse.json({ success: true, message: 'Tool access updated successfully' });
   } catch (error: any) {
     console.error('Error updating tool access:', error);
-    if (error.message.includes('Forbidden') || error.message.includes('Unauthorized')) {
+    if (error.message?.includes('Forbidden') || error.message?.includes('Unauthorized')) {
       return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 });
     }
     return NextResponse.json({ success: false, message: 'Failed to update tool access' }, { status: 500 });

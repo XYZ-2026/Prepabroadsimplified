@@ -104,7 +104,7 @@ export async function POST(request: NextRequest) {
       },
       toolAccess: {
         iqTest: true,
-        psychometricTest: true,
+        psychometricTest: false, // Psychometric test requires admin access activation
         universityPredictor: true,
       },
       passwordHash,

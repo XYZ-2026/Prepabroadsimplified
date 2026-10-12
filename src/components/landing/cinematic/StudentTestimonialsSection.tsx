@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { Star, School, GraduationCap, CheckCircle, Quote, Sparkles, ArrowRight, BookOpen, Trophy } from 'lucide-react';
@@ -165,10 +165,76 @@ const CATEGORIES = [
 export default function StudentTestimonialsSection() {
   const shouldReduceMotion = useReducedMotion();
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [liveTestimonials, setLiveTestimonials] = useState<Testimonial[]>(TESTIMONIALS);
+
+  // Fetch approved & featured reviews selected by admin
+  useEffect(() => {
+    async function loadFeaturedReviews() {
+      try {
+        const res = await fetch('/api/reviews');
+        const data = await res.json();
+        if (data.success && Array.isArray(data.reviews) && data.reviews.length > 0) {
+          const gradients = [
+            'from-blue-600 to-indigo-600',
+            'from-sky-500 to-blue-600',
+            'from-emerald-600 to-teal-600',
+            'from-violet-600 to-purple-600',
+            'from-amber-500 to-orange-600',
+            'from-rose-500 to-pink-600',
+          ];
+
+          const mapped: Testimonial[] = data.reviews.map((r: any, idx: number) => {
+            const initials = r.name
+              ? r.name
+                  .split(' ')
+                  .map((w: string) => w.charAt(0))
+                  .join('')
+                  .slice(0, 2)
+                  .toUpperCase()
+              : 'ST';
+
+            // Extract city from school if formatted e.g. "DPS (New Delhi)"
+            const cityMatch = r.school?.match(/\((.*?)\)/);
+            const city = cityMatch ? cityMatch[1] : 'Verified Campus';
+
+            return {
+              id: r.id,
+              name: r.name,
+              initials,
+              initialsGradient: gradients[idx % gradients.length],
+              grade: r.grade || 'High School',
+              board: r.role === 'parent' ? 'Parent Review' : 'Verified Student',
+              school: r.school || 'Leading Indian High School',
+              city,
+              category: 'stream' as const,
+              categoryLabel: r.impactTag || 'Psychometric & Career Review',
+              outcomeBadge: `${r.rating || 5}.0 ★ Verified Experience`,
+              outcomeMetric: r.reportType || 'Official Diagnostic Report',
+              quote: r.comment,
+              focusArea: r.headline || 'Assessment Evaluation',
+            };
+          });
+
+          // Deduplicate by name/id and prepend new approved reviews
+          const existingIds = new Set(mapped.map((m) => m.id));
+          const existingNames = new Set(mapped.map((m) => m.name.toLowerCase()));
+          const remainingCurated = TESTIMONIALS.filter(
+            (t) => !existingIds.has(t.id) && !existingNames.has(t.name.toLowerCase())
+          );
+
+          setLiveTestimonials([...mapped, ...remainingCurated]);
+        }
+      } catch (err) {
+        console.error('Failed to load featured reviews:', err);
+      }
+    }
+
+    loadFeaturedReviews();
+  }, []);
 
   const filteredTestimonials = selectedCategory === 'all'
-    ? TESTIMONIALS
-    : TESTIMONIALS.filter((t) => t.category === selectedCategory);
+    ? liveTestimonials
+    : liveTestimonials.filter((t) => t.category === selectedCategory);
 
   return (
     <section
@@ -361,10 +427,17 @@ export default function StudentTestimonialsSection() {
             </p>
           </div>
 
-          <div className="shrink-0 w-full md:w-auto">
+          <div className="shrink-0 w-full md:w-auto flex flex-col sm:flex-row items-center gap-3">
+            <Link
+              href="/submit-review"
+              className="w-full sm:w-auto h-13 px-6 rounded-xl bg-white/10 hover:bg-white/20 text-white font-extrabold text-[14px] inline-flex items-center justify-center gap-2 border border-white/20 backdrop-blur-xs transition-all cursor-pointer"
+            >
+              <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
+              <span>Share Student Review</span>
+            </Link>
             <Link
               href={BOOK_A_DEMO_URL}
-              className="w-full md:w-auto h-13 px-8 rounded-xl bg-white text-[#1E3A8A] font-extrabold text-[15px] inline-flex items-center justify-center gap-2.5 shadow-lg hover:bg-blue-50 transition-all cursor-pointer"
+              className="w-full sm:w-auto h-13 px-8 rounded-xl bg-white text-[#1E3A8A] font-extrabold text-[15px] inline-flex items-center justify-center gap-2.5 shadow-lg hover:bg-blue-50 transition-all cursor-pointer"
             >
               <span>Book a Demo</span>
               <ArrowRight className="w-4 h-4 text-[#1E3A8A]" />

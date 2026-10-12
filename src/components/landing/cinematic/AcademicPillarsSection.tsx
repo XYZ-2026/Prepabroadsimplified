@@ -9,8 +9,9 @@ const PILLARS = [
   { code: 'G7-8', badge: 'MIDDLE SCHOOL', name: 'Grades 7–8 Foundation', count: 'Aptitude Exploration', desc: 'Diagnostic testing, cognitive aptitude, and early STEM & humanities exploration.', href: '/discover' },
   { code: 'G9-10', badge: 'STREAM FIT', name: 'Grades 9–10 Stream Choice', count: 'High-Stakes Decision', desc: 'Scientific alignment for PCM, PCB, Commerce & Humanities selection with RIASEC fitment.', href: '/discover' },
   { code: 'G11-12', badge: 'SENIOR HIGH', name: 'Grades 11–12 Admissions', count: 'University Readiness', desc: 'Competitive university shortlisting, entrance exam prep & scholarship strategies.', href: '/discover' },
-  { code: 'SAT', badge: 'DIGITAL SAT', name: 'Digital SAT 1500+ Prep', count: 'Adaptive Mastery', desc: 'Diagnostic adaptive mock tests, question banks, and 1-on-1 expert coaching.', href: '/iq-test' },
   { code: 'RES', badge: 'RESEARCH', name: 'Research & Publications', count: 'Peer-Reviewed Journals', desc: 'Mentored academic research papers published in indexed high school journals.', href: '/discover' },
+  { code: 'INT', badge: 'LEADERSHIP', name: 'Internships & Community Services', count: 'Grades 7–10 Impact', desc: 'Structured social impact projects, NGO volunteering, and experiential micro-internships for Grades 7–10.', href: '/discover' },
+  { code: 'SAT', badge: 'DIGITAL SAT', name: 'Digital SAT 1500+ Prep', count: 'Adaptive Mastery', desc: 'Diagnostic adaptive mock tests, question banks, and 1-on-1 expert coaching.', href: '/iq-test' },
   { code: '1-ON-1', badge: 'TUTORING', name: '1-to-1 Private Tutoring', count: 'Elite Subject Experts', desc: 'Personalized tutoring across IB, Cambridge (IGCSE/A-Levels), CBSE & ICSE curricula.', href: '/book-a-demo' },
   { code: 'ROAD', badge: 'STRATEGY', name: 'AI Career Roadmap', count: 'Multi-Year Milestones', desc: 'Dynamic step-by-step roadmap from Grade 8 through graduation, internships & admissions.', href: '/career-roadmap' },
   { code: 'UNI', badge: 'PREDICTOR', name: 'Global University Matcher', count: '500+ Top Colleges', desc: 'Data-driven admit chance estimations for top domestic & global universities and premier institutes.', href: '/university-finder' },
@@ -51,7 +52,7 @@ export default function AcademicPillarsSection() {
           </Link>
         </motion.div>
 
-        {/* 9 Pillar Cards Grid (3x3) */}
+        {/* 10 Pillar Cards Grid (2x5) */}
         <motion.div
           initial="hidden"
           whileInView="visible"
@@ -62,7 +63,7 @@ export default function AcademicPillarsSection() {
               transition: { staggerChildren: shouldReduceMotion ? 0 : 0.05 },
             },
           }}
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6"
+          className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 sm:gap-5"
         >
           {PILLARS.map((item) => (
             <motion.div
@@ -83,7 +84,7 @@ export default function AcademicPillarsSection() {
                   href={item.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group bg-[#F8FAFC] border border-[#E2E8F0] rounded-[18px] p-5 sm:p-6 hover:border-[#2563EB] hover:bg-white transition-all duration-200 shadow-xs hover:shadow-md flex flex-col justify-between h-full min-h-[250px] cursor-pointer"
+                  className="group bg-[#F8FAFC] border border-[#E2E8F0] rounded-[18px] p-4 sm:p-5 hover:border-[#2563EB] hover:bg-white transition-all duration-200 shadow-xs hover:shadow-md flex flex-col justify-between h-full min-h-[250px] cursor-pointer"
                 >
                   <div>
                     <div className="flex justify-between items-center mb-3">
@@ -116,7 +117,7 @@ export default function AcademicPillarsSection() {
               ) : (
                 <Link
                   href={item.href}
-                  className="group bg-[#F8FAFC] border border-[#E2E8F0] rounded-[18px] p-5 sm:p-6 hover:border-[#2563EB] hover:bg-white transition-all duration-200 shadow-xs hover:shadow-md flex flex-col justify-between h-full min-h-[250px] cursor-pointer"
+                  className="group bg-[#F8FAFC] border border-[#E2E8F0] rounded-[18px] p-4 sm:p-5 hover:border-[#2563EB] hover:bg-white transition-all duration-200 shadow-xs hover:shadow-md flex flex-col justify-between h-full min-h-[250px] cursor-pointer"
                 >
                   <div>
                     <div className="flex justify-between items-center mb-3">

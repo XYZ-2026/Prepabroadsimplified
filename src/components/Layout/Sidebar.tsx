@@ -309,6 +309,9 @@ export default function Sidebar({ userRole, userName, userEmail }: SidebarProps)
                 <Link href="/dashboard/admin/enquiries" onClick={handleLinkClick} className={`${styles.navSubLink} ${isActive('/dashboard/admin/enquiries') ? styles.navSubLinkActive : ''}`}>
                   Enquiries
                 </Link>
+                <Link href="/dashboard/admin/reviews" onClick={handleLinkClick} className={`${styles.navSubLink} ${isActive('/dashboard/admin/reviews') ? styles.navSubLinkActive : ''}`}>
+                  Reviews &amp; Testimonials
+                </Link>
                 <Link href="/dashboard/admin/users" onClick={handleLinkClick} className={`${styles.navSubLink} ${isActive('/dashboard/admin/users') ? styles.navSubLinkActive : ''}`}>
                   Users
                 </Link>
@@ -325,7 +328,7 @@ export default function Sidebar({ userRole, userName, userEmail }: SidebarProps)
                   Assessment Analytics
                 </Link>
                 <Link href="/dashboard/admin/tool-access" onClick={handleLinkClick} className={`${styles.navSubLink} ${isActive('/dashboard/admin/tool-access') ? styles.navSubLinkActive : ''}`}>
-                  Tool Access
+                  Test Access Control
                 </Link>
               </div>
             </div>

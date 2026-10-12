@@ -176,23 +176,23 @@ export function getStudentPsychometricAccess(
   // Admin & Counsellors have unrestricted preview capabilities
   const isPrivileged = userRole === 'admin' || userRole === 'counsellor';
   
-  // Explicit disable check
-  if (toolAccess?.psychometricTest === false && !isPrivileged) {
+  // Explicit disable or pending approval check for non-privileged students
+  if (toolAccess?.psychometricTest !== true && !isPrivileged) {
     return {
       status: 'DISABLED',
       grade: normalizeGrade(gradeInput),
       gradeLabel: formatGradeLabel(gradeInput),
-      badgeLabel: 'Disabled',
+      badgeLabel: 'Access Pending Admin Approval',
       eligibleVariant: null,
       eligibleToolKey: null,
       eligibleAssessment: null,
-      eligibleTestName: 'Psychometric Assessment Disabled',
+      eligibleTestName: 'Psychometric Assessment Pending Admin Approval',
       eligibleHref: '/dashboard/student/profile',
       allAssessments: Object.values(ASSESSMENT_DEFINITIONS).map(def => ({
         ...def,
         isEligible: false,
         statusBadge: 'LOCKED',
-        accessReason: 'Access is currently disabled by administrator.',
+        accessReason: 'Psychometric test access has not yet been granted by your administrator.',
       })),
       canAccess: () => false,
     };

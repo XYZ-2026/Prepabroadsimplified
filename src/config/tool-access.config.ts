@@ -64,7 +64,8 @@ export function isToolAccessGranted(
 
   // Base psychometric test access
   if (toolId === 'psychometricTest') {
-    if (userAccess?.psychometricTest === false) return false;
+    if (userRole === 'admin' || userRole === 'counsellor') return true;
+    if (userAccess?.psychometricTest !== true) return false;
     return true;
   }
 
@@ -80,6 +81,11 @@ export function isToolAccessGranted(
     toolId === 'SENIOR_12';
 
   if (isPsychometricVariant) {
+    // For students, base psychometric test access must be approved by admin
+    if (userRole !== 'admin' && userRole !== 'counsellor') {
+      if (userAccess?.psychometricTest !== true) return false;
+    }
+
     // If grade is provided, resolve strictly via Grade-Based Access Policy
     if (academicGrade !== undefined) {
       const evaluation = getStudentPsychometricAccess(academicGrade, userAccess, userRole);
@@ -87,7 +93,7 @@ export function isToolAccessGranted(
     }
 
     // If grade is not directly passed to this function, check manual override / legacy toolAccess
-    if (userAccess?.psychometricTest === false) {
+    if (userAccess?.psychometricTest !== true) {
       return false;
     }
 

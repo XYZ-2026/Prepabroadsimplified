@@ -344,6 +344,36 @@ export default function ReportHeader({ userRole, activeMode = 'full', onSwitchMo
           )}
         </div>
 
+        {/* Rate & Review Button */}
+        <Link
+          href={`/submit-review?report=${activeMode === 'executive' ? 'executive' : 'psychometric'}&source=${source || 'report-header'}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '6px',
+            padding: '7px 15px',
+            borderRadius: '10px',
+            fontSize: '12px',
+            fontWeight: 700,
+            letterSpacing: '0.2px',
+            cursor: 'pointer',
+            transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+            background: 'linear-gradient(135deg, #FFFBEB 0%, #FEF3C7 100%)',
+            color: '#92400E',
+            border: '1.5px solid #FCD34D',
+            boxShadow: '0 1px 3px rgba(245, 158, 11, 0.15)',
+            textDecoration: 'none',
+          }}
+          title="Share your review and rating of this report"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="#F59E0B" stroke="#D97706" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+          </svg>
+          <span>Rate &amp; Review</span>
+        </Link>
+
         <button 
           type="button"
           onClick={handleClose} 

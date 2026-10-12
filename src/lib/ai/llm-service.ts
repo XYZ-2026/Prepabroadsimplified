@@ -95,9 +95,9 @@ export async function getValidatedGroqModels(groqKey: string): Promise<string[]>
     return validatedGroqCache.groqModels;
   }
 
-  const primaryConfig = process.env.GROQ_PRIMARY_MODEL || 'groq/compound';
-  const fallbackConfig = process.env.GROQ_FALLBACK_MODEL || 'groq/compound-mini';
-  let availableList: string[] = [primaryConfig, fallbackConfig];
+  const primaryConfig = process.env.GROQ_PRIMARY_MODEL || 'llama-3.3-70b-versatile';
+  const fallbackConfig = process.env.GROQ_FALLBACK_MODEL || 'llama-3.1-8b-instant';
+  let availableList: string[] = [primaryConfig, fallbackConfig, 'mixtral-8x7b-32768'];
 
   try {
     const res = await fetch('https://api.groq.com/openai/v1/models', {
@@ -193,7 +193,7 @@ export async function callGeminiAPI(prompt: string): Promise<{ text: string; mod
   const geminiKey = process.env.GEMINI_API_KEY || '';
   if (!geminiKey) return null;
 
-  const geminiModels = ['gemini-2.5-flash'];
+  const geminiModels = ['gemini-2.0-flash', 'gemini-1.5-flash', 'gemini-1.5-pro'];
   const genai = new GoogleGenerativeAI(geminiKey);
 
   for (const modelName of geminiModels) {

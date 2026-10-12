@@ -8,6 +8,9 @@ import { buildUniversalExecutiveHTMLReport } from '@/app/(main)/psychometric-tes
 import { buildUniversalExecutiveSummaryHTMLReport } from '@/app/(main)/psychometric-test/class10_executive_summary_builder';
 import { getVariantConfig } from '@/app/(main)/psychometric-test/report-engine/universal-report-schema';
 
+export const maxDuration = 120;
+export const dynamic = 'force-dynamic';
+
 export async function POST(req: NextRequest) {
   let browser: any = null;
   try {
@@ -234,20 +237,27 @@ export async function POST(req: NextRequest) {
 
     const page = await browser.newPage();
     
+    // Set 120s timeouts so large 56-page reports never hit the default 30000ms timeout
+    page.setDefaultTimeout(120000);
+    page.setDefaultNavigationTimeout(120000);
+
     // Set viewport to standard A4 resolution at 96 DPI
     await page.setViewport({ width: 794, height: 1123, deviceScaleFactor: 2 });
     
     await page.setContent(targetHTMLReport, {
-      waitUntil: ['load', 'domcontentloaded'],
-      timeout: 60000
+      waitUntil: 'domcontentloaded',
+      timeout: 120000
     });
 
-    // Wait for document fonts and canvas charts to finish rendering
+    // Wait for document fonts and canvas charts to finish rendering without hanging on remote CDNs
     await page.evaluate(async () => {
       if (document.fonts) {
-        await document.fonts.ready;
+        await Promise.race([
+          document.fonts.ready,
+          new Promise(r => setTimeout(r, 2500))
+        ]);
       }
-      await new Promise(r => setTimeout(r, 600));
+      await new Promise(r => setTimeout(r, 500));
     });
 
     await page.emulateMediaType('print');
@@ -257,7 +267,8 @@ export async function POST(req: NextRequest) {
       printBackground: true,
       preferCSSPageSize: true,
       margin: { top: '0', right: '0', bottom: '0', left: '0' },
-      displayHeaderFooter: false
+      displayHeaderFooter: false,
+      timeout: 120000
     });
 
     await browser.close();

@@ -11,7 +11,7 @@ import {
   PolarRadiusAxis, 
   ResponsiveContainer 
 } from 'recharts';
-import { Download, Sparkles, BrainCircuit, ChevronLeft, Award, RefreshCw, BarChart2, ShieldCheck } from 'lucide-react';
+import { Download, Sparkles, BrainCircuit, ChevronLeft, Award, RefreshCw, BarChart2, ShieldCheck, Star } from 'lucide-react';
 import { IQ_ASSESSMENT_CONFIG } from '@/config/iq-assessment.config';
 
 export default function ResultDashboardClient({ 
@@ -88,13 +88,21 @@ export default function ResultDashboardClient({
             <ChevronLeft className="w-4 h-4" /> Back to IQ Test Home
           </Link>
 
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center gap-2.5 sm:gap-3">
             <button
               onClick={() => router.push('/iq-test/instructions')}
               className="px-4 py-2.5 rounded-xl border border-slate-200 bg-white hover:bg-blue-50 text-slate-700 text-xs font-bold flex items-center gap-1.5 shadow-sm transition-all"
             >
               <RefreshCw className="w-4 h-4 text-[#2563EB]" /> Retake Assessment
             </button>
+            <Link
+              href={`/submit-review?report=iq-test&reportId=${resultId}&userName=${encodeURIComponent(candidateName)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-4 py-2.5 rounded-xl border border-amber-300 bg-amber-50 hover:bg-amber-100 text-amber-900 text-xs font-bold flex items-center gap-1.5 shadow-sm transition-all"
+            >
+              <Sparkles className="w-4 h-4 text-amber-600" /> Rate &amp; Review Report
+            </Link>
             <button
               onClick={handleDownloadPDF}
               disabled={downloading}
@@ -204,7 +212,36 @@ export default function ResultDashboardClient({
               })}
             </div>
           </div>
+        </div>
 
+        {/* Student Review & Feedback Invitation Card */}
+        <div className="bg-gradient-to-r from-amber-50 via-orange-50 to-amber-100/60 rounded-3xl border border-amber-200/90 p-6 md:p-8 mb-8 flex flex-col md:flex-row items-center justify-between gap-6 shadow-sm">
+          <div className="flex items-start gap-4">
+            <div className="w-12 h-12 rounded-2xl bg-amber-500/10 border border-amber-300 flex items-center justify-center shrink-0">
+              <Star className="w-6 h-6 text-amber-600 fill-amber-500" />
+            </div>
+            <div>
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-200/60 text-amber-900 text-[10px] font-extrabold uppercase tracking-wider mb-1.5">
+                <Sparkles className="w-3 h-3 text-amber-700" /> Student Voice Matters
+              </div>
+              <h4 className="text-lg md:text-xl font-display font-bold text-slate-900 mb-1">
+                How insightful was your cognitive evaluation?
+              </h4>
+              <p className="text-xs text-slate-600 max-w-xl font-medium leading-relaxed">
+                Your authentic feedback helps fellow students make informed decisions about their academic and cognitive roadmaps. It takes less than 60 seconds!
+              </p>
+            </div>
+          </div>
+
+          <Link
+            href={`/submit-review?report=iq-test&reportId=${resultId}&userName=${encodeURIComponent(candidateName)}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="px-6 py-3 rounded-2xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-extrabold text-xs shadow-md shadow-amber-500/25 transition-all flex items-center gap-2 cursor-pointer shrink-0"
+          >
+            <Star className="w-4 h-4 fill-white text-white" />
+            Give Review &amp; Rating
+          </Link>
         </div>
 
         {/* Download Certificate Footer Banner */}

@@ -135,6 +135,10 @@ export default function PsychometricLandingPage({ variant, onStart, eligibility,
               >
                 SET GRADE
               </Link>
+            ) : eligibility?.status === 'DISABLED' ? (
+              <span className="px-4 py-2 rounded-xl bg-amber-100 border border-amber-300 text-amber-900 font-extrabold text-xs shadow-sm">
+                ⏳ ACCESS PENDING
+              </span>
             ) : (
               <Link
                 href={eligibility?.eligibleHref || '#'}
@@ -243,6 +247,29 @@ export default function PsychometricLandingPage({ variant, onStart, eligibility,
                 >
                   Complete Profile &amp; Select Grade →
                 </Link>
+              </div>
+            ) : eligibility?.status === 'DISABLED' ? (
+              <div className="p-5 rounded-2xl bg-amber-50 border border-amber-200 text-left max-w-xl mb-8 shadow-sm">
+                <div className="text-amber-900 font-extrabold text-sm mb-1 flex items-center gap-2">
+                  <span>⏳</span> Test Access Pending Admin Activation
+                </div>
+                <p className="text-slate-600 text-xs mb-3 leading-relaxed">
+                  Your registration is complete. To maintain assessment integrity and counsellor allocation, your Psychometric Test access is pending 1-click activation by your administrator. Once granted, your test will unlock automatically.
+                </p>
+                <div className="flex flex-wrap items-center gap-3">
+                  <button
+                    onClick={() => window.location.reload()}
+                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-black text-white font-extrabold text-xs shadow-md transition-all cursor-pointer"
+                  >
+                    Refresh Status
+                  </button>
+                  <Link
+                    href="/dashboard"
+                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white hover:bg-slate-50 border border-slate-300 text-slate-700 font-bold text-xs shadow-sm transition-all"
+                  >
+                    Go to Dashboard →
+                  </Link>
+                </div>
               </div>
             ) : (
               <div className="p-5 rounded-2xl bg-amber-50 border border-amber-200 text-left max-w-xl mb-8 shadow-sm">

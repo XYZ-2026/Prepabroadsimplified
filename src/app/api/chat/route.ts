@@ -42,12 +42,13 @@ export async function POST(req: Request) {
 
     // 1. PRIMARY: Groq Free-Tier API
     if (groqApiKey) {
-      const primaryModel = process.env.GROQ_PRIMARY_MODEL || "groq/compound";
-      const fallbackModel = process.env.GROQ_FALLBACK_MODEL || "groq/compound-mini";
+      const primaryModel = process.env.GROQ_PRIMARY_MODEL || "llama-3.3-70b-versatile";
+      const fallbackModel = process.env.GROQ_FALLBACK_MODEL || "llama-3.1-8b-instant";
       const groqModels = [
         primaryModel,
         fallbackModel,
-        "openai/gpt-oss-120b"
+        "mixtral-8x7b-32768",
+        "gemma2-9b-it"
       ];
 
       const formattedMessages = Array.isArray(messages) && messages.length > 0
@@ -103,7 +104,9 @@ export async function POST(req: Request) {
       console.log("Groq unavailable or limit reached. Falling back to Gemini backup...");
       const genai = new GoogleGenerativeAI(geminiApiKey);
       const geminiModels = [
-        "gemini-2.5-flash"
+        "gemini-2.0-flash",
+        "gemini-1.5-flash",
+        "gemini-1.5-pro"
       ];
 
       for (const modelName of geminiModels) {

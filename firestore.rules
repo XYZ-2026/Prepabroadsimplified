@@ -1,0 +1,81 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    function isAdmin() {
+      return isAuthenticated() && (
+        request.auth.token.email == 'admin@abroadsimplified.com' ||
+        request.auth.token.email == 'admin@as.com' ||
+        request.auth.token.admin == true ||
+        request.auth.token.role == 'admin'
+      );
+    }
+
+    // ─────────────────────────────────────────────────────────────
+    // 1. Users collection
+    // ─────────────────────────────────────────────────────────────
+    match /users/{userId} {
+      // Anyone can read profile details (for public shareable pages, search SEO, and generateStaticParams)
+      allow read: if true;
+
+      // CRITICAL FIX: Allow new users to create their own profile document on sign up
+      allow create: if isOwner(userId) || isAdmin();
+
+      // Users can update their own profile, and the admin can update any profile
+      allow update: if isOwner(userId) || isAdmin();
+
+      // Users can delete their own profile document, and admin can delete any user document
+      allow delete: if isOwner(userId) || isAdmin();
+    }
+
+    // ─────────────────────────────────────────────────────────────
+    // 2. Assessment Results (IQ & Psychometric)
+    // ─────────────────────────────────────────────────────────────
+    match /psychometric_results/{resultId} {
+      allow read, write: if isAuthenticated();
+    }
+
+    match /iq_results/{resultId} {
+      allow read, write: if isAuthenticated();
+    }
+
+    // ─────────────────────────────────────────────────────────────
+    // 3. Parent Assessment Invitations & Submissions
+    // ─────────────────────────────────────────────────────────────
+    match /parent_assessments/{assessmentId} {
+      allow read, write: if true;
+    }
+
+    // ─────────────────────────────────────────────────────────────
+    // 4. Career Roadmaps & Saved Plans
+    // ─────────────────────────────────────────────────────────────
+    match /career_roadmaps/{roadmapId} {
+      allow read, write: if isAuthenticated();
+    }
+
+    // ─────────────────────────────────────────────────────────────
+    // 5. Inquiries & Student Leads
+    // ─────────────────────────────────────────────────────────────
+    match /enquiries/{enquiryId} {
+      allow create: if true;
+      allow read, update, delete: if isAdmin();
+    }
+
+    // ─────────────────────────────────────────────────────────────
+    // 6. Global fallback for authenticated app features
+    // ─────────────────────────────────────────────────────────────
+    match /{document=**} {
+      allow read, write: if isAuthenticated() || isAdmin();
+    }
+  }
+}

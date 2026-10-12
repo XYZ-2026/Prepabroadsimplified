@@ -8,6 +8,8 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const {
+      uid: providedUid,
+      idToken,
       name,
       email,
       password,
@@ -49,7 +51,7 @@ export async function POST(request: NextRequest) {
         .limit(1)
         .get();
 
-      if (!existingUserSnap.empty) {
+      if (!existingUserSnap.empty && !providedUid) {
         return NextResponse.json(
           { error: 'This email address is already registered. Please sign in instead.' },
           { status: 400 }
@@ -59,20 +61,21 @@ export async function POST(request: NextRequest) {
       console.warn('[Register] Firestore duplicate check note:', checkErr?.message);
     }
 
-    // Generate unique UID
-    const uid = `user_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
+    // Use provided client UID (from Firebase Client Auth) or generate unique UID
+    const uid = providedUid || `user_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
 
-    // Attempt to register in Firebase Auth if identity toolkit is provisioned
-    try {
-      await adminAuth.createUser({
-        uid,
-        email: cleanEmail,
-        password,
-        displayName: cleanName,
-      });
-    } catch (authErr: any) {
-      // Configuration-not-found is expected when Identity Platform is uninitialized
-      console.warn('[Register] Admin Auth createUser fallback to Firestore-backed auth:', authErr?.message);
+    // Attempt to register in Firebase Auth if not already created client-side
+    if (!providedUid) {
+      try {
+        await adminAuth.createUser({
+          uid,
+          email: cleanEmail,
+          password,
+          displayName: cleanName,
+        });
+      } catch (authErr: any) {
+        console.warn('[Register] Admin Auth createUser fallback note:', authErr?.message);
+      }
     }
 
     // Normalize grade and stream for students
@@ -118,33 +121,46 @@ export async function POST(request: NextRequest) {
       userProfilePayload.studentType = isSenior ? 'Class 11/12' : `Grade ${normalizedGrade}`;
     }
 
-    // Save profile to Firestore
-    await adminDb.collection('users').doc(uid).set(userProfilePayload);
+    // Save profile to Firestore safely (adminDb with merge)
+    try {
+      await adminDb.collection('users').doc(uid).set(userProfilePayload, { merge: true });
+    } catch (dbErr: any) {
+      console.warn('[Register] Firestore adminDb profile write notice:', dbErr?.message);
+    }
 
     // Create authenticated session token
     let sessionCookie: string;
-    try {
-      sessionCookie = await adminAuth.createCustomToken(uid, {
-        email: cleanEmail,
-        role: effectiveRole,
-        name: cleanName,
-      });
-    } catch (tokenErr: any) {
-      console.warn('[Register] createCustomToken error, fallback token payload:', tokenErr?.message);
-      // Fallback base64-encoded JWT session token
-      const header = Buffer.from(JSON.stringify({ alg: 'none', typ: 'JWT' })).toString('base64');
-      const payload = Buffer.from(
-        JSON.stringify({
-          uid,
-          sub: uid,
+    if (idToken) {
+      try {
+        const { createSessionCookie } = await import('@/lib/auth');
+        sessionCookie = await createSessionCookie(idToken);
+      } catch {
+        sessionCookie = idToken;
+      }
+    } else {
+      try {
+        sessionCookie = await adminAuth.createCustomToken(uid, {
           email: cleanEmail,
           role: effectiveRole,
           name: cleanName,
-          iat: Math.floor(Date.now() / 1000),
-          exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 5,
-        })
-      ).toString('base64');
-      sessionCookie = `${header}.${payload}.unsigned`;
+        });
+      } catch (tokenErr: any) {
+        console.warn('[Register] createCustomToken error, fallback token payload:', tokenErr?.message);
+        // Fallback base64-encoded JWT session token
+        const header = Buffer.from(JSON.stringify({ alg: 'none', typ: 'JWT' })).toString('base64');
+        const payload = Buffer.from(
+          JSON.stringify({
+            uid,
+            sub: uid,
+            email: cleanEmail,
+            role: effectiveRole,
+            name: cleanName,
+            iat: Math.floor(Date.now() / 1000),
+            exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 5,
+          })
+        ).toString('base64');
+        sessionCookie = `${header}.${payload}.unsigned`;
+      }
     }
 
     // Auto-allot unassigned students via SJF algorithm

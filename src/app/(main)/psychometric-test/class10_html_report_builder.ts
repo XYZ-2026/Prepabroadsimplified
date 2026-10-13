@@ -188,8 +188,8 @@ export function buildClass10ExecutiveHTMLReport(
     : "Your Sensing function emphasizes Extraverted Sensing (Se), prioritizing real-time tactile engagement, pragmatic experimentation, and responsiveness to active situational dynamics.";
 
   const mbtiSensingAlignment = isSensingBalanced
-    ? `Balanced Sensing Integrator (${Math.round(((spatSc + numSc) / 2) * 0.95)}th %ile)`
-    : `${siDominant ? 'Introverted Sensing (Si Dominant)' : 'Extraverted Sensing (Se Dominant)'} (${Math.round(((spatSc + numSc) / 2) * 0.95)}th %ile)`;
+    ? `Balanced Sensing Integrator (${formatOrdinal(Math.round(((spatSc + numSc) / 2) * 0.95))} %ile)`
+    : `${siDominant ? 'Introverted Sensing (Si Dominant)' : 'Extraverted Sensing (Se Dominant)'} (${formatOrdinal(Math.round(((spatSc + numSc) / 2) * 0.95))} %ile)`;
 
   const mbtiIntuitionArchetype = isIntuitionBalanced
     ? "Integrated Dual Intuitive (Ni/Ne)"
@@ -204,8 +204,8 @@ export function buildClass10ExecutiveHTMLReport(
     : "Extraverted Intuition (Ne) drives your perceiving function, generating prolific lateral ideas, creative brainstorming paths, and interdisciplinary associations.";
 
   const mbtiIntuitionAlignment = isIntuitionBalanced
-    ? `Integrated Dual Intuitive (${Math.min(99, Math.round(oSc * 0.98))}th %ile)`
-    : `${niDominant ? 'Dominant Ni Strategist' : 'Exploratory Ne Innovator'} (${Math.min(99, Math.round(oSc * 0.98))}th %ile)`;
+    ? `Integrated Dual Intuitive (${formatOrdinal(Math.min(99, Math.round(oSc * 0.98)))} %ile)`
+    : `${niDominant ? 'Dominant Ni Strategist' : 'Exploratory Ne Innovator'} (${formatOrdinal(Math.min(99, Math.round(oSc * 0.98)))} %ile)`;
 
   const mbtiDecisionArchetype = isTfBalanced
     ? "Contextual Decision Integrator (T/F)"
@@ -220,8 +220,8 @@ export function buildClass10ExecutiveHTMLReport(
     : "Your decision evaluation is guided by core personal values, interpersonal harmony (Fe), and human impact considerations, prioritizing stakeholder alignment alongside practical outcomes.";
 
   const mbtiDecisionAlignment = isTfBalanced
-    ? `Contextual Decision Integrator (${Math.round(((cSc + reasSc) / 2) * 0.96)}th %ile)`
-    : `${tDominant ? 'Objective Te Executive' : 'Values-Driven Decision Maker'} (${Math.round(((cSc + reasSc) / 2) * 0.96)}th %ile)`;
+    ? `Contextual Decision Integrator (${formatOrdinal(Math.round(((cSc + reasSc) / 2) * 0.96))} %ile)`
+    : `${tDominant ? 'Objective Te Executive' : 'Values-Driven Decision Maker'} (${formatOrdinal(Math.round(((cSc + reasSc) / 2) * 0.96))} %ile)`;
 
   const fluidArchetype = reasSc >= 70
     ? "Algorithmic Fluid Logic"
@@ -236,10 +236,10 @@ export function buildClass10ExecutiveHTMLReport(
     : "Your Fluid Intelligence indicates a grounded, methodical learning style. You solve problems most effectively through structured step-by-step algorithms, explicit examples, and proven templates rather than high-ambiguity abstract puzzles.";
 
   const fluidAlignment = reasSc >= 70
-    ? `Top Tier Fluid Logic (${Math.round(reasSc * 0.97)}th %ile)`
+    ? `Top Tier Fluid Logic (${formatOrdinal(Math.round(reasSc * 0.97))} %ile)`
     : reasSc >= 45
-    ? `Balanced Analytical Logic (${Math.round(reasSc * 0.97)}th %ile)`
-    : `Structured Step-by-Step Reasoner (${Math.round(reasSc * 0.97)}th %ile)`;
+    ? `Balanced Analytical Logic (${formatOrdinal(Math.round(reasSc * 0.97))} %ile)`
+    : `Structured Step-by-Step Reasoner (${formatOrdinal(Math.round(reasSc * 0.97))} %ile)`;
 
   const spatialArchetype = spatSc >= 70
     ? "3D Systems Spatializer"
@@ -254,10 +254,10 @@ export function buildClass10ExecutiveHTMLReport(
     : "You demonstrate a strong preference for verbal, textual, and procedural explanations over complex mental 3D rotations or topological abstractions.";
 
   const spatialAlignment = spatSc >= 70
-    ? `High Spatial Visualizer (${Math.round(spatSc * 0.96)}th %ile)`
+    ? `High Spatial Visualizer (${formatOrdinal(Math.round(spatSc * 0.96))} %ile)`
     : spatSc >= 45
-    ? `Applied Spatial Processor (${Math.round(spatSc * 0.96)}th %ile)`
-    : `Linear & Text-Oriented Processor (${Math.round(spatSc * 0.96)}th %ile)`;
+    ? `Applied Spatial Processor (${formatOrdinal(Math.round(spatSc * 0.96))} %ile)`
+    : `Linear & Text-Oriented Processor (${formatOrdinal(Math.round(spatSc * 0.96))} %ile)`;
 
   const systemsArchetype = reasSc >= 70
     ? "Master Systems Architect"
@@ -272,10 +272,10 @@ export function buildClass10ExecutiveHTMLReport(
     : "You approach systems through structured operational workflows, excelling at implementing clearly defined procedures and reliable execution routines.";
 
   const systemsAlignment = reasSc >= 70
-    ? `Master Systems Architect (${Math.min(99, Math.round(reasSc * 0.98))}th %ile)`
+    ? `Master Systems Architect (${formatOrdinal(Math.min(99, Math.round(reasSc * 0.98)))} %ile)`
     : reasSc >= 45
-    ? `Applied Process Modeler (${Math.min(99, Math.round(reasSc * 0.98))}th %ile)`
-    : `Structured Workflow Implementer (${Math.min(99, Math.round(reasSc * 0.98))}th %ile)`;
+    ? `Applied Process Modeler (${formatOrdinal(Math.min(99, Math.round(reasSc * 0.98)))} %ile)`
+    : `Structured Workflow Implementer (${formatOrdinal(Math.min(99, Math.round(reasSc * 0.98)))} %ile)`;
 
   const criticalArchetype = reasSc >= 70
     ? "Cognitive Error Auditor"
@@ -284,10 +284,10 @@ export function buildClass10ExecutiveHTMLReport(
     : "Procedural Checklist Reviewer";
 
   const criticalAlignment = reasSc >= 70
-    ? `Rigorous Bias Auditor (${Math.round(reasSc * 0.96)}th %ile)`
+    ? `Rigorous Bias Auditor (${formatOrdinal(Math.round(reasSc * 0.96))} %ile)`
     : reasSc >= 45
-    ? `Pragmatic Evidence Reviewer (${Math.round(reasSc * 0.96)}th %ile)`
-    : `Procedural Checklist Reviewer (${Math.round(reasSc * 0.96)}th %ile)`;
+    ? `Pragmatic Evidence Reviewer (${formatOrdinal(Math.round(reasSc * 0.96))} %ile)`
+    : `Procedural Checklist Reviewer (${formatOrdinal(Math.round(reasSc * 0.96))} %ile)`;
 
   const modules = [
     // Phase I: Personality Architecture (Modules 1 - 10)
@@ -297,7 +297,7 @@ export function buildClass10ExecutiveHTMLReport(
       code: "Module 01",
       title: "Big Five — Openness & Abstract Curiosity",
       score: `${oSc}%`,
-      percentile: `${Math.round(oSc * 0.96)}th`,
+      percentile: `${formatOrdinal(Math.round(oSc * 0.96))}`,
       archetype: oSc > 75 ? "Abstract Strategist" : "Pragmatic Executor",
       summary: `${name}, your Openness score reflects an active cognitive drive for theoretical exploration, cross-disciplinary synthesis, and non-linear problem solving. You operate with high tolerance for cognitive ambiguity, excelling in unconstrained environments requiring innovation.`,
       mechanism: "In modern personality psychology, Openness to Experience quantifies an individual's cognitive flexibility, intellectual curiosity, aesthetic sensitivity, and intrinsic motivation to explore novel concepts.",
@@ -310,7 +310,7 @@ export function buildClass10ExecutiveHTMLReport(
       ],
       low_behavior: "Prefers concrete facts, established routines, and proven operating procedures.",
       high_behavior: "Seeks novel hypotheses, cross-disciplinary concepts, and open-ended research.",
-      alignment: `${oSc > 75 ? 'High Exploratory Stance' : 'Pragmatic Focus'} (${Math.round(oSc * 0.96)}th %ile)`,
+      alignment: `${oSc > 75 ? 'High Exploratory Stance' : 'Pragmatic Focus'} (${formatOrdinal(Math.round(oSc * 0.96))} %ile)`,
       protocol_name: "Intellectual Focus & Execution Sifting",
       protocol: "While abstract curiosity fuels rapid learning and creative breakthroughs, guard against intellectual drift. Pair high curiosity with structured project management boards to ensure conceptual ideas are brought to full operational completion.",
       opt_name: "Workspace & Environmental Optimization",
@@ -322,20 +322,26 @@ export function buildClass10ExecutiveHTMLReport(
       code: "Module 02",
       title: "Big Five — Conscientiousness, Grit & Execution",
       score: `${cSc}%`,
-      percentile: `${Math.round(cSc * 0.96)}th`,
-      archetype: cSc > 75 ? "Executive Disciplinarian" : "Flexible Operator",
-      summary: `Your Conscientiousness profile indicates a disciplined executive function system. You naturally establish systematic workflows, set high internal benchmarks, and sustain goal-directed effort through complex multi-stage projects.`,
+      percentile: `${formatOrdinal(Math.round(cSc * 0.96))}`,
+      archetype: cSc >= 65 ? "Executive Disciplinarian" : cSc >= 40 ? "Pragmatic Balancer" : "Flexible Operator",
+      summary: cSc >= 65
+        ? "Your Conscientiousness profile indicates a disciplined executive function system. You naturally establish systematic workflows, set high internal benchmarks, and sustain goal-directed effort through complex multi-stage projects."
+        : cSc >= 40
+        ? "You display a flexible operational rhythm, balancing structured goal orientation with adaptable execution when project priorities shift."
+        : "You operate with high situational flexibility and spontaneous adaptability. To maximize output, you benefit from external accountability frameworks, digital task tracking, and milestone-based check-ins.",
       mechanism: "Conscientiousness reflects the structural integrity of executive function networks governing impulse control, long-term persistence, and procedural reliability.",
-      subfacet_desc: `Industriousness & Persistence (${Math.min(99, cSc + 4)}%) and Goal-Striving Ambition (${Math.min(99, cSc + 2)}%) form your execution anchors, ensuring steady task throughput.`,
+      subfacet_desc: cSc >= 50
+        ? `Industriousness & Persistence (${Math.min(99, cSc + 4)}%) and Goal-Striving Ambition (${Math.min(99, cSc + 2)}%) form your execution anchors, ensuring steady task throughput.`
+        : `Developing Industriousness (${Math.min(99, Math.max(14, cSc + 4))}%) highlights opportunities to build structured execution routines to support goal-striving ambition (${Math.min(99, Math.max(14, cSc + 2))}%).`,
       facets: [
-        ["Orderliness & System", `${Math.max(40, cSc - 3)}%`, "Instinctively builds structured filing systems, note hierarchies, and daily routines."],
-        ["Industriousness & Grit", `${Math.min(99, cSc + 4)}%`, "Sustained focus through tedious tasks; high resistance to digital distraction."],
-        ["Goal-Striving Ambition", `${Math.min(99, cSc + 2)}%`, "Sets ambitious benchmarks and derives deep satisfaction from crossing milestones."],
-        ["Operational Reliability", `${Math.min(99, cSc + 1)}%`, "Adheres strictly to promises, meeting submission deadlines without external prompts."]
+        ["Orderliness & System", `${Math.min(99, Math.max(12, cSc - 2))}%`, "Builds structured filing systems, note hierarchies, and daily study workflows."],
+        ["Industriousness & Grit", `${Math.min(99, Math.max(15, cSc + 4))}%`, "Sustained focus through challenging tasks and resistance to digital distraction."],
+        ["Goal-Striving Ambition", `${Math.min(99, Math.max(14, cSc + 2))}%`, "Sets ambitious benchmarks and derives satisfaction from crossing milestones."],
+        ["Operational Reliability", `${Math.min(99, Math.max(12, cSc + 1))}%`, "Adheres strictly to commitments and submission deadlines."]
       ],
       low_behavior: "Spontaneous, highly flexible, requires external structures to maintain consistency.",
       high_behavior: "Methodical, self-directed, maintains rigorous standards and strict milestone discipline.",
-      alignment: `Methodical Execution (${Math.round(cSc * 0.96)}th %ile)`,
+      alignment: `${cSc >= 65 ? 'Methodical Execution' : cSc >= 40 ? 'Adaptive Execution' : 'Flexible Execution'} (${formatOrdinal(Math.round(cSc * 0.96))} %ile)`,
       protocol_name: "Pomodoro Block-Scheduling Protocol",
       protocol: "Execute deep work in 50-minute uninterrupted focus blocks followed by 10-minute complete rest breaks. Add a 15% time buffer to daily schedules to prevent perfectionism burnout when handling unexpected delays.",
       opt_name: "Operational Workflow Optimization",
@@ -347,7 +353,7 @@ export function buildClass10ExecutiveHTMLReport(
       code: "Module 03",
       title: "Big Five — Extraversion, Energy & Sociability",
       score: `${eSc}%`,
-      percentile: `${Math.round(eSc * 0.95)}th`,
+      percentile: `${formatOrdinal(Math.round(eSc * 0.95))}`,
       archetype: eSc > 65 ? "Energetic Connector" : "Ambivert Reflective Leader",
       summary: `You display an ambivert energy profile. While cognitive clarity and energy recharge depend on solitary focus, you project decisive assertiveness when leading team alignments or pitching critical initiatives.`,
       mechanism: "Extraversion evaluates neurobehavioral reward sensitivity and dopaminergic activity under social stimulation.",
@@ -360,7 +366,7 @@ export function buildClass10ExecutiveHTMLReport(
       ],
       low_behavior: "Inward-focused, quiet focus, recharges through solitary reflection.",
       high_behavior: "Outward-focused, high reward seeking, recharges through group interaction.",
-      alignment: `Balanced Ambivert (${Math.round(eSc * 0.95)}th %ile)`,
+      alignment: `Balanced Ambivert (${formatOrdinal(Math.round(eSc * 0.95))} %ile)`,
       protocol_name: "Targeted Energy Management",
       protocol: "Schedule solitary analytical tasks during morning peak hours. Pair with brief, structured group alignment meetings in the afternoon to maximize collaborative efficiency while protecting mental recharge cycles.",
       opt_name: "Group Dynamic Optimization",
@@ -372,7 +378,7 @@ export function buildClass10ExecutiveHTMLReport(
       code: "Module 04",
       title: "Big Five — Agreeableness & Harmony",
       score: `${aSc}%`,
-      percentile: `${Math.round(aSc * 0.96)}th`,
+      percentile: `${formatOrdinal(Math.round(aSc * 0.96))}`,
       archetype: "Cooperative Diplomat",
       summary: `Your Agreeableness score reflects a prosocial orientation that values psychological safety and team alignment. You practice active listening while retaining the objectivity needed to enforce high standards.`,
       mechanism: "Agreeableness measures the prosocial disposition of the mind, defining how one balances personal self-interest against group cohesion.",
@@ -385,7 +391,7 @@ export function buildClass10ExecutiveHTMLReport(
       ],
       low_behavior: "Competitive, direct, prioritizes objective logic over team morale.",
       high_behavior: "Consensus-seeking, highly empathetic, prioritizes group cohesion.",
-      alignment: `Cooperative Diplomat (${Math.round(aSc * 0.96)}th %ile)`,
+      alignment: `Cooperative Diplomat (${formatOrdinal(Math.round(aSc * 0.96))} %ile)`,
       protocol_name: "Constructive Quality Audit",
       protocol: "Deliver direct technical feedback using the 'Validate-Audit-Pivot' framework: acknowledge team member contributions first, highlight critical technical adjustments dispassionately, and outline actionable fixes together.",
       opt_name: "Team Synergy Design",
@@ -397,22 +403,30 @@ export function buildClass10ExecutiveHTMLReport(
       code: "Module 05",
       title: "Big Five — Emotional Stability & Stress Buffering",
       score: `${esSc}%`,
-      percentile: `${Math.round(esSc * 0.96)}th`,
-      archetype: "Resilient Anchor",
-      summary: `You possess strong autonomic stress buffering and psychological equanimity. Under tight deadlines or high-stakes evaluative pressure, you maintain logical clarity and recover baseline composure rapidly.`,
+      percentile: `${formatOrdinal(Math.round(esSc * 0.96))}`,
+      archetype: esSc >= 65 ? "Resilient Anchor" : esSc >= 40 ? "Balanced Regulator" : "Sensory Reactive",
+      summary: esSc >= 65
+        ? "You possess strong autonomic stress buffering and psychological equanimity. Under tight deadlines or high-stakes evaluative pressure, you maintain logical clarity and recover baseline composure rapidly."
+        : esSc >= 40
+        ? "You maintain steady composure during routine demands while experiencing heightened arousal under high-stakes evaluative pressure, which can be harnessed through structured test-taking strategies."
+        : "You exhibit heightened autonomic sensitivity to evaluative pressure and tight deadlines. Incorporating pre-exam decompression routines, somatic breathing, and timed simulation practice will significantly protect cognitive clarity.",
       mechanism: "Emotional Stability quantifies the reactivity threshold of the autonomic nervous system when processing threat signals or evaluative pressure.",
-      subfacet_desc: `Composure Under Pressure (${Math.min(99, esSc + 5)}%) and Stress Resilience (${Math.min(99, esSc + 3)}%) place you in a solid resilience tier during high-stakes exam environments.`,
+      subfacet_desc: esSc >= 50
+        ? `Composure Under Pressure (${Math.min(99, esSc + 5)}%) and Stress Resilience (${Math.min(99, esSc + 3)}%) place you in a solid resilience tier during high-stakes exam environments.`
+        : `Developing Composure (${Math.min(99, Math.max(12, esSc + 5))}%) and Stress Resilience (${Math.min(99, Math.max(12, esSc + 3))}%) indicates that emotional energy can be channeled effectively with planned stress buffers.`,
       facets: [
-        ["Stress Resilience", `${Math.min(99, esSc + 3)}%`, "Maintains cognitive performance and logical reasoning under intense pressure."],
-        ["Composure Under Load", `${Math.min(99, esSc + 5)}%`, "Regulates emotional reactions, preventing panic or impulsive outbursts."],
-        ["Recovery Pace", `${Math.min(99, esSc + 1)}%`, "Returns to baseline emotional calm rapidly following setbacks or mistakes."],
-        ["Low Evaluative Stress Drift", `${Math.max(40, esSc - 2)}%`, "Demonstrates steady composure and recovers quickly from temporary testing setbacks."]
+        ["Stress Resilience", `${Math.min(99, Math.max(12, esSc + 3))}%`, "Maintains cognitive performance and logical reasoning under intense pressure."],
+        ["Composure Under Load", `${Math.min(99, Math.max(12, esSc + 5))}%`, "Regulates emotional reactions, preventing panic or impulsive outbursts."],
+        ["Recovery Pace", `${Math.min(99, Math.max(12, esSc + 1))}%`, "Returns to baseline emotional calm rapidly following setbacks or mistakes."],
+        ["Evaluative Stress Modulation", `${Math.min(99, Math.max(10, esSc - 1))}%`, "Demonstrates composure recovery and adaptation following testing setbacks."]
       ],
       low_behavior: "Elevated stress sensitivity, prone to anticipatory anxiety before exams.",
       high_behavior: "High stress tolerance, calm equanimity under load, rapid setback recovery.",
-      alignment: `Resilient Buffer (${Math.round(esSc * 0.96)}th %ile)`,
-      protocol_name: "Post-Performance Debrief Protocol",
-      protocol: "Capitalize on your emotional stability by conducting dispassionate post-mortem reviews after major milestones: record 3 execution wins and 2 operational adjustments without emotional self-criticism.",
+      alignment: `${esSc >= 65 ? 'Resilient Buffer' : esSc >= 40 ? 'Balanced Composure' : 'Sensory Reactive'} (${formatOrdinal(Math.round(esSc * 0.96))} %ile)`,
+      protocol_name: esSc >= 50 ? "Post-Performance Debrief Protocol" : "Somatic Grounding & Stress Buffering",
+      protocol: esSc >= 50
+        ? "Capitalize on your emotional stability by conducting dispassionate post-mortem reviews after major milestones: record 3 execution wins and 2 operational adjustments without emotional self-criticism."
+        : "Implement deliberate 4-4-4-4 box breathing before entering exam rooms and schedule 15-minute decompression blocks between intensive study sprints to maintain autonomic equilibrium.",
       opt_name: "High-Pressure Environment Calibration",
       opt_text: "Thrive in high-stakes roles such as live systems engineering, competitive evaluations, or crisis management where baseline calm is a primary competitive multiplier."
     },
@@ -422,7 +436,7 @@ export function buildClass10ExecutiveHTMLReport(
       code: "Module 06",
       title: "MBTI Cognitive Stack — Sensing (Si vs Se)",
       score: `${Math.round((spatSc + numSc) / 2)}%`,
-      percentile: `${Math.round(((spatSc + numSc) / 2) * 0.95)}th`,
+      percentile: `${formatOrdinal(Math.round(((spatSc + numSc) / 2) * 0.95))}`,
       archetype: mbtiSensingArchetype,
       summary: mbtiSensingSummary,
       mechanism: "Introverted Sensing (Si) operates as an internal database of historical facts, detailed procedures, and precedent.",
@@ -447,7 +461,7 @@ export function buildClass10ExecutiveHTMLReport(
       code: "Module 07",
       title: "MBTI Cognitive Stack — Intuition (Ni vs Ne)",
       score: `${Math.min(99, oSc + 3)}%`,
-      percentile: `${Math.min(99, Math.round(oSc * 0.98))}th`,
+      percentile: `${formatOrdinal(Math.min(99, Math.round(oSc * 0.98)))}`,
       archetype: mbtiIntuitionArchetype,
       summary: mbtiIntuitionSummary,
       mechanism: "Introverted Intuition (Ni) is a convergent perceiving engine that condenses high volumes of abstract data into focused overarching insights.",
@@ -472,7 +486,7 @@ export function buildClass10ExecutiveHTMLReport(
       code: "Module 08",
       title: "MBTI Decision Models — Thinking (Te/Ti) vs Feeling",
       score: `${Math.min(99, Math.round((cSc + reasSc) / 2))}%`,
-      percentile: `${Math.round(((cSc + reasSc) / 2) * 0.96)}th`,
+      percentile: `${formatOrdinal(Math.round(((cSc + reasSc) / 2) * 0.96))}`,
       archetype: mbtiDecisionArchetype,
       summary: mbtiDecisionSummary,
       mechanism: "Thinking (T) evaluation prioritizes impersonal cause-and-effect reasoning over subjective feelings.",
@@ -496,21 +510,27 @@ export function buildClass10ExecutiveHTMLReport(
       phase: "Phase I: Personality Architecture",
       code: "Module 09",
       title: "Locus of Control — Internal vs External Motivation",
-      score: `${Math.min(99, cSc + 6)}%`,
-      percentile: `${Math.min(99, Math.round(cSc * 0.98))}th`,
-      archetype: "Internal Sovereign",
-      summary: "You operate with a strong Internal Locus of Control, taking complete personal ownership of outcomes. You attribute success to strategic preparation and effort rather than luck or external circumstances.",
+      score: `${Math.min(99, Math.max(15, cSc + 6))}%`,
+      percentile: `${formatOrdinal(Math.min(99, Math.round(cSc * 0.98)))}`,
+      archetype: cSc >= 65 ? "Internal Sovereign" : cSc >= 40 ? "Balanced Originator" : "Contextual Navigator",
+      summary: cSc >= 65
+        ? "You operate with a strong Internal Locus of Control, taking complete personal ownership of outcomes. You attribute success to strategic preparation and effort rather than luck or external circumstances."
+        : cSc >= 40
+        ? "You balance personal ownership of outcomes with a realistic appreciation of institutional and environmental context."
+        : "You tend to view outcomes as significantly shaped by external dynamics, timing, and environmental constraints. Building incremental self-efficacy and personal accountability milestones will strengthen your internal sense of agency.",
       mechanism: "Locus of control measures where an individual locates the primary cause of life events.",
-      subfacet_desc: `Internal Locus Stance (${Math.min(99, cSc + 6)}%) and Self-Efficacy (${Math.min(99, cSc + 4)}%) empower you to take initiative in ambiguous environments.`,
+      subfacet_desc: cSc >= 50
+        ? `Internal Locus Stance (${Math.min(99, cSc + 6)}%) and Self-Efficacy (${Math.min(99, cSc + 4)}%) empower you to take initiative in ambiguous environments.`
+        : `Internal Locus Stance (${Math.min(99, Math.max(14, cSc + 6))}%) and Self-Efficacy (${Math.min(99, Math.max(12, cSc + 4))}%) provide actionable anchors for expanding personal ownership.`,
       facets: [
-        ["Internal Locus Stance", `${Math.min(99, cSc + 6)}%`, "Believes personal effort, strategy, and preparation dictate success."],
-        ["Self-Efficacy Index", `${Math.min(99, cSc + 4)}%`, "High confidence in capacity to master complex unfamiliar skills."],
-        ["Autonomy Requirement", `${Math.min(99, cSc + 2)}%`, "Requires operational freedom to design personal execution workflows."],
-        ["External Shift Shield", `${cSc}%`, "Resistant to learned helplessness or blaming external system obstacles."]
+        ["Internal Locus Stance", `${Math.min(99, Math.max(14, cSc + 6))}%`, "Believes personal effort, strategy, and preparation dictate success."],
+        ["Self-Efficacy Index", `${Math.min(99, Math.max(12, cSc + 4))}%`, "Confidence in capacity to master complex unfamiliar skills."],
+        ["Autonomy Requirement", `${Math.min(99, Math.max(12, cSc + 2))}%`, "Preference for operational freedom to design personal execution workflows."],
+        ["External Influence Awareness", `${Math.min(99, Math.max(10, cSc))}%`, "Sensitivity to external systemic opportunities and resource availability."]
       ],
       low_behavior: "Attributes outcomes to external factors, luck, environment, or system constraints.",
       high_behavior: "High self-efficacy, takes full personal ownership over performance and growth.",
-      alignment: `High Internal Sovereign (${Math.min(99, Math.round(cSc * 0.98))}th %ile)`,
+      alignment: `${cSc >= 65 ? 'Internal Sovereign' : cSc >= 40 ? 'Balanced Agency' : 'Contextual Agency'} (${formatOrdinal(Math.min(99, Math.round(cSc * 0.98)))} %ile)`,
       protocol_name: "Autonomy Maximization Protocol",
       protocol: "Structure study and project goals with clear personal accountability markers to leverage your high self-efficacy.",
       opt_name: "Self-Directed Environment Design",
@@ -522,7 +542,7 @@ export function buildClass10ExecutiveHTMLReport(
       code: "Module 10",
       title: "Risk Tolerance & Ambiguity Profiling",
       score: `${Math.min(99, oSc + 2)}%`,
-      percentile: `${Math.round(oSc * 0.95)}th`,
+      percentile: `${formatOrdinal(Math.round(oSc * 0.95))}`,
       archetype: "Calculated Innovation Risk",
       summary: "You display calculated risk tolerance, viewing unmapped ambiguity not as a source of stress but as an opportunity to architect novel, high-reward systems.",
       mechanism: "Risk tolerance profiles measure cognitive responses to uncertainty and potential loss.",
@@ -535,7 +555,7 @@ export function buildClass10ExecutiveHTMLReport(
       ],
       low_behavior: "Risk-averse, requires explicit guidelines and predictable environments.",
       high_behavior: "Thrives in ambiguous, fast-changing startup or R&D environments.",
-      alignment: `Calculated Innovator (${Math.round(oSc * 0.95)}th %ile)`,
+      alignment: `Calculated Innovator (${formatOrdinal(Math.round(oSc * 0.95))} %ile)`,
       protocol_name: "Pre-Mortem Analysis Protocol",
       protocol: "Before committing to high-risk strategic pivots, execute a pre-mortem session to identify potential failure modes and build mitigation buffers.",
       opt_name: "Emerging Tech Alignment",
@@ -549,7 +569,7 @@ export function buildClass10ExecutiveHTMLReport(
       code: "Module 11",
       title: "Fluid Intelligence (Gf) & Abstract Reasoning",
       score: `${reasSc}%`,
-      percentile: `${Math.round(reasSc * 0.97)}th`,
+      percentile: `${formatOrdinal(Math.round(reasSc * 0.97))}`,
       archetype: fluidArchetype,
       summary: fluidSummary,
       mechanism: "Fluid Intelligence (Gf) represents non-verbal reasoning capacity independent of acquired culture or schooling.",
@@ -574,7 +594,7 @@ export function buildClass10ExecutiveHTMLReport(
       code: "Module 12",
       title: "Crystallized Intelligence (Gc) & Knowledge Stacking",
       score: `${verbalSc}%`,
-      percentile: `${Math.round(verbalSc * 0.96)}th`,
+      percentile: `${formatOrdinal(Math.round(verbalSc * 0.96))}`,
       archetype: "Interdisciplinary Polymath",
       summary: `Your Crystallized Intelligence reflects solid cross-disciplinary knowledge retention, enabling you to stack insights from science, business, and humanities.`,
       mechanism: "Crystallized Intelligence (Gc) measures accumulated cultural knowledge, domain vocabulary, and semantic frameworks built through education and deliberate study.",
@@ -587,7 +607,7 @@ export function buildClass10ExecutiveHTMLReport(
       ],
       low_behavior: "Highly specialized single-domain knowledge focus.",
       high_behavior: "Broad cross-disciplinary knowledge repository with rapid semantic retrieval.",
-      alignment: `Interdisciplinary Stack (${Math.round(verbalSc * 0.96)}th %ile)`,
+      alignment: `Interdisciplinary Stack (${formatOrdinal(Math.round(verbalSc * 0.96))} %ile)`,
       protocol_name: "Interdisciplinary Stacking Protocol",
       protocol: "Read foundational texts outside your primary domain every quarter, taking structured notes to expand your semantic lattice.",
       opt_name: "Knowledge Synthesis Repository",
@@ -599,7 +619,7 @@ export function buildClass10ExecutiveHTMLReport(
       code: "Module 13",
       title: "Spatial-Visual Intelligence & 3D Geometry",
       score: `${spatSc}%`,
-      percentile: `${Math.round(spatSc * 0.96)}th`,
+      percentile: `${formatOrdinal(Math.round(spatSc * 0.96))}`,
       archetype: spatialArchetype,
       summary: spatialSummary,
       mechanism: "Spatial intelligence processes visual-spatial relationships, mental manipulation of objects, and geometric orientation.",
@@ -624,7 +644,7 @@ export function buildClass10ExecutiveHTMLReport(
       code: "Module 14",
       title: "Logical-Mathematical Intelligence",
       score: `${numSc}%`,
-      percentile: `${Math.round(numSc * 0.96)}th`,
+      percentile: `${formatOrdinal(Math.round(numSc * 0.96))}`,
       archetype: "Quantitative Logic Architect",
       summary: `You demonstrate speed in formal logic proofs, mathematical calculations, and step-sequence algorithmic troubleshooting.`,
       mechanism: "Logical-mathematical intelligence governs abstract numerical reasoning, pattern recognition, and inductive logic chain processing.",
@@ -637,7 +657,7 @@ export function buildClass10ExecutiveHTMLReport(
       ],
       low_behavior: "Prefers qualitative narrative analysis over quantitative proofs.",
       high_behavior: "Excels in quantitative modeling, formal logic, and mathematical algorithm design.",
-      alignment: `Quantitative Architect (${Math.round(numSc * 0.96)}th %ile)`,
+      alignment: `Quantitative Architect (${formatOrdinal(Math.round(numSc * 0.96))} %ile)`,
       protocol_name: "Quantitative Model Verification",
       protocol: "Apply formal mathematical proof structures to verify edge cases in system algorithms prior to deployment.",
       opt_name: "Quantitative Tooling Integration",
@@ -649,7 +669,7 @@ export function buildClass10ExecutiveHTMLReport(
       code: "Module 15",
       title: "Linguistic-Verbal Intelligence",
       score: `${verbalSc}%`,
-      percentile: `${Math.round(verbalSc * 0.95)}th`,
+      percentile: `${formatOrdinal(Math.round(verbalSc * 0.95))}`,
       archetype: "Precision Synthesizer",
       summary: `You express complex concepts with clarity, crafting structured outlines, analytical documentation, and clear executive summaries.`,
       mechanism: "Linguistic intelligence involves sensitivity to spoken and written language, syntax, semantic nuances, and rhetorical structure.",
@@ -662,7 +682,7 @@ export function buildClass10ExecutiveHTMLReport(
       ],
       low_behavior: "Communicates primarily through casual, non-structured verbal dialogue.",
       high_behavior: "Crafts precise, structured documentation with rigorous domain terminology.",
-      alignment: `Precision Documentation (${Math.round(verbalSc * 0.95)}th %ile)`,
+      alignment: `Precision Documentation (${formatOrdinal(Math.round(verbalSc * 0.95))} %ile)`,
       protocol_name: "Structured Outlining Protocol",
       protocol: "Utilize bulleted hierarchical outlines to structure all technical reports before writing prose.",
       opt_name: "Documentation Systematization",
@@ -674,7 +694,7 @@ export function buildClass10ExecutiveHTMLReport(
       code: "Module 16",
       title: "Systemic & Systems Thinking Archetypes",
       score: `${Math.min(99, reasSc + 4)}%`,
-      percentile: `${Math.min(99, Math.round(reasSc * 0.98))}th`,
+      percentile: `${formatOrdinal(Math.min(99, Math.round(reasSc * 0.98)))}`,
       archetype: systemsArchetype,
       summary: systemsSummary,
       mechanism: "Systems thinking evaluates interconnected networks, dynamic delays, non-linear feedback loops, and emergent structural properties.",
@@ -699,7 +719,7 @@ export function buildClass10ExecutiveHTMLReport(
       code: "Module 17",
       title: "Creative Synthesis & Lateral Problem Solving",
       score: `${Math.min(99, oSc + 2)}%`,
-      percentile: `${Math.round(oSc * 0.96)}th`,
+      percentile: `${formatOrdinal(Math.round(oSc * 0.96))}`,
       archetype: "Lateral Innovator",
       summary: "You combine concepts from unrelated domains to solve persistent problems, producing novel inventions and cross-disciplinary applications.",
       mechanism: "Creative synthesis involves lateral thinking, cognitive flexibility, and the ability to reorganize existing cognitive schemas into original configurations.",
@@ -712,7 +732,7 @@ export function buildClass10ExecutiveHTMLReport(
       ],
       low_behavior: "Incremental problem solver; relies on traditional domain solutions.",
       high_behavior: "Lateral problem solver; cross-pollinates ideas to generate radical innovations.",
-      alignment: `Lateral Innovator (${Math.round(oSc * 0.96)}th %ile)`,
+      alignment: `Lateral Innovator (${formatOrdinal(Math.round(oSc * 0.96))} %ile)`,
       protocol_name: "Lateral Ideation Sprints",
       protocol: "Run 20-minute divergent ideation sessions where traditional constraints are temporarily suspended to discover non-obvious solution vectors.",
       opt_name: "R&D Incubator Focus",
@@ -724,7 +744,7 @@ export function buildClass10ExecutiveHTMLReport(
       code: "Module 18",
       title: "Critical Thinking & Bias Auditing",
       score: `${Math.min(99, reasSc + 2)}%`,
-      percentile: `${Math.round(reasSc * 0.96)}th`,
+      percentile: `${formatOrdinal(Math.round(reasSc * 0.96))}`,
       archetype: criticalArchetype,
       summary: "You audit assumptions rigorously, identifying logical fallacies, bias traps, and weak empirical evidence before committing to strategy.",
       mechanism: "Critical thinking evaluates the validity of arguments, audits underlying assumptions, and filters out cognitive biases dispassionately.",
@@ -749,7 +769,7 @@ export function buildClass10ExecutiveHTMLReport(
       code: "Module 19",
       title: "Processing Speed & Cognitive Endurance",
       score: `${Math.min(99, aptOverall + 2)}%`,
-      percentile: `${Math.round(aptOverall * 0.95)}th`,
+      percentile: `${formatOrdinal(Math.round(aptOverall * 0.95))}`,
       archetype: "High-Stamina Processor",
       summary: "You maintain information processing speed and cognitive accuracy across extended deep work sessions without mental breakdown.",
       mechanism: "Processing speed and endurance reflect neural efficiency, axonal myelination quality, and working memory stamina under continuous cognitive load.",
@@ -762,7 +782,7 @@ export function buildClass10ExecutiveHTMLReport(
       ],
       low_behavior: "Cognitive fatigue sets in quickly during intense mental processing.",
       high_behavior: "Sustains high processing velocity and mental accuracy over multi-hour sprints.",
-      alignment: `High Stamina Processor (${Math.round(aptOverall * 0.95)}th %ile)`,
+      alignment: `High Stamina Processor (${formatOrdinal(Math.round(aptOverall * 0.95))} %ile)`,
       protocol_name: "Paced Sprint Protocol",
       protocol: "Implement scheduled 5-minute active recovery breaks every 50 minutes to maintain processing velocity throughout long study days.",
       opt_name: "High-Throughput Environment Design",
@@ -774,7 +794,7 @@ export function buildClass10ExecutiveHTMLReport(
       code: "Module 20",
       title: "Metacognition: Self-Auditing & Adaptation",
       score: `${Math.min(99, cSc + 3)}%`,
-      percentile: `${Math.round(cSc * 0.96)}th`,
+      percentile: `${formatOrdinal(Math.round(cSc * 0.96))}`,
       archetype: "Self-Correcting Loop",
       summary: "You perform continuous active mental audits during execution, quickly identifying friction points and modifying your learning approach.",
       mechanism: "Metacognition is 'thinking about thinking' — the executive monitoring and control of one's own cognitive processes during learning and problem-solving.",
@@ -787,7 +807,7 @@ export function buildClass10ExecutiveHTMLReport(
       ],
       low_behavior: "Executes tasks passively without auditing personal learning efficiency.",
       high_behavior: "Active self-auditing; continuously adjusts tactics to eliminate mental friction.",
-      alignment: `Self-Correcting Loop (${Math.round(cSc * 0.96)}th %ile)`,
+      alignment: `Self-Correcting Loop (${formatOrdinal(Math.round(cSc * 0.96))} %ile)`,
       protocol_name: "Metacognitive Audit Routine",
       protocol: "Conduct a 3-minute mental audit after every major task: ask 'What worked?', 'Where was friction?', and 'What single change optimizes the next sprint?'",
       opt_name: "Adaptive Strategy Design",
@@ -801,7 +821,7 @@ export function buildClass10ExecutiveHTMLReport(
       code: "Module 21",
       title: "VARK — Visual & Diagrammatic Learning",
       score: `${topVarkCode === 'V' ? 92 : 75}%`,
-      percentile: `${topVarkCode === 'V' ? 95 : 72}th`,
+      percentile: `${formatOrdinal(topVarkCode === 'V' ? 95 : 72)}`,
       archetype: "Visual Dual-Coding Specialist",
       summary: `${topVarkCode === 'V' ? 'Visual learning is your primary learning modality.' : 'Visual learning serves as a strong secondary modality.'} You convert dense descriptions into flowcharts, block diagrams, and color-coded maps.`,
       mechanism: "Grounded in Paivio's Dual-Coding Theory, visual processing utilizes both verbal and visual memory channels simultaneously, doubling working memory retention.",
@@ -814,7 +834,7 @@ export function buildClass10ExecutiveHTMLReport(
       ],
       low_behavior: "Experiences friction with graphic diagrams; prefers text descriptions.",
       high_behavior: "Translates complex ideas into visual flowcharts, maps, and graphic structures.",
-      alignment: `Visual Specialist (${topVarkCode === 'V' ? 95 : 72}th %ile)`,
+      alignment: `Visual Specialist (${formatOrdinal(topVarkCode === 'V' ? 95 : 72)} %ile)`,
       protocol_name: "Dual-Coding Study Protocol",
       protocol: "Always convert dense textbook text into color-coded visual flowcharts or architecture diagrams on canvas prior to exam revision.",
       opt_name: "Visual Workspace Setup",
@@ -826,7 +846,7 @@ export function buildClass10ExecutiveHTMLReport(
       code: "Module 22",
       title: "VARK — Auditory Processing & Dialogue",
       score: `${topVarkCode === 'A' ? 90 : 68}%`,
-      percentile: `${topVarkCode === 'A' ? 93 : 65}th`,
+      percentile: `${formatOrdinal(topVarkCode === 'A' ? 93 : 65)}`,
       archetype: "Conversational Dialogue User",
       summary: `${topVarkCode === 'A' ? 'Auditory learning is your primary modality.' : 'Auditory channels serve as a supportive secondary path.'} You retain best when explaining concepts aloud to peers or participating in debate.`,
       mechanism: "Auditory learning relies on Baddeley's phonological working memory loop to encode information through speech rhythm, cadence, and dialogue.",
@@ -839,7 +859,7 @@ export function buildClass10ExecutiveHTMLReport(
       ],
       low_behavior: "Prefers quiet silent reading; easily distracted by auditory input.",
       high_behavior: "Absorbs best through lectures, audio discussions, and peer teaching.",
-      alignment: `Auditory Channel (${topVarkCode === 'A' ? 93 : 65}th %ile)`,
+      alignment: `Auditory Channel (${formatOrdinal(topVarkCode === 'A' ? 93 : 65)} %ile)`,
       protocol_name: "Feynman Peer Teaching Protocol",
       protocol: "Explain complex topics aloud in 2-minute plain-language summaries as if teaching a peer to locate hidden knowledge gaps.",
       opt_name: "Acoustic Environment Calibration",
@@ -851,7 +871,7 @@ export function buildClass10ExecutiveHTMLReport(
       code: "Module 23",
       title: "VARK — Read/Write Synthesis & Outlining",
       score: `${topVarkCode === 'R' ? 92 : 78}%`,
-      percentile: `${topVarkCode === 'R' ? 95 : 75}th`,
+      percentile: `${formatOrdinal(topVarkCode === 'R' ? 95 : 75)}`,
       archetype: "Structured Textual Outliner",
       summary: "Strong affinity for structured outlines, glossaries, documentation synthesis, and long-form written summaries (e.g., Cornell Note-Taking method).",
       mechanism: "Read/Write processing relies heavily on orthographic and semantic memory networks, encoding knowledge through active textual condensation.",
@@ -864,7 +884,7 @@ export function buildClass10ExecutiveHTMLReport(
       ],
       low_behavior: "Avoids writing long summaries; struggles with structured outlining.",
       high_behavior: "Excels in writing long-form notes, glossaries, and analytical prose.",
-      alignment: `Read/Write Specialist (${topVarkCode === 'R' ? 95 : 75}th %ile)`,
+      alignment: `Read/Write Specialist (${formatOrdinal(topVarkCode === 'R' ? 95 : 75)} %ile)`,
       protocol_name: "Cornell Note-Taking Protocol",
       protocol: "Format study pages with Cues on the left and Notes on the right, writing a 2-sentence summary at the bottom of every page.",
       opt_name: "Digital Textual Archive",
@@ -876,7 +896,7 @@ export function buildClass10ExecutiveHTMLReport(
       code: "Module 24",
       title: "VARK — Kinesthetic & Experiential Execution",
       score: `${topVarkCode === 'K' ? 92 : 72}%`,
-      percentile: `${topVarkCode === 'K' ? 95 : 68}th`,
+      percentile: `${formatOrdinal(topVarkCode === 'K' ? 95 : 68)}`,
       archetype: "Tactile Prototype Tester",
       summary: "You solidify theoretical knowledge by building active prototypes, running simulation experiments, and solving practice problems directly.",
       mechanism: "Kinesthetic learning anchors cognition in motor-memory encoding and embodied trial-and-error experimentation.",
@@ -889,7 +909,7 @@ export function buildClass10ExecutiveHTMLReport(
       ],
       low_behavior: "Prefers pure theoretical study without needing physical manipulation.",
       high_behavior: "Learns fastest through hands-on practice, labs, and interactive building.",
-      alignment: `Kinesthetic Tester (${topVarkCode === 'K' ? 95 : 68}th %ile)`,
+      alignment: `Kinesthetic Tester (${formatOrdinal(topVarkCode === 'K' ? 95 : 68)} %ile)`,
       protocol_name: "Theory-to-Practice Sprint",
       protocol: "Follow every 20 minutes of theoretical reading immediately with 10 minutes of practical hands-on coding or problem solving.",
       opt_name: "Interactive Lab Environment",
@@ -901,7 +921,7 @@ export function buildClass10ExecutiveHTMLReport(
       code: "Module 25",
       title: "Memory Systems: Working Memory & Retrieval",
       score: `${Math.min(99, aptOverall + 5)}%`,
-      percentile: `${Math.round(aptOverall * 0.97)}th`,
+      percentile: `${formatOrdinal(Math.round(aptOverall * 0.97))}`,
       archetype: "High Memory Workbench",
       summary: "High working memory capacity (holds complex multi-step variables simultaneously) combined with active schema integration into long-term storage.",
       mechanism: "Working memory acts as the mental workbench for active reasoning, while long-term memory stores consolidated schemas via synaptic strengthening.",
@@ -914,7 +934,7 @@ export function buildClass10ExecutiveHTMLReport(
       ],
       low_behavior: "Experiences cognitive overload when processing multi-step instructions.",
       high_behavior: "Holds complex multi-variable data in mind without cognitive overflow.",
-      alignment: `High Memory Capacity (${Math.round(aptOverall * 0.97)}th %ile)`,
+      alignment: `High Memory Capacity (${formatOrdinal(Math.round(aptOverall * 0.97))} %ile)`,
       protocol_name: "Spaced Active Retrieval Protocol",
       protocol: "Test memory recall without looking at notes at expanding intervals (24 hours, 3 days, 14 days) to consolidate long-term memory schemas.",
       opt_name: "External Scratchpad Usage",
@@ -926,20 +946,26 @@ export function buildClass10ExecutiveHTMLReport(
       code: "Module 26",
       title: "Time Management & Block Scheduling",
       score: `${cSc}%`,
-      percentile: `${Math.round(cSc * 0.96)}th`,
-      archetype: "Time-Boxing Master",
-      summary: "You maintain control over your execution schedule, protecting deep focus windows against digital distractions using time-blocking systems.",
+      percentile: `${formatOrdinal(Math.round(cSc * 0.96))}`,
+      archetype: cSc >= 65 ? "Time-Boxing Master" : cSc >= 40 ? "Adaptive Scheduler" : "Emergent Pacer",
+      summary: cSc >= 65
+        ? "You maintain proactive control over your execution schedule, protecting deep focus windows against digital distractions using time-blocking systems."
+        : cSc >= 40
+        ? "You balance scheduled study blocks with opportunistic pacing, adjusting timelines as assignments evolve."
+        : "You operate with an unstructured execution style that is prone to context-switching and deadline rush. Implementing fixed calendar blocking and visual kanban sprints will stabilize study throughput.",
       mechanism: "Grounded in Eisenhower's Priority Matrix and Newport's Time-Blocking, this dimension measures structural control over daily focus windows.",
-      subfacet_desc: `Prioritization Efficiency (${Math.min(99, cSc + 4)}%) ensures you invest energy into high-leverage study activities.`,
+      subfacet_desc: cSc >= 50
+        ? `Prioritization Efficiency (${Math.min(99, cSc + 4)}%) ensures you invest energy into high-leverage study activities.`
+        : `Prioritization Efficiency (${Math.min(99, Math.max(14, cSc + 4))}%) highlights the importance of visual task boards to manage cognitive overload.`,
       facets: [
-        ["Prioritization Efficiency", `${Math.min(99, cSc + 4)}%`, "Distinguishes between urgent tasks and high-impact long-term goals."],
-        ["Block Scheduling", `${cSc}%`, "Allocates dedicated, uninterrupted time blocks for deep execution."],
-        ["Procrastination Control", `${Math.max(40, cSc - 4)}%`, "Manages task inertia effectively using time constraints."],
-        ["Routine Automation", `${Math.min(99, cSc + 2)}%`, "Links study habits to daily cues to build effortless execution flow."]
+        ["Prioritization Efficiency", `${Math.min(99, Math.max(14, cSc + 4))}%`, "Distinguishes between urgent tasks and high-impact long-term goals."],
+        ["Block Scheduling", `${Math.min(99, Math.max(10, cSc))}%`, "Allocates dedicated, uninterrupted time blocks for deep execution."],
+        ["Procrastination Control", `${Math.min(99, Math.max(12, cSc - 2))}%`, "Manages task inertia effectively using time constraints."],
+        ["Routine Automation", `${Math.min(99, Math.max(12, cSc + 2))}%`, "Links study habits to daily cues to build effortless execution flow."]
       ],
       low_behavior: "Unstructured work style; prone to context-switching and distraction.",
       high_behavior: "Uses calendars, block-scheduling, and strict priority matrices.",
-      alignment: `Time-Blocking Master (${Math.round(cSc * 0.96)}th %ile)`,
+      alignment: `${cSc >= 65 ? 'Time-Boxing Master' : cSc >= 40 ? 'Adaptive Scheduler' : 'Emergent Pacer'} (${formatOrdinal(Math.round(cSc * 0.96))} %ile)`,
       protocol_name: "Weekly Time-Blocking Setup",
       protocol: "Schedule fixed study blocks every Sunday night, inserting a 1-hour daily buffer window to absorb unexpected delays without disrupting master schedules.",
       opt_name: "Digital Distraction Shielding",
@@ -950,21 +976,27 @@ export function buildClass10ExecutiveHTMLReport(
       phase: "Phase III: Learning & Execution",
       code: "Module 27",
       title: "Exam Anxiety & Somatic Readiness",
-      score: `${Math.min(99, esSc + 4)}%`,
-      percentile: `${Math.round(esSc * 0.97)}th`,
-      archetype: "Yerkes-Dodson Optimizer",
-      summary: "Mastery over Yerkes-Dodson arousal reframing. You turn pre-evaluative physiological adrenaline into sharp focus and mental clarity.",
+      score: `${Math.min(99, Math.max(12, esSc + 4))}%`,
+      percentile: `${formatOrdinal(Math.round(esSc * 0.97))}`,
+      archetype: esSc >= 65 ? "Yerkes-Dodson Optimizer" : esSc >= 40 ? "Somatic Stabilizer" : "High-Arousal Pacer",
+      summary: esSc >= 65
+        ? "Mastery over Yerkes-Dodson arousal reframing. You turn pre-evaluative physiological adrenaline into sharp focus and mental clarity."
+        : esSc >= 40
+        ? "You experience moderate test-day activation and recover equilibrium through steady pacing and procedural routines."
+        : "Elevated evaluative arousal can cause anticipatory tension and working memory friction under exam conditions. Applying 4-4-4-4 box breathing and simulated mock exam drills will convert adrenaline into sustained focus.",
       mechanism: "Yerkes-Dodson Law dictates performance increases with mental arousal up to an optimal point. Your cognitive reframing keeps you in peak operational focus.",
-      subfacet_desc: `Arousal Reinterpretation (${Math.min(99, esSc + 5)}%) turns pre-exam heart rate elevation into rapid processing velocity.`,
+      subfacet_desc: esSc >= 50
+        ? `Arousal Reinterpretation (${Math.min(99, esSc + 5)}%) turns pre-exam heart rate elevation into rapid processing velocity.`
+        : `Arousal Reinterpretation (${Math.min(99, Math.max(14, esSc + 5))}%) indicates high sensitivity to testing environments, which can be mitigated through deliberate mock exams.`,
       facets: [
-        ["Arousal Reinterpretation", `${Math.min(99, esSc + 5)}%`, "Reframes physiological stress signals as excitement and focus."],
-        ["Somatic Regulation", `${Math.min(99, esSc + 2)}%`, "Uses breath control and muscle relaxation to keep arousal optimal."],
-        ["Thought Override", `${Math.min(99, esSc + 4)}%`, "Suppresses negative self-talk to protect working memory capacity."],
-        ["Simulation Readiness", `${esSc}%`, "Replicates exam conditions during practice sessions to build familiarity."]
+        ["Arousal Reinterpretation", `${Math.min(99, Math.max(14, esSc + 5))}%`, "Reframes physiological stress signals into focused attention."],
+        ["Somatic Regulation", `${Math.min(99, Math.max(12, esSc + 2))}%`, "Uses breath control and muscle relaxation to keep arousal optimal."],
+        ["Thought Override", `${Math.min(99, Math.max(12, esSc + 4))}%`, "Suppresses negative self-talk to protect working memory capacity."],
+        ["Simulation Readiness", `${Math.min(99, Math.max(10, esSc))}%`, "Replicates exam conditions during practice sessions to build familiarity."]
       ],
       low_behavior: "Physiological arousal causes test anxiety, worry, and memory blackout.",
       high_behavior: "Reframes adrenaline as excitement and focus; thrives under exam pressure.",
-      alignment: `Yerkes-Dodson Master (${Math.round(esSc * 0.97)}th %ile)`,
+      alignment: `${esSc >= 65 ? 'Yerkes-Dodson Master' : esSc >= 40 ? 'Somatic Stabilizer' : 'Arousal Sensitive'} (${formatOrdinal(Math.round(esSc * 0.97))} %ile)`,
       protocol_name: "Somatic Box Breathing Reset",
       protocol: "If physiological arousal spikes during high-stakes exams, perform two cycles of 4-4-4-4 Box Breathing to instantly restore autonomic balance.",
       opt_name: "Exam Simulation Practice",
@@ -976,7 +1008,7 @@ export function buildClass10ExecutiveHTMLReport(
       code: "Module 28",
       title: "Spatial Navigation & Physical Kinematics",
       score: `${spatSc}%`,
-      percentile: `${Math.round(spatSc * 0.95)}th`,
+      percentile: `${formatOrdinal(Math.round(spatSc * 0.95))}`,
       archetype: "Physical Geometry Intuition",
       summary: "Strong spatial wayfinding and mechanical force intuition. Mentally maps physical trajectories, leverage forces, and CAD geometries.",
       mechanism: "Measures real-world spatial orientation, movement coordination, and intuitive physics understanding.",
@@ -989,7 +1021,7 @@ export function buildClass10ExecutiveHTMLReport(
       ],
       low_behavior: "Struggles to visualize physical forces, leverage, or 3D geometry.",
       high_behavior: "Intuitive grasp of physics, mechanical forces, and physical wayfinding.",
-      alignment: `Physical Kinematics (${Math.round(spatSc * 0.95)}th %ile)`,
+      alignment: `Physical Kinematics (${formatOrdinal(Math.round(spatSc * 0.95))} %ile)`,
       protocol_name: "Kinematic Force Tracing",
       protocol: "Draw explicit force vector diagrams illustrating direction, tension, and gravity before applying formulas in physics assignments.",
       opt_name: "Physical Prototyping Integration",
@@ -1003,7 +1035,7 @@ export function buildClass10ExecutiveHTMLReport(
       code: "Module 29",
       title: "Career Interest Mapping (Holland RIASEC)",
       score: `${riasecScore}%`,
-      percentile: `${Math.round(riasecScore * 0.96)}th`,
+      percentile: `${formatOrdinal(Math.round(riasecScore * 0.96))}`,
       archetype: `Top RIASEC: ${topRiasecCodes.join('-')}`,
       summary: `Vocational interest mapping for ${name}: Alignment across ${topRiasecCodes.join(', ')} Holland vectors, supporting targeted ${variant === 'senior' ? 'undergraduate degree selection' : variant === 'junior' ? 'academic exploration' : 'Class 11 stream selection'} in ${topCareer}.`,
       mechanism: "John Holland's Vocational Personalities theory maps six interest environments (Realistic, Investigative, Artistic, Social, Enterprising, Conventional) to target academic streams.",
@@ -1016,7 +1048,7 @@ export function buildClass10ExecutiveHTMLReport(
       ],
       low_behavior: "Mismatched vocational interests; risk of subject burnout or low academic engagement.",
       high_behavior: "Strong interest-stream congruence; high intrinsic drive and academic persistence.",
-      alignment: `RIASEC Aligned (${Math.round(riasecScore * 0.96)}th %ile)`,
+      alignment: `RIASEC Aligned (${formatOrdinal(Math.round(riasecScore * 0.96))} %ile)`,
       protocol_name: "Vocational Interest Alignment Protocol",
       protocol: `${variant === 'senior' ? 'Select undergraduate degree majors and coursework that directly engage your top 2 RIASEC interest vectors to maximize intrinsic engagement.' : variant === 'junior' ? 'Explore extracurricular activities and foundational subjects that engage your top 2 RIASEC vectors.' : 'Select Class 11 subjects that directly engage your top 2 RIASEC interest vectors to maximize intrinsic study motivation.'}`,
       opt_name: "Career Cluster Preview",
@@ -1041,7 +1073,7 @@ export function buildClass10ExecutiveHTMLReport(
       ],
       low_behavior: "Fragmented trait profile requiring structured micromanagement.",
       high_behavior: "Synergistic high-capacity profile built for complex technical leadership.",
-      alignment: `${topFitScore >= 80 ? 'High Career Synergy' : topFitScore >= 60 ? 'Moderate Career Synergy' : 'Exploratory Career Fitment'} (${Math.round(topFitScore * 0.97)}th %ile)`,
+      alignment: `${topFitScore >= 80 ? 'High Career Synergy' : topFitScore >= 60 ? 'Moderate Career Synergy' : 'Exploratory Career Fitment'} (${formatOrdinal(Math.round(topFitScore * 0.97))} %ile)`,
       protocol_name: "Continuous Growth Loop",
       protocol: "Direct 70% of your operational energy toward fields that leverage your top cognitive vectors (Fluid Logic, Systems Thinking, Introverted Intuition).",
       opt_name: "Strategic Career Placement",
@@ -2282,7 +2314,7 @@ export function buildClass10ExecutiveHTMLReport(
                     <div class="bg-obsidian/70 p-3.5 sm:p-4 rounded-2xl border border-gold/40 text-center space-y-1 backdrop-blur-sm">
                         <span class="text-[10px] text-slate-300 uppercase font-bold block">Overall Competency</span>
                         <div class="text-2xl sm:text-3xl font-extrabold text-gold">${aptOverall}%</div>
-                        <span class="text-[10px] text-emerald-400 font-semibold"><i class="fa-solid fa-circle-check"></i> Top ${Math.max(1, 100 - Math.round(aptOverall * 0.96))}th %ile Candidate</span>
+                        <span class="text-[10px] text-emerald-400 font-semibold"><i class="fa-solid fa-circle-check"></i> Top ${formatOrdinal(Math.max(1, 100 - Math.round(aptOverall * 0.96)))} %ile Candidate</span>
                     </div>
 
                     <div class="bg-obsidian/70 p-3.5 sm:p-4 rounded-2xl border border-gold/40 text-center space-y-1 backdrop-blur-sm">
@@ -2308,7 +2340,7 @@ export function buildClass10ExecutiveHTMLReport(
                         ${careerFitmentList.map((c, i) => `
                         <div class="p-2.5 sm:p-3 bg-black/40 rounded-xl border border-gold/30 text-center space-y-1">
                             <span class="text-[10px] font-bold text-slate-400 uppercase block">Stream ${i + 1}</span>
-                            <span class="font-bold text-white block text-[10px] sm:text-[10.5px] leading-snug break-words">${getCanonicalStreamName(c.name)}</span>
+                            <span class="font-bold text-white block text-[10px] sm:text-[10.5px] leading-snug break-words">${variantConfig.variant === 'grade10' ? getCanonicalStreamName(c.name) : c.name}</span>
                             <div class="text-base sm:text-lg font-extrabold text-gold">${c.score}%</div>
                         </div>
                         `).join('')}
@@ -2378,19 +2410,19 @@ export function buildClass10ExecutiveHTMLReport(
                     <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
                         <div class="bg-white p-2.5 rounded-xl border border-slate-200 text-center">
                             <span class="text-[10px] text-slate-500 font-bold uppercase block">Fluid Reasoning</span>
-                            <span class="text-sm font-extrabold text-maroon">${reasSc}% %ile</span>
+                            <span class="text-sm font-extrabold text-maroon">${formatOrdinal(reasSc)} %ile</span>
                         </div>
                         <div class="bg-white p-2.5 rounded-xl border border-slate-200 text-center">
                             <span class="text-[10px] text-slate-500 font-bold uppercase block">Numerical Logic</span>
-                            <span class="text-sm font-extrabold text-maroon">${numSc}% %ile</span>
+                            <span class="text-sm font-extrabold text-maroon">${formatOrdinal(numSc)} %ile</span>
                         </div>
                         <div class="bg-white p-2.5 rounded-xl border border-slate-200 text-center">
                             <span class="text-[10px] text-slate-500 font-bold uppercase block">Verbal Analysis</span>
-                            <span class="text-sm font-extrabold text-maroon">${verbalSc}% %ile</span>
+                            <span class="text-sm font-extrabold text-maroon">${formatOrdinal(verbalSc)} %ile</span>
                         </div>
                         <div class="bg-white p-2.5 rounded-xl border border-slate-200 text-center">
                             <span class="text-[10px] text-slate-500 font-bold uppercase block">Spatial Visualization</span>
-                            <span class="text-sm font-extrabold text-maroon">${spatSc}% %ile</span>
+                            <span class="text-sm font-extrabold text-maroon">${formatOrdinal(spatSc)} %ile</span>
                         </div>
                     </div>
                 </div>
@@ -2543,7 +2575,7 @@ export function buildClass10ExecutiveHTMLReport(
                         <div class="space-y-2 text-[11px] text-slate-700">
                             <div class="flex items-start gap-2">
                                 <span class="text-gold font-bold">•</span>
-                                <div><strong class="text-maroon">Stress Resilience Baseline:</strong> Emotional stability score (${esSc}%) indicates robust psychological endurance under high-stakes timed examination conditions.</div>
+                                <div><strong class="text-maroon">Stress Resilience Baseline:</strong> ${esSc >= 60 ? `Emotional stability score (${esSc}%) indicates robust psychological endurance and composure under high-stakes timed examination conditions.` : esSc >= 40 ? `Emotional stability score (${esSc}%) reflects balanced emotional composure, with good capacity to manage regular evaluative stress.` : `Emotional stability score (${esSc}%) indicates sensitivity to evaluative pressure, highlighting the value of structured stress-buffering routines and time-buffered preparation.`}</div>
                             </div>
                             <div class="flex items-start gap-2">
                                 <span class="text-gold font-bold">•</span>
@@ -3272,7 +3304,7 @@ export function buildClass10ExecutiveHTMLReport(
                     <div class="grid grid-cols-3 gap-3 text-xs">
                         <div class="space-y-0.5">
                             <span class="font-extrabold text-maroon text-[11px] block">30 Days — Research</span>
-                            <p class="text-[10px] text-slate-600 leading-snug">Research top 5 career paths in ${topCareer}. Complete Class 10 board prep gap review.</p>
+                            <p class="text-[10px] text-slate-600 leading-snug">${variant === 'senior' ? `Research top 5 career paths in ${topCareer}. Complete entrance exam and academic milestone audit.` : variant === 'junior' ? `Explore foundational career interests in ${topCareer}. Identify key subject strengths.` : `Research top 5 career paths in ${topCareer}. Complete Class 10 board prep gap review.`}</p>
                         </div>
                         <div class="space-y-0.5 border-l border-slate-200 pl-3">
                             <span class="font-extrabold text-maroon text-[11px] block">60 Days — Preview</span>

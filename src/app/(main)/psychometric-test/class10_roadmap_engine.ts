@@ -100,7 +100,7 @@ export function getSpecializedDomain(pathwayName: string): SpecializedDomain {
   if (/civil|architecture|construction|structural|urban planning|infrastructure|building/i.test(name)) {
     return 'CIVIL_ARCHITECTURE';
   }
-  if (/mechanical|aerospace|aeronautical|automobile|automotive|thermal|petroleum|mining|metallurg/i.test(name)) {
+  if (/mechanical|aerospace|aeronautical|automobile|automotive|thermal|petroleum|mining|metallurg|defence/i.test(name)) {
     return 'MECHANICAL_AEROSPACE';
   }
   if (/electrical|electronics|ece|vlsi|semiconductor|telecom|microelectronics/i.test(name)) {
@@ -124,7 +124,7 @@ export function getSpecializedDomain(pathwayName: string): SpecializedDomain {
   if (/law|legal|judiciary|corporate law|advocate|llb|arbitration/i.test(name)) {
     return 'LAW_LEGAL';
   }
-  if (/business|management|mba|bba|marketing|advertising|human resources|supply chain|operations|entrepreneurship|international business|hotel|hospitality/i.test(name)) {
+  if (/business|management|mba|bba|marketing|advertising|human resources|supply chain|operations|entrepreneurship|startups?|international business|hotel|hospitality/i.test(name)) {
     return 'BUSINESS_MANAGEMENT_MARKETING';
   }
   if (/design|graphic|ui|ux|interior|fashion|product design|animation|game design|film|visual arts/i.test(name)) {
@@ -233,66 +233,184 @@ export function getPathwayRoadmapData(
       };
       break;
 
-    case 'MECHANICAL_AEROSPACE':
-      data = {
-        pathwayName,
-        pathwayTitle: pathwayName.toLowerCase().includes('aero') ? 'Aerospace, Aeronautical & Defence Engineering' : 'Mechanical, Automotive & Aerospace Engineering',
-        pathwayRankLabel: rankLabel,
-        fitScore,
-        rationale: `${firstName} demonstrates high spatial reasoning (${scores.aptitude.spatial}%) and analytical problem solving (${scores.aptitude.reasoning}%), providing an ideal baseline for advanced mechanics, vehicle dynamics, fluid mechanics, and aerospace systems.`,
-        foundation: {
-          subjects: ['Physics (Thermodynamics & Dynamics)', 'Higher Mathematics (Differential Equations & Vectors)', 'Chemistry & Metallurgy', 'Engineering Graphics / Python for Mechanics', 'Technical English'],
-          exams: ['JEE Main & JEE Advanced', 'BITSAT', 'IIST Dual Degree Admission', 'VITEEE / MET / MHT-CET', 'GATE (Future Benchmark)'],
-          curriculumFocus: 'Focus on Newtonian dynamics, thermal energy cycles, fluid flow mechanics, and 3D computer-aided design (CAD).'
-        },
-        bachelors: [
-          {
-            degree: 'B.Tech in Mechanical Engineering',
-            specialization: 'Finite Element Analysis, Thermal Fluid Systems, Advanced Manufacturing',
-            whyFits: `Aligns with ${firstName}'s high spatial visualization and physics execution.`,
-            careerOutcomes: 'Mechanical Design Engineer, Thermal Systems Specialist, Manufacturing Lead'
+    case 'MECHANICAL_AEROSPACE': {
+      const isAero = pathwayName.toLowerCase().includes('aero') || pathwayName.toLowerCase().includes('defence');
+      const isPetro = pathwayName.toLowerCase().includes('petroleum') || pathwayName.toLowerCase().includes('mining');
+      const isAuto = pathwayName.toLowerCase().includes('auto');
+
+      if (isAero) {
+        data = {
+          pathwayName,
+          pathwayTitle: 'Aerospace, Aeronautical & Defence Systems Engineering',
+          pathwayRankLabel: rankLabel,
+          fitScore,
+          rationale: `${firstName} demonstrates high spatial reasoning (${scores.aptitude.spatial}%) and analytical problem solving (${scores.aptitude.reasoning}%), providing an ideal baseline for advanced aerodynamics, rocket propulsion, orbital flight dynamics, and defense aerospace systems.`,
+          foundation: {
+            subjects: ['Physics (Mechanics, Thermodynamics & Electromagnetism)', 'Higher Mathematics (Calculus, Vectors & Differential Equations)', 'Chemistry & Aerospace Materials', 'Engineering Graphics & 3D CAD', 'Technical English & Avionics Basics'],
+            exams: ['JEE Main & JEE Advanced (IIT Bombay, IIT Madras, IIT Kharagpur)', 'IIST Admission Test (Indian Institute of Space Science and Technology)', 'BITSAT (Pilani & Goa Campuses)', 'VITEEE / MET / State CETs', 'SAT + AP Physics C (Global Focus)'],
+            curriculumFocus: 'Focus on Newtonian dynamics, supersonic aerodynamics, orbital mechanics, turbomachinery thermodynamics, and 3D computer-aided design (CAD).'
           },
-          {
-            degree: 'B.Tech in Aerospace & Aeronautical Engineering',
-            specialization: 'Aerodynamics, Rocket Propulsion, Orbital Mechanics & Avionics',
-            whyFits: 'Combines advanced mathematical modeling with high-speed aerospace physics.',
-            careerOutcomes: 'Aerospace Propulsion Engineer, Aerodynamics Specialist, Flight Systems Analyst'
+          bachelors: [
+            {
+              degree: 'B.Tech in Aerospace & Aeronautical Engineering',
+              specialization: 'Rocket Propulsion, Hypersonic Aerodynamics, Orbital Flight Dynamics',
+              whyFits: `Directly engages ${firstName}'s high spatial visualization and advanced physics problem solving.`,
+              careerOutcomes: 'Aerospace Propulsion Engineer, Aerodynamics Specialist, Flight Systems Analyst'
+            },
+            {
+              degree: 'B.Tech in Avionics & Space Systems Engineering',
+              specialization: 'Satellite Communication, Flight Control Computer Systems, Radar & Inertial Navigation',
+              whyFits: 'Combines aerospace vehicle mechanics with high-reliability guidance avionics.',
+              careerOutcomes: 'Avionics Systems Architect, Flight Control Specialist, Satellite Navigation Lead'
+            },
+            {
+              degree: 'B.Tech in Mechanical Engineering (Aerospace & Defense Track)',
+              specialization: 'Computational Fluid Dynamics (CFD), Structural Aero-Elasticity, Advanced Composites',
+              whyFits: 'Provides comprehensive foundational mechanics with targeted aerospace defense electives.',
+              careerOutcomes: 'Aero-Structural Engineer, CFD Simulation Analyst, Defence Systems Specialist'
+            },
+            {
+              degree: 'B.Tech in Mechatronics & Autonomous Flight Systems',
+              specialization: 'Unmanned Aerial Vehicles (UAVs / Drones), Autonomous Navigation, Actuator Dynamics',
+              whyFits: 'Bridges aerospace airframe design with intelligent autonomous robotic flight control.',
+              careerOutcomes: 'UAV Systems Engineer, Autonomous Guidance Lead, Drone Systems Architect'
+            }
+          ],
+          colleges: {
+            reach: ['IIT Bombay (Dept. of Aerospace Engineering)', 'IIT Madras (Aerospace Division)', 'Indian Institute of Space Science and Technology (IIST)', 'IIT Kharagpur', 'BITS Pilani'],
+            fit: ['NIT Trichy', 'NIT Surathkal', 'Delhi Technological University (DTU)', 'Punjab Engineering College (PEC Chandigarh)', 'PSG College of Technology'],
+            accessible: ['Manipal Institute of Technology (MIT)', 'Thapar University Patiala', 'SRM University Kattankulathur', 'Hindustan Institute of Technology & Science']
           },
-          {
-            degree: 'B.Tech in Automotive Engineering & EV Technology',
-            specialization: 'Electric Vehicle Powertrains, Battery Thermal Management, Vehicle Dynamics',
-            whyFits: 'Directly addresses the electric mobility and smart automotive revolution.',
-            careerOutcomes: 'EV Powertrain Engineer, Vehicle Dynamics Lead, Automotive Systems Architect'
+          masters: [
+            'M.Tech / M.S. in Aerospace Propulsion & Space Systems (Purdue / TU Delft / Cranfield / IIST)',
+            'M.S. in Computational Aerodynamics & Hypersonics (Stanford / Georgia Tech)',
+            'M.Tech in Avionics & Spacecraft Guidance (IIT Bombay / IIST)',
+            'Ph.D. in Advanced Carbon-Carbon Composites & Space Launch Systems'
+          ],
+          careerOutcomes: [
+            'Lead Aerospace Propulsion / Aerodynamics Engineer (ISRO / Boeing / Airbus)',
+            'Senior Spacecraft Systems & Orbital Flight Dynamics Architect',
+            'Defence Systems & Guided Missile Propulsion Specialist (DRDO / HAL)',
+            'Chief Aero-Structural Design Engineer (GE Aerospace / Rolls-Royce)'
+          ],
+          skills: ['SolidWorks & CATIA 3D Aerospace CAD', 'ANSYS Fluent & CFD Aerodynamic Modeling', 'MATLAB & Simulink Flight Simulation', 'Compressible Fluid Dynamics & Heat Transfer', 'Orbital Mechanics & Avionics Bus Protocols'],
+          targetCompanies: ['ISRO (Indian Space Research Organisation)', 'DRDO (Defence Research and Development Organisation)', 'Boeing India Engineering', 'Airbus Commercial & Defence', 'Hindustan Aeronautics Limited (HAL)', 'GE Aerospace', 'Lockheed Martin'],
+          milestone: 'Design working 3D CAD rocket/aircraft airframe in SolidWorks, participate in national aeromodelling / CanSat competition, and clear JEE Advanced/IIST cutoffs.'
+        };
+      } else if (isPetro) {
+        data = {
+          pathwayName,
+          pathwayTitle: 'Petroleum, Mining & Energy Resources Engineering',
+          pathwayRankLabel: rankLabel,
+          fitScore,
+          rationale: `${firstName} demonstrates strong physical-spatial reasoning and applied quantitative analysis, supporting rigorous engineering roles in energy extraction, subterranean fluid flow, mineral processing, and sustainable resource management.`,
+          foundation: {
+            subjects: ['Applied Physics & Thermodynamics', 'Chemistry & Geochemistry', 'Higher Mathematics (Calculus & Vectors)', 'Earth Sciences / Geology Basics', 'Technical Communication'],
+            exams: ['JEE Main & JEE Advanced (IIT ISM Dhanbad)', 'State CETs (MHT-CET / WBJEE)', 'BITSAT', 'UPES Engineering Aptitude Test'],
+            curriculumFocus: 'Focus on reservoir thermodynamics, subterranean rock mechanics, multiphase fluid flow, and sustainable drilling instrumentation.'
           },
-          {
-            degree: 'B.Tech in Mechatronics & Precision Engineering',
-            specialization: 'Robotic Actuators, Sensor Integration, Micro-electromechanical Systems',
-            whyFits: 'Bridges physical mechanical structures with electronic micro-controllers.',
-            careerOutcomes: 'Mechatronics Engineer, Automation Specialist, Precision Systems Lead'
-          }
-        ],
-        colleges: {
-          reach: ['IIT Madras', 'IIT Bombay', 'IIT Kharagpur', 'Indian Institute of Space Science and Technology (IIST)', 'BITS Pilani'],
-          fit: ['NIT Trichy', 'NIT Surathkal', 'Delhi Technological University (DTU)', 'PSG College of Technology Coimbatore'],
-          accessible: ['Manipal Institute of Technology (MIT)', 'Thapar University Patiala', 'SRM University Kattankulathur', 'VIT Vellore']
-        },
-        masters: [
-          'M.Tech / M.S. in Thermal Fluid Engineering & Computational Fluid Dynamics (CFD)',
-          'M.S. in Aerospace Propulsion & Space Systems (Purdue / TU Delft / Cranfield)',
-          'M.Tech in Automotive Engineering & E-Mobility',
-          'Ph.D. in Advanced Materials Science & Lightweight Carbon Composites'
-        ],
-        careerOutcomes: [
-          'Lead Aerospace Propulsion / Aerodynamics Engineer (ISRO / Boeing / Airbus)',
-          'Senior Vehicle Dynamics & EV Powertrain Specialist (Tesla / Tata Motors / Mahindra)',
-          'Thermal & Computational Fluid Dynamics (CFD) Design Specialist',
-          'Chief Mechanical Design Engineer (GE Aerospace / Rolls-Royce / Bosch)'
-        ],
-        skills: ['SolidWorks & CATIA 3D CAD', 'ANSYS Mechanical & CFD Simulation', 'MATLAB & Simulink Modeling', 'Thermodynamics & Heat Transfer', 'Geometric Dimensioning & Tolerancing (GD&T)'],
-        targetCompanies: ['ISRO / DRDO', 'Boeing India Engineering', 'Airbus Commercial', 'Tata Motors EV Division', 'Mahindra Defence / Mahindra Racing', 'General Electric (GE) Aerospace'],
-        milestone: 'Design working 3D CAD mechanical assembly in SolidWorks, participate in Formula Student / SAE BAJA or aeromodelling team, and master JEE mechanics.'
-      };
+          bachelors: [
+            {
+              degree: 'B.Tech in Petroleum Engineering & Energy Resources',
+              specialization: 'Reservoir Simulation, Drilling Technology, Enhanced Oil Recovery (EOR)',
+              whyFits: `Leverages ${firstName}'s spatial comprehension and quantitative thermodynamics.`,
+              careerOutcomes: 'Petroleum Reservoir Engineer, Drilling Specialist, Energy Systems Modeler'
+            },
+            {
+              degree: 'B.Tech in Mining & Mineral Processing Engineering',
+              specialization: 'Subsurface Geomechanics, Sustainable Mineral Extraction, Mine Automation',
+              whyFits: 'Applies structural physical reasoning to large-scale resource excavation.',
+              careerOutcomes: 'Mining Systems Engineer, Geomechanical Specialist, Mine Operations Lead'
+            },
+            {
+              degree: 'B.Tech in Chemical & Energy Process Engineering',
+              specialization: 'Refinery Process Design, Biofuel Synthesis, Carbon Capture Systems',
+              whyFits: 'Bridges traditional chemical thermodynamics with clean energy transition.',
+              careerOutcomes: 'Process Optimization Lead, Energy Transition Consultant, Refinery Engineer'
+            }
+          ],
+          colleges: {
+            reach: ['IIT (ISM) Dhanbad', 'IIT Madras', 'IIT Roorkee', 'Institute of Chemical Technology (ICT) Mumbai'],
+            fit: ['Pandit Deendayal Energy University (PDEU)', 'UPES Dehradun', 'NIT Rourkela (Mining)', 'NIT Surathkal'],
+            accessible: ['Maharashtra Institute of Technology (MIT-WPU)', 'Dibrugarh University', 'Graphic Era University']
+          },
+          masters: [
+            'M.Tech in Subsurface Energy Systems & Reservoir Characterization',
+            'M.S. in Carbon Capture & Subterranean Hydrogen Storage (TU Delft / Texas A&M)',
+            'Ph.D. in Multiphase Geofluid Dynamics'
+          ],
+          careerOutcomes: [
+            'Principal Reservoir Engineer at Global Energy Major (SLB / Shell / ONGC)',
+            'Chief Drilling Operations & Well-Control Specialist',
+            'Subsurface Geomechanics Director at International Mining Consortium (Rio Tinto / BHP)',
+            'Carbon Capture & Deep-Earth Energy Transition Strategist'
+          ],
+          skills: ['Reservoir Simulation (Eclipse / CMG)', 'Subterranean Well-Log Interpretation', 'Multiphase Fluid Thermodynamics', 'AutoCAD & MineSight Geomodeling', 'HSE Risk Governance & Offshore Protocols'],
+          targetCompanies: ['Schlumberger (SLB)', 'ONGC (Oil and Natural Gas Corp)', 'Shell Global Energy', 'Halliburton', 'Rio Tinto / BHP Minerals', 'Reliance Industries Petroleum'],
+          milestone: 'Complete certified training in Petrel/Eclipse reservoir simulation, author case study on geothermal/hydrocarbon flow, and score in top percentile of JEE Main.'
+        };
+      } else {
+        data = {
+          pathwayName,
+          pathwayTitle: isAuto ? 'Automotive Engineering, Electric Vehicles & Mobility Systems' : 'Mechanical Engineering, Robotics & Advanced Manufacturing',
+          pathwayRankLabel: rankLabel,
+          fitScore,
+          rationale: `${firstName} demonstrates high spatial reasoning (${scores.aptitude.spatial}%) and analytical problem solving (${scores.aptitude.reasoning}%), providing an ideal baseline for advanced mechanics, vehicle dynamics, fluid mechanics, and automated systems.`,
+          foundation: {
+            subjects: ['Physics (Thermodynamics & Dynamics)', 'Higher Mathematics (Differential Equations & Vectors)', 'Chemistry & Metallurgy', 'Engineering Graphics / Python for Mechanics', 'Technical English'],
+            exams: ['JEE Main & JEE Advanced', 'BITSAT', 'State CETs (MHT-CET / KCET / WBJEE)', 'VITEEE / MET', 'GATE (Future Benchmark)'],
+            curriculumFocus: 'Focus on Newtonian dynamics, thermal energy cycles, fluid flow mechanics, and 3D computer-aided design (CAD).'
+          },
+          bachelors: [
+            {
+              degree: 'B.Tech in Mechanical Engineering',
+              specialization: 'Finite Element Analysis (FEA), Thermal Fluid Systems, Advanced Manufacturing',
+              whyFits: `Aligns with ${firstName}'s high spatial visualization and physics execution.`,
+              careerOutcomes: 'Mechanical Design Engineer, Thermal Systems Specialist, Manufacturing Lead'
+            },
+            {
+              degree: 'B.Tech in Automotive Engineering & EV Technology',
+              specialization: 'Electric Vehicle Powertrains, Battery Thermal Management, Vehicle Dynamics',
+              whyFits: 'Directly addresses the electric mobility and smart automotive revolution.',
+              careerOutcomes: 'EV Powertrain Engineer, Vehicle Dynamics Lead, Automotive Systems Architect'
+            },
+            {
+              degree: 'B.Tech in Mechatronics & Precision Engineering',
+              specialization: 'Robotic Actuators, Sensor Integration, Micro-electromechanical Systems',
+              whyFits: 'Bridges physical mechanical structures with electronic micro-controllers.',
+              careerOutcomes: 'Mechatronics Engineer, Automation Specialist, Precision Systems Lead'
+            },
+            {
+              degree: 'B.Tech in Industrial Automation & Precision Engineering',
+              specialization: 'Computer-Integrated Manufacturing, CNC Automation, Quality Metrology',
+              whyFits: 'Applies manufacturing optimization to scalable precision assembly.',
+              careerOutcomes: 'Automation Project Lead, Manufacturing Process Engineer, Quality Lead'
+            }
+          ],
+          colleges: {
+            reach: ['IIT Madras', 'IIT Bombay', 'IIT Kharagpur', 'IIT Delhi', 'BITS Pilani'],
+            fit: ['NIT Trichy', 'NIT Surathkal', 'Delhi Technological University (DTU)', 'PSG College of Technology Coimbatore'],
+            accessible: ['Manipal Institute of Technology (MIT)', 'Thapar University Patiala', 'SRM University Kattankulathur', 'VIT Vellore']
+          },
+          masters: [
+            'M.Tech / M.S. in Thermal Fluid Engineering & Computational Fluid Dynamics (CFD)',
+            'M.S. in Automotive Systems & EV Engineering (RWTH Aachen / TU Munich / Michigan)',
+            'M.Tech in Robotics & Mechatronics Automation',
+            'Ph.D. in Advanced Materials Science & Lightweight Carbon Composites'
+          ],
+          careerOutcomes: [
+            'Lead Mechanical Systems & Thermal Design Engineer (Bosch / Siemens / GE)',
+            'Senior Vehicle Dynamics & EV Powertrain Specialist (Tesla / Tata Motors / Mahindra)',
+            'Thermal & Computational Fluid Dynamics (CFD) Design Specialist',
+            'Chief Manufacturing & Automation Systems Director'
+          ],
+          skills: ['SolidWorks & CATIA 3D CAD', 'ANSYS Mechanical & CFD Simulation', 'MATLAB & Simulink Modeling', 'Thermodynamics & Heat Transfer', 'Geometric Dimensioning & Tolerancing (GD&T)'],
+          targetCompanies: ['Tata Motors EV Division', 'Mahindra & Mahindra Automotive', 'Tesla Systems', 'General Electric (GE)', 'Bosch Automotive', 'Larsen & Toubro Heavy Eng.'],
+          milestone: 'Design working 3D CAD mechanical assembly in SolidWorks, participate in Formula Student / SAE BAJA team, and master JEE mechanics.'
+        };
+      }
       break;
+    }
 
     case 'ELECTRICAL_ELECTRONICS':
       data = {
@@ -662,68 +780,139 @@ export function getPathwayRoadmapData(
       };
       break;
 
-    case 'BUSINESS_MANAGEMENT_MARKETING':
-      data = {
-        pathwayName,
-        pathwayTitle: pathwayName.toLowerCase().includes('market') || pathwayName.toLowerCase().includes('advert')
-          ? 'Marketing Strategy, Consumer Insights & Brand Leadership'
-          : 'Business Administration, Strategy & Management Consulting',
-        pathwayRankLabel: rankLabel,
-        fitScore,
-        rationale: `${firstName}'s profile exhibits strong strategic initiative (${scores.personality.extraversion}% Extraversion) and organized commercial acumen (${scores.personality.conscientiousness}% Conscientiousness), creating high aptitude for cross-functional business leadership, market expansion, and consulting.`,
-        foundation: {
-          subjects: ['Business Studies & Corporate Organization', 'Economics & Global Commerce', 'Applied Mathematics / Statistics', 'Accountancy & Financial Basics', 'English Communication & Public Speaking'],
-          exams: ['IPMAT (IIM Indore, Rohtak, Ranchi, Jammu)', 'CUET-UG (BBA / BMS / BBE)', 'NPAT (NMIMS Mumbai)', 'SET (Symbiosis International)', 'DU JAT / GGSIPU CET'],
-          curriculumFocus: 'Focus on strategic case studies, market equilibrium, consumer psychology, and presentation storytelling.'
-        },
-        bachelors: [
-          {
-            degree: 'IPM (5-Year Integrated Program in Management - IIM Track)',
-            specialization: 'General Management, Quantitative Strategy, International Business',
-            whyFits: `Provides fast-track management training combining leadership with quantitative analysis.`,
-            careerOutcomes: 'Management Consultant, Business Operations Manager, Growth Lead'
+    case 'BUSINESS_MANAGEMENT_MARKETING': {
+      const isEnt = /entrepreneur|startup|venture/i.test(pathwayName);
+      const isMkt = /market|advert/i.test(pathwayName);
+      const isIB = /international business|trade/i.test(pathwayName);
+      const isSCM = /supply chain|logistics|operation/i.test(pathwayName);
+
+      if (isEnt) {
+        data = {
+          pathwayName,
+          pathwayTitle: 'Entrepreneurship, Venture Building & Strategic Business Administration',
+          pathwayRankLabel: rankLabel,
+          fitScore,
+          rationale: `${firstName}'s profile exhibits strong strategic initiative (${scores.personality.extraversion}% Extraversion) and commercial acumen, creating exceptional aptitude for venture building, startup leadership, product scaling, and corporate strategy.`,
+          foundation: {
+            subjects: ['Business Studies & Corporate Innovation', 'Economics & Venture Finance', 'Applied Mathematics / Statistics', 'Accountancy & Financial Modeling', 'English Communication & Pitch Presentation'],
+            exams: ['IPMAT (IIM Indore, Rohtak, Ranchi, Jammu)', 'CUET-UG (Top BBA/BMS Programs: SSCBS, DU)', 'NPAT (NMIMS Mumbai)', 'SET (Symbiosis International)', 'SAT / Global Undergraduate Business Tests'],
+            curriculumFocus: 'Focus on lean startup methodologies, early-stage unit economics, business model validation, market expansion, and persuasive pitch delivery.'
           },
-          {
-            degree: 'BBA / BMS (Bachelor of Management Studies - Strategy Track)',
-            specialization: 'Corporate Strategy, Global Supply Chain, Digital Enterprise Transformation',
-            whyFits: 'Focuses on modern agile operations and strategic enterprise execution.',
-            careerOutcomes: 'Strategy Associate, Operations Manager, Business Development Lead'
+          bachelors: [
+            {
+              degree: 'BBA in Entrepreneurship, Innovation & New Venture Building',
+              specialization: 'Venture Incubation, Growth Hacking, Early-Stage Unit Economics, Agile Product Dev',
+              whyFits: `Directly engages ${firstName}'s initiative and drive to build scalable enterprises.`,
+              careerOutcomes: 'Startup Founder, Venture Operator, Innovation Manager, Growth Lead'
+            },
+            {
+              degree: 'IPM (5-Year Integrated Program in Management - IIM Track)',
+              specialization: 'General Management, Strategic Leadership, Global Corporate Expansion',
+              whyFits: 'Fast-tracks executive management pedigree with prestigious 5-year IIM dual degree.',
+              careerOutcomes: 'Management Consultant, Corporate Strategy Associate, Venture Capital Analyst'
+            },
+            {
+              degree: 'B.S. in Business Analytics, Product Strategy & FinTech',
+              specialization: 'Digital Business Models, Product Analytics, Customer Acquisition Data, FinTech',
+              whyFits: 'Combines entrepreneurial vision with modern quantitative data modeling.',
+              careerOutcomes: 'Product Growth Lead, Business Intelligence Architect, Strategy Lead'
+            },
+            {
+              degree: 'BBA / BMS in Corporate Strategy & Global Enterprise Management',
+              specialization: 'Mergers & Acquisitions, Cross-Border Expansion, Operational Scaling',
+              whyFits: 'Provides systemic operational frameworks for building sustainable businesses.',
+              careerOutcomes: 'Strategy Consultant, Chief of Staff, Operations Lead'
+            }
+          ],
+          colleges: {
+            reach: ['IIM Indore (IPM Program)', 'Shaheed Sukhdev College of Business Studies (SSCBS, Delhi)', 'Wharton School (UPenn, US)', 'Babson College (Top Entrepreneurship, US)', 'IIM Rohtak IPM'],
+            fit: ['St. Xavier\'s College, Mumbai', 'NMIMS School of Business Management, Mumbai', 'Christ University, Bangalore', 'Symbiosis Centre for Management Studies (SCMS), Pune', 'Ashoka University'],
+            accessible: ['K.J. Somaiya Institute, Mumbai', 'Mithibai College, Mumbai', 'Bennett University, Greater Noida', 'Amity Global Business School']
           },
-          {
-            degree: 'B.A. (Hons) in Marketing Communications & Brand Strategy',
-            specialization: 'Consumer Insights, Digital Performance Marketing, Brand Storytelling',
-            whyFits: 'Applies psychological insights and creative communication to brand growth.',
-            careerOutcomes: 'Brand Manager, Digital Marketing Lead, Consumer Insights Analyst'
+          masters: [
+            'Master of Business Administration (MBA - Stanford GSB / Harvard / INSEAD / IIM Ahmedabad)',
+            'Master in Management (MiM - London Business School / St. Gallen)',
+            'M.Sc. in Innovation, Entrepreneurship & Management (Imperial College London)',
+            'Executive Master in Venture Capital & Private Equity'
+          ],
+          careerOutcomes: [
+            'Co-Founder & CEO of Venture-Backed Technology Enterprise',
+            'Partner / Principal at Tier-1 Venture Capital Firm (Peak XV / Lightspeed)',
+            'Director of Corporate Strategy & New Ventures at Global Multinational',
+            'Senior Engagement Manager at Top Strategy Consulting Firm (McKinsey / BCG / Bain)'
+          ],
+          skills: ['Business Model Canvas & Lean Startup Validation', 'Financial Modeling, Cap Tables & Pitch Deck Creation', 'Product-Market Fit Auditing & User Acquisition', 'P&L Management & Unit Economics Optimization', 'High-Stakes Investor Negotiation & Team Leadership'],
+          targetCompanies: ['Y Combinator & Antler Venture Ecosystems', 'Peak XV Partners (formerly Sequoia India)', 'McKinsey & Company Strategy Practice', 'Boston Consulting Group (BCG Digital Ventures)', 'Google / Amazon Strategic Expansion', 'High-Growth Startups (Zepto / Razorpay / Swiggy)'],
+          milestone: 'Build prototype business model canvas, pitch at student venture competition, and achieve 99th percentile in IPMAT/CUET mocks.'
+        };
+      } else {
+        data = {
+          pathwayName,
+          pathwayTitle: isMkt
+            ? 'Marketing Strategy, Consumer Insights & Brand Leadership'
+            : isIB
+            ? 'International Business, Global Trade Policy & Cross-Border Strategy'
+            : isSCM
+            ? 'Supply Chain Operations, Global Logistics & Procurement Analytics'
+            : 'Business Administration, Strategy & Management Consulting',
+          pathwayRankLabel: rankLabel,
+          fitScore,
+          rationale: `${firstName}'s profile exhibits strong strategic initiative (${scores.personality.extraversion}% Extraversion) and organized commercial acumen (${scores.personality.conscientiousness}% Conscientiousness), creating high aptitude for cross-functional business leadership, market expansion, and consulting.`,
+          foundation: {
+            subjects: ['Business Studies & Corporate Organization', 'Economics & Global Commerce', 'Applied Mathematics / Statistics', 'Accountancy & Financial Basics', 'English Communication & Public Speaking'],
+            exams: ['IPMAT (IIM Indore, Rohtak, Ranchi, Jammu)', 'CUET-UG (BBA / BMS / BBE)', 'NPAT (NMIMS Mumbai)', 'SET (Symbiosis International)', 'DU JAT / GGSIPU CET'],
+            curriculumFocus: 'Focus on strategic case studies, market equilibrium, consumer psychology, and presentation storytelling.'
           },
-          {
-            degree: 'B.Sc. in Supply Chain Operations & Logistics Analytics',
-            specialization: 'Supply Chain Optimization, Procurement, Global Trade Networks',
-            whyFits: 'Leverages systematic analytical logic for global logistics and manufacturing.',
-            careerOutcomes: 'Supply Chain Consultant, Logistics Director, Procurement Strategist'
-          }
-        ],
-        colleges: {
-          reach: ['IIM Indore (IPM Program)', 'Shaheed Sukhdev College of Business Studies (SSCBS) Delhi', 'IIM Roorkee / IIM Ranchi IPM', 'NMIMS ASMSOC Mumbai'],
-          fit: ['St. Xavier\'s College Mumbai', 'Christ University Bangalore', 'Symbiosis Centre for Management Studies (SCMS) Pune', 'Loyola College Chennai'],
-          accessible: ['K.J. Somaiya Institute Mumbai', 'Mithibai College Mumbai', 'Bennett University Greater Noida', 'Amity Global Business School']
-        },
-        masters: [
-          'Master of Business Administration (MBA - IIM Ahmedabad, Bangalore, Calcutta / INSEAD / Harvard)',
-          'M.Sc. in Strategic Marketing & Brand Leadership',
-          'Master of Science in Supply Chain Engineering & Global Logistics',
-          'Executive Master in International Business & Trade Policy'
-        ],
-        careerOutcomes: [
-          'Management Consultant (McKinsey & Company / BCG / Bain & Co)',
-          'Global Brand Manager / Chief Marketing Officer (CMO Track)',
-          'Product Growth & Go-to-Market (GTM) Strategy Director',
-          'Venture Capital Operations Associate / High-Growth Founder'
-        ],
-        skills: ['Strategic Problem Solving & MECE Frameworks', 'Consumer Behavior & Brand Positioning Analysis', 'Performance Marketing & Digital Analytics', 'Negotiation & Stakeholder Management', 'P&L Ownership & Financial Acumen'],
-        targetCompanies: ['McKinsey & Company', 'Boston Consulting Group (BCG)', 'Hindustan Unilever Limited (HUL)', 'Procter & Gamble (P&G)', 'Google Consumer Marketing', 'Amazon Operations'],
-        milestone: 'Complete IPMAT syllabus coverage, launch a student entrepreneurial project or school marketing campaign, and win an inter-school business case competition.'
-      };
+          bachelors: [
+            {
+              degree: 'IPM (5-Year Integrated Program in Management - IIM Track)',
+              specialization: 'General Management, Quantitative Strategy, International Business',
+              whyFits: `Provides fast-track management training combining leadership with quantitative analysis.`,
+              careerOutcomes: 'Management Consultant, Business Operations Manager, Growth Lead'
+            },
+            {
+              degree: 'BBA / BMS (Bachelor of Management Studies - Strategy Track)',
+              specialization: 'Corporate Strategy, Global Supply Chain, Digital Enterprise Transformation',
+              whyFits: 'Focuses on modern agile operations and strategic enterprise execution.',
+              careerOutcomes: 'Strategy Associate, Operations Manager, Business Development Lead'
+            },
+            {
+              degree: 'B.A. (Hons) in Marketing Communications & Brand Strategy',
+              specialization: 'Consumer Insights, Digital Performance Marketing, Brand Storytelling',
+              whyFits: 'Applies psychological insights and creative communication to brand growth.',
+              careerOutcomes: 'Brand Manager, Digital Marketing Lead, Consumer Insights Analyst'
+            },
+            {
+              degree: 'B.Sc. in Supply Chain Operations & Logistics Analytics',
+              specialization: 'Supply Chain Optimization, Procurement, Global Trade Networks',
+              whyFits: 'Leverages systematic analytical logic for global logistics and manufacturing.',
+              careerOutcomes: 'Supply Chain Consultant, Logistics Director, Procurement Strategist'
+            }
+          ],
+          colleges: {
+            reach: ['IIM Indore (IPM Program)', 'Shaheed Sukhdev College of Business Studies (SSCBS) Delhi', 'IIM Roorkee / IIM Ranchi IPM', 'NMIMS ASMSOC Mumbai'],
+            fit: ['St. Xavier\'s College Mumbai', 'Christ University Bangalore', 'Symbiosis Centre for Management Studies (SCMS) Pune', 'Loyola College Chennai'],
+            accessible: ['K.J. Somaiya Institute Mumbai', 'Mithibai College Mumbai', 'Bennett University Greater Noida', 'Amity Global Business School']
+          },
+          masters: [
+            'Master of Business Administration (MBA - IIM Ahmedabad, Bangalore, Calcutta / INSEAD / Harvard)',
+            'M.Sc. in Strategic Marketing & Brand Leadership',
+            'Master of Science in Supply Chain Engineering & Global Logistics',
+            'Executive Master in International Business & Trade Policy'
+          ],
+          careerOutcomes: [
+            'Management Consultant (McKinsey & Company / BCG / Bain & Co)',
+            'Global Brand Manager / Chief Marketing Officer (CMO Track)',
+            'Product Growth & Go-to-Market (GTM) Strategy Director',
+            'Venture Capital Operations Associate / High-Growth Founder'
+          ],
+          skills: ['Strategic Problem Solving & MECE Frameworks', 'Consumer Behavior & Brand Positioning Analysis', 'Performance Marketing & Digital Analytics', 'Negotiation & Stakeholder Management', 'P&L Ownership & Financial Acumen'],
+          targetCompanies: ['McKinsey & Company', 'Boston Consulting Group (BCG)', 'Hindustan Unilever Limited (HUL)', 'Procter & Gamble (P&G)', 'Google Consumer Marketing', 'Amazon Operations'],
+          milestone: 'Complete IPMAT syllabus coverage, launch a student entrepreneurial project or school marketing campaign, and win an inter-school business case competition.'
+        };
+      }
       break;
+    }
 
     case 'PSYCHOLOGY_HUMANITIES':
       data = {

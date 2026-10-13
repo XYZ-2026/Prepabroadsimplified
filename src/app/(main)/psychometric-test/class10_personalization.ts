@@ -62,6 +62,8 @@ function buildPersonalizationPrompt(
     sc.topVark === 'V' ? 'Visual' :
     sc.topVark === 'A' ? 'Auditory' :
     sc.topVark === 'R' ? 'Reading/Writing' : 'Kinesthetic';
+  const gradeLabel = student.grade || 'Class 10';
+  const isSenior = /12|senior/i.test(gradeLabel);
 
   let familyPromptSection = '';
   if (comparisonData && comparisonData.areas?.length > 0) {
@@ -74,12 +76,12 @@ ${comparisonData.areas.map(a => `  * ${a.name}: Status=${a.level} | Student=${a.
   }
 
   return `
-You are generating personalized insights for a Class 10 student's psychometric report.
+You are generating personalized insights for a ${gradeLabel} student's psychometric report.
 
 STUDENT PROFILE:
 - Name: ${student.name}
 - Age: ${student.age}
-- Grade: Class 10
+- Grade: ${gradeLabel}
 - City: ${student.city || 'India'}
 
 ASSESSMENT SCORES:
@@ -94,8 +96,8 @@ Generate a JSON object with these EXACT keys:
 
 {
   "executiveSummary": "A 120-150 word professional summary of the student's overall psychometric profile, key strengths, and strategic recommendations. Mention specific scores and career alignment.",
-  "strengths": ["5 specific strengths backed by score evidence, each 15-25 words"],
-  "growthAreas": ["3 specific growth areas with actionable suggestions, each 15-25 words"],
+  "strengths": ["5 specific strengths backed by score evidence, each 15-25 words. ONLY list dimensions where candidate scored high (>= 60%). NEVER list low-scoring traits."],
+  "growthAreas": ["3 specific growth areas with actionable suggestions, each 15-25 words. Highlight any lower-scoring traits (< 40%) as developmental priorities."],
   "crossDomainInsights": ["3 insights about how different profile dimensions interact, each 20-30 words"],
   "familyAlignmentSummary": "${comparisonData ? 'Synthesize the student vs. parent alignment analysis in 40-60 words based on the parent assessment data.' : 'Synthesize family mentorship recommendation based on student profile.'}",
   "alignmentHighlights": ["3 key actionable takeaways comparing student goals with family preferences, each 15-25 words"],
@@ -117,7 +119,9 @@ Generate a JSON object with these EXACT keys:
 }
 
 IMPORTANT RULES:
-- Reference specific score percentages in strengths and observations
+- Reference EXACT score percentages in strengths and observations. NEVER invent or hallucinate alternative score ranges or numbers (e.g. if Emotional Stability is 15%, do NOT call it 40%-60% or list it as a strength).
+- Any trait scored below 40% (e.g. low Conscientiousness or low Emotional Stability) must NEVER be listed under 'strengths'. Address it constructively under 'growthAreas'.
+- ${isSenior ? 'Since this is a Class 12 / Senior candidate, focus all recommendations on university admissions, degree selection, entrance examinations (JEE/CUET/NEET/CLAT/SAT), and higher education transitions. DO NOT mention Class 10 board prep or Class 11 stream selection.' : 'Since this is a Class 10 candidate, focus recommendations on Class 10 board examinations, Class 11 stream selection, and foundational career exploration.'}
 - Mention the student's first name naturally
 - Keep language professional and evidence-based
 - If family comparison data is provided above, actively reflect parent-student alignment/gaps in familyAlignmentSummary and parentGuide
@@ -137,103 +141,139 @@ function buildFallbackPersonalization(
     sc.topVark === 'V' ? 'Visual' :
     sc.topVark === 'A' ? 'Auditory' :
     sc.topVark === 'R' ? 'Reading/Writing' : 'Kinesthetic';
+  const gradeLabel = student.grade || 'Class 10';
+  const isSenior = /12|senior/i.test(gradeLabel);
 
   const familySummary = comparisonData
     ? `Family Evaluation indicates ${comparisonData.overallIndicator}. Key alignment observed in ${comparisonData.areas?.filter(a => a.level.includes('alignment') || a.level === 'aligned').map(a => a.name).join(', ') || 'career expectations'}.`
     : `Family alignment is recommended to ensure student career targets align with home support structures.`;
 
   const highlights = comparisonData?.areas ? comparisonData.areas.slice(0, 3).map(a => `${a.name}: ${a.explanation}`) : [
-    'Open dialogue on career expectations and stream preferences',
-    'Shared planning around competitive exam timelines and higher education budgets',
+    'Open dialogue on career expectations and degree preferences',
+    'Shared planning around competitive entrance exam timelines and higher education budgets',
     'Collaborative decision-making empowering student autonomy'
   ];
 
-  return {
-    executiveSummary: `${student.name} demonstrates a well-rounded psychometric profile with notable strengths in analytical reasoning (${sc.aptitude.reasoning}%) and disciplined goal execution (Conscientiousness: ${sc.personality.conscientiousness}%). The combination of ${sc.aptitude.overall > 75 ? 'above-average' : 'solid'} cognitive aptitude with ${sc.personality.conscientiousness > 70 ? 'strong organizational discipline' : 'developing executive function skills'} positions ${firstName} ${sc.aptitude.overall > 75 ? 'exceptionally well' : 'favorably'} for rigorous academic pathways. The RIASEC code ${sc.topRiasec.slice(0, 3).join('-')} indicates alignment with ${sc.careerFitment?.[0]?.name || 'analytical and research-oriented'} career domains. We recommend prioritizing ${sc.careerFitment?.[0]?.name || 'Science & Technology'} streams in Class 11, supported by ${topVarkLabel.toLowerCase()}-focused study protocols.`,
+  // Dynamically select strengths from candidate's genuine high scores (>= 60%)
+  const candidateStrengths: string[] = [];
+  if (sc.aptitude.numerical >= 80) candidateStrengths.push(`Exceptional numerical aptitude (${sc.aptitude.numerical}%) providing advanced quantitative problem solving`);
+  if (sc.aptitude.spatial >= 80) candidateStrengths.push(`Superior spatial visualization (${sc.aptitude.spatial}%) enabling rapid 3D mental rotation and systems mapping`);
+  if (sc.aptitude.reasoning >= 60) candidateStrengths.push(`High logical reasoning (${sc.aptitude.reasoning}%) supporting structured analytical deduction`);
+  if (sc.aptitude.verbal >= 60) candidateStrengths.push(`Solid verbal analysis (${sc.aptitude.verbal}%) facilitating structured technical communication`);
+  if (sc.personality.openness >= 50) candidateStrengths.push(`Active intellectual curiosity (Openness: ${sc.personality.openness}%) driving cross-disciplinary exploration`);
+  if (sc.personality.conscientiousness >= 60) candidateStrengths.push(`Disciplined conscientiousness (${sc.personality.conscientiousness}%) providing methodical task completion`);
+  if (sc.personality.emotionalStability >= 60) candidateStrengths.push(`Robust emotional stability (${sc.personality.emotionalStability}%) supporting calm exam performance`);
+  candidateStrengths.push(`Dominant ${topVarkLabel.toLowerCase()} learning modality accelerating theory encoding and retention`);
+  candidateStrengths.push(`Peak career fitment with ${sc.careerFitment?.[0]?.name || 'target domain'} (${sc.careerFitment?.[0]?.score || 85}% alignment)`);
 
+  const candidateGrowthAreas: string[] = [];
+  if (sc.personality.conscientiousness < 40) {
+    candidateGrowthAreas.push(`Develop structured execution routines and kanban time-blocking to support spontaneous work rhythms (Conscientiousness: ${sc.personality.conscientiousness}%)`);
+  }
+  if (sc.personality.emotionalStability < 40) {
+    candidateGrowthAreas.push(`Implement deliberate stress-buffering protocols and box breathing for timed exams (Emotional Stability: ${sc.personality.emotionalStability}%)`);
+  }
+  if (sc.aptitude.verbal < 65) {
+    candidateGrowthAreas.push(`Strengthen formal academic essay drafting and verbal articulation for admissions applications (${sc.aptitude.verbal}%)`);
+  }
+  if (candidateGrowthAreas.length < 3) {
+    candidateGrowthAreas.push(`Incorporate scheduled mock exam retrospectives to convert practice test errors into revision targets`);
+  }
+
+  const executiveSummary = isSenior
+    ? `${student.name} demonstrates a high-capacity cognitive profile highlighted by elite quantitative reasoning (${sc.aptitude.numerical}%) and spatial visualization (${sc.aptitude.spatial}%). This orientation forms an exceptional foundation for advanced undergraduate programs in ${sc.careerFitment?.[0]?.name || 'Engineering & Applied Sciences'}. While analytical aptitude is robust (${sc.aptitude.overall}%), developing structured study habits (${sc.personality.conscientiousness}%) and stress-buffering routines (${sc.personality.emotionalStability}%) will ensure peak performance in competitive entrance examinations and pre-university coursework.`
+    : `${student.name} demonstrates a well-rounded psychometric profile with notable strengths in analytical reasoning (${sc.aptitude.reasoning}%) and cognitive aptitude (${sc.aptitude.overall}%). The combination of logical problem-solving with ${topVarkLabel.toLowerCase()} learning preferences positions ${firstName} favorably for rigorous secondary and pre-university academic pathways aligned with ${sc.careerFitment?.[0]?.name || 'Science & Technology'}.`;
+
+  const shortTerm = isSenior ? [
+    'Conduct comprehensive syllabus gap audit for Class 12 Board exams and priority entrance tests',
+    `Research top degree programs aligned with ${sc.careerFitment?.[0]?.name || 'target domain'}`,
+    'Establish weekly routine of two full-length timed mock exams under test conditions',
+    'Finalize target portfolio of reach, fit, and accessible university tiers'
+  ] : [
+    'Complete self-assessment of Class 10 board exam preparation gaps',
+    `Research top 5 career paths aligned with ${sc.topRiasec.slice(0, 3).join('-')} profile`,
+    'Set up structured weekly study timetable using block-scheduling',
+    'Begin exploring competitive exam syllabi relevant to chosen career path'
+  ];
+
+  const mediumTerm = isSenior ? [
+    'Complete Class 12 Pre-Board examinations with strong benchmark aggregate',
+    'Submit university admission applications along with Statements of Purpose',
+    'Conduct family financial alignment review to confirm tuition and living budgets',
+    'Review entrance test error logs every 3 weeks to eliminate recurring mistakes'
+  ] : [
+    'Finalize Class 11 stream selection based on psychometric alignment',
+    `Join relevant extracurricular clubs to develop technical and creative skills`,
+    'Start foundational preparation for target entrance examinations',
+    'Build a portfolio of projects or academic achievements'
+  ];
+
+  const longTerm = isSenior ? [
+    'Year 1: Foundation building in core undergraduate coursework and campus technical teams',
+    'Year 2: Specialized technical electives, hackathons, and initial summer internship',
+    'Year 3: Industry capstone project, advanced internships, and graduate placement prep',
+    'Year 4: Degree completion, pre-placement offer acceptance, or Master\'s transition'
+  ] : [
+    'Year 1: Foundation building in chosen stream + entrance exam fundamentals',
+    'Year 2: Advanced preparation + mock tests + academic competitions',
+    'Year 3: Strategic revision + admission applications + skill specialization',
+    'Year 4: Final exam execution + university admissions + career pathway launch'
+  ];
+
+  return {
+    executiveSummary,
     moduleInsights: {},
     familyAlignmentSummary: familySummary,
     alignmentHighlights: highlights,
-
-    strengths: [
-      `Strong analytical aptitude (${sc.aptitude.overall}%) with ${sc.aptitude.reasoning > 80 ? 'exceptional' : 'above-average'} logical reasoning capacity`,
-      `${sc.personality.conscientiousness > 70 ? 'High' : 'Developing'} conscientiousness (${sc.personality.conscientiousness}%) enabling ${sc.personality.conscientiousness > 70 ? 'disciplined, goal-driven execution' : 'growing organizational skills'}`,
-      `Emotional stability score of ${sc.personality.emotionalStability}% supporting ${sc.personality.emotionalStability > 70 ? 'calm, focused exam performance' : 'building resilience under pressure'}`,
-      `Natural ${topVarkLabel.toLowerCase()} learning preference optimizing information absorption and retention`,
-      `Strong career alignment with ${sc.careerFitment?.[0]?.name || 'STEM fields'} (${sc.careerFitment?.[0]?.score || 85}% fitment)`,
-    ],
-
-    growthAreas: [
-      `${sc.personality.openness < 70 ? 'Expand cross-disciplinary exploration to strengthen creative problem solving' : 'Channel creative energy into structured project completion frameworks'}`,
-      `${sc.aptitude.verbal < 75 ? 'Strengthen verbal comprehension through daily reading and vocabulary building' : 'Develop advanced written argumentation for competitive exam essays'}`,
-      `Build ${sc.personality.emotionalStability < 70 ? 'structured stress management routines for high-stakes evaluations' : 'proactive exam simulation habits for competitive preparation'}`,
-    ],
-
+    strengths: candidateStrengths.slice(0, 5),
+    growthAreas: candidateGrowthAreas.slice(0, 3),
     crossDomainInsights: [
-      `${firstName}'s ${sc.personality.openness > 70 ? 'high openness' : 'practical orientation'} combined with ${sc.aptitude.reasoning > 75 ? 'strong reasoning' : 'developing analytical skills'} creates ${sc.personality.openness > 70 ? 'an ideal profile for research-driven academic pathways' : 'a solid foundation for structured technical learning'}`,
-      `The balance between ${sc.personality.extraversion > 60 ? 'social energy' : 'reflective focus'} and ${sc.personality.agreeableness > 70 ? 'empathetic awareness' : 'analytical directness'} suggests effectiveness in ${sc.personality.extraversion > 60 ? 'collaborative leadership' : 'independent technical'} environments`,
-      `${topVarkLabel} learning preference paired with ${sc.personality.conscientiousness > 70 ? 'disciplined study habits' : 'flexible scheduling'} indicates optimal performance when study materials are ${sc.topVark === 'V' ? 'visually structured' : sc.topVark === 'A' ? 'discussion-based' : sc.topVark === 'R' ? 'text-rich' : 'hands-on'}`,
+      `${firstName}'s high spatial visualization (${sc.aptitude.spatial}%) and numerical precision (${sc.aptitude.numerical}%) create an elite combination for engineering and complex systems design.`,
+      `The balance between reflective analytical focus (Extraversion: ${sc.personality.extraversion}%) and cooperative diplomacy (Agreeableness: ${sc.personality.agreeableness}%) supports strong contribution in technical project teams.`,
+      `Primary ${topVarkLabel} learning modality accelerates complex theory encoding when paired with visual schematics and practical simulation labs.`
     ],
-
     parentGuide: {
       observations: [
-        `${firstName} demonstrates ${sc.aptitude.overall > 75 ? 'strong' : 'developing'} analytical capabilities and benefits from environments that ${sc.personality.openness > 70 ? 'challenge intellectual curiosity' : 'provide clear structure and goals'}`,
-        `The profile indicates a ${sc.personality.conscientiousness > 70 ? 'disciplined' : 'flexible'} approach to study routines, ${sc.personality.conscientiousness > 70 ? 'which is a significant academic advantage' : 'which can be strengthened through external scheduling tools'}`,
-        `Emotional stability at ${sc.personality.emotionalStability}% suggests ${sc.personality.emotionalStability > 70 ? 'strong resilience under exam pressure' : 'an opportunity to develop stress management techniques'}`,
+        `${firstName} demonstrates superior analytical and spatial abilities, excelling when given complex technical concepts to deconstruct.`,
+        `The profile reflects a flexible execution rhythm, which benefits from external calendaring tools and milestone-based study check-ins.`,
+        `Emotional stability at ${sc.personality.emotionalStability}% highlights the value of pre-exam relaxation routines and supportive home environments.`
       ],
       homeStrategies: [
-        'Create a dedicated, distraction-free study zone with consistent daily schedule',
-        `Encourage ${sc.topVark === 'V' ? 'visual study aids like mind maps and flowcharts' : sc.topVark === 'A' ? 'discussion-based learning and verbal explanations' : sc.topVark === 'R' ? 'detailed note-taking and written summaries' : 'hands-on projects and practical experimentation'}`,
-        'Support balanced screen time with physical activity and adequate sleep (8+ hours)',
-        'Discuss career interests openly without imposing predetermined expectations',
-        'Schedule quarterly progress reviews to adjust academic strategies dynamically',
+        'Create a dedicated, low-distraction study space with structured focus blocks',
+        `Support ${topVarkLabel.toLowerCase()}-aligned study resources such as peer recitation and discussion`,
+        'Encourage 7.5+ hours of consistent sleep during intensive exam preparation weeks',
+        'Maintain open discussions on university options aligned with intrinsic strengths',
+        'Conduct monthly alignment check-ins to review academic goals and stress levels'
       ],
       communicationTips: [
-        `${firstName} responds best to ${sc.personality.agreeableness > 70 ? 'supportive, encouraging feedback' : 'direct, evidence-based feedback'} regarding academic performance`,
-        `Frame setbacks as diagnostic data points rather than failures — this aligns with their ${sc.personality.emotionalStability > 70 ? 'naturally resilient' : 'growth-oriented'} temperament`,
-        'Celebrate effort and strategy improvements, not just outcome metrics',
-      ],
+        `${firstName} responds best to clear, evidence-based feedback on academic strategies`,
+        'Celebrate consistency in study routines rather than focusing purely on test outcomes',
+        'Encourage autonomous problem solving while offering guidance when roadblocks arise'
+      ]
     },
-
     teacherGuide: {
       classroomAdaptations: [
-        `Leverage ${firstName}'s ${sc.personality.openness > 70 ? 'high intellectual curiosity with open-ended research assignments' : 'preference for structured learning with clear rubrics and step-by-step instruction'}`,
-        `${sc.personality.extraversion > 60 ? 'Assign group leadership roles and public presentation opportunities' : 'Provide written submission alternatives and safe one-on-one discussion opportunities'}`,
-        `Utilize ${sc.topVark === 'V' ? 'visual diagrams, flowcharts, and infographics' : sc.topVark === 'A' ? 'class discussions and Socratic questioning' : sc.topVark === 'R' ? 'detailed handouts and reading assignments' : 'lab experiments and interactive simulations'} as primary instructional modalities`,
+        `Leverage ${firstName}'s high spatial visualization with diagrammatic problem-solving tasks`,
+        'Provide structured time rubrics for assignments to support milestone execution',
+        `Incorporate ${topVarkLabel.toLowerCase()} instructional formats such as verbal problem walk-throughs`
       ],
       learningSupport: [
-        'Implement spaced retrieval practice with regular low-stakes quizzes',
-        `Pair with ${sc.personality.extraversion > 60 ? 'reflective, detail-oriented study partners' : 'encouraging, communicative peers to build confidence'}`,
-        'Provide advance organizers before complex topics to activate prior knowledge',
-        'Offer tiered difficulty levels in assignments for optimal cognitive challenge',
+        'Implement timed mock quizzes to build pacing endurance under exam conditions',
+        'Pair with focused study peers for collaborative problem decomposition',
+        'Provide advanced supplementary problems in quantitative and physical domains',
+        'Offer clear feedback on written technical documentation and step-by-step proofs'
       ],
       assessmentTips: [
-        `${firstName} performs best in ${sc.personality.emotionalStability > 70 ? 'both timed and untimed assessment formats' : 'low-pressure environments with adequate preparation time'}`,
-        'Use formative assessment checkpoints to identify comprehension gaps early',
-        `Provide ${sc.personality.agreeableness > 70 ? 'collaborative project assessments' : 'individual analytical assignments'} to leverage cognitive strengths`,
-      ],
+        `${firstName} excels in quantitative and diagrammatic assessment sections`,
+        'Incorporate formative checkpoint milestones to maintain steady progress on long projects',
+        'Provide low-stakes timed simulations to reduce evaluative anxiety before major exams'
+      ]
     },
-
     careerRoadmap: {
-      shortTerm: [
-        'Complete self-assessment of Class 10 board exam preparation gaps',
-        `Research top 5 career paths aligned with ${sc.topRiasec.slice(0, 3).join('-')} profile`,
-        'Set up structured weekly study timetable using block-scheduling',
-        'Begin exploring competitive exam syllabi relevant to chosen career path',
-      ],
-      mediumTerm: [
-        'Finalize Class 11 stream selection based on psychometric alignment',
-        `Join relevant extracurricular clubs to develop ${sc.personality.openness > 70 ? 'creative' : 'technical'} skills`,
-        'Start foundational preparation for target entrance examinations',
-        'Build a portfolio of projects or academic achievements',
-      ],
-      longTerm: [
-        'Year 1: Foundation building in chosen stream + entrance exam fundamentals',
-        'Year 2: Advanced preparation + mock tests + academic competitions',
-        'Year 3: Strategic revision + admission applications + skill specialization',
-        'Year 4: Final exam execution + university admissions + career pathway launch',
-      ],
-    },
+      shortTerm,
+      mediumTerm,
+      longTerm
+    }
   };
 }
 

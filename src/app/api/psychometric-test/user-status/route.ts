@@ -8,11 +8,14 @@ export async function GET(request: Request) {
     if (!claims) {
       return NextResponse.json({
         authenticated: false,
+        isAdmin: false,
         hasCompletedTest: false,
         results: [],
         resultsByType: {},
       });
     }
+
+    const isAdmin = claims.email === 'admin@as.com' || claims.admin === true || claims.role === 'admin';
 
     const { searchParams } = new URL(request.url);
     const requestedType = searchParams.get('type'); // e.g. 'junior', 'grade10', 'senior'
@@ -23,8 +26,44 @@ export async function GET(request: Request) {
       assessmentType: string;
       assessmentVariant: string;
       createdAt: string;
+      workflowState: string;
+      isLocked: boolean;
       reportUrl: string;
     }> = [];
+
+    // Fetch workflow states for user's assessments
+    const wfMap = new Map<string, string>();
+    try {
+      const wfSnap = await adminDb
+        .collection('assessment_workflow')
+        .where('studentId', '==', claims.uid)
+        .get();
+      if (!wfSnap.empty) {
+        wfSnap.docs.forEach(doc => {
+          const w = doc.data();
+          if (w.resultId) wfMap.set(w.resultId, w.state || 'parent_pending');
+        });
+      }
+    } catch (wfErr) {
+      console.warn('[User Status Route] Workflow fetch warning:', wfErr);
+    }
+
+    const buildResultItem = (docId: string, d: any) => {
+      const gCacheWf = (globalThis as any).__workflowCache;
+      const memState = gCacheWf ? gCacheWf.get(docId) : null;
+      const workflowState = memState || wfMap.get(docId) || 'parent_pending';
+      const isLocked = !isAdmin && workflowState !== 'report_unlocked';
+      return {
+        resultId: docId,
+        testName: d.testName || 'Psychometric Assessment',
+        assessmentType: d.assessmentType || (d.testType || 'senior'),
+        assessmentVariant: d.assessmentVariant || '',
+        createdAt: d.createdAt || '',
+        workflowState,
+        isLocked,
+        reportUrl: isLocked ? `/parent-assessment?resultId=${docId}` : `/psychometric-test?resultId=${docId}`,
+      };
+    };
 
     // Fetch user's completed psychometric results from Firestore
     try {
@@ -35,15 +74,7 @@ export async function GET(request: Request) {
 
       if (!snapshot.empty) {
         snapshot.docs.forEach(doc => {
-          const d = doc.data();
-          results.push({
-            resultId: doc.id,
-            testName: d.testName || 'Psychometric Assessment',
-            assessmentType: d.assessmentType || (d.testType || 'senior'),
-            assessmentVariant: d.assessmentVariant || '',
-            createdAt: d.createdAt || '',
-            reportUrl: `/psychometric-test?resultId=${doc.id}`,
-          });
+          results.push(buildResultItem(doc.id, doc.data()));
         });
       }
     } catch (dbErr) {
@@ -55,14 +86,7 @@ export async function GET(request: Request) {
     if (gCache) {
       for (const [id, d] of gCache.entries()) {
         if (d.userId === claims.uid && !results.some(r => r.resultId === id)) {
-          results.push({
-            resultId: id,
-            testName: d.testName || 'Psychometric Assessment',
-            assessmentType: d.assessmentType || (d.testType || 'senior'),
-            assessmentVariant: d.assessmentVariant || '',
-            createdAt: d.createdAt || '',
-            reportUrl: `/psychometric-test?resultId=${id}`,
-          });
+          results.push(buildResultItem(id, d));
         }
       }
     }
@@ -70,6 +94,7 @@ export async function GET(request: Request) {
     if (results.length === 0) {
       return NextResponse.json({
         authenticated: true,
+        isAdmin,
         hasCompletedTest: false,
         results: [],
         resultsByType: {},
@@ -113,6 +138,7 @@ export async function GET(request: Request) {
 
     return NextResponse.json({
       authenticated: true,
+      isAdmin,
       hasCompletedTest: true,
       totalCompleted: results.length,
       latestResultId: results[0].resultId,

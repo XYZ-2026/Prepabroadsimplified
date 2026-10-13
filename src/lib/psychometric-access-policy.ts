@@ -236,7 +236,7 @@ export function getStudentPsychometricAccess(
       isEligible,
       statusBadge: isEligible ? 'AVAILABLE' : 'LOCKED',
       accessReason: isEligible
-        ? `Unlocked for your academic stage (${formatGradeLabel(normalizedGrade)})`
+        ? (isPrivileged ? 'Administrator Universal Access (Unlocked for Testing & Evaluation)' : `Unlocked for your academic stage (${formatGradeLabel(normalizedGrade)})`)
         : def.lockedReason,
     };
   });

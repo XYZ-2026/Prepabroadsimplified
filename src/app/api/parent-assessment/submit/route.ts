@@ -50,11 +50,17 @@ export async function POST(req: NextRequest) {
     const parentProfile = computeParentProfile(answers, PARENT_ASSESSMENT.sections);
 
     // 2. Prepare Student Data for Comparison
+    const studentScores = studentResultData?.scores || {};
+    const topFitment = studentScores?.careerFitment || studentResultData?.topCareers || studentResultData?.careerFitment?.slice(0, 5) || [];
+    const topRiasec = studentScores?.topRiasec || (studentResultData?.hollandCode ? studentResultData.hollandCode.split('') : []);
+    const topValues = studentScores?.topValues || studentResultData?.careerValues?.topValues || [];
+    const valuesScores = studentScores?.values || studentResultData?.careerValues?.scores || {};
+
     const studentComparisonData: StudentComparisonData = {
-      topCareerFitment: studentResultData?.topCareers || studentResultData?.careerFitment?.slice(0, 5) || [],
-      topRiasecCodes: studentResultData?.hollandCode?.split('') || [],
-      topCareerValues: studentResultData?.careerValues?.topValues || [],
-      careerValuesScores: studentResultData?.careerValues?.scores || {},
+      topCareerFitment: topFitment,
+      topRiasecCodes: (topRiasec || []).map((code: string) => String(code).charAt(0).toUpperCase()),
+      topCareerValues: topValues,
+      careerValuesScores: valuesScores,
     };
 
     // 3. Compute Alignment
@@ -81,6 +87,7 @@ export async function POST(req: NextRequest) {
       resultId,
       studentId,
       ...comparisonResult,
+      parentProfile,
       aiInterpretation: null, 
     });
 
@@ -95,7 +102,22 @@ export async function POST(req: NextRequest) {
       updatedAt: new Date().toISOString()
     }, { merge: true });
 
+    // Also update psychometric_results document with parentProfile and clear outdated reportSnapshot lock
+    const studentDocRef = adminDb.collection('psychometric_results').doc(resultId);
+    batch.set(studentDocRef, {
+      parentProfile,
+      updatedAt: new Date().toISOString()
+    }, { merge: true });
+
     await batch.commit();
+
+    // Mirror to global memory cache fallback for resilience
+    try {
+      const gWfCache = ((globalThis as any).__workflowCache = (globalThis as any).__workflowCache || new Map());
+      gWfCache.set(resultId, 'report_unlocked');
+      const gCompCache = ((globalThis as any).__comparisonCache = (globalThis as any).__comparisonCache || new Map());
+      gCompCache.set(resultId, { ...comparisonResult, parentProfile });
+    } catch {}
 
     // 5. Pre-generate Family Insight ONCE upon completion (0 Groq calls on subsequent views)
     try {

@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 import { CAREER_ROADMAP_ENABLED } from '@/config/feature-flags';
 import styles from '@/styles/components.module.css';
 
@@ -45,6 +46,7 @@ export default function Topbar() {
           </button>
         )}
         <Link href={isRoadmap ? "/career-roadmap" : "/"} className={styles.topbarLogo} style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <Image src="/logo.png" alt="CLARVO" width={32} height={32} className="w-[28px] h-[28px] sm:w-[32px] sm:h-[32px] object-contain shrink-0" priority />
           <span style={{ 
             fontFamily: 'var(--font-primary)',
             fontWeight: 900, 

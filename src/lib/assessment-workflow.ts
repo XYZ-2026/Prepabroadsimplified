@@ -73,16 +73,35 @@ export function hashToken(rawToken: string): string {
  * This function consults the authoritative source documents if necessary.
  */
 export async function getWorkflowState(resultId: string): Promise<WorkflowState> {
-  const workflowSnap = await adminDb.collection('assessment_workflow').doc(resultId).get();
+  const gCache = (globalThis as any).__workflowCache;
+  if (gCache && gCache.has(resultId)) {
+    return gCache.get(resultId);
+  }
+
+  let workflowSnap: any = null;
+  try {
+    workflowSnap = await adminDb.collection('assessment_workflow').doc(resultId).get();
+  } catch (dbErr) {
+    console.warn('[Workflow State] Firestore fetch error:', dbErr);
+  }
   
-  if (!workflowSnap.exists) {
+  if (!workflowSnap || !workflowSnap.exists) {
     // Check if psychometric_results exists
-    const resultSnap = await adminDb.collection('psychometric_results').doc(resultId).get();
-    if (!resultSnap.exists) {
+    let resultExists = false;
+    try {
+      const resultSnap = await adminDb.collection('psychometric_results').doc(resultId).get();
+      resultExists = resultSnap.exists;
+    } catch {}
+
+    const pCache = (globalThis as any).__psychometricResultsCache;
+    if (!resultExists && pCache && pCache.has(resultId)) {
+      resultExists = true;
+    }
+
+    if (!resultExists) {
       throw new Error(`Assessment ${resultId} not found`);
     }
-    // Result exists but no workflow doc -> we need to initialize it
-    // For now, return parent_pending
+    // Result exists but no workflow doc -> return parent_pending
     return 'parent_pending';
   }
 

@@ -18,6 +18,7 @@ import { formatReportDate } from './class10_html_report_builder';
 import type { UniversalReportData, ReportVariant, ReportVariantConfig } from './report-engine/universal-report-schema';
 import { getVariantConfig } from './report-engine/universal-report-schema';
 import { resolveReportVariant } from './report-engine/adapters';
+import { LOGO_BASE64 } from '@/lib/logo-base64';
 
 export const totalExecutiveSummaryPages = 15;
 
@@ -257,10 +258,13 @@ export function buildClass10ExecutiveSummaryHTMLReport(
 
                 <!-- Brand Header -->
                 <div class="flex justify-between items-start border-b-2 border-gold/40 pb-6 relative z-10">
-                    <div>
-                        <span class="text-gold font-bold text-xs tracking-widest block uppercase mb-1">CLARVO PREMIA</span>
-                        <h1 class="text-3xl font-black text-white tracking-tight">EXECUTIVE CAREER EDITION</h1>
-                        <p class="text-gold/80 text-xs font-semibold mt-1">15-Page Curated Psychometric &amp; Decision Support Evaluation</p>
+                    <div class="flex items-center space-x-3.5">
+                        <img src="${LOGO_BASE64}" class="w-11 h-11 rounded-2xl object-contain shadow-lg border-2 border-white/80 bg-white shrink-0" alt="CLARVO" />
+                        <div>
+                            <span class="text-gold font-bold text-xs tracking-widest block uppercase mb-0.5">CLARVO PREMIA</span>
+                            <h1 class="text-2xl font-black text-white tracking-tight">EXECUTIVE CAREER EDITION</h1>
+                            <p class="text-gold/80 text-[11px] font-semibold">15-Page Curated Psychometric &amp; Decision Support Evaluation</p>
+                        </div>
                     </div>
                     <div class="text-right">
                         <span class="inline-block px-3.5 py-1 rounded-full bg-gold text-maroon-dark text-xs font-extrabold uppercase tracking-wider shadow">

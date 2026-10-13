@@ -36,7 +36,7 @@ export async function POST(req: Request) {
     }
 
     const resultData = resultDoc.data();
-    const studentName = resultData?.studentInfo?.name || 'Student';
+    const studentName = resultData?.student?.name || resultData?.studentInfo?.name || resultData?.name || 'Student';
 
     // Fetch workflow document for saved progress
     const workflowDoc = await adminDb.collection('assessment_workflow').doc(resultId).get();

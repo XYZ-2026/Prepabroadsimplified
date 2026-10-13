@@ -3,6 +3,7 @@ import { adminDb } from '@/lib/firebase-admin';
 import { verifySessionCookie, getUserRole } from '@/lib/auth';
 import type { EditorialStudent, EditorialScores } from '@/app/(main)/psychometric-test/class10_editorial_engine';
 import { getOrGenerateReportSnapshot } from '@/lib/report-snapshot-service';
+import { getWorkflowState } from '@/lib/assessment-workflow';
 import { adaptReportData, resolveReportVariant } from '@/app/(main)/psychometric-test/report-engine/adapters';
 import { buildUniversalExecutiveHTMLReport } from '@/app/(main)/psychometric-test/class10_html_report_builder';
 import { buildUniversalExecutiveSummaryHTMLReport } from '@/app/(main)/psychometric-test/class10_executive_summary_builder';
@@ -40,8 +41,17 @@ export async function POST(req: NextRequest) {
 
       if (resultSnap.exists) {
         data = resultSnap.data();
-        if (decodedClaims && role === 'student' && data?.userId !== decodedClaims.uid) {
-          return NextResponse.json({ success: false, error: 'Access denied' }, { status: 403 });
+        if (decodedClaims && role === 'student') {
+          if (data?.userId !== decodedClaims.uid) {
+            return NextResponse.json({ success: false, error: 'Access denied' }, { status: 403 });
+          }
+          const wfState = await getWorkflowState(resultId);
+          if (wfState !== 'report_unlocked') {
+            return NextResponse.json({ 
+              success: false, 
+              error: 'Report is locked. Complete the compulsory Parent Psychometric Assessment to unlock.' 
+            }, { status: 403 });
+          }
         }
       }
 

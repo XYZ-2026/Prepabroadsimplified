@@ -1,6 +1,7 @@
 import React, { Suspense } from 'react';
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import Image from 'next/image';
 import AuthForm from '@/components/Auth/AuthForm';
 import AuthInfographics from '@/components/Auth/AuthInfographics';
 import styles from '@/styles/auth.module.css';
@@ -22,7 +23,8 @@ export default function AuthPage() {
   return (
     <>
       <header className={styles.authTopbar} style={{ justifyContent: 'space-between' }}>
-        <Link href="/" className={styles.authTopbarBrand}>
+        <Link href="/" className={styles.authTopbarBrand} style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none' }}>
+          <Image src="/logo.png" alt="CLARVO" width={34} height={34} className="w-[30px] h-[30px] sm:w-[34px] sm:h-[34px] object-contain shrink-0" priority />
           <div className={styles.authTopbarText}>
             <span className={styles.authTopbarTitle} style={{ fontWeight: 900, fontSize: '1.25rem', letterSpacing: '-0.02em', color: '#080F1C' }}>
               CLARVO

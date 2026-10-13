@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import styles from '@/styles/components.module.css';
 
@@ -15,7 +16,8 @@ export default function Footer() {
     <footer className={`footer ${styles.footer}`}>
       <div className={styles.footerGrid}>
         <div>
-          <div className={styles.footerBrandLogoText}>
+          <div className={styles.footerBrandLogoText} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <Image src="/logo.png" alt="CLARVO" width={32} height={32} className="w-[28px] h-[28px] object-contain shrink-0" />
             <span style={{ fontWeight: 900, color: 'var(--clarvo-deep-black, #080F1C)' }}>CLARVO</span>
           </div>
           <p className={styles.footerBrandDesc}>

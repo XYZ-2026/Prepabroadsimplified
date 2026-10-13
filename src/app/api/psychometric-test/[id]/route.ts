@@ -71,6 +71,10 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
       } catch (compErr) {
         console.warn('[Get Result Route] Comparison fetch warning:', compErr);
       }
+
+      if (!comparisonData && (globalThis as any).__comparisonCache) {
+        comparisonData = (globalThis as any).__comparisonCache.get(resolvedParams.id) || null;
+      }
     }
 
     return NextResponse.json({ 

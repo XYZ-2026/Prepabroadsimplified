@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
 export default function LandingNavbar() {
@@ -34,9 +35,14 @@ export default function LandingNavbar() {
       <div className="w-full h-[68px] sm:h-[84px] md:h-[88px] px-4 sm:px-6 md:px-8 lg:px-12 flex items-center justify-between">
         {/* LEFT - Logo & Website Name */}
         <Link href="/" className="flex items-center gap-3 sm:gap-3.5 cursor-pointer hover:opacity-90 transition-opacity">
-          <div className="relative w-[40px] h-[40px] sm:w-[48px] sm:h-[48px] rounded-[14px] bg-gradient-to-br from-[#2563EB] to-[#1E3A8A] shadow-[0_6px_20px_rgba(37,99,235,0.25)] flex items-center justify-center text-white font-extrabold text-lg sm:text-xl tracking-tight shrink-0">
-            CL
-          </div>
+          <Image
+            src="/logo.png"
+            alt="CLARVO"
+            width={44}
+            height={44}
+            className="w-[38px] h-[38px] sm:w-[44px] sm:h-[44px] object-contain shrink-0"
+            priority
+          />
           <div>
             <div className="text-[18px] sm:text-[21px] md:text-[22px] font-black tracking-[-0.03em] leading-none text-[#080F1C]">
               CLARVO

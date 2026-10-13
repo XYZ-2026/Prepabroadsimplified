@@ -15,6 +15,7 @@ import { getPathwayRoadmapData, getStudyAbroadGuideData, getAcademicProfileRoadm
 import type { UniversalReportData, ReportVariant, ReportVariantConfig } from './report-engine/universal-report-schema';
 import { getVariantConfig, REPORT_ORGANIZATION_IDENTITY } from './report-engine/universal-report-schema';
 import { resolveReportVariant } from './report-engine/adapters';
+import { LOGO_BASE64 } from '@/lib/logo-base64';
 
 export const totalReportPages = 56;
 
@@ -1382,9 +1383,7 @@ export function buildClass10ExecutiveHTMLReport(
                 <!-- Top Branding Header -->
                 <div class="flex items-center justify-between border-b-2 border-gold/40 pb-4 relative z-10 shrink-0">
                     <div class="flex items-center space-x-3">
-                        <div class="w-10 h-10 rounded-2xl bg-gold text-maroon-dark font-black flex items-center justify-center text-lg shadow-lg border-2 border-white">
-                            CL
-                        </div>
+                        <img src="${LOGO_BASE64}" class="w-10 h-10 rounded-2xl object-contain shadow-lg border-2 border-white/80 bg-white" alt="CLARVO" />
                         <div>
                             <span class="text-xs font-bold text-gold tracking-widest block uppercase">CLARVO</span>
                             <span class="text-[10px] text-slate-300 block font-medium">Psychometric Research & Academic Assessment Division</span>

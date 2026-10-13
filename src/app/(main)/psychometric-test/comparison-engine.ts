@@ -12,7 +12,7 @@ import { PREFERENCE_LABELS, RISK_LABELS } from './parent-scoring';
 // ─── Input Types ────────────────────────────────────────────────────────────
 
 export interface StudentComparisonData {
-  topCareerFitment: Array<{ name: string; score: number; cluster: string; stream: string }>;
+  topCareerFitment: Array<{ name: string; score: number; cluster?: string; stream?: string; color?: string }>;
   topRiasecCodes: string[];
   topCareerValues: string[];
   careerValuesScores: Record<string, number>;
@@ -70,20 +70,35 @@ export function computeAlignment(
   let directionLevel: AlignmentLevel = 'potential_gap';
   const parentDirection = parent.choices.perceivedCareerDirection;
   
-  // Mapping parent categories to student clusters (heuristic for MVP, typically would be more robust)
-  const isTechMatch = parentDirection === 'engineering_tech' && student.topCareerFitment.some(c => c.cluster.includes('Engineering') || c.cluster.includes('Technology'));
-  const isMedMatch = parentDirection === 'medical_life_sciences' && student.topCareerFitment.some(c => c.cluster.includes('Medical') || c.cluster.includes('Science'));
-  const isBizMatch = parentDirection === 'business_finance' && student.topCareerFitment.some(c => c.cluster.includes('Business') || c.cluster.includes('Finance'));
-  const isLawMatch = parentDirection === 'law_public_service' && student.topCareerFitment.some(c => c.cluster.includes('Law') || c.cluster.includes('Public'));
-  const isCreativeMatch = parentDirection === 'creative_media' && student.topCareerFitment.some(c => c.cluster.includes('Creative') || c.cluster.includes('Media') || c.cluster.includes('Arts'));
+  // Mapping parent categories to student clusters / stream pathways
+  const getClusterText = (c: any) => `${c?.cluster || ''} ${c?.stream || ''} ${c?.name || ''}`.toLowerCase();
+
+  const isTechMatch = parentDirection === 'engineering_tech' && student.topCareerFitment.some(c => {
+    const t = getClusterText(c);
+    return t.includes('engineering') || t.includes('technology') || t.includes('tech') || t.includes('pcm') || t.includes('software') || t.includes('data') || t.includes('computer');
+  });
+  const isMedMatch = parentDirection === 'medical_life_sciences' && student.topCareerFitment.some(c => {
+    const t = getClusterText(c);
+    return t.includes('medical') || t.includes('medicine') || t.includes('science') || t.includes('pcb') || t.includes('life') || t.includes('pharmacy') || t.includes('biotech');
+  });
+  const isBizMatch = parentDirection === 'business_finance' && student.topCareerFitment.some(c => {
+    const t = getClusterText(c);
+    return t.includes('business') || t.includes('finance') || t.includes('commerce') || t.includes('management') || t.includes('accountancy');
+  });
+  const isLawMatch = parentDirection === 'law_public_service' && student.topCareerFitment.some(c => {
+    const t = getClusterText(c);
+    return t.includes('law') || t.includes('public') || t.includes('civil') || t.includes('humanities') || t.includes('legal');
+  });
+  const isCreativeMatch = parentDirection === 'creative_media' && student.topCareerFitment.some(c => {
+    const t = getClusterText(c);
+    return t.includes('creative') || t.includes('media') || t.includes('arts') || t.includes('humanities') || t.includes('design') || t.includes('fashion') || t.includes('film');
+  });
   
   if (parentDirection === 'open_exploring') {
     directionLevel = 'high_alignment';
   } else if (isTechMatch || isMedMatch || isBizMatch || isLawMatch || isCreativeMatch) {
     directionLevel = 'high_alignment';
   } else {
-    // Check if there's any partial overlap (e.g. parent says tech, student has some tech inclination)
-    // For now, if no direct match, call it a potential gap
     directionLevel = 'potential_gap';
   }
 

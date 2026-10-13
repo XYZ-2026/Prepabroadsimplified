@@ -1,4 +1,5 @@
 import { adminDb } from '@/lib/firebase-admin';
+import Link from 'next/link';
 import AssessmentsTableClient, { AssessmentData } from '@/components/Admin/AssessmentsTableClient';
 import styles from '@/styles/admin-users.module.css';
 
@@ -118,6 +119,107 @@ export default async function AdminAssessmentsPage() {
             <p>Exceptional Scores</p>
             <div className={styles.statTrend} style={{ color: '#FF9800' }}>IQ 130+</div>
           </div>
+        </div>
+      </div>
+
+      {/* Admin Test Sandbox & Multiple Attempts Launcher */}
+      <div style={{
+        background: '#ffffff',
+        border: '1.5px solid #e2e8f0',
+        borderRadius: '16px',
+        padding: '22px 24px',
+        marginBottom: '24px',
+        boxShadow: '0 4px 16px rgba(0,0,0,0.03)',
+      }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px', marginBottom: '16px' }}>
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span style={{ fontSize: '18px' }}>🧪</span>
+              <h2 style={{ fontSize: '16px', fontWeight: 800, color: '#0f172a', margin: 0 }}>
+                Admin Assessment Sandbox & Evaluation Console
+              </h2>
+              <span style={{ fontSize: '10.5px', fontWeight: 700, padding: '2px 8px', borderRadius: '10px', background: '#dcfce7', color: '#166534', textTransform: 'uppercase' }}>
+                Universal Unlimited Access
+              </span>
+            </div>
+            <p style={{ fontSize: '13px', color: '#64748b', margin: '4px 0 0 0' }}>
+              As an administrator, you have full access to take any assessment variant, simulate student profiles, and inspect the resulting reports multiple times.
+            </p>
+          </div>
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '14px' }}>
+          <Link
+            href="/psychometric-test?type=junior&retake=true&source=admin"
+            target="_blank"
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              padding: '14px 16px',
+              borderRadius: '12px',
+              border: '1.5px solid #2563EB',
+              background: '#eff6ff',
+              textDecoration: 'none',
+              transition: 'all 0.2s ease',
+            }}
+          >
+            <span style={{ fontSize: '11px', fontWeight: 700, color: '#2563EB', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Class 7–9 Foundation</span>
+            <span style={{ fontSize: '14px', fontWeight: 800, color: '#1e3a8a', marginTop: '2px' }}>Take Junior Assessment →</span>
+            <span style={{ fontSize: '11.5px', color: '#64748b', marginTop: '4px' }}>Aptitude, exploratory interests & habits</span>
+          </Link>
+          <Link
+            href="/psychometric-test?type=grade10&retake=true&source=admin"
+            target="_blank"
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              padding: '14px 16px',
+              borderRadius: '12px',
+              border: '1.5px solid #057a55',
+              background: '#f0fdf4',
+              textDecoration: 'none',
+              transition: 'all 0.2s ease',
+            }}
+          >
+            <span style={{ fontSize: '11px', fontWeight: 700, color: '#057a55', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Class 10 Stream Selection</span>
+            <span style={{ fontSize: '14px', fontWeight: 800, color: '#14532d', marginTop: '2px' }}>Take Stream Assessment →</span>
+            <span style={{ fontSize: '11.5px', color: '#64748b', marginTop: '4px' }}>PCM / PCB / Commerce / Humanities stream fits</span>
+          </Link>
+          <Link
+            href="/psychometric-test?type=senior&retake=true&source=admin"
+            target="_blank"
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              padding: '14px 16px',
+              borderRadius: '12px',
+              border: '1.5px solid #690b1b',
+              background: '#fff1f2',
+              textDecoration: 'none',
+              transition: 'all 0.2s ease',
+            }}
+          >
+            <span style={{ fontSize: '11px', fontWeight: 700, color: '#690b1b', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Class 11–12 Senior Career</span>
+            <span style={{ fontSize: '14px', fontWeight: 800, color: '#881337', marginTop: '2px' }}>Take Senior Assessment →</span>
+            <span style={{ fontSize: '11.5px', color: '#64748b', marginTop: '4px' }}>56-page dossier, colleges, exams & roadmaps</span>
+          </Link>
+          <Link
+            href="/iq-test?source=admin"
+            target="_blank"
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              padding: '14px 16px',
+              borderRadius: '12px',
+              border: '1.5px solid #7c3aed',
+              background: '#f5f3ff',
+              textDecoration: 'none',
+              transition: 'all 0.2s ease',
+            }}
+          >
+            <span style={{ fontSize: '11px', fontWeight: 700, color: '#7c3aed', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Cognitive Testing</span>
+            <span style={{ fontSize: '14px', fontWeight: 800, color: '#5b21b6', marginTop: '2px' }}>Take IQ Test →</span>
+            <span style={{ fontSize: '11.5px', color: '#64748b', marginTop: '4px' }}>Timed standard cognitive reasoning test</span>
+          </Link>
         </div>
       </div>
 

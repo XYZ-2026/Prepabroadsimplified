@@ -1155,7 +1155,7 @@ function AssessmentPageContent() {
       fetch(`/api/psychometric-test/user-status?type=${encodeURIComponent(requestedType)}`)
         .then(res => res.json())
         .then(statusData => {
-          if (statusData.authenticated && statusData.hasCompletedTest && !isRetake) {
+          if (statusData.authenticated && statusData.hasCompletedTest && !isRetake && !statusData.isAdmin) {
             // Find matching result for the requested type/variant, or fall back to their latest completed result
             const targetResult = statusData.matchingResult || (statusData.latestResultId ? { reportUrl: statusData.latestReportUrl, resultId: statusData.latestResultId } : null);
             if (targetResult && targetResult.reportUrl) {
@@ -1681,7 +1681,15 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
         return;
       }
       if (data.success && data.resultId) {
-        // Keep the loading screen visible during navigation (don't switch to "landing")
+        // Parent assessment is compulsory: redirect directly to parent assessment
+        if (data.redirectUrl) {
+          window.location.href = data.redirectUrl;
+          return;
+        }
+        if (data.reportLocked || !data.isAdmin) {
+          window.location.href = `/parent-assessment?resultId=${data.resultId}`;
+          return;
+        }
         window.location.href = `/psychometric-test/result/${data.resultId}`;
         return;
       }
@@ -2675,11 +2683,11 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
             <div style={{ marginBottom: '1.5rem' }}>
               <Lock size={64} style={{ margin: '0 auto', color: '#f59e0b' }} />
             </div>
-            <h2 style={{ fontSize: '1.6rem', marginBottom: '1rem', color: '#1e293b', lineHeight: 1.3 }}>
-              Results are locked. Complete Parent Psychometric to view results.
+            <h2 style={{ fontSize: '1.6rem', marginBottom: '1rem', color: '#1e293b', lineHeight: 1.3, fontWeight: 800 }}>
+              Compulsory Parent Psychometric Required
             </h2>
             <p style={{ color: '#475569', fontSize: '1rem', marginBottom: '2rem', lineHeight: 1.6 }}>
-              Your student assessment responses have been successfully analyzed and saved! To unlock your full career recommendations, aptitude breakdown, and family insights, please complete the Parent Psychometric Assessment.
+              Your student responses have been analyzed and securely saved! To unlock your full career recommendations, aptitude breakdown, and complete report with parent alignment, please complete the <strong>Parent Psychometric Assessment</strong>.
             </p>
             <div style={{ background: '#f8fafc', padding: '1.5rem', borderRadius: '12px', marginBottom: '1.5rem', border: '1px solid #e2e8f0' }}>
               <button 
@@ -2692,7 +2700,7 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
                   }
                 }}
                 className="as-btn as-btn-primary"
-                style={{ width: '100%', padding: '1rem', fontSize: '1.1rem', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px', background: '#2563EB' }}
+                style={{ width: '100%', padding: '1rem', fontSize: '1.1rem', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px', background: '#2563EB', fontWeight: 700 }}
               >
                 Start Parent Psychometric Test →
               </button>

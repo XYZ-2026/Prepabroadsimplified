@@ -176,9 +176,18 @@ export async function POST(request: Request) {
       console.warn('[Submit Route] Initial reportSnapshot generation warning:', rsErr);
     }
 
+    const isAdmin = userRole === 'admin' || userRole === 'counsellor';
+    const reportLocked = !isAdmin;
+    const redirectUrl = reportLocked
+      ? `/parent-assessment?resultId=${docId}`
+      : `/psychometric-test?resultId=${docId}`;
+
     return NextResponse.json({ 
       success: true, 
-      resultId: docId
+      resultId: docId,
+      reportLocked,
+      isAdmin,
+      redirectUrl
     });
   } catch (error) {
     console.error('Error submitting psychometric test:', error);

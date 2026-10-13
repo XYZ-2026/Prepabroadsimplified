@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   PSYCHOMETRIC_LANDING_CONFIG, 
@@ -73,12 +74,17 @@ export default function PsychometricLandingPage({ variant, onStart, eligibility,
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           
           {/* Brand Logo */}
-          <Link href="/" className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-xl bg-[#2563EB] text-white font-black text-xs flex items-center justify-center shadow-md">
-              CS
-            </div>
-            <span className="font-display font-extrabold text-base tracking-tight text-slate-900">
-              Career <span className="text-[#2563EB]">Simplified</span>
+          <Link href="/" className="flex items-center gap-2.5">
+            <Image
+              src="/logo.png"
+              alt="CLARVO"
+              width={34}
+              height={34}
+              className="w-[32px] h-[32px] object-contain shrink-0"
+              priority
+            />
+            <span className="font-display font-black text-lg tracking-tight text-slate-900">
+              CLARVO
             </span>
           </Link>
 

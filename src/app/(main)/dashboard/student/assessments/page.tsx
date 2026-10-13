@@ -29,6 +29,10 @@ export default async function AssessmentsPage() {
       userRole = uData?.role || 'student';
     }
 
+    if (claims.email === 'admin@as.com' || claims.admin === true || claims.role === 'admin') {
+      userRole = 'admin';
+    }
+
     const assessmentsSnapshot = await adminDb
       .collection('iq_results')
       .where('userId', '==', claims.uid)

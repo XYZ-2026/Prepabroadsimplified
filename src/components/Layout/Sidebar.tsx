@@ -131,7 +131,7 @@ export default function Sidebar({ userRole, userName, userEmail }: SidebarProps)
       {/* Logo Block */}
       <div className={styles.sidebarLogoBlock}>
         <div className={styles.sidebarLogo} style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <Image src="/logo.png" alt="CLARVO" width={38} height={38} className="w-[36px] h-[36px] object-contain shrink-0" priority />
+          <Image src="/logo-transparent.png" alt="CLARVO" width={38} height={38} className="w-[36px] h-[36px] object-contain shrink-0" priority />
           <span style={{ fontWeight: 900, fontSize: '22px', letterSpacing: '-0.02em', color: 'var(--clarvo-deep-black, #080F1C)' }}>
             CLARVO
           </span>

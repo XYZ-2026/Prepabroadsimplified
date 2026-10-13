@@ -17,7 +17,7 @@ export default function Footer() {
       <div className={styles.footerGrid}>
         <div>
           <div className={styles.footerBrandLogoText} style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <Image src="/logo.png" alt="CLARVO" width={38} height={38} className="w-[34px] h-[34px] object-contain shrink-0" />
+            <Image src="/logo-transparent.png" alt="CLARVO" width={42} height={42} className="w-[38px] h-[38px] object-contain shrink-0" />
             <span style={{ fontWeight: 900, fontSize: '22px', color: 'var(--clarvo-deep-black, #080F1C)' }}>CLARVO</span>
           </div>
           <p className={styles.footerBrandDesc}>

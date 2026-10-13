@@ -76,7 +76,7 @@ export default function PsychometricLandingPage({ variant, onStart, eligibility,
           {/* Brand Logo */}
           <Link href="/" className="flex items-center gap-3">
             <Image
-              src="/logo.png"
+              src="/logo-transparent.png"
               alt="CLARVO"
               width={42}
               height={42}

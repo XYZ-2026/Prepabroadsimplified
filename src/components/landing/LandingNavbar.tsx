@@ -36,7 +36,7 @@ export default function LandingNavbar() {
         {/* LEFT - Logo & Website Name */}
         <Link href="/" className="flex items-center gap-2.5 sm:gap-3.5 cursor-pointer hover:opacity-90 transition-opacity">
           <Image
-            src="/logo.png"
+            src="/logo-transparent.png"
             alt="CLARVO"
             width={56}
             height={56}

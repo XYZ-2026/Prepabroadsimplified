@@ -11,14 +11,14 @@ export default function LandingFooter() {
           <div className="col-span-2 sm:col-span-2 lg:col-span-1 max-w-[320px]">
             <Link href="/" className="flex items-center gap-3.5 text-white hover:opacity-90 transition-opacity">
               <Image
-                src="/logo.png"
+                src="/logo-transparent.png"
                 alt="CLARVO"
-                width={48}
-                height={48}
-                className="w-[44px] h-[44px] object-contain shrink-0"
+                width={56}
+                height={56}
+                className="w-[48px] h-[48px] sm:w-[52px] sm:h-[52px] object-contain shrink-0"
               />
               <div>
-                <span className="text-[23px] font-black tracking-[-0.03em] text-white">CLARVO</span>
+                <span className="text-[24px] font-black tracking-[-0.03em] text-white">CLARVO</span>
                 <span className="block text-[10px] text-[#94A3B8] tracking-widest uppercase font-semibold">
                   A platform under Simplified Eduventures
                 </span>

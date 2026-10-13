@@ -1,6 +1,7 @@
 import React from 'react';
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import Image from 'next/image';
 
 export const metadata: Metadata = {
   title: 'Privacy Policy | CLARVO',
@@ -17,15 +18,20 @@ export default function PrivacyPolicyPage() {
       {/* HEADER */}
       <header className="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-[#E2E8F0]">
         <div className="max-w-5xl mx-auto px-5 py-4 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-3 hover:opacity-90 transition-opacity">
-            <div className="w-[40px] h-[40px] rounded-[12px] bg-gradient-to-br from-[#2563EB] to-[#1E3A8A] flex items-center justify-center font-black text-white text-lg shadow-md">
-              CL
-            </div>
+          <Link href="/" className="flex items-center gap-3.5 hover:opacity-90 transition-opacity">
+            <Image
+              src="/logo-transparent.png"
+              alt="CLARVO"
+              width={48}
+              height={48}
+              className="w-[44px] h-[44px] object-contain shrink-0"
+              priority
+            />
             <div>
-              <div className="text-[18px] font-black text-[#080F1C] tracking-tight leading-none">
+              <div className="text-[20px] font-black text-[#080F1C] tracking-tight leading-none">
                 CLARVO
               </div>
-              <div className="mt-0.5 text-[9px] uppercase tracking-[0.2em] font-semibold text-[#64748B]">
+              <div className="mt-1 text-[9.5px] uppercase tracking-[0.2em] font-semibold text-[#64748B]">
                 A platform under Simplified Eduventures
               </div>
             </div>

@@ -24,7 +24,7 @@ export default function AuthPage() {
     <>
       <header className={styles.authTopbar} style={{ justifyContent: 'space-between' }}>
         <Link href="/" className={styles.authTopbarBrand} style={{ display: 'flex', alignItems: 'center', gap: '12px', textDecoration: 'none' }}>
-          <Image src="/logo.png" alt="CLARVO" width={48} height={48} className="w-[40px] h-[40px] sm:w-[44px] sm:h-[44px] object-contain shrink-0" priority />
+          <Image src="/logo-transparent.png" alt="CLARVO" width={48} height={48} className="w-[40px] h-[40px] sm:w-[44px] sm:h-[44px] object-contain shrink-0" priority />
           <div className={styles.authTopbarText}>
             <span className={styles.authTopbarTitle} style={{ fontWeight: 900, fontSize: '1.45rem', letterSpacing: '-0.02em', color: '#080F1C' }}>
               CLARVO

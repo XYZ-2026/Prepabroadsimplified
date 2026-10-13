@@ -191,12 +191,12 @@ async function run() {
   const ico48 = { width: 48, height: 48, buffer: await generateSquareIcon(48, 2) };
   const icoBuffer = createIco([ico16, ico32, ico48]);
 
-  const pngFavicon32 = await generateSquareIcon(32, 1);
-  const pngFavicon16 = await generateSquareIcon(16, 1);
-  const appleIcon = await generateSquareIcon(180, 8);
-  const icon192 = await generateSquareIcon(192, 8);
-  const icon512 = await generateSquareIcon(512, 18);
-  const logoSquareCroppedAvif = await generateSquareIcon(512, 18, 'avif');
+  const pngFavicon32 = await generateSquareIcon(32, 0);
+  const pngFavicon16 = await generateSquareIcon(16, 0);
+  const appleIcon = await generateSquareIcon(180, 4);
+  const icon192 = await generateSquareIcon(192, 4);
+  const icon512 = await generateSquareIcon(512, 0);
+  const logoSquareCroppedAvif = await generateSquareIcon(512, 0, 'avif');
 
   // Destinations: public/ and src/app/
   const destinations = [
@@ -219,6 +219,7 @@ async function run() {
     { path: path.join(root, 'src', 'app', 'icon-192.png'), buffer: icon192 },
     // Master logo
     { path: path.join(root, 'public', 'logo.png'), buffer: icon512 },
+    { path: path.join(root, 'public', 'logo-transparent.png'), buffer: icon512 },
     { path: path.join(root, 'public', 'logo-square-cropped.png'), buffer: icon512 },
     { path: path.join(root, 'public', 'logo-square-cropped.avif'), buffer: logoSquareCroppedAvif },
   ];

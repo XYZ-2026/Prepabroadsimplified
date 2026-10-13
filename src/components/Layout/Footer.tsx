@@ -16,9 +16,9 @@ export default function Footer() {
     <footer className={`footer ${styles.footer}`}>
       <div className={styles.footerGrid}>
         <div>
-          <div className={styles.footerBrandLogoText} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <Image src="/logo.png" alt="CLARVO" width={32} height={32} className="w-[28px] h-[28px] object-contain shrink-0" />
-            <span style={{ fontWeight: 900, color: 'var(--clarvo-deep-black, #080F1C)' }}>CLARVO</span>
+          <div className={styles.footerBrandLogoText} style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <Image src="/logo.png" alt="CLARVO" width={38} height={38} className="w-[34px] h-[34px] object-contain shrink-0" />
+            <span style={{ fontWeight: 900, fontSize: '22px', color: 'var(--clarvo-deep-black, #080F1C)' }}>CLARVO</span>
           </div>
           <p className={styles.footerBrandDesc}>
             <strong>Clarity for Their Future.</strong> A premium student development platform for Grades 7–12, offering psychometric assessments, personalised career guidance, SAT preparation, one-to-one tutoring, and research/profile building.

@@ -38,18 +38,18 @@ export default function LandingNavbar() {
           <Image
             src="/logo.png"
             alt="CLARVO"
-            width={44}
-            height={44}
-            className="w-[38px] h-[38px] sm:w-[44px] sm:h-[44px] object-contain shrink-0"
+            width={52}
+            height={52}
+            className="w-[42px] h-[42px] sm:w-[48px] sm:h-[48px] md:w-[50px] md:h-[50px] object-contain shrink-0"
             priority
           />
           <div>
-            <div className="text-[18px] sm:text-[21px] md:text-[22px] font-black tracking-[-0.03em] leading-none text-[#080F1C]">
+            <div className="text-[19px] sm:text-[23px] md:text-[24px] font-black tracking-[-0.03em] leading-none text-[#080F1C]">
               CLARVO
             </div>
             <div className="hidden sm:flex mt-[5px] items-center gap-1.5">
               <span className="w-[4px] h-[4px] rounded-full bg-[#2563EB]" />
-              <span className="text-[9.5px] uppercase tracking-[0.2em] font-semibold text-[#64748B]">
+              <span className="text-[9.5px] sm:text-[10px] uppercase tracking-[0.2em] font-semibold text-[#64748B]">
                 Student Development Platform
               </span>
             </div>

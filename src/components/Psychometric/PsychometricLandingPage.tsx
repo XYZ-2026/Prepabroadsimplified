@@ -74,16 +74,16 @@ export default function PsychometricLandingPage({ variant, onStart, eligibility,
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           
           {/* Brand Logo */}
-          <Link href="/" className="flex items-center gap-2.5">
+          <Link href="/" className="flex items-center gap-3">
             <Image
               src="/logo.png"
               alt="CLARVO"
-              width={34}
-              height={34}
-              className="w-[32px] h-[32px] object-contain shrink-0"
+              width={42}
+              height={42}
+              className="w-[36px] h-[36px] sm:w-[40px] sm:h-[40px] object-contain shrink-0"
               priority
             />
-            <span className="font-display font-black text-lg tracking-tight text-slate-900">
+            <span className="font-display font-black text-xl tracking-tight text-slate-900">
               CLARVO
             </span>
           </Link>

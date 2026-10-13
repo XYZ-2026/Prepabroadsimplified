@@ -1,5 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function LandingFooter() {
   return (
@@ -8,12 +9,16 @@ export default function LandingFooter() {
         <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-10 lg:gap-14">
           {/* BRAND */}
           <div className="col-span-2 sm:col-span-2 lg:col-span-1 max-w-[320px]">
-            <Link href="/" className="flex items-center gap-3 text-white hover:opacity-90 transition-opacity">
-              <div className="w-[44px] h-[44px] rounded-[14px] bg-gradient-to-br from-[#2563EB] to-[#1E3A8A] flex items-center justify-center font-extrabold text-white text-lg shadow-[0_6px_20px_rgba(37,99,235,0.3)] shrink-0">
-                CL
-              </div>
+            <Link href="/" className="flex items-center gap-3.5 text-white hover:opacity-90 transition-opacity">
+              <Image
+                src="/logo.png"
+                alt="CLARVO"
+                width={48}
+                height={48}
+                className="w-[44px] h-[44px] object-contain shrink-0"
+              />
               <div>
-                <span className="text-[22px] font-black tracking-[-0.03em] text-white">CLARVO</span>
+                <span className="text-[23px] font-black tracking-[-0.03em] text-white">CLARVO</span>
                 <span className="block text-[10px] text-[#94A3B8] tracking-widest uppercase font-semibold">
                   A platform under Simplified Eduventures
                 </span>

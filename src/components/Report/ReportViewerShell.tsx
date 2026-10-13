@@ -898,9 +898,9 @@ export default function ReportViewerShell({
             </svg>
             <span>{backLabel}</span>
           </a>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <img src="/logo.png" alt="CLARVO" style={{ width: '24px', height: '24px', objectFit: 'contain' }} />
-            <span style={{ color: '#080F1C', fontWeight: 900, fontSize: '15px', letterSpacing: '-0.02em' }}>CLARVO</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <img src="/logo.png" alt="CLARVO" style={{ width: '28px', height: '28px', objectFit: 'contain' }} />
+            <span style={{ color: '#080F1C', fontWeight: 900, fontSize: '16px', letterSpacing: '-0.02em' }}>CLARVO</span>
             <span style={{
               fontSize: '9px', fontWeight: 700, padding: '2px 7px', borderRadius: '10px',
               background: '#e0f2fe', color: '#0369a1', textTransform: 'uppercase' as const,

@@ -250,16 +250,15 @@ export default function AssessmentMatrixSection() {
                 }`}
               >
                 <div>
-                  {/* Top Badge & Identifier */}
                   <div className="flex items-center justify-between mb-4">
                     <div
-                      className={`w-10 h-10 rounded-xl ${phase.iconBg} text-white font-black text-sm flex items-center justify-center shadow-md`}
+                      className={`w-10 h-10 rounded-xl font-black text-[13px] tracking-tight flex items-center justify-center transition-all ${
+                        isSelected
+                          ? 'bg-[#2563EB] text-white shadow-md shadow-blue-500/20'
+                          : `${phase.iconBg} text-white shadow-xs`
+                      }`}
                     >
-                      {phase.id === 'phase1' && <span className="text-[#FBBF24]">👨‍🚀</span>}
-                      {phase.id === 'phase2' && <span className="text-[#FBBF24]">🧠</span>}
-                      {phase.id === 'phase3' && <span className="text-[#FBBF24]">⚡</span>}
-                      {phase.id === 'phase4' && <span className="text-[#FBBF24]">🧭</span>}
-                      <span className="ml-1 text-xs">{phase.phaseNum}</span>
+                      {phase.phaseNum}
                     </div>
 
                     <span

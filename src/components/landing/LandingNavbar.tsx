@@ -34,22 +34,22 @@ export default function LandingNavbar() {
     <nav className="sticky top-0 z-50 w-full bg-[#F8FAFC]/92 backdrop-blur-xl border-b border-[#E2E8F0]">
       <div className="w-full h-[68px] sm:h-[84px] md:h-[88px] px-4 sm:px-6 md:px-8 lg:px-12 flex items-center justify-between">
         {/* LEFT - Logo & Website Name */}
-        <Link href="/" className="flex items-center gap-3 sm:gap-3.5 cursor-pointer hover:opacity-90 transition-opacity">
+        <Link href="/" className="flex items-center gap-2.5 sm:gap-3.5 cursor-pointer hover:opacity-90 transition-opacity">
           <Image
             src="/logo.png"
             alt="CLARVO"
-            width={52}
-            height={52}
-            className="w-[42px] h-[42px] sm:w-[48px] sm:h-[48px] md:w-[50px] md:h-[50px] object-contain shrink-0"
+            width={56}
+            height={56}
+            className="w-[46px] h-[46px] sm:w-[50px] sm:h-[50px] md:w-[52px] md:h-[52px] object-contain shrink-0"
             priority
           />
           <div>
-            <div className="text-[19px] sm:text-[23px] md:text-[24px] font-black tracking-[-0.03em] leading-none text-[#080F1C]">
+            <div className="text-[21px] sm:text-[23px] md:text-[25px] font-black tracking-[-0.03em] leading-none text-[#080F1C]">
               CLARVO
             </div>
-            <div className="hidden sm:flex mt-[5px] items-center gap-1.5">
-              <span className="w-[4px] h-[4px] rounded-full bg-[#2563EB]" />
-              <span className="text-[9.5px] sm:text-[10px] uppercase tracking-[0.2em] font-semibold text-[#64748B]">
+            <div className="flex mt-[3px] sm:mt-[5px] items-center gap-1.5">
+              <span className="w-[3.5px] h-[3.5px] sm:w-[4px] sm:h-[4px] rounded-full bg-[#2563EB] shrink-0" />
+              <span className="text-[8px] xs:text-[9.5px] sm:text-[10px] uppercase tracking-[0.14em] sm:tracking-[0.2em] font-bold text-[#64748B] whitespace-nowrap">
                 Student Development Platform
               </span>
             </div>

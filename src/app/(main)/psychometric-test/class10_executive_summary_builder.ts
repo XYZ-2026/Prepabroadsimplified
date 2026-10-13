@@ -259,7 +259,7 @@ export function buildClass10ExecutiveSummaryHTMLReport(
                 <!-- Brand Header -->
                 <div class="flex justify-between items-start border-b-2 border-gold/40 pb-6 relative z-10">
                     <div class="flex items-center space-x-3.5">
-                        <img src="${LOGO_BASE64}" class="w-11 h-11 rounded-2xl object-contain shadow-lg border-2 border-white/80 bg-white shrink-0" alt="CLARVO" />
+                        <img src="${LOGO_BASE64}" class="w-12 h-12 object-contain shrink-0" alt="CLARVO" />
                         <div>
                             <span class="text-gold font-bold text-xs tracking-widest block uppercase mb-0.5">CLARVO PREMIA</span>
                             <h1 class="text-2xl font-black text-white tracking-tight">EXECUTIVE CAREER EDITION</h1>

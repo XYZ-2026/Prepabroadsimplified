@@ -46,7 +46,7 @@ export default function Topbar() {
           </button>
         )}
         <Link href={isRoadmap ? "/career-roadmap" : "/"} className={styles.topbarLogo} style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <Image src="/logo.png" alt="CLARVO" width={38} height={38} className="w-[32px] h-[32px] sm:w-[38px] sm:h-[38px] object-contain shrink-0" priority />
+          <Image src="/logo.png" alt="CLARVO" width={44} height={44} className="w-[38px] h-[38px] sm:w-[42px] sm:h-[42px] object-contain shrink-0" priority />
           <span style={{ 
             fontFamily: 'var(--font-primary)',
             fontWeight: 900, 

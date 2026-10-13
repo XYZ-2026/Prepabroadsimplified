@@ -1383,7 +1383,7 @@ export function buildClass10ExecutiveHTMLReport(
                 <!-- Top Branding Header -->
                 <div class="flex items-center justify-between border-b-2 border-gold/40 pb-4 relative z-10 shrink-0">
                     <div class="flex items-center space-x-3">
-                        <img src="${LOGO_BASE64}" class="w-10 h-10 rounded-2xl object-contain shadow-lg border-2 border-white/80 bg-white" alt="CLARVO" />
+                        <img src="${LOGO_BASE64}" class="w-11 h-11 object-contain shrink-0" alt="CLARVO" />
                         <div>
                             <span class="text-xs font-bold text-gold tracking-widest block uppercase">CLARVO</span>
                             <span class="text-[10px] text-slate-300 block font-medium">Psychometric Research & Academic Assessment Division</span>

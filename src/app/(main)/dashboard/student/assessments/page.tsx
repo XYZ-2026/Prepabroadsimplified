@@ -86,10 +86,12 @@ export default async function AssessmentsPage() {
     assessments = [
       ...assessmentsSnapshot.docs.map(doc => ({
         id: doc.id,
+        type: 'iq',
         ...doc.data()
       })),
       ...psychometricSnapshot.docs.map(doc => ({
         id: doc.id,
+        type: 'psychometric',
         workflowState: workflows.get(doc.id) || 'parent_pending',
         ...doc.data()
       }))
@@ -342,9 +344,9 @@ export default async function AssessmentsPage() {
                 const percentileLabel = assessment.type === 'psychometric' ? 'Best Fit' : 'Percentile';
                 const strengthLabel = assessment.type === 'psychometric' ? 'Top Interest (RIASEC)' : 'Top Strength';
 
-                const resultLink = assessment.type === 'psychometric'
-                  ? `/psychometric-test/result/${assessment.id as string}?source=my-assessments`
-                  : `/iq-test/result/${assessment.id as string}?source=my-assessments`;
+                const resultLink = assessment.type === 'iq'
+                  ? `/iq-test/result/${assessment.id as string}?source=my-assessments`
+                  : `/psychometric-test/result/${assessment.id as string}?source=my-assessments`;
 
                 return (
                   <div key={assessment.id as string} className={styles.premiumCard}>

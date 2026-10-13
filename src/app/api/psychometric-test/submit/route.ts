@@ -81,6 +81,7 @@ export async function POST(request: Request) {
 
     // Prepare full immutable document
     const finalDocument = {
+      type: 'psychometric',
       testName,
       assessmentType: canonicalVariant,
       variant: canonicalVariant,

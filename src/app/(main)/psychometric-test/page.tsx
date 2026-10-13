@@ -1144,9 +1144,15 @@ function AssessmentPageContent() {
             
             setReportMode("detailed");
             setPdfUnlocked(true);
+          } else {
+            console.error("Result not found or error:", data);
+            setScreen("landing");
           }
         })
-        .catch(err => console.error("Error fetching result:", err));
+        .catch(err => {
+          console.error("Error fetching result:", err);
+          setScreen("landing");
+        });
     } else {
       const isRetake = searchParams.get('retake') === 'true';
       const requestedType = searchParams.get('type') || '';

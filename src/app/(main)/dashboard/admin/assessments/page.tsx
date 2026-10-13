@@ -14,13 +14,6 @@ export default async function AdminAssessmentsPage() {
         adminDb.collection('psychometric_results').orderBy('createdAt', 'desc').limit(100).get(),
         adminDb.collection('users').limit(200).get(),
       ]);
-      
-      // Combine them and sort by date descending
-      const combinedDocs = [...iqSnapshot.docs, ...psychoSnapshot.docs].sort((a, b) => {
-        const da = a.data().createdAt ? new Date(a.data().createdAt).getTime() : 0;
-        const db = b.data().createdAt ? new Date(b.data().createdAt).getTime() : 0;
-        return db - da;
-      }).slice(0, 200);
 
       // 2. Map user details
       const userMap = new Map();
@@ -32,47 +25,72 @@ export default async function AdminAssessmentsPage() {
         });
       });
 
-      initialAssessments = combinedDocs.map(doc => {
+      const psychoItems: AssessmentData[] = psychoSnapshot.docs.map(doc => {
         const data = doc.data();
-        const type = data.type === 'psychometric' ? 'psychometric' : 'iq';
-        
         let createdAtStr = 'Unknown';
         if (data.createdAt) {
           const date = new Date(data.createdAt);
           createdAtStr = date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
         }
         
-        const userInfo = userMap.get(data.userId) || { name: 'Anonymous', email: 'No Email' };
-
-        if (type === 'psychometric') {
-          const riasec = data.scores?.topRiasec || [];
-          return {
-            id: doc.id,
-            userId: data.userId || 'unknown',
-            userName: userInfo.name,
-            userEmail: userInfo.email,
-            iqScore: data.scores?.aptitude?.overall || 0,
-            percentile: 0,
-            tier: data.testName || 'Psychometric Test',
-            strength: riasec.length > 0 ? riasec.join('-') : 'N/A',
-            createdAtStr,
-            type,
-          };
-        }
-
+        const userInfo = userMap.get(data.userId) || { 
+          name: data.student?.name || data.userName || 'Anonymous', 
+          email: data.student?.email || data.userEmail || 'No Email' 
+        };
+        const riasec = data.scores?.topRiasec || [];
         return {
           id: doc.id,
           userId: data.userId || 'unknown',
           userName: userInfo.name,
           userEmail: userInfo.email,
-          iqScore: data.iqScore || 0,
-          percentile: data.percentile || 0,
-          tier: data.tier || 'Unknown',
-          strength: data.strength || 'Unknown',
+          iqScore: data.scores?.aptitude?.overall || 0,
+          percentile: 0,
+          tier: data.testName || data.gradeLabelAtAttempt || 'Psychometric Test',
+          strength: riasec.length > 0 ? riasec.join('-') : 'N/A',
           createdAtStr,
-          type,
+          type: 'psychometric',
         };
       });
+
+      const iqItems: AssessmentData[] = iqSnapshot.docs.map(doc => {
+        const data = doc.data();
+        let createdAtStr = 'Unknown';
+        if (data.createdAt) {
+          const date = new Date(data.createdAt);
+          createdAtStr = date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+        }
+        
+        const userInfo = userMap.get(data.userId) || { 
+          name: data.userName || 'Anonymous', 
+          email: data.userEmail || 'No Email' 
+        };
+        return {
+          id: doc.id,
+          userId: data.userId || 'unknown',
+          userName: userInfo.name,
+          userEmail: userInfo.email,
+          iqScore: data.iqScore || data.estimatedIQ || 0,
+          percentile: data.percentile || 0,
+          tier: data.cognitiveBand || data.tier || 'Cognitive Assessment',
+          strength: data.strength || data.strongestDomain || 'General',
+          createdAtStr,
+          type: 'iq',
+        };
+      });
+
+      // Combine both collections and sort by date descending
+      const combinedDocs = [...iqSnapshot.docs, ...psychoSnapshot.docs];
+      const docDateMap = new Map<string, number>();
+      combinedDocs.forEach(d => {
+        const c = d.data().createdAt;
+        docDateMap.set(d.id, c ? new Date(c).getTime() : 0);
+      });
+
+      initialAssessments = [...psychoItems, ...iqItems].sort((a, b) => {
+        const da = docDateMap.get(a.id) || 0;
+        const db = docDateMap.get(b.id) || 0;
+        return db - da;
+      }).slice(0, 200);
     }
   } catch (error) {
     console.error('Error fetching assessments from Firestore:', error);

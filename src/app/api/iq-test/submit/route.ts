@@ -61,7 +61,7 @@ export async function POST(request: Request) {
       evaluatedAnswers,
       userName,
       distractionReported,
-      `SIMP-IQ-${Date.now().toString(36).toUpperCase()}-${Math.floor(1000 + Math.random() * 9000)}`
+      `CLARVO-IQ-${Date.now().toString(36).toUpperCase()}-${Math.floor(1000 + Math.random() * 9000)}`
     );
 
     console.log(`[IQ RESULT] status=CALCULATED rawScore=${evaluation.rawScore} estimatedIQ=${evaluation.estimatedIQ} percentile=${evaluation.percentile} strongestDomain=${evaluation.strongestDomain}`);

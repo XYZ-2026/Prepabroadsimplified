@@ -13,6 +13,7 @@ import {
 } from 'recharts';
 import { Download, Sparkles, BrainCircuit, ChevronLeft, Award, RefreshCw, BarChart2, ShieldCheck, Star } from 'lucide-react';
 import { IQ_ASSESSMENT_CONFIG } from '@/config/iq-assessment.config';
+import CongratulationsShareBanner, { getOrdinalSuffix } from '@/components/IQTest/CongratulationsShareBanner';
 
 export default function ResultDashboardClient({ 
   resultData, 
@@ -37,7 +38,7 @@ export default function ResultDashboardClient({
     developmentalDomain = resultData.developmentalDomain ?? resultData.weakness ?? 'Abstract Reasoning',
     cognitivePersona = resultData.cognitivePersona || 'The Strategic Thinker',
     insightsNarrative = resultData.insightsNarrative || resultData.insights || '',
-    certificateId = resultData.certificateId || `SIMP-IQ-${resultId.toUpperCase().slice(0, 8)}`,
+    certificateId = resultData.certificateId || `CLARVO-IQ-${resultId.toUpperCase().slice(0, 8)}`,
     completedAt = resultData.completedAt || resultData.createdAt || new Date().toISOString()
   } = resultData;
 
@@ -114,6 +115,17 @@ export default function ResultDashboardClient({
           </div>
         </div>
 
+        {/* ── CONGRATULATIONS & SOCIAL SHARING SECTION ── */}
+        <CongratulationsShareBanner
+          candidateName={candidateName}
+          estimatedIQ={estimatedIQ}
+          percentile={percentile}
+          cognitiveBand={cognitiveBand}
+          cognitivePersona={cognitivePersona}
+          strongestDomain={strongestDomain}
+          resultId={resultId}
+        />
+
         {/* Hero Score Box */}
         <div className="bg-white rounded-3xl border border-slate-200 p-6 md:p-10 shadow-xl shadow-slate-200/50 mb-8 relative overflow-hidden">
           <div className="absolute top-0 right-0 w-96 h-96 bg-blue-600/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none" />
@@ -137,7 +149,7 @@ export default function ResultDashboardClient({
               <p className="text-xs font-semibold text-slate-500 max-w-sm">
                 Candidate: <strong className="text-slate-800 font-bold">{candidateName}</strong>
                 <br />
-                Performance Rank: <strong className="text-[#2563EB] font-bold">{percentile}th Percentile</strong>
+                Performance Rank: <strong className="text-[#2563EB] font-bold">{percentile}{getOrdinalSuffix(percentile)} Percentile</strong>
               </p>
             </div>
 

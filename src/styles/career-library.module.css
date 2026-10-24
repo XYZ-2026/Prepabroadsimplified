@@ -1,0 +1,922 @@
+/* ============================================================
+   career-library.module.css — CLARVO Career Library Design System
+   Approved CLARVO Palette & High-Fidelity UI Preservation
+   ============================================================ */
+
+.wrap {
+  max-width: 1250px;
+  margin: 0 auto;
+  padding: 32px 24px 80px;
+}
+
+/* Page Header */
+.pageHdr {
+  margin-bottom: 28px;
+  border-bottom: 1.5px solid #E4E7EC;
+  padding-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.pageHdrTitle {
+  flex: 1;
+  min-width: 280px;
+}
+
+.pageTitle {
+  font-family: var(--font-primary, 'Inter', sans-serif);
+  font-size: 30px;
+  font-weight: 800;
+  color: #080F1C;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.pageSubtitle {
+  color: #667085;
+  font-size: 14.5px;
+  margin-top: 6px;
+  line-height: 1.6;
+}
+
+/* Search & Filters Card */
+.searchCard {
+  background: #FFFFFF;
+  border: 1.5px solid #E4E7EC;
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: 0 4px 6px -1px rgba(8, 15, 28, 0.04);
+  margin-bottom: 28px;
+}
+
+.filtersRow {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.searchInputGroup {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+}
+
+.searchBox {
+  position: relative;
+  flex: 1;
+}
+
+.searchBox input {
+  width: 100%;
+  padding: 13px 16px 13px 44px;
+  border: 1.5px solid #E4E7EC;
+  border-radius: 12px;
+  font-family: inherit;
+  font-size: 14.5px;
+  font-weight: 500;
+  color: #344054;
+  background: #F8FAFC;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.searchBox input:focus {
+  border-color: #2563EB;
+  background: #FFFFFF;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+}
+
+.searchIcon {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #667085;
+  pointer-events: none;
+  width: 18px;
+  height: 18px;
+}
+
+.selectFiltersGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+}
+
+.filterSelect {
+  padding: 11px 14px;
+  border: 1.5px solid #E4E7EC;
+  border-radius: 10px;
+  font-family: inherit;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #344054;
+  background: #FFFFFF;
+  outline: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  width: 100%;
+}
+
+.filterSelect:focus {
+  border-color: #2563EB;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+/* Stream & Cluster Filter Pills */
+.clusterTabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.clusterPill {
+  padding: 8px 16px;
+  border-radius: 50px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1.5px solid #E4E7EC;
+  background: #FFFFFF;
+  color: #344054;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  user-select: none;
+  text-decoration: none;
+}
+
+.clusterPill:hover {
+  border-color: #2563EB;
+  color: #2563EB;
+  background: #E8F0FF;
+}
+
+.clusterPillActive {
+  background: #2563EB !important;
+  color: #FFFFFF !important;
+  border-color: #2563EB !important;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+}
+
+/* List View Panel */
+.listViewPanel {
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.listViewHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.countBadge {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #667085;
+  background: #FFFFFF;
+  padding: 6px 14px;
+  border-radius: 50px;
+  border: 1px solid #E4E7EC;
+}
+
+.clearFiltersBtn {
+  background: none;
+  border: none;
+  color: #2563EB;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: 0.2s;
+}
+
+.clearFiltersBtn:hover {
+  background: #E8F0FF;
+}
+
+.branchesListGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 350px), 1fr));
+  gap: 22px;
+}
+
+/* Career Card */
+.branchCard {
+  background: #FFFFFF;
+  border: 1.5px solid #E4E7EC;
+  border-radius: 18px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  box-shadow: 0 2px 4px rgba(8, 15, 28, 0.04);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
+}
+
+.branchCard:hover,
+.branchCard:focus-visible {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px -3px rgba(37, 99, 235, 0.1);
+  border-color: #2563EB;
+  outline: none;
+}
+
+.branchCardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.branchCardName {
+  font-size: 18px;
+  font-weight: 700;
+  color: #080F1C;
+  line-height: 1.35;
+  margin: 0;
+}
+
+.branchClusterBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px;
+  border-radius: 50px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  background: #E8F0FF;
+  color: #2563EB;
+  border: 1px solid rgba(37, 99, 235, 0.15);
+}
+
+.matchBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 11.5px;
+  font-weight: 700;
+  background: #f0fdf4;
+  color: #16A34A;
+  border: 1px solid rgba(22, 163, 74, 0.2);
+  white-space: nowrap;
+}
+
+.branchCardDesc {
+  font-size: 13.5px;
+  color: #667085;
+  line-height: 1.55;
+  flex-grow: 1;
+  margin: 0;
+}
+
+.branchCardMeta {
+  display: flex;
+  gap: 16px;
+  border-top: 1px solid #E4E7EC;
+  padding-top: 12px;
+}
+
+.cardMetaItem {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.cardMetaLabel {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #667085;
+  letter-spacing: 0.5px;
+}
+
+.cardMetaVal {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #080F1C;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.starsContainer {
+  display: inline-flex;
+  gap: 3px;
+}
+
+.starDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #E4E7EC;
+}
+
+.starDotFilled {
+  background: #2563EB;
+}
+
+.starDotScope {
+  background: #16A34A;
+}
+
+/* Detailed Career Dashboard */
+.branchDashboard {
+  animation: fadeIn 0.35s ease-out;
+}
+
+.backBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #FFFFFF;
+  border: 1.5px solid #E4E7EC;
+  color: #344054;
+  padding: 10px 18px;
+  border-radius: 12px;
+  font-size: 13.5px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-bottom: 24px;
+  box-shadow: 0 1px 3px rgba(8, 15, 28, 0.05);
+}
+
+.backBtn:hover {
+  border-color: #2563EB;
+  color: #2563EB;
+  background: #E8F0FF;
+  transform: translateX(-3px);
+}
+
+/* Detail Header Card */
+.detailHeaderCard {
+  background: #FFFFFF;
+  border: 1.5px solid #E4E7EC;
+  border-radius: 20px;
+  padding: 32px;
+  margin-bottom: 28px;
+  box-shadow: 0 4px 6px -1px rgba(8, 15, 28, 0.04);
+}
+
+.detailHeaderTags {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.detailHeaderTitle {
+  font-size: 28px;
+  font-weight: 800;
+  color: #080F1C;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+.detailHeaderDesc {
+  font-size: 15px;
+  color: #667085;
+  margin-top: 8px;
+  max-width: 860px;
+  line-height: 1.6;
+}
+
+.entryRouteBanner {
+  margin-top: 16px;
+  padding: 12px 16px;
+  background: #F8FAFC;
+  border: 1px solid #E4E7EC;
+  border-left: 4px solid #2563EB;
+  border-radius: 8px;
+  font-size: 13px;
+  color: #344054;
+  line-height: 1.5;
+}
+
+/* 2-Column Detail Grid */
+.detailGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 28px;
+  align-items: start;
+}
+
+@media (min-width: 992px) {
+  .detailGrid {
+    grid-template-columns: 1.55fr 1fr;
+  }
+}
+
+.colFlex {
+  display: flex;
+  flex-direction: column;
+}
+
+.detailCard {
+  background: #FFFFFF;
+  border: 1.5px solid #E4E7EC;
+  border-radius: 20px;
+  padding: 28px;
+  margin-bottom: 24px;
+  box-shadow: 0 2px 4px rgba(8, 15, 28, 0.03);
+}
+
+.detailCard:last-child {
+  margin-bottom: 0;
+}
+
+.detailCardTitle {
+  font-size: 18px;
+  font-weight: 800;
+  color: #080F1C;
+  margin-bottom: 18px;
+  border-left: 4px solid #2563EB;
+  padding-left: 12px;
+  line-height: 1.2;
+}
+
+.whyFitsBox {
+  background: #E8F0FF;
+  border-radius: 12px;
+  padding: 18px;
+  border-left: 4px solid #2563EB;
+  margin-bottom: 18px;
+  font-size: 14px;
+  color: #080F1C;
+  line-height: 1.6;
+  font-weight: 500;
+}
+
+.whoSuitsBox {
+  background: #F8FAFC;
+  border-radius: 12px;
+  padding: 18px;
+  border-left: 4px solid #344054;
+  font-size: 14px;
+  color: #344054;
+  line-height: 1.6;
+  font-weight: 500;
+}
+
+/* Timeline */
+.timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  position: relative;
+  padding-left: 18px;
+  border-left: 2px dashed #E4E7EC;
+  margin-left: 10px;
+}
+
+.timelineItem {
+  position: relative;
+}
+
+.timelineDot {
+  position: absolute;
+  left: -28px;
+  top: 4px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #FFFFFF;
+  border: 4px solid #2563EB;
+  z-index: 2;
+}
+
+.timelineContent {
+  background: #F8FAFC;
+  border: 1px solid #E4E7EC;
+  border-radius: 12px;
+  padding: 18px;
+  transition: 0.2s;
+}
+
+.timelineContent:hover {
+  border-color: #2563EB;
+  background: #FFFFFF;
+  box-shadow: 0 4px 12px rgba(8, 15, 28, 0.05);
+}
+
+.timelineYear {
+  font-size: 14.5px;
+  font-weight: 800;
+  color: #2563EB;
+  margin-bottom: 8px;
+}
+
+.timelineList {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 0;
+  margin: 0;
+}
+
+.timelineList li {
+  font-size: 13.5px;
+  color: #344054;
+  padding-left: 16px;
+  position: relative;
+  line-height: 1.45;
+}
+
+.timelineList li::before {
+  content: '•';
+  color: #2563EB;
+  position: absolute;
+  left: 0;
+  font-size: 16px;
+  top: -2px;
+}
+
+/* Chips / Badges */
+.badgeList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.chip {
+  padding: 7px 13px;
+  border-radius: 10px;
+  font-size: 12.5px;
+  font-weight: 600;
+  background: #F8FAFC;
+  border: 1px solid #E4E7EC;
+  color: #344054;
+  transition: all 0.2s;
+}
+
+.chip:hover {
+  border-color: #2563EB;
+  color: #2563EB;
+  background: #E8F0FF;
+}
+
+.chipSubject {
+  background: #E8F0FF;
+  color: #2563EB;
+  border-color: rgba(37, 99, 235, 0.2);
+}
+
+.chipSubject:hover {
+  background: #dbeafe;
+}
+
+.chipTool {
+  background: #F8FAFC;
+  color: #080F1C;
+  border-color: #E4E7EC;
+}
+
+.chipTool:hover {
+  background: #E8F0FF;
+  color: #2563EB;
+}
+
+/* Projects */
+.projectsList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.projectItem {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 14px;
+  border-radius: 10px;
+  border: 1px solid #E4E7EC;
+  background: #F8FAFC;
+}
+
+.projectIcon {
+  color: #2563EB;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.projectText {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #344054;
+  line-height: 1.45;
+}
+
+/* Strategy Box */
+.strategyBox {
+  background: #f0fdf4;
+  border-left: 4px solid #16A34A;
+  padding: 18px;
+  border-radius: 12px;
+  font-size: 13.5px;
+  color: #344054;
+  line-height: 1.6;
+  margin-top: 14px;
+}
+
+/* Salary Direction Box (CLARVO Navy & Blue) */
+.salaryBox {
+  background: linear-gradient(135deg, #080F1C 0%, #2563EB 100%);
+  color: #FFFFFF;
+  border-radius: 14px;
+  padding: 22px;
+  margin-bottom: 20px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 8px 20px rgba(8, 15, 28, 0.12);
+}
+
+.salaryBoxTitle {
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 6px;
+}
+
+.salaryBoxVal {
+  font-size: 14.5px;
+  font-weight: 500;
+  line-height: 1.6;
+}
+
+/* Recruiters Grid */
+.recruiterGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 10px;
+}
+
+.recruiterTag {
+  background: #F8FAFC;
+  border: 1px solid #E4E7EC;
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #344054;
+  text-align: center;
+  transition: 0.2s;
+}
+
+.recruiterTag:hover {
+  background: #FFFFFF;
+  border-color: #2563EB;
+  color: #2563EB;
+  box-shadow: 0 2px 6px rgba(8, 15, 28, 0.06);
+}
+
+/* Milestones */
+.milestonesList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.milestoneItem {
+  background: #F8FAFC;
+  border: 1px solid #E4E7EC;
+  padding: 12px 14px;
+  border-radius: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.milestoneSem {
+  font-size: 12px;
+  font-weight: 800;
+  color: #2563EB;
+  white-space: nowrap;
+}
+
+.milestoneDesc {
+  font-size: 13px;
+  font-weight: 600;
+  color: #344054;
+  text-align: right;
+  flex: 1;
+}
+
+/* Risks Box */
+.risksBox {
+  background: #fffbeb;
+  border-left: 4px solid #D97706;
+  border-radius: 12px;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.riskItem {
+  font-size: 13px;
+  color: #344054;
+  font-weight: 500;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  line-height: 1.45;
+}
+
+/* Action Plan Box */
+.actionPlanBox {
+  background: #f0fdf4;
+  border: 1.5px solid rgba(22, 163, 74, 0.2);
+  border-radius: 16px;
+  padding: 24px;
+}
+
+.actionPlanTitle {
+  font-size: 16px;
+  font-weight: 800;
+  color: #16A34A;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.actionList {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 0;
+  margin: 0;
+}
+
+.actionList li {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #080F1C;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  line-height: 1.45;
+}
+
+.fallbackNotice {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11.5px;
+  color: #667085;
+  background: #F8FAFC;
+  border: 1px dashed #E4E7EC;
+  padding: 5px 12px;
+  border-radius: 6px;
+  margin-top: 14px;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .wrap {
+    padding: 16px 14px 80px;
+  }
+
+  .pageHdr {
+    margin-bottom: 16px;
+    padding-bottom: 14px;
+  }
+
+  .pageTitle {
+    font-size: 22px;
+  }
+
+  .pageSubtitle {
+    font-size: 13px;
+  }
+
+  .searchCard {
+    padding: 16px;
+    border-radius: 16px;
+    margin-bottom: 18px;
+  }
+
+  .searchBox input {
+    padding: 11px 14px 11px 38px;
+    font-size: 13.5px;
+  }
+
+  .searchIcon {
+    left: 12px;
+  }
+
+  .clusterTabs {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 4px;
+    gap: 6px;
+    scrollbar-width: none;
+  }
+
+  .clusterTabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .clusterPill {
+    padding: 6px 12px;
+    font-size: 12px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .branchesListGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .branchCard {
+    padding: 14px;
+    border-radius: 14px;
+    gap: 10px;
+  }
+
+  .branchCardName {
+    font-size: 14.5px;
+  }
+
+  .branchCardDesc {
+    font-size: 12px;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .branchCardMeta {
+    padding-top: 8px;
+    gap: 8px;
+    flex-direction: column;
+  }
+
+  .detailHeaderCard {
+    padding: 20px 16px;
+    border-radius: 16px;
+  }
+
+  .detailHeaderTitle {
+    font-size: 20px;
+  }
+
+  .detailCard {
+    padding: 18px 16px;
+    border-radius: 16px;
+  }
+
+  .detailCardTitle {
+    font-size: 16px;
+  }
+
+  .timeline {
+    padding-left: 14px;
+    margin-left: 6px;
+  }
+
+  .timelineDot {
+    left: -23px;
+    width: 15px;
+    height: 15px;
+  }
+
+  .recruiterGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .branchesListGrid {
+    grid-template-columns: 1fr;
+  }
+}

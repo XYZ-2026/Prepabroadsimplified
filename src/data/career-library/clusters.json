@@ -1,0 +1,110 @@
+{
+  "computer-it": {
+    "name": "Computer & IT",
+    "icon": "🖥️",
+    "max": 2,
+    "stream": "engineering"
+  },
+  "ai-data": {
+    "name": "AI, ML & Data Science",
+    "icon": "🤖",
+    "max": 2,
+    "stream": "engineering"
+  },
+  "electronics": {
+    "name": "Electronics & Communication",
+    "icon": "📡",
+    "max": 2,
+    "stream": "engineering"
+  },
+  "electrical": {
+    "name": "Electrical & Instrumentation",
+    "icon": "⚡",
+    "max": 1,
+    "stream": "engineering"
+  },
+  "mechanical": {
+    "name": "Mechanical & Automobile",
+    "icon": "⚙️",
+    "max": 2,
+    "stream": "engineering"
+  },
+  "civil": {
+    "name": "Civil & Infrastructure",
+    "icon": "🏗️",
+    "max": 1,
+    "stream": "engineering"
+  },
+  "chemical-pharma": {
+    "name": "Chemical, Pharma & Biotech",
+    "icon": "🧪",
+    "max": 1,
+    "stream": "engineering"
+  },
+  "textile-fashion": {
+    "name": "Textile & Fashion",
+    "icon": "🧵",
+    "max": 1,
+    "stream": "engineering"
+  },
+  "food-material": {
+    "name": "Food, Oil & Materials",
+    "icon": "🔬",
+    "max": 1,
+    "stream": "engineering"
+  },
+  "emerging": {
+    "name": "Emerging & Interdisciplinary",
+    "icon": "🚀",
+    "max": 2,
+    "stream": "engineering"
+  },
+  "commerce-finance": {
+    "name": "Commerce, Accounting & Finance",
+    "icon": "💰",
+    "max": 2,
+    "stream": "commerce"
+  },
+  "management-business": {
+    "name": "Management & Business",
+    "icon": "📈",
+    "max": 2,
+    "stream": "commerce"
+  },
+  "humanities-social": {
+    "name": "Humanities & Social Sciences",
+    "icon": "📚",
+    "max": 2,
+    "stream": "arts"
+  },
+  "media-communication": {
+    "name": "Media & Communication",
+    "icon": "🎙️",
+    "max": 1,
+    "stream": "arts"
+  },
+  "creative-design": {
+    "name": "Design, Fine & Performing Arts",
+    "icon": "🎨",
+    "max": 2,
+    "stream": "arts"
+  },
+  "law-public": {
+    "name": "Law, Civil Services & Public Policy",
+    "icon": "⚖️",
+    "max": 1,
+    "stream": "arts"
+  },
+  "medical-health": {
+    "name": "Medical, Allied Health & Sports",
+    "icon": "🩺",
+    "max": 2,
+    "stream": "science-health"
+  },
+  "pure-science": {
+    "name": "Pure & Applied Sciences",
+    "icon": "🔭",
+    "max": 2,
+    "stream": "science-health"
+  }
+}

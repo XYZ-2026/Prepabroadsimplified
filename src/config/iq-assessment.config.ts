@@ -21,7 +21,7 @@ export interface IQConfigFAQ {
 }
 
 export const IQ_CERTIFICATE_CONFIG = {
-  issuerName: 'SIMPLIFIED CENTER FOR COGNITIVE SCIENCES',
+  issuerName: 'CLARVO CENTER FOR COGNITIVE SCIENCES',
   issuerDivision: 'COGNITIVE ASSESSMENT & RESEARCH DIVISION',
   certificateTitle: 'Cognitive Assessment Certificate',
 };
@@ -34,7 +34,7 @@ export const IQ_ASSESSMENT_CONFIG = {
   sectionCount: 5,
   resultLabel: 'Estimated IQ Score',
   certificateTitle: IQ_CERTIFICATE_CONFIG.certificateTitle,
-  issuingOrganization: 'Simplified Center for Cognitive Sciences',
+  issuingOrganization: 'Clarvo Center for Cognitive Sciences',
   issuerDivision: 'Cognitive Assessment & Research Division',
   scoringFramework: 'Mean = 100, SD = 15 Standardized Normal Distribution',
 
@@ -141,7 +141,7 @@ export const IQ_ASSESSMENT_CONFIG = {
     },
     {
       question: 'What do I receive after completion?',
-      answer: 'Upon completion, you receive an instant Estimated IQ Score, percentile rank, 5-domain performance breakdown, cognitive persona analysis, and a downloadable PDF certificate issued by the Simplified Center for Cognitive Sciences.'
+      answer: 'Upon completion, you receive an instant Estimated IQ Score, percentile rank, 5-domain performance breakdown, cognitive persona analysis, and a downloadable PDF certificate issued by the Clarvo Center for Cognitive Sciences.'
     },
     {
       question: 'How is the estimated score calculated?',

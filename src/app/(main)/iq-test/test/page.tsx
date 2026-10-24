@@ -54,11 +54,14 @@ export default function IQTestRunnerPage() {
   // Stages: 'prep' -> 'testing' -> 'distraction_check' -> 'calculating'
   const [stage, setStage] = useState<'prep' | 'testing' | 'distraction_check' | 'calculating'>('prep');
   const [calcProgress, setCalcProgress] = useState<number>(0);
+  const [calcStepText, setCalcStepText] = useState<string>('Evaluating 45 item responses across 5 cognitive domains...');
+  const [calcError, setCalcError] = useState<string | null>(null);
   const [distractionReported, setDistractionReported] = useState<'Yes' | 'No' | null>(null);
   const [submitting, setSubmitting] = useState<boolean>(false);
   const [showIncompleteModal, setShowIncompleteModal] = useState<boolean>(false);
   const advancingRef = useRef(false);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const calcIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
   // Load 45 Questions & Run State Machine
   useEffect(() => {
@@ -227,14 +230,30 @@ export default function IQTestRunnerPage() {
     setDistractionReported(distractionAnswer);
     setStage('calculating');
     setSubmitting(true);
+    setCalcError(null);
+    setCalcProgress(12);
+    setCalcStepText('Validating 45 test item response vectors...');
 
-    // Calculation progress animation
-    let prog = 0;
-    const interval = setInterval(() => {
-      prog += 20;
-      setCalcProgress(Math.min(100, prog));
-      if (prog >= 100) clearInterval(interval);
-    }, 300);
+    // Clear any previous calculation timer
+    if (calcIntervalRef.current) clearInterval(calcIntervalRef.current);
+
+    // Realistic progressive advance while request is in-flight (maxes out at 92% until server responds)
+    const phases = [
+      { target: 28, text: 'Evaluating item responses across 5 cognitive domains...' },
+      { target: 48, text: 'Calibrating domain difficulty weights & standard deviations...' },
+      { target: 68, text: 'Computing standardized normal distribution (Mean=100, SD=15)...' },
+      { target: 82, text: 'Synthesizing cognitive persona & strengths profile...' },
+      { target: 92, text: 'Finalizing official Clarvo cognitive certificate...' },
+    ];
+
+    let phaseIndex = 0;
+    calcIntervalRef.current = setInterval(() => {
+      if (phaseIndex < phases.length) {
+        setCalcProgress(phases[phaseIndex].target);
+        setCalcStepText(phases[phaseIndex].text);
+        phaseIndex++;
+      }
+    }, 450);
 
     try {
       const answersPayload = questions.map(q => ({
@@ -260,45 +279,64 @@ export default function IQTestRunnerPage() {
 
       if (data.success && data.resultId) {
         console.log('[IQ RESULT PERSIST] status=SUCCESS resultId=', data.resultId);
+        if (calcIntervalRef.current) clearInterval(calcIntervalRef.current);
+
         // Clear local storage test progress
         localStorage.removeItem('iq45_answers');
         localStorage.removeItem('iq45_time_left');
 
+        // Smoothly reach 100% on success
+        setCalcProgress(100);
+        setCalcStepText('Assessment Complete! Loading your score report...');
+
         setTimeout(() => {
           router.replace(`/iq-test/result/${data.resultId}`);
-        }, 1800);
+        }, 600);
       } else {
         throw new Error(data.message || 'Submission failed');
       }
     } catch (err: any) {
       console.error('[Submit Error]:', err);
-      alert(err.message || 'Your answers were saved, but the cognitive result could not be finalized. Please retry submission.');
+      if (calcIntervalRef.current) clearInterval(calcIntervalRef.current);
+      setCalcError(err.message || 'Your answers were saved, but the cognitive result could not be finalized. Please retry submission.');
       setSubmitting(false);
-      setStage('testing');
     }
   };
 
   if (loading || stage === 'prep') {
     return (
-      <div className="min-h-screen bg-[#F8FAFC] flex flex-col justify-center items-center gap-5 px-6 text-center">
-        <div className="relative">
-          <div className="w-20 h-20 rounded-3xl bg-[#2563EB]/10 flex items-center justify-center text-[#2563EB] animate-pulse">
-            <BrainCircuit className="w-10 h-10" />
+      <div className="min-h-screen bg-[#F8FAFC] flex flex-col justify-center items-center gap-6 px-6 text-center">
+        {/* Harmonious Concentric Spinner and Brain Squircle */}
+        <div className="relative w-24 h-24 flex items-center justify-center">
+          <div 
+            className="absolute inset-0 rounded-full border-2 border-blue-100 border-t-[#2563EB] animate-spin" 
+            style={{ animationDuration: '1.8s' }} 
+          />
+          <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#E8F0FF] to-blue-50 flex items-center justify-center text-[#2563EB] shadow-sm">
+            <BrainCircuit className="w-8 h-8 text-[#2563EB] animate-pulse" />
           </div>
-          <Loader2 className="w-8 h-8 text-[#2563EB] animate-spin absolute -top-2 -right-2" />
         </div>
-        <h2 className="text-2xl font-display font-extrabold text-slate-900">Preparing Cognitive Assessment</h2>
+
+        <div className="space-y-1">
+          <span className="text-[10px] font-extrabold tracking-widest text-[#2563EB] uppercase">
+            Cognitive Diagnostics
+          </span>
+          <h2 className="text-2xl font-display font-extrabold text-slate-900">
+            Preparing Cognitive Assessment
+          </h2>
+        </div>
+
         <div className="flex flex-col gap-2 max-w-sm w-full text-xs font-semibold text-slate-500">
-          <div className="flex items-center justify-between p-2.5 bg-white rounded-xl border border-slate-200/60 shadow-sm">
-            <span>Assessment structure (45 items)</span>
+          <div className="flex items-center justify-between p-3 bg-white rounded-2xl border border-slate-200/70 shadow-sm">
+            <span className="text-slate-700">Assessment structure (45 items)</span>
             {prepStatus === 'INITIALIZING' ? <Loader2 className="w-4 h-4 text-[#2563EB] animate-spin" /> : <Check className="w-4 h-4 text-emerald-600" />}
           </div>
-          <div className="flex items-center justify-between p-2.5 bg-white rounded-xl border border-slate-200/60 shadow-sm">
-            <span>Visual Matrix & Spatial Engines</span>
+          <div className="flex items-center justify-between p-3 bg-white rounded-2xl border border-slate-200/70 shadow-sm">
+            <span className="text-slate-700">Visual Matrix & Spatial Engines</span>
             {['INITIALIZING'].includes(prepStatus) ? <Loader2 className="w-4 h-4 text-[#2563EB] animate-spin" /> : <Check className="w-4 h-4 text-emerald-600" />}
           </div>
-          <div className="flex items-center justify-between p-2.5 bg-white rounded-xl border border-slate-200/60 shadow-sm">
-            <span>Standardized Scoring Model</span>
+          <div className="flex items-center justify-between p-3 bg-white rounded-2xl border border-slate-200/70 shadow-sm">
+            <span className="text-slate-700">Standardized Scoring Model</span>
             {prepStatus === 'READY' ? <Check className="w-4 h-4 text-emerald-600" /> : <Loader2 className="w-4 h-4 text-[#2563EB] animate-spin" />}
           </div>
         </div>
@@ -639,23 +677,67 @@ export default function IQTestRunnerPage() {
       {/* ── CALCULATING / SCORING STAGE ── */}
       {stage === 'calculating' && (
         <div className="fixed inset-0 z-50 bg-[#F8FAFC] flex flex-col items-center justify-center p-6 text-center">
-          <div className="relative mb-6">
-            <div className="w-24 h-24 rounded-3xl bg-[#2563EB]/10 flex items-center justify-center text-[#2563EB] animate-pulse">
-              <BrainCircuit className="w-12 h-12" />
+          <div className="bg-white rounded-3xl border border-slate-200/90 shadow-2xl shadow-blue-900/5 p-8 sm:p-10 max-w-md w-full flex flex-col items-center">
+            
+            {/* Harmonious Concentric Spinner and Brain Squircle */}
+            <div className="relative w-24 h-24 mb-6 flex items-center justify-center">
+              <div 
+                className="absolute inset-0 rounded-full border-2 border-blue-100 border-t-[#2563EB] animate-spin" 
+                style={{ animationDuration: '1.8s' }} 
+              />
+              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#E8F0FF] to-blue-50 flex items-center justify-center text-[#2563EB] shadow-sm">
+                <BrainCircuit className="w-8 h-8 text-[#2563EB] animate-pulse" />
+              </div>
             </div>
-            <Loader2 className="w-10 h-10 text-[#2563EB] animate-spin absolute -top-3 -right-3" />
-          </div>
 
-          <span className="text-xs font-extrabold tracking-widest text-[#2563EB] uppercase mb-1">Standardized Psychometric Processing</span>
-          <h2 className="text-2xl font-display font-extrabold text-slate-900 mb-2">Calculating Your Cognitive Profile</h2>
-          <p className="text-xs text-slate-500 max-w-sm mb-6">
-            Evaluating 45 item responses across 5 cognitive domains using standardized normal distribution metrics.
-          </p>
+            <span className="text-[10px] font-extrabold tracking-widest text-[#2563EB] uppercase mb-1.5">
+              Standardized Psychometric Processing
+            </span>
+            <h2 className="text-2xl font-display font-extrabold text-[#080F1C] mb-2">
+              Calculating Your Cognitive Profile
+            </h2>
+            <p className="text-xs text-slate-500 max-w-sm mb-6 leading-relaxed min-h-[36px] flex items-center justify-center">
+              {calcStepText}
+            </p>
 
-          <div className="w-full max-w-xs h-2 bg-slate-200 rounded-full overflow-hidden mb-2">
-            <div className="h-full bg-[#2563EB] transition-all duration-300 rounded-full" style={{ width: `${calcProgress}%` }} />
+            {calcError ? (
+              <div className="w-full flex flex-col items-center gap-3">
+                <div className="p-3 bg-red-50 text-red-700 rounded-xl text-xs font-medium border border-red-200 w-full text-center">
+                  {calcError}
+                </div>
+                <div className="flex gap-2 w-full">
+                  <button
+                    onClick={() => {
+                      setStage('testing');
+                      setCalcError(null);
+                    }}
+                    className="flex-1 py-2.5 rounded-xl border border-slate-200 text-slate-700 text-xs font-bold hover:bg-slate-50 transition-colors"
+                  >
+                    Return to Test
+                  </button>
+                  <button
+                    onClick={() => submitFinalAssessment(distractionReported || 'No')}
+                    className="flex-1 py-2.5 rounded-xl bg-[#2563EB] text-white text-xs font-bold hover:bg-[#1D4ED8] transition-colors shadow-sm"
+                  >
+                    Retry Calculation
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div className="w-full flex flex-col items-center">
+                <div className="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden mb-2.5 p-0.5 border border-slate-200/50">
+                  <div 
+                    className="h-full bg-gradient-to-r from-[#2563EB] to-[#38BDF8] rounded-full transition-all duration-300 ease-out" 
+                    style={{ width: `${calcProgress}%` }} 
+                  />
+                </div>
+                <div className="flex items-center justify-between w-full text-xs font-bold">
+                  <span className="text-slate-400">Processing 45 Questions</span>
+                  <span className="text-[#2563EB] font-extrabold">{calcProgress}% Complete</span>
+                </div>
+              </div>
+            )}
           </div>
-          <span className="text-xs font-bold text-slate-400">{calcProgress}% Complete</span>
         </div>
       )}
 

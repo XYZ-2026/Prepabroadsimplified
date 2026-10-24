@@ -1,0 +1,22 @@
+{
+  "engineering": {
+    "name": "Engineering & Technology",
+    "icon": "🛠️",
+    "eligibility": "Class 12 with Physics, Chemistry, Mathematics (PCM)"
+  },
+  "science-health": {
+    "name": "Science, Medical & Health",
+    "icon": "🧬",
+    "eligibility": "Class 12 with PCB for medical and allied health; PCM or PCB for pure sciences"
+  },
+  "commerce": {
+    "name": "Commerce & Management",
+    "icon": "💼",
+    "eligibility": "Any Class 12 stream (Commerce or Mathematics helpful)"
+  },
+  "arts": {
+    "name": "Arts, Humanities, Creative & Law",
+    "icon": "🎭",
+    "eligibility": "Any Class 12 stream"
+  }
+}

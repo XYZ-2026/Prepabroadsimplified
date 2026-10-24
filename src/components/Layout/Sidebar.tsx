@@ -224,6 +224,18 @@ export default function Sidebar({ userRole, userName, userEmail }: SidebarProps)
             {/* Career Roadmap Studio — DISABLED (feature flag: CAREER_ROADMAP_ENABLED=false) */}
             <div className={styles.navItem}>
               <Link
+                href="/career-library"
+                onClick={handleLinkClick}
+                className={`${styles.navLink} ${pathname === '/career-library' || pathname === '/dashboard/career-library' ? styles.navLinkActive : ''}`}
+              >
+                <span className={styles.navLinkIcon}>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+                </span>
+                <span className={styles.navLinkText}>Career Library</span>
+              </Link>
+            </div>
+            <div className={styles.navItem}>
+              <Link
                 href="/university-finder"
                 onClick={handleLinkClick}
                 className={`${styles.navLink} ${pathname === '/university-finder' ? styles.navLinkActive : ''}`}
@@ -366,6 +378,9 @@ export default function Sidebar({ userRole, userName, userEmail }: SidebarProps)
                 <Link href="/dashboard/student/assessments" onClick={handleLinkClick} className={`${styles.navSubLink} ${isActive('/dashboard/student/assessments') ? styles.navSubLinkActive : ''}`}>
                   My Assessments
                 </Link>
+                <Link href="/career-library" onClick={handleLinkClick} className={`${styles.navSubLink} ${pathname === '/career-library' || pathname === '/dashboard/career-library' ? styles.navSubLinkActive : ''}`}>
+                  Career Library
+                </Link>
               </div>
             </div>
           )}
@@ -433,6 +448,15 @@ export default function Sidebar({ userRole, userName, userEmail }: SidebarProps)
             <nav className={styles.sidebarNavSection}>
               <p className={styles.navLabel}>Career & Planning Tools</p>
               {/* Career Roadmap Studio — DISABLED (feature flag: CAREER_ROADMAP_ENABLED=false) */}
+
+              <div className={styles.navItem}>
+                <Link href="/career-library" onClick={handleLinkClick} className={`${styles.navLink} ${pathname === '/career-library' || pathname === '/dashboard/career-library' ? styles.navLinkActive : ''}`}>
+                  <span className={styles.navLinkIcon}>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+                  </span>
+                  <span className={styles.navLinkText}>Career Library</span>
+                </Link>
+              </div>
 
               <div className={styles.navItem}>
                 <Link href="/university-finder" onClick={handleLinkClick} className={`${styles.navLink} ${isActive('/university-finder') ? styles.navLinkActive : ''}`}>

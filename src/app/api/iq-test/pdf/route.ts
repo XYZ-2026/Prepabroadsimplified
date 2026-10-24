@@ -22,7 +22,12 @@ export async function GET(request: Request) {
     const estimatedIQ = data.estimatedIQ || 100;
     const percentile = data.percentile || 50;
     const cognitiveBand = data.cognitiveBand || 'Average Cognitive Ability';
-    const certificateId = data.certificateId || `SIMP-IQ-${resultId.toUpperCase().slice(0, 8)}`;
+    const certificateId = data.certificateId || `CLARVO-IQ-${resultId.toUpperCase().slice(0, 8)}`;
+    const getOrdinal = (n: number) => {
+      const s = ['th', 'st', 'nd', 'rd'];
+      const v = n % 100;
+      return s[(v - 20) % 10] || s[v] || s[0];
+    };
     const completionDate = data.completedAt ? new Date(data.completedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
 
     const htmlContent = `
@@ -252,7 +257,7 @@ export async function GET(request: Request) {
         <div class="score-card-lbl">Estimated IQ Score</div>
       </div>
       <div class="score-card">
-        <div class="score-card-val">${percentile}th</div>
+        <div class="score-card-val">${percentile}${getOrdinal(percentile)}</div>
         <div class="score-card-lbl">Percentile Rank</div>
       </div>
       <div class="score-card">

@@ -1,9 +1,74 @@
+import type { Metadata } from 'next';
 import { notFound, redirect } from 'next/navigation';
 import { adminDb } from '@/lib/firebase-admin';
 import ResultDashboardClient from './ResultDashboardClient';
 import { getUserProfile } from '@/lib/auth';
 
 export const revalidate = 0; // Dynamic rendering
+
+function getOrdinal(n: number): string {
+  const s = ['th', 'st', 'nd', 'rd'];
+  const v = n % 100;
+  return s[(v - 20) % 10] || s[v] || s[0];
+}
+
+export async function generateMetadata({ 
+  params 
+}: { 
+  params: Promise<{ resultId: string }> 
+}): Promise<Metadata> {
+  const { resultId } = await params;
+  try {
+    const docSnap = await adminDb.collection('iq_results').doc(resultId).get();
+    if (!docSnap.exists) {
+      return {
+        title: 'Cognitive Assessment Score | CLARVO Center for Cognitive Sciences',
+        description: 'View certified cognitive performance profile and domain analysis on Clarvo.',
+      };
+    }
+
+    const data = docSnap.data() || {};
+    const candidateName = data.userName || 'Candidate';
+    const estimatedIQ = data.estimatedIQ ?? 100;
+    const percentile = data.percentile ?? 50;
+    const cognitiveBand = data.cognitiveBand || 'Average Cognitive Ability';
+    const cognitivePersona = data.cognitivePersona || 'The Strategic Thinker';
+    const ordinal = getOrdinal(percentile);
+
+    const title = `${candidateName}'s Cognitive Assessment: IQ ${estimatedIQ} (${percentile}${ordinal} Percentile) | CLARVO`;
+    const description = `Certified Result: ${candidateName} completed the 45-Question Cognitive Assessment measuring matrix reasoning and spatial logic. Persona: "${cognitivePersona}". Classification: ${cognitiveBand}.`;
+    const imageUrl = `/api/iq-test/share-image?resultId=${resultId}`;
+
+    return {
+      title,
+      description,
+      openGraph: {
+        title,
+        description,
+        type: 'article',
+        images: [
+          {
+            url: imageUrl,
+            width: 1200,
+            height: 630,
+            alt: `${candidateName}'s Cognitive Score: IQ ${estimatedIQ}`,
+          },
+        ],
+      },
+      twitter: {
+        card: 'summary_large_image',
+        title,
+        description,
+        images: [imageUrl],
+      },
+    };
+  } catch (err) {
+    return {
+      title: 'Cognitive Assessment Score | CLARVO',
+      description: 'View certified cognitive performance profile and domain analysis on Clarvo.',
+    };
+  }
+}
 
 export default async function ResultPage({ 
   params, 

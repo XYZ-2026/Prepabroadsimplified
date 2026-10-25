@@ -1,6 +1,7 @@
 import React, { Suspense } from 'react';
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import Image from 'next/image';
 import AuthForm from '@/components/Auth/AuthForm';
 import AuthInfographics from '@/components/Auth/AuthInfographics';
 import styles from '@/styles/auth.module.css';
@@ -8,7 +9,7 @@ import styles from '@/styles/auth.module.css';
 export const metadata: Metadata = {
   title: 'Sign Up — Create Student Account | CLARVO',
   description:
-    'Join CLARVO to access personalized student guidance, psychometric assessments, university matching, and profile building.',
+    'Join CLARVO for Indian student career guidance, Class 10 stream selection, 147+ career roadmaps, cognitive psychometrics, and college admissions.',
   alternates: {
     canonical: '/signup',
   },
@@ -22,9 +23,10 @@ export default function SignUpPage() {
   return (
     <>
       <header className={styles.authTopbar} style={{ justifyContent: 'space-between' }}>
-        <Link href="/" className={styles.authTopbarBrand}>
+        <Link href="/" className={styles.authTopbarBrand} style={{ display: 'flex', alignItems: 'center', gap: '12px', textDecoration: 'none' }}>
+          <Image src="/logo-transparent.png" alt="CLARVO" width={48} height={48} className="w-[40px] h-[40px] sm:w-[44px] sm:h-[44px] object-contain shrink-0" priority />
           <div className={styles.authTopbarText}>
-            <span className={styles.authTopbarTitle} style={{ fontWeight: 900, fontSize: '1.25rem', letterSpacing: '-0.02em', color: '#080F1C' }}>
+            <span className={styles.authTopbarTitle} style={{ fontWeight: 900, fontSize: '1.45rem', letterSpacing: '-0.02em', color: '#080F1C' }}>
               CLARVO
             </span>
           </div>

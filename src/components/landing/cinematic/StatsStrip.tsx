@@ -53,7 +53,7 @@ export default function StatsStrip() {
               whileInView={{ scale: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.4, delay: idx * 0.08 }}
-              className={`text-[32px] sm:text-[44px] md:text-[50px] font-black leading-none tracking-tight ${
+              className={`text-[25px] xs:text-[32px] sm:text-[44px] md:text-[50px] font-black leading-none tracking-tight ${
                 item.accent ? 'text-[#38BDF8]' : 'text-white'
               }`}
             >

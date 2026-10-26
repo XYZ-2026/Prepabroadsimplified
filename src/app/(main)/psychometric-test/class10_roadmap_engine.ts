@@ -845,70 +845,241 @@ export function getPathwayRoadmapData(
           targetCompanies: ['Y Combinator & Antler Venture Ecosystems', 'Peak XV Partners (formerly Sequoia India)', 'McKinsey & Company Strategy Practice', 'Boston Consulting Group (BCG Digital Ventures)', 'Google / Amazon Strategic Expansion', 'High-Growth Startups (Zepto / Razorpay / Swiggy)'],
           milestone: 'Build prototype business model canvas, pitch at student venture competition, and achieve 99th percentile in IPMAT/CUET mocks.'
         };
+      } else if (isMkt) {
+        data = {
+          pathwayName,
+          pathwayTitle: 'Marketing Strategy, Consumer Insights & Brand Leadership',
+          pathwayRankLabel: rankLabel,
+          fitScore,
+          rationale: `${firstName}'s profile combines creative communication (${scores.personality.openness}% Openness) with strategic consumer empathy (${scores.personality.agreeableness}% Agreeableness) and commercial acumen, providing an exceptional foundation for digital brand architecture, behavioral economics, consumer insights, and global marketing strategy.`,
+          foundation: {
+            subjects: ['Business Studies & Marketing Principles', 'Economics & Consumer Psychology', 'Applied Mathematics / Data Analytics', 'Media Studies / Visual Communication', 'English & Persuasive Storytelling'],
+            exams: ['CUET-UG (Mass Comm / BBA Marketing)', 'IPMAT (IIM Indore, Rohtak, Ranchi)', 'NPAT (NMIMS Mumbai)', 'SET (Symbiosis International)', 'XET (St. Xavier’s College Mumbai)'],
+            curriculumFocus: 'Focus on market segmentation, brand positioning frameworks, digital campaign analytics, behavioral consumer dynamics, and creative narrative messaging.'
+          },
+          bachelors: [
+            {
+              degree: 'B.A. (Hons) in Marketing Communications & Brand Strategy',
+              specialization: 'Consumer Psychology, Integrated Brand Campaigns, Neuromarketing & Digital Media',
+              whyFits: `Capitalizes on ${firstName}'s creative openness and analytical storytelling capacity.`,
+              careerOutcomes: 'Brand Strategist, Consumer Insights Lead, Creative Account Director'
+            },
+            {
+              degree: 'BBA in Digital Marketing, Growth Hacking & Performance Media',
+              specialization: 'Search Engine Marketing, Conversion Rate Optimization (CRO), Social Media Algorithms, AdTech',
+              whyFits: 'Bridges commercial marketing strategy with quantitative digital performance data.',
+              careerOutcomes: 'Growth Marketing Manager, Performance Marketing Lead, SEO/SEM Director'
+            },
+            {
+              degree: 'B.Sc. in Market Research, Consumer Behavior & Behavioral Economics',
+              specialization: 'Quantitative Survey Design, Predictive Modeling, Consumer Segmentation & Pricing Analytics',
+              whyFits: 'Applies rigorous statistical analysis and behavioural science to commercial product adoption.',
+              careerOutcomes: 'Consumer Insights Analyst, Market Research Director, Pricing Strategist'
+            },
+            {
+              degree: 'BMS in Advertising, Public Relations & Corporate Communications',
+              specialization: 'Multi-Channel Campaign Strategy, Brand Reputation Management, Influencer Ecosystems',
+              whyFits: 'Focuses on multi-channel public communications and brand reputation leadership.',
+              careerOutcomes: 'Corporate Communications Lead, PR Director, Media Planning Strategist'
+            }
+          ],
+          colleges: {
+            reach: ['MICA Ahmedabad (Premier Communications Institution)', 'Shaheed Sukhdev College of Business Studies (SSCBS Delhi)', 'IIM Indore (IPM - Marketing Track)', 'St. Xavier\'s College Mumbai', 'Babson College (Global Brand Leadership)'],
+            fit: ['Symbiosis Institute of Media & Communication (SIMC Pune)', 'NMIMS School of Commerce Mumbai', 'Christ University Bangalore', 'Delhi College of Arts & Commerce (DCAC)', 'Jai Hind College Mumbai'],
+            accessible: ['Amity School of Communication Noida', 'MIT-WPU School of Management Pune', 'K.J. Somaiya College of Arts & Commerce Mumbai', 'Bennett University Greater Noida']
+          },
+          masters: [
+            'M.Sc. in Strategic Marketing & Brand Leadership (HEC Paris / Columbia / Northwestern Medill)',
+            'Post Graduate Diploma in Management - Communications (PGDM-C - MICA Ahmedabad)',
+            'MBA in Marketing Strategy & Global Brand Leadership (IIM Calcutta / NYU Stern / INSEAD)',
+            'Master of Science in Marketing Analytics & Consumer Insights (NUS Singapore / LBS)'
+          ],
+          careerOutcomes: [
+            'Global Brand Director / Vice President of Brand Marketing (HUL / Nestlé / Apple)',
+            'Head of Consumer Insights & Market Strategy (Kantar / Nielsen / Ipsos)',
+            'Chief Marketing Officer (CMO Track - High Growth Tech & D2C Brands)',
+            'Executive Strategy Director (Ogilvy & Mather / McCann / WPP Network)'
+          ],
+          skills: ['Brand Equity & Identity Architecture', 'Consumer Journey Mapping & Ethnography', 'Digital Performance Marketing & Attribution Modeling', 'Google Analytics 4 & Data Storytelling', 'Creative Campaign Direction & Copy Strategy'],
+          targetCompanies: ['Unilever (HUL) Global Brand Teams', 'Procter & Gamble (P&G)', 'Google Global Marketing Solutions', 'Ogilvy & Mather / WPP Group', 'Nestlé Consumer Strategy', 'D2C Consumer Giants (Nykaa / Mamaearth / Boat)'],
+          milestone: 'Develop comprehensive multi-channel brand launch campaign proposal, conduct 100-respondent consumer preference study with statistical segmentation, and score in the 99th percentile of CUET/IPMAT marketing electives.'
+        };
+      } else if (isIB) {
+        data = {
+          pathwayName,
+          pathwayTitle: 'International Business, Global Trade Policy & Cross-Border Strategy',
+          pathwayRankLabel: rankLabel,
+          fitScore,
+          rationale: `${firstName}'s profile exhibits strong strategic initiative (${scores.personality.extraversion}% Extraversion) and global analytical perspective, creating ideal capabilities for cross-border enterprise strategy, foreign market entry, international trade finance, and supply negotiations.`,
+          foundation: {
+            subjects: ['International Economics & Global Commerce', 'Business Studies & Trade Law', 'Foreign Language (French / German / Spanish)', 'Applied Mathematics / Statistics', 'English & Diplomatic Negotiation'],
+            exams: ['IPMAT (IIM Indore, Rohtak, Ranchi)', 'CUET-UG (BBA / BMS / Economics)', 'NPAT (NMIMS Mumbai)', 'SET (Symbiosis International)', 'SAT / Global Business Entrance Tests'],
+            curriculumFocus: 'Focus on macroeconomic trade agreements, tariffs, currency hedging, cross-cultural team management, and multinational corporate structures.'
+          },
+          bachelors: [
+            {
+              degree: 'BBA in International Business & Global Trade Operations',
+              specialization: 'Export-Import Procedures, Tariff Compliance, Cross-Border Logistics, Global Sourcing',
+              whyFits: `Engages ${firstName}'s strategic worldview and commercial initiative.`,
+              careerOutcomes: 'International Trade Specialist, Export-Import Manager, Global Sourcing Lead'
+            },
+            {
+              degree: 'B.Sc. in Global Economics & Geopolitical Risk Analysis',
+              specialization: 'Emerging Market Analysis, Trade Sanctions, Macroeconomic Modeling, Bilateral Treaties',
+              whyFits: 'Combines economic theory with geopolitical risk forecasting.',
+              careerOutcomes: 'Geopolitical Risk Analyst, Country Risk Lead, Trade Policy Consultant'
+            },
+            {
+              degree: 'B.Com (Hons) in Cross-Border Finance & Global Supply Chains',
+              specialization: 'Foreign Exchange Hedging, Trade Credit, Multinational Tax Architecture, Transfer Pricing',
+              whyFits: 'Focuses on the financial architecture governing global corporations.',
+              careerOutcomes: 'International Finance Associate, FX Risk Analyst, Global Treasury Lead'
+            },
+            {
+              degree: 'BMS in Global Enterprise Management & Market Entry',
+              specialization: 'FDI Strategy, Joint Ventures, Cross-Cultural Organizational Leadership',
+              whyFits: 'Applies management execution to multi-country market expansion.',
+              careerOutcomes: 'Global Expansion Associate, International Operations Lead, Market Entry Lead'
+            }
+          ],
+          colleges: {
+            reach: ['Indian Institute of Foreign Trade (IIFT Delhi)', 'Shaheed Sukhdev College of Business Studies (SSCBS)', 'IIM Indore (IPM)', 'St. Xavier\'s College Mumbai', 'London School of Economics (LSE)'],
+            fit: ['Symbiosis Centre for Management Studies (SCMS Pune)', 'NMIMS School of Commerce Mumbai', 'Christ University Bangalore', 'Loyola College Chennai', 'Ashoka University'],
+            accessible: ['Amity Global Business School', 'UPES School of Business Dehradun', 'Bennett University Greater Noida', 'K.J. Somaiya Institute Mumbai']
+          },
+          masters: [
+            'Master of International Business (MIB - St. Gallen / HEC Paris / IIFT)',
+            'Master of Business Administration (Global MBA - INSEAD / LBS / Wharton / Columbia)',
+            'M.Sc. in International Trade Policy & Geopolitics (Georgetown / Sciences Po)',
+            'Executive Master in Supply Chain & Cross-Border Logistics'
+          ],
+          careerOutcomes: [
+            'Director of Global Market Expansion (Multinational Corporations)',
+            'International Trade & Customs Policy Director (WTO / World Bank Track)',
+            'Vice President - Global Sourcing & Supply Chain Networks',
+            'Senior Cross-Border Strategy Partner (McKinsey Global Institute / BCG)'
+          ],
+          skills: ['Cross-Border Market Entry & FDI Strategy', 'International Trade Law & Incoterms 2020', 'Foreign Currency Hedging & Letter of Credit (LC)', 'Multinational Transfer Pricing Architecture', 'Cross-Cultural Stakeholder Negotiation'],
+          targetCompanies: ['World Trade Organization (WTO)', 'Maersk Line Global Sourcing', 'Tata International Enterprise', 'McKinsey Global Institute', 'Amazon Global Trade & Selling', 'ITC International Business Division'],
+          milestone: 'Draft a comprehensive market entry strategy for an Indian enterprise expanding to EU/ASEAN markets, achieve foreign language fluency certification, and score in the 99th percentile of IPMAT/CUET.'
+        };
+      } else if (isSCM) {
+        data = {
+          pathwayName,
+          pathwayTitle: 'Supply Chain Operations, Global Logistics & Procurement Analytics',
+          pathwayRankLabel: rankLabel,
+          fitScore,
+          rationale: `${firstName}'s profile exhibits strong systematic reasoning (${scores.aptitude.reasoning}%) and conscientiousness (${scores.personality.conscientiousness}%), creating exceptional aptitude for end-to-end supply chain optimization, inventory modeling, global logistics analytics, and automated procurement.`,
+          foundation: {
+            subjects: ['Applied Mathematics & Operations Research', 'Business Studies & Production Organization', 'Computer Science (Python / SQL Basics)', 'Economics & Cost Accounting', 'Technical Communication & Project Management'],
+            exams: ['CUET-UG (BMS / BBA)', 'IPMAT (IIM Indore, Rohtak)', 'NPAT (NMIMS Mumbai)', 'SET (Symbiosis International)', 'State CETs'],
+            curriculumFocus: 'Focus on inventory optimization algorithms, linear programming, warehouse automation, freight forwarding networks, and supplier relationship management.'
+          },
+          bachelors: [
+            {
+              degree: 'B.Sc. in Supply Chain Operations & Logistics Analytics',
+              specialization: 'Supply Chain Analytics, Demand Forecasting, Route Optimization, Inventory Modeling',
+              whyFits: `Directly engages ${firstName}'s methodical reasoning and operational discipline.`,
+              careerOutcomes: 'Supply Chain Analyst, Logistics Coordinator, Demand Planner'
+            },
+            {
+              degree: 'BBA in Operations Management & Strategic Sourcing',
+              specialization: 'Strategic Sourcing, Contract Negotiation, Quality Management (Six Sigma), Vendor Audits',
+              whyFits: 'Applies business administration frameworks to enterprise cost reduction.',
+              careerOutcomes: 'Procurement Specialist, Operations Manager, Sourcing Lead'
+            },
+            {
+              degree: 'B.Tech in Industrial Engineering & Supply Chain Management',
+              specialization: 'Warehouse Robotics, Simulation Modeling, Automated Sorting, Plant Logistics',
+              whyFits: 'Bridges technical engineering design with modern automated fulfillment.',
+              careerOutcomes: 'Industrial Engineer, Warehouse Automation Lead, Fulfillment Operations Lead'
+            },
+            {
+              degree: 'BMS in Maritime Logistics & Port Transportation',
+              specialization: 'Container Shipping, Port Terminal Operations, Customs Clearance, Freight Brokerage',
+              whyFits: 'Focuses on global maritime container trade and intermodal freight transport.',
+              careerOutcomes: 'Port Logistics Manager, Freight Operations Lead, Customs Broker'
+            }
+          ],
+          colleges: {
+            reach: ['Shaheed Sukhdev College of Business Studies (SSCBS)', 'IIM Rohtak (IPM Operations Track)', 'BITS Pilani (Industrial Engineering)', 'IIT Kharagpur (Industrial & Systems Eng.)', 'Purdue University (Top Supply Chain)'],
+            fit: ['NMIMS School of Business Management Mumbai', 'Christ University Bangalore', 'Symbiosis Centre for Management Studies (SCMS)', 'UPES School of Logistics & Supply Chain'],
+            accessible: ['Amity School of Business Noida', 'Chandigarh University Logistics Division', 'Bennett University Greater Noida', 'K.J. Somaiya Institute']
+          },
+          masters: [
+            'Master of Science in Supply Chain Management (MIT CTL / Georgia Tech / Michigan Ross)',
+            'MBA in Operations & Logistics (IIM Lucknow / NITIE Mumbai / SPJIMR)',
+            'M.S. in Operations Research & Industrial Logistics (Columbia / TU Delft)',
+            'Executive Master in Sustainable Supply Chains & Circular Economy'
+          ],
+          careerOutcomes: [
+            'Vice President of Global Supply Chain & Logistics (Amazon / Walmart / Apple)',
+            'Chief Procurement Officer (CPO Track - Global FMCG / Industrial Enterprises)',
+            'Operations Director - Robotics & Automated Fulfillment Networks',
+            'Principal Partner - Supply Chain Transformation (McKinsey Operations / Kearney)'
+          ],
+          skills: ['Deterministic & Stochastic Inventory Modeling', 'ERP Architecture (SAP S/4HANA / Oracle SCM)', 'Demand Forecasting & Time Series Analytics (Python/R)', 'Linear Programming & Network Optimization', 'Lean Six Sigma & Total Quality Management (TQM)'],
+          targetCompanies: ['Amazon Global Operations & Fulfillment', 'Apple Worldwide Operations', 'Unilever Global Supply Chain', 'DHL Supply Chain & Logistics', 'Maersk Intermodal Logistics', 'Flipkart Supply Chain (Ekart)'],
+          milestone: 'Construct a multi-node Python simulation model minimizing logistics deadhead miles and holding costs, complete Lean Six Sigma Green Belt, and secure top ranking in university entrance evaluations.'
+        };
       } else {
         data = {
           pathwayName,
-          pathwayTitle: isMkt
-            ? 'Marketing Strategy, Consumer Insights & Brand Leadership'
-            : isIB
-            ? 'International Business, Global Trade Policy & Cross-Border Strategy'
-            : isSCM
-            ? 'Supply Chain Operations, Global Logistics & Procurement Analytics'
-            : 'Business Administration, Strategy & Management Consulting',
+          pathwayTitle: 'Business Administration, Strategy & Management Consulting',
           pathwayRankLabel: rankLabel,
           fitScore,
-          rationale: `${firstName}'s profile exhibits strong strategic initiative (${scores.personality.extraversion}% Extraversion) and organized commercial acumen (${scores.personality.conscientiousness}% Conscientiousness), creating high aptitude for cross-functional business leadership, market expansion, and consulting.`,
+          rationale: `${firstName}'s profile exhibits strong strategic initiative (${scores.personality.extraversion}% Extraversion) and organized commercial acumen (${scores.personality.conscientiousness}% Conscientiousness), creating high aptitude for cross-functional business leadership, enterprise strategy, and management consulting.`,
           foundation: {
             subjects: ['Business Studies & Corporate Organization', 'Economics & Global Commerce', 'Applied Mathematics / Statistics', 'Accountancy & Financial Basics', 'English Communication & Public Speaking'],
             exams: ['IPMAT (IIM Indore, Rohtak, Ranchi, Jammu)', 'CUET-UG (BBA / BMS / BBE)', 'NPAT (NMIMS Mumbai)', 'SET (Symbiosis International)', 'DU JAT / GGSIPU CET'],
-            curriculumFocus: 'Focus on strategic case studies, market equilibrium, consumer psychology, and presentation storytelling.'
+            curriculumFocus: 'Focus on strategic case studies, market equilibrium, corporate finance, and structured problem solving.'
           },
           bachelors: [
             {
               degree: 'IPM (5-Year Integrated Program in Management - IIM Track)',
-              specialization: 'General Management, Quantitative Strategy, International Business',
+              specialization: 'General Management, Quantitative Strategy, International Business, Corporate Finance',
               whyFits: `Provides fast-track management training combining leadership with quantitative analysis.`,
-              careerOutcomes: 'Management Consultant, Business Operations Manager, Growth Lead'
+              careerOutcomes: 'Management Consultant, Business Operations Manager, Corporate Strategy Lead'
             },
             {
               degree: 'BBA / BMS (Bachelor of Management Studies - Strategy Track)',
-              specialization: 'Corporate Strategy, Global Supply Chain, Digital Enterprise Transformation',
+              specialization: 'Corporate Strategy, Digital Enterprise Transformation, Organizational Restructuring',
               whyFits: 'Focuses on modern agile operations and strategic enterprise execution.',
               careerOutcomes: 'Strategy Associate, Operations Manager, Business Development Lead'
             },
             {
-              degree: 'B.A. (Hons) in Marketing Communications & Brand Strategy',
-              specialization: 'Consumer Insights, Digital Performance Marketing, Brand Storytelling',
-              whyFits: 'Applies psychological insights and creative communication to brand growth.',
-              careerOutcomes: 'Brand Manager, Digital Marketing Lead, Consumer Insights Analyst'
+              degree: 'B.A. (Hons) in Economics & Management Strategy',
+              specialization: 'Microeconomics, Econometric Modeling, Corporate Valuation, Competitive Strategy',
+              whyFits: 'Combines theoretical economic rigor with practical strategic business decisions.',
+              careerOutcomes: 'Economic Consultant, Strategy Analyst, Financial Modeling Associate'
             },
             {
-              degree: 'B.Sc. in Supply Chain Operations & Logistics Analytics',
-              specialization: 'Supply Chain Optimization, Procurement, Global Trade Networks',
-              whyFits: 'Leverages systematic analytical logic for global logistics and manufacturing.',
-              careerOutcomes: 'Supply Chain Consultant, Logistics Director, Procurement Strategist'
+              degree: 'B.Com (Hons) in Strategic Management & Financial Markets',
+              specialization: 'Corporate Governance, Financial Accounting, Capital Markets, Valuation',
+              whyFits: 'Leverages systematic analytical logic for corporate fiscal management and advisory.',
+              careerOutcomes: 'Financial Analyst, Strategic Financial Advisor, Risk Manager'
             }
           ],
           colleges: {
-            reach: ['IIM Indore (IPM Program)', 'Shaheed Sukhdev College of Business Studies (SSCBS) Delhi', 'IIM Roorkee / IIM Ranchi IPM', 'NMIMS ASMSOC Mumbai'],
-            fit: ['St. Xavier\'s College Mumbai', 'Christ University Bangalore', 'Symbiosis Centre for Management Studies (SCMS) Pune', 'Loyola College Chennai'],
+            reach: ['IIM Indore (IPM Program)', 'Shaheed Sukhdev College of Business Studies (SSCBS) Delhi', 'IIM Rohtak / IIM Ranchi IPM', 'NMIMS ASMSOC Mumbai', 'Wharton School (UPenn)'],
+            fit: ['St. Xavier\'s College Mumbai', 'Christ University Bangalore', 'Symbiosis Centre for Management Studies (SCMS) Pune', 'Loyola College Chennai', 'SRCC (Economics)'],
             accessible: ['K.J. Somaiya Institute Mumbai', 'Mithibai College Mumbai', 'Bennett University Greater Noida', 'Amity Global Business School']
           },
           masters: [
             'Master of Business Administration (MBA - IIM Ahmedabad, Bangalore, Calcutta / INSEAD / Harvard)',
-            'M.Sc. in Strategic Marketing & Brand Leadership',
-            'Master of Science in Supply Chain Engineering & Global Logistics',
-            'Executive Master in International Business & Trade Policy'
+            'Master in Management (MiM - London Business School / St. Gallen / HEC Paris)',
+            'M.Sc. in Strategic Management & Business Analytics (Imperial / NYU Stern)',
+            'Executive Master in Corporate Governance & M&A Strategy'
           ],
           careerOutcomes: [
-            'Management Consultant (McKinsey & Company / BCG / Bain & Co)',
-            'Global Brand Manager / Chief Marketing Officer (CMO Track)',
-            'Product Growth & Go-to-Market (GTM) Strategy Director',
-            'Venture Capital Operations Associate / High-Growth Founder'
+            'Management Consultant (McKinsey & Company / BCG / Bain & Company)',
+            'Corporate Strategy Director / Chief of Staff to CEO',
+            'Business Transformation Lead / Agile Operations Director',
+            'Venture Capital Operations Associate / Growth Equity Analyst'
           ],
-          skills: ['Strategic Problem Solving & MECE Frameworks', 'Consumer Behavior & Brand Positioning Analysis', 'Performance Marketing & Digital Analytics', 'Negotiation & Stakeholder Management', 'P&L Ownership & Financial Acumen'],
-          targetCompanies: ['McKinsey & Company', 'Boston Consulting Group (BCG)', 'Hindustan Unilever Limited (HUL)', 'Procter & Gamble (P&G)', 'Google Consumer Marketing', 'Amazon Operations'],
-          milestone: 'Complete IPMAT syllabus coverage, launch a student entrepreneurial project or school marketing campaign, and win an inter-school business case competition.'
+          skills: ['Strategic Problem Solving & MECE Frameworks', 'Financial Modeling & DCF Valuation', 'Data-Driven Executive Decision Making', 'Negotiation & C-Suite Stakeholder Management', 'P&L Ownership & Unit Economics'],
+          targetCompanies: ['McKinsey & Company', 'Boston Consulting Group (BCG)', 'Bain & Company', 'Tata Sons Strategic Group', 'Deloitte Strategy & Operations', 'Google Global Operations'],
+          milestone: 'Complete IPMAT syllabus coverage, solve 25 comprehensive business case studies, lead school team to victory in inter-school case competition, and score in the 99th percentile of IPMAT/CUET.'
         };
       }
       break;

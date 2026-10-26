@@ -13,6 +13,11 @@ export interface EditorialStudent {
   school?: string;
   city?: string;
   stream?: string;
+  mathStatus?: string;
+  subjects?: string | string[];
+  board?: string;
+  academicYear?: string;
+  graduationYear?: string;
   email?: string;
   date: string;
   reportId: string;

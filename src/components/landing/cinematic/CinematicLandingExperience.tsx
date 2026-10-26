@@ -2,6 +2,8 @@
 
 import React from 'react';
 import CinematicHero from './CinematicHero';
+import TopSchoolsTicker from './TopSchoolsTicker';
+import ServicesSection from './ServicesSection';
 import StatsStrip from './StatsStrip';
 import AssessmentMatrixSection from './AssessmentMatrixSection';
 import StudentJourneySection from './StudentJourneySection';
@@ -16,10 +18,16 @@ export default function CinematicLandingExperience() {
       {/* 1. Cinematic Hero Section */}
       <CinematicHero />
 
-      {/* 2. Micro Stats Strip */}
+      {/* 2. Top Schools Marquee Ticker (Directly below Hero section) */}
+      <TopSchoolsTicker />
+
+      {/* 3. Dedicated Core Services Section (Immediately following ticker) */}
+      <ServicesSection />
+
+      {/* 3. Micro Stats Strip */}
       <StatsStrip />
 
-      {/* 3. The Assessment Matrix (Directly addresses user prompt & #assessments) */}
+      {/* 4. The Assessment Matrix (Directly addresses user prompt & #assessments) */}
       <AssessmentMatrixSection />
 
       {/* 4. The Student Development Journey */}

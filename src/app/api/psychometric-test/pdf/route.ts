@@ -82,18 +82,22 @@ export async function POST(req: NextRequest) {
       const studentObj = data.student || {};
       studentName = studentObj.name || studentInfo.name || data.name || data.userName || 'Candidate';
       
-      if ((!studentName || studentName === 'Candidate') && data.userId) {
+      let userProfileData: any = null;
+      if (data.userId) {
         try {
           const userSnap = await adminDb.collection('users').doc(data.userId).get();
-          if (userSnap.exists && userSnap.data()?.name) {
-            studentName = userSnap.data()?.name;
+          if (userSnap.exists) {
+            userProfileData = userSnap.data();
+            if (userProfileData?.name && (!studentName || studentName === 'Candidate')) {
+              studentName = userProfileData.name;
+            }
           }
         } catch (e) {
           console.warn('[PDF Route] Could not fetch name from user record:', e);
         }
       }
       
-      const rawGrade = studentObj.grade || studentInfo.grade || variantConfig.defaultGradeLabel;
+      const rawGrade = studentObj.grade || studentInfo.grade || userProfileData?.grade || userProfileData?.academicGrade || variantConfig.defaultGradeLabel;
       const formattedGrade = rawGrade.toLowerCase().includes('class') || rawGrade.toLowerCase().includes('grade') ? rawGrade : `Class ${rawGrade}`;
       const defaultAge = resolvedVariant === 'junior' ? '13' : resolvedVariant === 'senior' ? '17' : '15';
 
@@ -101,9 +105,14 @@ export async function POST(req: NextRequest) {
         name: studentName,
         grade: formattedGrade,
         age: studentObj.age || studentInfo.age || defaultAge,
-        school: studentObj.school || studentInfo.school || '',
-        city: studentObj.city || studentInfo.city || 'India',
-        stream: studentObj.stream || studentInfo.stream || '',
+        school: studentObj.school || studentInfo.school || userProfileData?.currentSchool || userProfileData?.schoolName || '',
+        city: studentObj.city || studentInfo.city || userProfileData?.city || 'India',
+        stream: studentObj.stream || studentInfo.stream || userProfileData?.stream || '',
+        mathStatus: studentObj.mathStatus || studentInfo.mathStatus || userProfileData?.mathStatus || '',
+        subjects: studentObj.subjects || studentInfo.subjects || studentObj.subjectCombination || studentInfo.subjectCombination || userProfileData?.subjects || '',
+        board: studentObj.board || studentInfo.board || userProfileData?.board || '',
+        academicYear: studentObj.academicYear || studentInfo.academicYear || studentObj.graduationYear || studentInfo.graduationYear || userProfileData?.graduationYear || '',
+        graduationYear: studentObj.graduationYear || studentInfo.graduationYear || userProfileData?.graduationYear || '',
         email: studentObj.email || studentInfo.email || data.email || '',
         date: data.createdAt || data.date || new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }),
         reportId: `${variantConfig.reportIdPrefix}-${resultId.substring(0, 6).toUpperCase()}`,
@@ -157,6 +166,11 @@ export async function POST(req: NextRequest) {
         school: reqStudent.school || '',
         city: reqStudent.city || 'India',
         stream: reqStudent.stream || '',
+        mathStatus: reqStudent.mathStatus || '',
+        subjects: reqStudent.subjects || reqStudent.subjectCombination || '',
+        board: reqStudent.board || '',
+        academicYear: reqStudent.academicYear || reqStudent.graduationYear || '',
+        graduationYear: reqStudent.graduationYear || '',
         email: reqStudent.email || '',
         date: reqStudent.date || new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }),
         reportId: reqStudent.reportId || `${variantConfig.reportIdPrefix}-${Math.floor(100000 + Math.random() * 900000)}`,

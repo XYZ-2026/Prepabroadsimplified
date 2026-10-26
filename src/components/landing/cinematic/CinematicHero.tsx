@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
-import { Sparkles, ArrowRight, ShieldCheck, CheckCircle2, ChevronRight, Activity, Cpu } from 'lucide-react';
+import { Sparkles, ArrowRight, ShieldCheck, CheckCircle2, ChevronRight, Activity, Cpu, Compass } from 'lucide-react';
 
 interface MetricPreview {
   id: string;
@@ -82,7 +82,7 @@ export default function CinematicHero() {
   };
 
   return (
-    <section className="relative overflow-hidden bg-gradient-to-b from-[#F8FAFC] via-[#FFFFFF] to-[#F1F5F9] pt-8 sm:pt-14 pb-16 lg:pb-24 px-4 sm:px-6 md:px-10 border-b border-[#E4E7EC]">
+    <section className="relative overflow-hidden bg-gradient-to-b from-[#F8FAFC] via-[#FFFFFF] to-[#F1F5F9] pt-6 sm:pt-12 lg:pt-14 pb-10 sm:pb-16 lg:pb-24 px-4 sm:px-6 md:px-10 border-b border-[#E4E7EC]">
       {/* ── Background Atmospheric Lighting & Floating Particles ── */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
         {/* Floating Ambient Glowing Orbs */}
@@ -115,67 +115,71 @@ export default function CinematicHero() {
           variants={containerVariants}
           initial="hidden"
           animate="visible"
-          className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center"
+          className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-center"
         >
           {/* ── Left Column: Editorial Headline & Actions ── */}
           <div className="lg:col-span-7 flex flex-col text-left">
             {/* Pill Badge */}
-            <motion.div variants={itemVariants} className="inline-flex items-center gap-2.5 mb-6">
-              <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#E8F0FF] border border-[#2563EB]/25 text-[#2563EB] text-[11px] font-bold tracking-[0.16em] uppercase shadow-xs">
-                <span className="w-2 h-2 rounded-full bg-[#2563EB] animate-pulse" />
-                AI-POWERED STUDENT INTELLIGENCE · GRADES 7–12
+            <motion.div variants={itemVariants} className="inline-flex items-center gap-2 mb-4 sm:mb-6">
+              <span className="inline-flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-full bg-[#E8F0FF] border border-[#2563EB]/25 text-[#2563EB] text-[9px] xs:text-[10px] sm:text-[11px] font-bold tracking-[0.08em] xs:tracking-[0.12em] sm:tracking-[0.16em] uppercase shadow-xs">
+                <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-[#2563EB] animate-pulse shrink-0" />
+                <span>AI-POWERED STUDENT INTELLIGENCE · GRADES 7–12</span>
               </span>
             </motion.div>
 
             {/* Editorial Heading */}
             <motion.h1
               variants={itemVariants}
-              className="text-[34px] xs:text-[42px] sm:text-[54px] md:text-[62px] lg:text-[68px] leading-[1.03] tracking-[-0.05em] font-black text-[#080F1C]"
+              className="text-[32px] xs:text-[38px] sm:text-[50px] md:text-[58px] lg:text-[66px] leading-[1.08] sm:leading-[1.03] tracking-[-0.04em] sm:tracking-[-0.05em] font-black text-[#080F1C]"
             >
-              Clarity for <br />
+              <span>Clarity for</span>{' '}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#2563EB] via-[#1D4ED8] to-[#080F1C]">
                 Their Future.
               </span>{' '}
-              <br />
+              <br className="hidden xs:inline" />
               <span className="text-[#080F1C]">Built for Ambition.</span>
             </motion.h1>
 
-            {/* Subtitle */}
+            {/* Subtitle: Concise on mobile, full on tablet/desktop */}
             <motion.p
               variants={itemVariants}
-              className="mt-6 text-[15px] sm:text-[17px] leading-[1.8] text-[#344054] max-w-[580px] font-normal"
+              className="mt-4 sm:mt-6 text-[14.5px] sm:text-[17px] leading-[1.65] sm:leading-[1.8] text-[#344054] max-w-[580px] font-normal"
             >
-              Empowering students in Grades 7–12 with psychometric assessments, personalized career roadmaps, elite SAT preparation, 1-to-1 tutoring, and university profile building.
+              <span className="sm:hidden">
+                Personalised assessments, career guidance and academic support for students in Grades 7–12.
+              </span>
+              <span className="hidden sm:inline">
+                Empowering students in Grades 7–12 with psychometric assessments, personalized career roadmaps, elite SAT preparation, 1-to-1 tutoring, and university profile building.
+              </span>
             </motion.p>
 
-            {/* Action Buttons */}
+            {/* Action Buttons: Stacked full-width on mobile, row on tablet/desktop */}
             <motion.div
               variants={itemVariants}
-              className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 mt-8 w-full sm:w-auto"
+              className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 sm:gap-3.5 mt-6 sm:mt-8 w-full sm:w-auto"
             >
-              <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-                <Link
-                  href="/auth?tab=register"
-                  className="h-[54px] px-8 rounded-[12px] bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-[15px] font-bold inline-flex items-center justify-center gap-2.5 shadow-[0_12px_28px_rgba(37,99,235,0.28)] transition-all cursor-pointer ring-1 ring-[#2563EB]/40 w-full sm:w-auto"
-                >
-                  <span>Start Assessment Free</span>
-                  <ArrowRight className="w-4 h-4" />
-                </Link>
-              </motion.div>
+              {/* Primary Assessment CTA */}
+              <Link
+                href="/auth?tab=register"
+                className="h-[50px] sm:h-[54px] px-7 sm:px-8 rounded-[12px] bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-[14.5px] sm:text-[15px] font-bold inline-flex items-center justify-center gap-2.5 shadow-[0_10px_24px_rgba(37,99,235,0.25)] transition-all cursor-pointer ring-1 ring-[#2563EB]/40 w-full sm:w-auto shrink-0"
+              >
+                <span>Start Assessment Free</span>
+                <ArrowRight className="w-4 h-4" />
+              </Link>
 
-              <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-                <a
-                  href="#assessments"
-                  className="h-[54px] px-7 rounded-[12px] bg-white hover:bg-[#F8FAFC] border border-[#CBD5E1] text-[#080F1C] text-[15px] font-semibold inline-flex items-center justify-center gap-2 shadow-xs hover:border-[#2563EB]/60 hover:text-[#2563EB] transition-all cursor-pointer w-full sm:w-auto"
-                >
-                  <Cpu className="w-4 h-4 text-[#2563EB]" />
-                  <span>Explore Diagnostic Matrix</span>
-                </a>
-              </motion.div>
+              {/* Secondary Explore Our Services CTA */}
+              <a
+                href="#services"
+                className="h-[50px] sm:h-[54px] px-6 sm:px-7 rounded-[12px] bg-white hover:bg-[#F8FAFC] border border-[#CBD5E1] text-[#080F1C] text-[14.5px] sm:text-[15px] font-semibold inline-flex items-center justify-center gap-2 shadow-xs hover:border-[#2563EB]/60 hover:text-[#2563EB] transition-all cursor-pointer w-full sm:w-auto shrink-0"
+              >
+                <Compass className="w-4 h-4 text-[#2563EB]" />
+                <span>Explore Our Services</span>
+              </a>
 
+              {/* View Sample Report - Tablet & Desktop */}
               <Link
                 href="/sample-report?type=grade10"
-                className="h-[54px] px-6 rounded-[12px] border border-transparent text-[#667085] hover:text-[#2563EB] text-[14px] font-semibold inline-flex items-center justify-center gap-1.5 transition-all"
+                className="hidden sm:inline-flex h-[54px] px-5 rounded-[12px] border border-transparent text-[#667085] hover:text-[#2563EB] text-[14px] font-semibold items-center justify-center gap-1.5 transition-all shrink-0"
               >
                 <span>View Sample Report</span>
                 <ChevronRight className="w-4 h-4" />
@@ -185,25 +189,25 @@ export default function CinematicHero() {
             {/* Trust Metrics Strip */}
             <motion.div
               variants={itemVariants}
-              className="grid grid-cols-3 gap-4 border-t border-[#E4E7EC] pt-7 mt-9 text-left"
+              className="grid grid-cols-3 gap-2 sm:gap-4 border-t border-[#E4E7EC] pt-5 sm:pt-7 mt-6 sm:mt-9 text-left"
             >
               <div>
-                <div className="text-[20px] sm:text-[24px] font-black text-[#080F1C] tracking-tight">15,000+</div>
-                <div className="text-[11px] sm:text-[12px] font-medium text-[#667085] mt-0.5">Students Guided</div>
+                <div className="text-[18px] xs:text-[20px] sm:text-[24px] font-black text-[#080F1C] tracking-tight">15,000+</div>
+                <div className="text-[10px] xs:text-[11px] sm:text-[12px] font-medium text-[#667085] mt-0.5 leading-tight">Students Guided</div>
               </div>
               <div>
-                <div className="text-[20px] sm:text-[24px] font-black text-[#080F1C] tracking-tight">98%</div>
-                <div className="text-[11px] sm:text-[12px] font-medium text-[#667085] mt-0.5">Parent Clarity Rate</div>
+                <div className="text-[18px] xs:text-[20px] sm:text-[24px] font-black text-[#080F1C] tracking-tight">98%</div>
+                <div className="text-[10px] xs:text-[11px] sm:text-[12px] font-medium text-[#667085] mt-0.5 leading-tight">Parent Clarity Rate</div>
               </div>
               <div>
-                <div className="text-[20px] sm:text-[24px] font-black text-[#080F1C] tracking-tight">100+</div>
-                <div className="text-[11px] sm:text-[12px] font-medium text-[#667085] mt-0.5">Global Universities</div>
+                <div className="text-[18px] xs:text-[20px] sm:text-[24px] font-black text-[#080F1C] tracking-tight">100+</div>
+                <div className="text-[10px] xs:text-[11px] sm:text-[12px] font-medium text-[#667085] mt-0.5 leading-tight">Global Universities</div>
               </div>
             </motion.div>
           </div>
 
-          {/* ── Right Column: Interactive Diagnostic Simulator Card ── */}
-          <motion.div variants={itemVariants} className="lg:col-span-5 flex justify-center w-full">
+          {/* ── Right Column: Interactive Diagnostic Simulator Card (Desktop/Tablet Only to Keep Mobile Hero Compact) ── */}
+          <motion.div variants={itemVariants} className="hidden lg:flex lg:col-span-5 justify-center w-full">
             <motion.div 
               whileHover={{ y: -4, transition: { duration: 0.25 } }}
               className="w-full max-w-[500px] bg-white rounded-[22px] border border-[#CBD5E1] shadow-[0_20px_50px_rgba(8,15,28,0.08)] overflow-hidden transition-shadow duration-300 hover:shadow-[0_24px_60px_rgba(37,99,235,0.14)]"

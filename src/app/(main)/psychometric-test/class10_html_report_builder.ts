@@ -1449,7 +1449,7 @@ export function buildClass10ExecutiveHTMLReport(
                     </div>
 
                     <!-- Golden Candidate Glass Card -->
-                    <div class="max-w-xl mx-auto bg-obsidian/75 p-4 rounded-2xl border-2 border-gold/60 shadow-2xl backdrop-blur-md text-left space-y-3 gold-card-glow">
+                    <div class="max-w-xl mx-auto bg-obsidian/75 p-4 rounded-2xl border-2 border-gold/60 shadow-2xl backdrop-blur-md text-left space-y-2.5 gold-card-glow">
                         <div class="flex items-center justify-between border-b border-gold/30 pb-2">
                             <span class="text-[11px] font-bold text-gold uppercase tracking-wider">Candidate Diagnostic File</span>
                             <span class="text-[11px] font-bold text-emerald-400"><i class="fa-solid fa-shield-halved mr-1"></i> Verified & Certified</span>
@@ -1479,6 +1479,42 @@ export function buildClass10ExecutiveHTMLReport(
                             <div>
                                 <span class="text-slate-400 block text-[10px] uppercase font-semibold">Report Reference</span>
                                 <span class="font-semibold text-white">#${rid}</span>
+                            </div>
+                        </div>
+
+                        <!-- Academic Profile Context Block -->
+                        <div class="border-t border-gold/30 pt-2 mt-1 space-y-1.5">
+                            <div class="flex items-center justify-between">
+                                <span class="text-[10px] font-bold text-gold uppercase tracking-wider flex items-center gap-1.5">
+                                    <i class="fa-solid fa-graduation-cap text-gold"></i> Academic Context &amp; Curriculum Profile
+                                </span>
+                                <span class="text-[9px] text-slate-400 font-mono">Academic Intake File</span>
+                            </div>
+                            <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 text-xs">
+                                <div>
+                                    <span class="text-slate-400 block text-[9px] uppercase font-semibold">Class / Grade</span>
+                                    <span class="font-bold text-white text-[11px] block">${student.grade || (variant === 'senior' ? 'Class 12' : variant === 'junior' ? 'Class 7–9' : 'Class 10')}</span>
+                                </div>
+                                <div>
+                                    <span class="text-slate-400 block text-[9px] uppercase font-semibold">Academic Stream</span>
+                                    <span class="font-bold text-gold-light text-[11px] block">${student.stream ? student.stream : '<span class="text-slate-400 font-normal italic">Not recorded in assessment profile</span>'}</span>
+                                </div>
+                                <div>
+                                    <span class="text-slate-400 block text-[9px] uppercase font-semibold">Mathematics Status</span>
+                                    <span class="font-bold text-white text-[11px] block">${student.mathStatus ? student.mathStatus : '<span class="text-slate-400 font-normal italic">Not recorded in assessment profile</span>'}</span>
+                                </div>
+                                <div>
+                                    <span class="text-slate-400 block text-[9px] uppercase font-semibold">Board / Curriculum</span>
+                                    <span class="font-bold text-white text-[11px] block">${student.board ? student.board : '<span class="text-slate-400 font-normal italic">Not recorded in assessment profile</span>'}</span>
+                                </div>
+                                <div>
+                                    <span class="text-slate-400 block text-[9px] uppercase font-semibold">Academic / Exam Year</span>
+                                    <span class="font-bold text-white text-[11px] block">${(student.academicYear || student.graduationYear) ? (student.academicYear || student.graduationYear) : '<span class="text-slate-400 font-normal italic">Not recorded in assessment profile</span>'}</span>
+                                </div>
+                                <div>
+                                    <span class="text-slate-400 block text-[9px] uppercase font-semibold">Subject Combination</span>
+                                    <span class="font-semibold text-slate-200 text-[10px] block leading-snug">${student.subjects ? (Array.isArray(student.subjects) ? student.subjects.join(', ') : student.subjects) : '<span class="text-slate-400 font-normal italic">Not recorded in assessment profile</span>'}</span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -1688,7 +1724,7 @@ export function buildClass10ExecutiveHTMLReport(
                             This assessment has been designed and administered in compliance with internationally recognized ethical standards for psychometric testing, including the guidelines established by the International Test Commission (ITC) and the American Psychological Association (APA) Standards for Educational and Psychological Testing.
                         </p>
                         <p class="text-[10px] text-slate-200 leading-relaxed">
-                            By participating in this assessment and receiving this Report, the candidate and authorized stakeholders acknowledge and accept the terms, limitations, and conditions described herein. For any questions, clarifications, or data requests, contact: <strong class="text-gold">support@collegesimplified.in</strong>
+                            By participating in this assessment and receiving this Report, the candidate and authorized stakeholders acknowledge and accept the terms, limitations, and conditions described herein. For any questions, clarifications, or data requests, contact: <strong class="text-gold">support@clarvo.in</strong>
                         </p>
                     </div>
 
@@ -2101,8 +2137,8 @@ export function buildClass10ExecutiveHTMLReport(
                         <!-- Phase I -->
                         <div class="bg-slate-50/70 p-3.5 rounded-xl border border-slate-200 space-y-1.5 flex flex-col justify-between shadow-sm">
                             <div>
-                                <div class="w-8 h-8 rounded-lg bg-blue-600 text-white font-extrabold flex items-center justify-center text-xs shadow-sm mb-1.5">
-                                    <i class="fa-solid fa-user-astronaut text-amber-300 mr-1 text-[11px]"></i>P1
+                                <div class="w-8 h-8 rounded-lg bg-blue-600 text-white font-extrabold flex items-center justify-center text-xs shadow-sm mb-1.5 tracking-wider">
+                                    P1
                                 </div>
                                 <h4 class="font-extrabold text-blue-800 text-[11px] uppercase tracking-wide">Phase I: Personality</h4>
                                 <p class="text-[10px] text-slate-600 mt-0.5 leading-tight">Evaluates Big Five dimensions (Openness, Conscientiousness, Extraversion, Agreeableness, Emotional Stability) &amp; behavioral drivers.</p>
@@ -2113,8 +2149,8 @@ export function buildClass10ExecutiveHTMLReport(
                         <!-- Phase II -->
                         <div class="bg-slate-50/70 p-3.5 rounded-xl border border-slate-200 space-y-1.5 flex flex-col justify-between shadow-sm">
                             <div>
-                                <div class="w-8 h-8 rounded-lg bg-indigo-600 text-white font-extrabold flex items-center justify-center text-xs shadow-sm mb-1.5">
-                                    <i class="fa-solid fa-brain text-amber-300 mr-1 text-[11px]"></i>P2
+                                <div class="w-8 h-8 rounded-lg bg-indigo-600 text-white font-extrabold flex items-center justify-center text-xs shadow-sm mb-1.5 tracking-wider">
+                                    P2
                                 </div>
                                 <h4 class="font-extrabold text-indigo-800 text-[11px] uppercase tracking-wide">Phase II: Cognitive</h4>
                                 <p class="text-[10px] text-slate-600 mt-0.5 leading-tight">Measures Fluid Logic (Gf), Quantitative Reasoning, Verbal Comprehension, Spatial Visualization, and Working Memory.</p>
@@ -2125,8 +2161,8 @@ export function buildClass10ExecutiveHTMLReport(
                         <!-- Phase III -->
                         <div class="bg-slate-50/70 p-3.5 rounded-xl border border-slate-200 space-y-1.5 flex flex-col justify-between shadow-sm">
                             <div>
-                                <div class="w-8 h-8 rounded-lg bg-cyan-700 text-white font-extrabold flex items-center justify-center text-xs shadow-sm mb-1.5">
-                                    <i class="fa-solid fa-bolt text-amber-300 mr-1 text-[11px]"></i>P3
+                                <div class="w-8 h-8 rounded-lg bg-cyan-700 text-white font-extrabold flex items-center justify-center text-xs shadow-sm mb-1.5 tracking-wider">
+                                    P3
                                 </div>
                                 <h4 class="font-extrabold text-cyan-900 text-[11px] uppercase tracking-wide">Phase III: Execution</h4>
                                 <p class="text-[10px] text-slate-600 mt-0.5 leading-tight">Identifies VARK sensory study modalities, Grit, Time Blocking, Exam Arousal Optimization, and Spatial Kinematics.</p>
@@ -2137,8 +2173,8 @@ export function buildClass10ExecutiveHTMLReport(
                         <!-- Phase IV -->
                         <div class="bg-slate-50/70 p-3.5 rounded-xl border border-slate-200 space-y-1.5 flex flex-col justify-between shadow-sm">
                             <div>
-                                <div class="w-8 h-8 rounded-lg bg-slate-800 text-white font-extrabold flex items-center justify-center text-xs shadow-sm mb-1.5">
-                                    <i class="fa-solid fa-compass text-amber-300 mr-1 text-[11px]"></i>P4
+                                <div class="w-8 h-8 rounded-lg bg-slate-800 text-white font-extrabold flex items-center justify-center text-xs shadow-sm mb-1.5 tracking-wider">
+                                    P4
                                 </div>
                                 <h4 class="font-extrabold text-slate-900 text-[11px] uppercase tracking-wide">Phase IV: Alignment</h4>
                                 <p class="text-[10px] text-slate-600 mt-0.5 leading-tight">${variant === 'senior' ? 'Holland RIASEC Interest Mapping & Degree Specialization across STEM, Business, Law, Design, and Social Sciences.' : variant === 'junior' ? 'Holland RIASEC Interest Mapping & Foundational Vectors across STEM Discovery, Creative Arts, and Interdisciplinary Inquiry.' : 'Holland RIASEC Interest Mapping & Master Stream Integration across PCM, PCB, Commerce, and Humanities pathways.'}</p>
@@ -3429,98 +3465,98 @@ export function buildClass10ExecutiveHTMLReport(
             const primaryRoadmap = universalData?.roadmaps?.primary || getPathwayRoadmapData(topCareer, 'PRIMARY TARGET PATHWAY (RECOMMENDED #1)', student, scores, comparisonData);
             return `
             <section class="as-report-page avoid-break" id="page-50" data-page="50">
-                <div class="bg-white p-5 rounded-2xl border-2 border-gold shadow-xl flex flex-col justify-between h-full space-y-2.5">
-                    <div class="bg-maroon-dark text-white p-3.5 rounded-2xl shadow flex items-center justify-between border-b-4 border-gold shrink-0">
+                <div class="bg-white p-3.5 rounded-2xl border-2 border-gold shadow-xl flex flex-col justify-between h-full space-y-1.5">
+                    <div class="bg-maroon-dark text-white py-1.5 px-3 rounded-xl shadow flex items-center justify-between border-b-4 border-gold shrink-0">
                         <div>
-                            <span class="text-xs text-gold uppercase font-bold tracking-widest block">${primaryRoadmap.pathwayRankLabel}</span>
-                            <h2 class="text-lg font-extrabold">${primaryRoadmap.pathwayTitle}</h2>
+                            <span class="text-[10px] text-gold uppercase font-bold tracking-widest block">${primaryRoadmap.pathwayRankLabel}</span>
+                            <h2 class="text-base font-extrabold leading-tight">${primaryRoadmap.pathwayTitle}</h2>
                         </div>
                         <div class="text-right">
-                            <span class="inline-block px-3 py-1 rounded-full bg-gold text-maroon-dark text-xs font-extrabold uppercase shadow">
+                            <span class="inline-block px-2.5 py-0.5 rounded-full bg-gold text-maroon-dark text-xs font-extrabold uppercase shadow">
                                 ${primaryRoadmap.fitScore}% Match
                             </span>
-                            <span class="block text-[9px] text-gold/80 font-mono mt-0.5">Page 50</span>
+                            <span class="block text-[8.5px] text-gold/80 font-mono mt-0.5">Page 50</span>
                         </div>
                     </div>
 
-                    <div class="bg-cream/80 p-2.5 rounded-xl border border-gold/40 text-xs text-slate-700">
-                        <strong class="text-maroon font-bold uppercase text-[10px] block mb-0.5"><i class="fa-solid fa-compass text-gold mr-1"></i> Why This Pathway Is In Your Report:</strong>
-                        <p class="text-[10px] leading-relaxed text-slate-700">${primaryRoadmap.rationale}</p>
+                    <div class="bg-cream/80 py-1.5 px-2.5 rounded-lg border border-gold/40 text-xs text-slate-700">
+                        <strong class="text-maroon font-bold uppercase text-[9.5px] block mb-0.5"><i class="fa-solid fa-compass text-gold mr-1"></i> Why This Pathway Is In Your Report:</strong>
+                        <p class="text-[9.5px] leading-snug text-slate-700">${primaryRoadmap.rationale}</p>
                     </div>
 
-                    <div class="grid grid-cols-2 gap-3 text-xs">
-                        <div class="bg-white p-2.5 rounded-xl border border-slate-200 space-y-1">
-                            <span class="font-bold text-maroon uppercase text-[10px] block border-b border-slate-100 pb-0.5"><i class="fa-solid fa-book text-gold mr-1"></i> ${variant === 'senior' ? 'Higher Secondary &amp; Pre-requisite Core Subjects' : 'Class 11–12 Recommended Subjects'}</span>
+                    <div class="grid grid-cols-2 gap-2 text-xs">
+                        <div class="bg-white p-2 rounded-lg border border-slate-200 space-y-0.5">
+                            <span class="font-bold text-maroon uppercase text-[9.5px] block border-b border-slate-100 pb-0.5"><i class="fa-solid fa-book text-gold mr-1"></i> ${variant === 'senior' ? 'Higher Secondary &amp; Pre-requisite Core Subjects' : 'Class 11–12 Recommended Subjects'}</span>
                             <div class="flex flex-wrap gap-1 pt-0.5">
-                                ${primaryRoadmap.foundation.subjects.map(s => `<span class="bg-cream border border-gold/40 px-2 py-0.5 rounded text-[9px] font-semibold text-slate-800">${s}</span>`).join('')}
+                                ${primaryRoadmap.foundation.subjects.map(s => `<span class="bg-cream border border-gold/40 px-1.5 py-0.5 rounded text-[8.5px] font-semibold text-slate-800">${s}</span>`).join('')}
                             </div>
                         </div>
-                        <div class="bg-white p-2.5 rounded-xl border border-slate-200 space-y-1">
-                            <span class="font-bold text-maroon uppercase text-[10px] block border-b border-slate-100 pb-0.5"><i class="fa-solid fa-file-pen text-gold mr-1"></i> Target Entrance Examinations</span>
-                            <ul class="space-y-0.5 text-[9.5px] text-slate-700">
-                                ${primaryRoadmap.foundation.exams.map((e, idx) => `<li class="flex items-center gap-1.5"><span class="font-bold text-maroon font-mono text-[8.5px]">${String(idx+1).padStart(2,'0')}.</span><span>${e}</span></li>`).join('')}
+                        <div class="bg-white p-2 rounded-lg border border-slate-200 space-y-0.5">
+                            <span class="font-bold text-maroon uppercase text-[9.5px] block border-b border-slate-100 pb-0.5"><i class="fa-solid fa-file-pen text-gold mr-1"></i> Target Entrance Examinations</span>
+                            <ul class="space-y-0.5 text-[8.5px] text-slate-700">
+                                ${primaryRoadmap.foundation.exams.map((e, idx) => `<li class="flex items-center gap-1.5"><span class="font-bold text-maroon font-mono text-[8px]">${String(idx+1).padStart(2,'0')}.</span><span>${e}</span></li>`).join('')}
                             </ul>
                         </div>
                     </div>
 
-                    <div class="space-y-1">
-                        <span class="font-bold text-maroon uppercase text-[10px] block"><i class="fa-solid fa-graduation-cap text-gold mr-1"></i> Bachelor's Degree Options &amp; Specializations</span>
-                        <div class="grid grid-cols-2 gap-2 text-xs">
+                    <div class="space-y-0.5">
+                        <span class="font-bold text-maroon uppercase text-[9.5px] block"><i class="fa-solid fa-graduation-cap text-gold mr-1"></i> Bachelor's Degree Options &amp; Specializations</span>
+                        <div class="grid ${primaryRoadmap.bachelors.length === 3 ? 'grid-cols-3' : 'grid-cols-4'} gap-1.5 text-xs">
                             ${primaryRoadmap.bachelors.map(b => `
-                                <div class="bg-white p-2 rounded-xl border border-slate-200 shadow-sm space-y-0.5">
-                                    <strong class="text-maroon font-bold block text-[10.5px] leading-tight">${b.degree}</strong>
-                                    <div class="text-[9px] text-slate-600"><strong>Specialization:</strong> ${b.specialization}</div>
-                                    <div class="text-[9px] text-slate-500"><strong>Fit:</strong> ${b.whyFits}</div>
-                                    <div class="text-[9px] text-emerald-800 font-semibold"><strong>Outcomes:</strong> ${b.careerOutcomes}</div>
+                                <div class="bg-white p-1.5 rounded-lg border border-slate-200 shadow-sm space-y-0.5">
+                                    <strong class="text-maroon font-bold block text-[9px] leading-tight">${b.degree}</strong>
+                                    <div class="text-[8px] text-slate-600 leading-tight"><strong>Specialization:</strong> ${b.specialization}</div>
+                                    <div class="text-[8px] text-slate-500 leading-tight"><strong>Fit:</strong> ${b.whyFits}</div>
+                                    <div class="text-[8px] text-emerald-800 font-semibold leading-tight"><strong>Outcomes:</strong> ${b.careerOutcomes}</div>
                                 </div>
                             `).join('')}
                         </div>
                     </div>
 
-                    <div class="bg-cream/60 p-2 rounded-xl border border-gold/30 space-y-1">
-                        <span class="font-bold text-maroon uppercase text-[10px] block border-b border-slate-200 pb-0.5"><i class="fa-solid fa-building-columns text-gold mr-1"></i> Recommended Institutions (India &amp; Region)</span>
-                        <div class="grid grid-cols-3 gap-2 text-[9.5px]">
-                            <div class="bg-white p-1.5 rounded-lg border border-slate-200">
-                                <span class="font-bold text-rose-700 uppercase block text-[8.5px]">REACH (Top Tier)</span>
-                                <ul class="text-[9px] text-slate-700 space-y-0.5 mt-0.5">
+                    <div class="bg-cream/60 p-1.5 rounded-lg border border-gold/30 space-y-0.5">
+                        <span class="font-bold text-maroon uppercase text-[9.5px] block border-b border-slate-200 pb-0.5"><i class="fa-solid fa-building-columns text-gold mr-1"></i> Recommended Institutions (India &amp; Region)</span>
+                        <div class="grid grid-cols-3 gap-2 text-[8.5px]">
+                            <div class="bg-white p-1.5 rounded border border-slate-200">
+                                <span class="font-bold text-rose-700 uppercase block text-[8px]">REACH (Top Tier)</span>
+                                <ul class="text-[8px] text-slate-700 space-y-0.5 mt-0.5">
                                     ${primaryRoadmap.colleges.reach.map(c => `<li>• ${c}</li>`).join('')}
                                 </ul>
                             </div>
-                            <div class="bg-white p-1.5 rounded-lg border border-slate-200">
-                                <span class="font-bold text-emerald-700 uppercase block text-[8.5px]">STRONG FIT</span>
-                                <ul class="text-[9px] text-slate-700 space-y-0.5 mt-0.5">
+                            <div class="bg-white p-1.5 rounded border border-slate-200">
+                                <span class="font-bold text-emerald-700 uppercase block text-[8px]">STRONG FIT</span>
+                                <ul class="text-[8px] text-slate-700 space-y-0.5 mt-0.5">
                                     ${primaryRoadmap.colleges.fit.map(c => `<li>• ${c}</li>`).join('')}
                                 </ul>
                             </div>
-                            <div class="bg-white p-1.5 rounded-lg border border-slate-200">
-                                <span class="font-bold text-slate-700 uppercase block text-[8.5px]">ACCESSIBLE</span>
-                                <ul class="text-[9px] text-slate-700 space-y-0.5 mt-0.5">
+                            <div class="bg-white p-1.5 rounded border border-slate-200">
+                                <span class="font-bold text-slate-700 uppercase block text-[8px]">ACCESSIBLE</span>
+                                <ul class="text-[8px] text-slate-700 space-y-0.5 mt-0.5">
                                     ${primaryRoadmap.colleges.accessible.map(c => `<li>• ${c}</li>`).join('')}
                                 </ul>
                             </div>
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-2 gap-2.5 text-xs">
-                        <div class="bg-white p-2 rounded-xl border border-slate-200 space-y-0.5">
-                            <span class="font-bold text-maroon uppercase text-[9.5px] block"><i class="fa-solid fa-scroll text-gold mr-1"></i> Postgraduate / Master's Pathways</span>
-                            <ul class="text-[9px] text-slate-700 space-y-0.5">
-                                ${primaryRoadmap.masters.map(m => `<li class="flex items-center gap-1"><i class="fa-solid fa-angle-right text-gold text-[8px]"></i><span>${m}</span></li>`).join('')}
+                    <div class="grid grid-cols-2 gap-2 text-xs">
+                        <div class="bg-white p-1.5 rounded-lg border border-slate-200 space-y-0.5">
+                            <span class="font-bold text-maroon uppercase text-[9px] block"><i class="fa-solid fa-scroll text-gold mr-1"></i> Postgraduate / Master's Pathways</span>
+                            <ul class="text-[8.5px] text-slate-700 space-y-0.5">
+                                ${primaryRoadmap.masters.map(m => `<li class="flex items-center gap-1"><i class="fa-solid fa-angle-right text-gold text-[7.5px]"></i><span>${m}</span></li>`).join('')}
                             </ul>
                         </div>
-                        <div class="bg-white p-2 rounded-xl border border-slate-200 space-y-0.5">
-                            <span class="font-bold text-maroon uppercase text-[9.5px] block"><i class="fa-solid fa-briefcase text-maroon mr-1"></i> Target Early Career Roles</span>
-                            <ul class="text-[9px] text-slate-700 space-y-0.5">
-                                ${primaryRoadmap.careerOutcomes.map(co => `<li class="flex items-center gap-1"><i class="fa-solid fa-circle-dot text-emerald-600 text-[7px]"></i><span>${co}</span></li>`).join('')}
+                        <div class="bg-white p-1.5 rounded-lg border border-slate-200 space-y-0.5">
+                            <span class="font-bold text-maroon uppercase text-[9px] block"><i class="fa-solid fa-briefcase text-maroon mr-1"></i> Target Early Career Roles</span>
+                            <ul class="text-[8.5px] text-slate-700 space-y-0.5">
+                                ${primaryRoadmap.careerOutcomes.map(co => `<li class="flex items-center gap-1"><i class="fa-solid fa-circle-dot text-emerald-600 text-[6.5px]"></i><span>${co}</span></li>`).join('')}
                             </ul>
                         </div>
                     </div>
 
-                    <div class="bg-maroon-dark text-white p-2 rounded-xl border border-gold shadow-sm flex items-center justify-between text-[10px]">
-                        <div><strong class="text-gold font-bold uppercase text-[9.5px]"><i class="fa-solid fa-flag text-gold mr-1"></i> CAREER MILESTONE:</strong> ${primaryRoadmap.milestone}</div>
+                    <div class="bg-maroon-dark text-white py-1.5 px-3 rounded-lg border border-gold shadow-sm flex items-center justify-between text-[9px]">
+                        <div><strong class="text-gold font-bold uppercase text-[8.5px]"><i class="fa-solid fa-flag text-gold mr-1"></i> CAREER MILESTONE:</strong> ${primaryRoadmap.milestone}</div>
                     </div>
 
-                    <div class="border-t border-slate-200 pt-1 flex justify-between items-center text-xs text-slate-500 shrink-0">
+                    <div class="border-t border-slate-200 pt-1 flex justify-between items-center text-[9.5px] text-slate-500 shrink-0">
                         <span>Phase VI: Advanced Career Synthesis | Primary Pathway Roadmap | ${name}</span>
                         <span>Ref: #${rid}</span>
                     </div>
@@ -3535,98 +3571,98 @@ export function buildClass10ExecutiveHTMLReport(
             const secondaryRoadmap = universalData?.roadmaps?.secondary || getPathwayRoadmapData(secName, 'SECONDARY TARGET PATHWAY (RECOMMENDED #2)', student, scores, comparisonData);
             return `
             <section class="as-report-page avoid-break" id="page-51" data-page="51">
-                <div class="bg-white p-5 rounded-2xl border-2 border-gold shadow-xl flex flex-col justify-between h-full space-y-2.5">
-                    <div class="bg-maroon-dark text-white p-3.5 rounded-2xl shadow flex items-center justify-between border-b-4 border-gold shrink-0">
+                <div class="bg-white p-3.5 rounded-2xl border-2 border-gold shadow-xl flex flex-col justify-between h-full space-y-1.5">
+                    <div class="bg-maroon-dark text-white py-1.5 px-3 rounded-xl shadow flex items-center justify-between border-b-4 border-gold shrink-0">
                         <div>
-                            <span class="text-xs text-gold uppercase font-bold tracking-widest block">${secondaryRoadmap.pathwayRankLabel}</span>
-                            <h2 class="text-lg font-extrabold">${secondaryRoadmap.pathwayTitle}</h2>
+                            <span class="text-[10px] text-gold uppercase font-bold tracking-widest block">${secondaryRoadmap.pathwayRankLabel}</span>
+                            <h2 class="text-base font-extrabold leading-tight">${secondaryRoadmap.pathwayTitle}</h2>
                         </div>
                         <div class="text-right">
-                            <span class="inline-block px-3 py-1 rounded-full bg-gold text-maroon-dark text-xs font-extrabold uppercase shadow">
+                            <span class="inline-block px-2.5 py-0.5 rounded-full bg-gold text-maroon-dark text-xs font-extrabold uppercase shadow">
                                 ${secondaryRoadmap.fitScore}% Match
                             </span>
-                            <span class="block text-[9px] text-gold/80 font-mono mt-0.5">Page 51</span>
+                            <span class="block text-[8.5px] text-gold/80 font-mono mt-0.5">Page 51</span>
                         </div>
                     </div>
 
-                    <div class="bg-cream/80 p-2.5 rounded-xl border border-gold/40 text-xs text-slate-700">
-                        <strong class="text-maroon font-bold uppercase text-[10px] block mb-0.5"><i class="fa-solid fa-compass text-gold mr-1"></i> Why This Pathway Is In Your Report:</strong>
-                        <p class="text-[10px] leading-relaxed text-slate-700">${secondaryRoadmap.rationale}</p>
+                    <div class="bg-cream/80 py-1.5 px-2.5 rounded-lg border border-gold/40 text-xs text-slate-700">
+                        <strong class="text-maroon font-bold uppercase text-[9.5px] block mb-0.5"><i class="fa-solid fa-compass text-gold mr-1"></i> Why This Pathway Is In Your Report:</strong>
+                        <p class="text-[9.5px] leading-snug text-slate-700">${secondaryRoadmap.rationale}</p>
                     </div>
 
-                    <div class="grid grid-cols-2 gap-3 text-xs">
-                        <div class="bg-white p-2.5 rounded-xl border border-slate-200 space-y-1">
-                            <span class="font-bold text-maroon uppercase text-[10px] block border-b border-slate-100 pb-0.5"><i class="fa-solid fa-book text-gold mr-1"></i> ${variant === 'senior' ? 'Higher Secondary &amp; Pre-requisite Core Subjects' : 'Class 11–12 Recommended Subjects'}</span>
+                    <div class="grid grid-cols-2 gap-2 text-xs">
+                        <div class="bg-white p-2 rounded-lg border border-slate-200 space-y-0.5">
+                            <span class="font-bold text-maroon uppercase text-[9.5px] block border-b border-slate-100 pb-0.5"><i class="fa-solid fa-book text-gold mr-1"></i> ${variant === 'senior' ? 'Higher Secondary &amp; Pre-requisite Core Subjects' : 'Class 11–12 Recommended Subjects'}</span>
                             <div class="flex flex-wrap gap-1 pt-0.5">
-                                ${secondaryRoadmap.foundation.subjects.map(s => `<span class="bg-cream border border-gold/40 px-2 py-0.5 rounded text-[9px] font-semibold text-slate-800">${s}</span>`).join('')}
+                                ${secondaryRoadmap.foundation.subjects.map(s => `<span class="bg-cream border border-gold/40 px-1.5 py-0.5 rounded text-[8.5px] font-semibold text-slate-800">${s}</span>`).join('')}
                             </div>
                         </div>
-                        <div class="bg-white p-2.5 rounded-xl border border-slate-200 space-y-1">
-                            <span class="font-bold text-maroon uppercase text-[10px] block border-b border-slate-100 pb-0.5"><i class="fa-solid fa-file-pen text-gold mr-1"></i> Target Entrance Examinations</span>
-                            <ul class="space-y-0.5 text-[9.5px] text-slate-700">
-                                ${secondaryRoadmap.foundation.exams.map((e, idx) => `<li class="flex items-center gap-1.5"><span class="font-bold text-maroon font-mono text-[8.5px]">${String(idx+1).padStart(2,'0')}.</span><span>${e}</span></li>`).join('')}
+                        <div class="bg-white p-2 rounded-lg border border-slate-200 space-y-0.5">
+                            <span class="font-bold text-maroon uppercase text-[9.5px] block border-b border-slate-100 pb-0.5"><i class="fa-solid fa-file-pen text-gold mr-1"></i> Target Entrance Examinations</span>
+                            <ul class="space-y-0.5 text-[8.5px] text-slate-700">
+                                ${secondaryRoadmap.foundation.exams.map((e, idx) => `<li class="flex items-center gap-1.5"><span class="font-bold text-maroon font-mono text-[8px]">${String(idx+1).padStart(2,'0')}.</span><span>${e}</span></li>`).join('')}
                             </ul>
                         </div>
                     </div>
 
-                    <div class="space-y-1">
-                        <span class="font-bold text-maroon uppercase text-[10px] block"><i class="fa-solid fa-graduation-cap text-gold mr-1"></i> Bachelor's Degree Options &amp; Specializations</span>
-                        <div class="grid grid-cols-2 gap-2 text-xs">
+                    <div class="space-y-0.5">
+                        <span class="font-bold text-maroon uppercase text-[9.5px] block"><i class="fa-solid fa-graduation-cap text-gold mr-1"></i> Bachelor's Degree Options &amp; Specializations</span>
+                        <div class="grid ${secondaryRoadmap.bachelors.length === 3 ? 'grid-cols-3' : 'grid-cols-4'} gap-1.5 text-xs">
                             ${secondaryRoadmap.bachelors.map(b => `
-                                <div class="bg-white p-2 rounded-xl border border-slate-200 shadow-sm space-y-0.5">
-                                    <strong class="text-maroon font-bold block text-[10.5px] leading-tight">${b.degree}</strong>
-                                    <div class="text-[9px] text-slate-600"><strong>Specialization:</strong> ${b.specialization}</div>
-                                    <div class="text-[9px] text-slate-500"><strong>Fit:</strong> ${b.whyFits}</div>
-                                    <div class="text-[9px] text-emerald-800 font-semibold"><strong>Outcomes:</strong> ${b.careerOutcomes}</div>
+                                <div class="bg-white p-1.5 rounded-lg border border-slate-200 shadow-sm space-y-0.5">
+                                    <strong class="text-maroon font-bold block text-[9px] leading-tight">${b.degree}</strong>
+                                    <div class="text-[8px] text-slate-600 leading-tight"><strong>Specialization:</strong> ${b.specialization}</div>
+                                    <div class="text-[8px] text-slate-500 leading-tight"><strong>Fit:</strong> ${b.whyFits}</div>
+                                    <div class="text-[8px] text-emerald-800 font-semibold leading-tight"><strong>Outcomes:</strong> ${b.careerOutcomes}</div>
                                 </div>
                             `).join('')}
                         </div>
                     </div>
 
-                    <div class="bg-cream/60 p-2 rounded-xl border border-gold/30 space-y-1">
-                        <span class="font-bold text-maroon uppercase text-[10px] block border-b border-slate-200 pb-0.5"><i class="fa-solid fa-building-columns text-gold mr-1"></i> Recommended Institutions (India &amp; Region)</span>
-                        <div class="grid grid-cols-3 gap-2 text-[9.5px]">
-                            <div class="bg-white p-1.5 rounded-lg border border-slate-200">
-                                <span class="font-bold text-rose-700 uppercase block text-[8.5px]">REACH (Top Tier)</span>
-                                <ul class="text-[9px] text-slate-700 space-y-0.5 mt-0.5">
+                    <div class="bg-cream/60 p-1.5 rounded-lg border border-gold/30 space-y-0.5">
+                        <span class="font-bold text-maroon uppercase text-[9.5px] block border-b border-slate-200 pb-0.5"><i class="fa-solid fa-building-columns text-gold mr-1"></i> Recommended Institutions (India &amp; Region)</span>
+                        <div class="grid grid-cols-3 gap-2 text-[8.5px]">
+                            <div class="bg-white p-1.5 rounded border border-slate-200">
+                                <span class="font-bold text-rose-700 uppercase block text-[8px]">REACH (Top Tier)</span>
+                                <ul class="text-[8px] text-slate-700 space-y-0.5 mt-0.5">
                                     ${secondaryRoadmap.colleges.reach.map(c => `<li>• ${c}</li>`).join('')}
                                 </ul>
                             </div>
-                            <div class="bg-white p-1.5 rounded-lg border border-slate-200">
-                                <span class="font-bold text-emerald-700 uppercase block text-[8.5px]">STRONG FIT</span>
-                                <ul class="text-[9px] text-slate-700 space-y-0.5 mt-0.5">
+                            <div class="bg-white p-1.5 rounded border border-slate-200">
+                                <span class="font-bold text-emerald-700 uppercase block text-[8px]">STRONG FIT</span>
+                                <ul class="text-[8px] text-slate-700 space-y-0.5 mt-0.5">
                                     ${secondaryRoadmap.colleges.fit.map(c => `<li>• ${c}</li>`).join('')}
                                 </ul>
                             </div>
-                            <div class="bg-white p-1.5 rounded-lg border border-slate-200">
-                                <span class="font-bold text-slate-700 uppercase block text-[8.5px]">ACCESSIBLE</span>
-                                <ul class="text-[9px] text-slate-700 space-y-0.5 mt-0.5">
+                            <div class="bg-white p-1.5 rounded border border-slate-200">
+                                <span class="font-bold text-slate-700 uppercase block text-[8px]">ACCESSIBLE</span>
+                                <ul class="text-[8px] text-slate-700 space-y-0.5 mt-0.5">
                                     ${secondaryRoadmap.colleges.accessible.map(c => `<li>• ${c}</li>`).join('')}
                                 </ul>
                             </div>
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-2 gap-2.5 text-xs">
-                        <div class="bg-white p-2 rounded-xl border border-slate-200 space-y-0.5">
-                            <span class="font-bold text-maroon uppercase text-[9.5px] block"><i class="fa-solid fa-scroll text-gold mr-1"></i> Postgraduate / Master's Pathways</span>
-                            <ul class="text-[9px] text-slate-700 space-y-0.5">
-                                ${secondaryRoadmap.masters.map(m => `<li class="flex items-center gap-1"><i class="fa-solid fa-angle-right text-gold text-[8px]"></i><span>${m}</span></li>`).join('')}
+                    <div class="grid grid-cols-2 gap-2 text-xs">
+                        <div class="bg-white p-1.5 rounded-lg border border-slate-200 space-y-0.5">
+                            <span class="font-bold text-maroon uppercase text-[9px] block"><i class="fa-solid fa-scroll text-gold mr-1"></i> Postgraduate / Master's Pathways</span>
+                            <ul class="text-[8.5px] text-slate-700 space-y-0.5">
+                                ${secondaryRoadmap.masters.map(m => `<li class="flex items-center gap-1"><i class="fa-solid fa-angle-right text-gold text-[7.5px]"></i><span>${m}</span></li>`).join('')}
                             </ul>
                         </div>
-                        <div class="bg-white p-2 rounded-xl border border-slate-200 space-y-0.5">
-                            <span class="font-bold text-maroon uppercase text-[9.5px] block"><i class="fa-solid fa-briefcase text-maroon mr-1"></i> Target Early Career Roles</span>
-                            <ul class="text-[9px] text-slate-700 space-y-0.5">
-                                ${secondaryRoadmap.careerOutcomes.map(co => `<li class="flex items-center gap-1"><i class="fa-solid fa-circle-dot text-emerald-600 text-[7px]"></i><span>${co}</span></li>`).join('')}
+                        <div class="bg-white p-1.5 rounded-lg border border-slate-200 space-y-0.5">
+                            <span class="font-bold text-maroon uppercase text-[9px] block"><i class="fa-solid fa-briefcase text-maroon mr-1"></i> Target Early Career Roles</span>
+                            <ul class="text-[8.5px] text-slate-700 space-y-0.5">
+                                ${secondaryRoadmap.careerOutcomes.map(co => `<li class="flex items-center gap-1"><i class="fa-solid fa-circle-dot text-emerald-600 text-[6.5px]"></i><span>${co}</span></li>`).join('')}
                             </ul>
                         </div>
                     </div>
 
-                    <div class="bg-maroon-dark text-white p-2 rounded-xl border border-gold shadow-sm flex items-center justify-between text-[10px]">
-                        <div><strong class="text-gold font-bold uppercase text-[9.5px]"><i class="fa-solid fa-flag text-gold mr-1"></i> CAREER MILESTONE:</strong> ${secondaryRoadmap.milestone}</div>
+                    <div class="bg-maroon-dark text-white py-1.5 px-3 rounded-lg border border-gold shadow-sm flex items-center justify-between text-[9px]">
+                        <div><strong class="text-gold font-bold uppercase text-[8.5px]"><i class="fa-solid fa-flag text-gold mr-1"></i> CAREER MILESTONE:</strong> ${secondaryRoadmap.milestone}</div>
                     </div>
 
-                    <div class="border-t border-slate-200 pt-1 flex justify-between items-center text-xs text-slate-500 shrink-0">
+                    <div class="border-t border-slate-200 pt-1 flex justify-between items-center text-[9.5px] text-slate-500 shrink-0">
                         <span>Phase VI: Advanced Career Synthesis | Secondary Pathway Roadmap | ${name}</span>
                         <span>Ref: #${rid}</span>
                     </div>
@@ -3641,98 +3677,98 @@ export function buildClass10ExecutiveHTMLReport(
             const alternativeRoadmap = universalData?.roadmaps?.alternative || getPathwayRoadmapData(altName, 'STRATEGIC ALTERNATIVE PATHWAY (RECOMMENDED #3)', student, scores, comparisonData);
             return `
             <section class="as-report-page avoid-break" id="page-52" data-page="52">
-                <div class="bg-white p-5 rounded-2xl border-2 border-gold shadow-xl flex flex-col justify-between h-full space-y-2.5">
-                    <div class="bg-maroon-dark text-white p-3.5 rounded-2xl shadow flex items-center justify-between border-b-4 border-gold shrink-0">
+                <div class="bg-white p-3.5 rounded-2xl border-2 border-gold shadow-xl flex flex-col justify-between h-full space-y-1.5">
+                    <div class="bg-maroon-dark text-white py-1.5 px-3 rounded-xl shadow flex items-center justify-between border-b-4 border-gold shrink-0">
                         <div>
-                            <span class="text-xs text-gold uppercase font-bold tracking-widest block">${alternativeRoadmap.pathwayRankLabel}</span>
-                            <h2 class="text-lg font-extrabold">${alternativeRoadmap.pathwayTitle}</h2>
+                            <span class="text-[10px] text-gold uppercase font-bold tracking-widest block">${alternativeRoadmap.pathwayRankLabel}</span>
+                            <h2 class="text-base font-extrabold leading-tight">${alternativeRoadmap.pathwayTitle}</h2>
                         </div>
                         <div class="text-right">
-                            <span class="inline-block px-3 py-1 rounded-full bg-gold text-maroon-dark text-xs font-extrabold uppercase shadow">
+                            <span class="inline-block px-2.5 py-0.5 rounded-full bg-gold text-maroon-dark text-xs font-extrabold uppercase shadow">
                                 ${alternativeRoadmap.fitScore}% Match
                             </span>
-                            <span class="block text-[9px] text-gold/80 font-mono mt-0.5">Page 52</span>
+                            <span class="block text-[8.5px] text-gold/80 font-mono mt-0.5">Page 52</span>
                         </div>
                     </div>
 
-                    <div class="bg-cream/80 p-2.5 rounded-xl border border-gold/40 text-xs text-slate-700">
-                        <strong class="text-maroon font-bold uppercase text-[10px] block mb-0.5"><i class="fa-solid fa-compass text-gold mr-1"></i> Why This Pathway Is In Your Report:</strong>
-                        <p class="text-[10px] leading-relaxed text-slate-700">${alternativeRoadmap.rationale}</p>
+                    <div class="bg-cream/80 py-1.5 px-2.5 rounded-lg border border-gold/40 text-xs text-slate-700">
+                        <strong class="text-maroon font-bold uppercase text-[9.5px] block mb-0.5"><i class="fa-solid fa-compass text-gold mr-1"></i> Why This Pathway Is In Your Report:</strong>
+                        <p class="text-[9.5px] leading-snug text-slate-700">${alternativeRoadmap.rationale}</p>
                     </div>
 
-                    <div class="grid grid-cols-2 gap-3 text-xs">
-                        <div class="bg-white p-2.5 rounded-xl border border-slate-200 space-y-1">
-                            <span class="font-bold text-maroon uppercase text-[10px] block border-b border-slate-100 pb-0.5"><i class="fa-solid fa-book text-gold mr-1"></i> ${variant === 'senior' ? 'Higher Secondary &amp; Pre-requisite Core Subjects' : 'Class 11–12 Recommended Subjects'}</span>
+                    <div class="grid grid-cols-2 gap-2 text-xs">
+                        <div class="bg-white p-2 rounded-lg border border-slate-200 space-y-0.5">
+                            <span class="font-bold text-maroon uppercase text-[9.5px] block border-b border-slate-100 pb-0.5"><i class="fa-solid fa-book text-gold mr-1"></i> ${variant === 'senior' ? 'Higher Secondary &amp; Pre-requisite Core Subjects' : 'Class 11–12 Recommended Subjects'}</span>
                             <div class="flex flex-wrap gap-1 pt-0.5">
-                                ${alternativeRoadmap.foundation.subjects.map(s => `<span class="bg-cream border border-gold/40 px-2 py-0.5 rounded text-[9px] font-semibold text-slate-800">${s}</span>`).join('')}
+                                ${alternativeRoadmap.foundation.subjects.map(s => `<span class="bg-cream border border-gold/40 px-1.5 py-0.5 rounded text-[8.5px] font-semibold text-slate-800">${s}</span>`).join('')}
                             </div>
                         </div>
-                        <div class="bg-white p-2.5 rounded-xl border border-slate-200 space-y-1">
-                            <span class="font-bold text-maroon uppercase text-[10px] block border-b border-slate-100 pb-0.5"><i class="fa-solid fa-file-pen text-gold mr-1"></i> Target Entrance Examinations</span>
-                            <ul class="space-y-0.5 text-[9.5px] text-slate-700">
-                                ${alternativeRoadmap.foundation.exams.map((e, idx) => `<li class="flex items-center gap-1.5"><span class="font-bold text-maroon font-mono text-[8.5px]">${String(idx+1).padStart(2,'0')}.</span><span>${e}</span></li>`).join('')}
+                        <div class="bg-white p-2 rounded-lg border border-slate-200 space-y-0.5">
+                            <span class="font-bold text-maroon uppercase text-[9.5px] block border-b border-slate-100 pb-0.5"><i class="fa-solid fa-file-pen text-gold mr-1"></i> Target Entrance Examinations</span>
+                            <ul class="space-y-0.5 text-[8.5px] text-slate-700">
+                                ${alternativeRoadmap.foundation.exams.map((e, idx) => `<li class="flex items-center gap-1.5"><span class="font-bold text-maroon font-mono text-[8px]">${String(idx+1).padStart(2,'0')}.</span><span>${e}</span></li>`).join('')}
                             </ul>
                         </div>
                     </div>
 
-                    <div class="space-y-1">
-                        <span class="font-bold text-maroon uppercase text-[10px] block"><i class="fa-solid fa-graduation-cap text-gold mr-1"></i> Bachelor's Degree Options &amp; Specializations</span>
-                        <div class="grid grid-cols-2 gap-2 text-xs">
+                    <div class="space-y-0.5">
+                        <span class="font-bold text-maroon uppercase text-[9.5px] block"><i class="fa-solid fa-graduation-cap text-gold mr-1"></i> Bachelor's Degree Options &amp; Specializations</span>
+                        <div class="grid ${alternativeRoadmap.bachelors.length === 3 ? 'grid-cols-3' : 'grid-cols-4'} gap-1.5 text-xs">
                             ${alternativeRoadmap.bachelors.map(b => `
-                                <div class="bg-white p-2 rounded-xl border border-slate-200 shadow-sm space-y-0.5">
-                                    <strong class="text-maroon font-bold block text-[10.5px] leading-tight">${b.degree}</strong>
-                                    <div class="text-[9px] text-slate-600"><strong>Specialization:</strong> ${b.specialization}</div>
-                                    <div class="text-[9px] text-slate-500"><strong>Fit:</strong> ${b.whyFits}</div>
-                                    <div class="text-[9px] text-emerald-800 font-semibold"><strong>Outcomes:</strong> ${b.careerOutcomes}</div>
+                                <div class="bg-white p-1.5 rounded-lg border border-slate-200 shadow-sm space-y-0.5">
+                                    <strong class="text-maroon font-bold block text-[9px] leading-tight">${b.degree}</strong>
+                                    <div class="text-[8px] text-slate-600 leading-tight"><strong>Specialization:</strong> ${b.specialization}</div>
+                                    <div class="text-[8px] text-slate-500 leading-tight"><strong>Fit:</strong> ${b.whyFits}</div>
+                                    <div class="text-[8px] text-emerald-800 font-semibold leading-tight"><strong>Outcomes:</strong> ${b.careerOutcomes}</div>
                                 </div>
                             `).join('')}
                         </div>
                     </div>
 
-                    <div class="bg-cream/60 p-2 rounded-xl border border-gold/30 space-y-1">
-                        <span class="font-bold text-maroon uppercase text-[10px] block border-b border-slate-200 pb-0.5"><i class="fa-solid fa-building-columns text-gold mr-1"></i> Recommended Institutions (India &amp; Region)</span>
-                        <div class="grid grid-cols-3 gap-2 text-[9.5px]">
-                            <div class="bg-white p-1.5 rounded-lg border border-slate-200">
-                                <span class="font-bold text-rose-700 uppercase block text-[8.5px]">REACH (Top Tier)</span>
-                                <ul class="text-[9px] text-slate-700 space-y-0.5 mt-0.5">
+                    <div class="bg-cream/60 p-1.5 rounded-lg border border-gold/30 space-y-0.5">
+                        <span class="font-bold text-maroon uppercase text-[9.5px] block border-b border-slate-200 pb-0.5"><i class="fa-solid fa-building-columns text-gold mr-1"></i> Recommended Institutions (India &amp; Region)</span>
+                        <div class="grid grid-cols-3 gap-2 text-[8.5px]">
+                            <div class="bg-white p-1.5 rounded border border-slate-200">
+                                <span class="font-bold text-rose-700 uppercase block text-[8px]">REACH (Top Tier)</span>
+                                <ul class="text-[8px] text-slate-700 space-y-0.5 mt-0.5">
                                     ${alternativeRoadmap.colleges.reach.map(c => `<li>• ${c}</li>`).join('')}
                                 </ul>
                             </div>
-                            <div class="bg-white p-1.5 rounded-lg border border-slate-200">
-                                <span class="font-bold text-emerald-700 uppercase block text-[8.5px]">STRONG FIT</span>
-                                <ul class="text-[9px] text-slate-700 space-y-0.5 mt-0.5">
+                            <div class="bg-white p-1.5 rounded border border-slate-200">
+                                <span class="font-bold text-emerald-700 uppercase block text-[8px]">STRONG FIT</span>
+                                <ul class="text-[8px] text-slate-700 space-y-0.5 mt-0.5">
                                     ${alternativeRoadmap.colleges.fit.map(c => `<li>• ${c}</li>`).join('')}
                                 </ul>
                             </div>
-                            <div class="bg-white p-1.5 rounded-lg border border-slate-200">
-                                <span class="font-bold text-slate-700 uppercase block text-[8.5px]">ACCESSIBLE</span>
-                                <ul class="text-[9px] text-slate-700 space-y-0.5 mt-0.5">
+                            <div class="bg-white p-1.5 rounded border border-slate-200">
+                                <span class="font-bold text-slate-700 uppercase block text-[8px]">ACCESSIBLE</span>
+                                <ul class="text-[8px] text-slate-700 space-y-0.5 mt-0.5">
                                     ${alternativeRoadmap.colleges.accessible.map(c => `<li>• ${c}</li>`).join('')}
                                 </ul>
                             </div>
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-2 gap-2.5 text-xs">
-                        <div class="bg-white p-2 rounded-xl border border-slate-200 space-y-0.5">
-                            <span class="font-bold text-maroon uppercase text-[9.5px] block"><i class="fa-solid fa-scroll text-gold mr-1"></i> Postgraduate / Master's Pathways</span>
-                            <ul class="text-[9px] text-slate-700 space-y-0.5">
-                                ${alternativeRoadmap.masters.map(m => `<li class="flex items-center gap-1"><i class="fa-solid fa-angle-right text-gold text-[8px]"></i><span>${m}</span></li>`).join('')}
+                    <div class="grid grid-cols-2 gap-2 text-xs">
+                        <div class="bg-white p-1.5 rounded-lg border border-slate-200 space-y-0.5">
+                            <span class="font-bold text-maroon uppercase text-[9px] block"><i class="fa-solid fa-scroll text-gold mr-1"></i> Postgraduate / Master's Pathways</span>
+                            <ul class="text-[8.5px] text-slate-700 space-y-0.5">
+                                ${alternativeRoadmap.masters.map(m => `<li class="flex items-center gap-1"><i class="fa-solid fa-angle-right text-gold text-[7.5px]"></i><span>${m}</span></li>`).join('')}
                             </ul>
                         </div>
-                        <div class="bg-white p-2 rounded-xl border border-slate-200 space-y-0.5">
-                            <span class="font-bold text-maroon uppercase text-[9.5px] block"><i class="fa-solid fa-briefcase text-maroon mr-1"></i> Target Early Career Roles</span>
-                            <ul class="text-[9px] text-slate-700 space-y-0.5">
-                                ${alternativeRoadmap.careerOutcomes.map(co => `<li class="flex items-center gap-1"><i class="fa-solid fa-circle-dot text-emerald-600 text-[7px]"></i><span>${co}</span></li>`).join('')}
+                        <div class="bg-white p-1.5 rounded-lg border border-slate-200 space-y-0.5">
+                            <span class="font-bold text-maroon uppercase text-[9px] block"><i class="fa-solid fa-briefcase text-maroon mr-1"></i> Target Early Career Roles</span>
+                            <ul class="text-[8.5px] text-slate-700 space-y-0.5">
+                                ${alternativeRoadmap.careerOutcomes.map(co => `<li class="flex items-center gap-1"><i class="fa-solid fa-circle-dot text-emerald-600 text-[6.5px]"></i><span>${co}</span></li>`).join('')}
                             </ul>
                         </div>
                     </div>
 
-                    <div class="bg-maroon-dark text-white p-2 rounded-xl border border-gold shadow-sm flex items-center justify-between text-[10px]">
-                        <div><strong class="text-gold font-bold uppercase text-[9.5px]"><i class="fa-solid fa-flag text-gold mr-1"></i> CAREER MILESTONE:</strong> ${alternativeRoadmap.milestone}</div>
+                    <div class="bg-maroon-dark text-white py-1.5 px-3 rounded-lg border border-gold shadow-sm flex items-center justify-between text-[9px]">
+                        <div><strong class="text-gold font-bold uppercase text-[8.5px]"><i class="fa-solid fa-flag text-gold mr-1"></i> CAREER MILESTONE:</strong> ${alternativeRoadmap.milestone}</div>
                     </div>
 
-                    <div class="border-t border-slate-200 pt-1 flex justify-between items-center text-xs text-slate-500 shrink-0">
+                    <div class="border-t border-slate-200 pt-1 flex justify-between items-center text-[9.5px] text-slate-500 shrink-0">
                         <span>Phase VI: Advanced Career Synthesis | Strategic Alternative Roadmap | ${name}</span>
                         <span>Ref: #${rid}</span>
                     </div>
@@ -3746,76 +3782,76 @@ export function buildClass10ExecutiveHTMLReport(
             const sag = universalData?.studyAbroad || getStudyAbroadGuideData(student, scores, comparisonData);
             return `
             <section class="as-report-page avoid-break" id="page-53" data-page="53">
-                <div class="bg-white p-5 rounded-2xl border-2 border-gold shadow-xl flex flex-col justify-between h-full space-y-3">
-                    <div class="bg-maroon-dark text-white p-3.5 rounded-2xl shadow flex items-center justify-between border-b-4 border-gold shrink-0">
+                <div class="bg-white p-3.5 rounded-2xl border-2 border-gold shadow-xl flex flex-col justify-between h-full space-y-1.5">
+                    <div class="bg-maroon-dark text-white py-2 px-3.5 rounded-xl shadow flex items-center justify-between border-b-4 border-gold shrink-0">
                         <div>
-                            <span class="text-xs text-gold uppercase font-bold tracking-widest block">Phase VI — Advanced Career Synthesis</span>
-                            <h2 class="text-lg font-extrabold">Personalized Study Abroad Guide</h2>
+                            <span class="text-[10px] text-gold uppercase font-bold tracking-widest block">Phase VI — Advanced Career Synthesis</span>
+                            <h2 class="text-base font-extrabold leading-tight">Personalized Study Abroad Guide</h2>
                         </div>
-                        <span class="inline-block px-3 py-1 rounded-full bg-gold text-maroon-dark text-xs font-extrabold uppercase shadow">Page 53</span>
+                        <span class="inline-block px-2.5 py-0.5 rounded-full bg-gold text-maroon-dark text-xs font-extrabold uppercase shadow">Page 53</span>
                     </div>
 
-                    <div class="bg-cream p-3 rounded-xl border border-gold/40 space-y-2 text-xs">
-                        <p class="text-[10.5px] text-slate-700 leading-relaxed">${sag.rationale}</p>
-                        <div class="grid grid-cols-3 gap-2 text-[9.5px] pt-1">
-                            <div class="bg-white p-2 rounded-lg border border-slate-200">
-                                <span class="text-slate-500 uppercase block font-semibold text-[8.5px]">Student Global Fit</span>
-                                <strong class="text-maroon font-bold block mt-0.5 text-[10px]">${topCareer}</strong>
+                    <div class="bg-cream/80 py-1.5 px-2.5 rounded-lg border border-gold/40 space-y-1 text-xs">
+                        <p class="text-[9.5px] text-slate-700 leading-snug">${sag.rationale}</p>
+                        <div class="grid grid-cols-3 gap-2 text-[8.5px] pt-0.5">
+                            <div class="bg-white p-1.5 rounded border border-slate-200">
+                                <span class="text-slate-500 uppercase block font-semibold text-[8px]">Student Global Fit</span>
+                                <strong class="text-maroon font-bold block mt-0.5 text-[9.5px]">${topCareer}</strong>
                             </div>
-                            <div class="bg-white p-2 rounded-lg border border-slate-200">
-                                <span class="text-slate-500 uppercase block font-semibold text-[8.5px]">Parent International Openness</span>
-                                <strong class="text-emerald-700 font-bold block mt-0.5 text-[10px]">${sag.parentOpennessLabel}</strong>
+                            <div class="bg-white p-1.5 rounded border border-slate-200">
+                                <span class="text-slate-500 uppercase block font-semibold text-[8px]">Parent International Openness</span>
+                                <strong class="text-emerald-700 font-bold block mt-0.5 text-[9.5px]">${sag.parentOpennessLabel}</strong>
                             </div>
-                            <div class="bg-white p-2 rounded-lg border border-slate-200">
-                                <span class="text-slate-500 uppercase block font-semibold text-[8.5px]">Financial Alignment</span>
-                                <strong class="text-amber-700 font-bold block mt-0.5 text-[10px]">${sag.financialAlignmentLabel}</strong>
+                            <div class="bg-white p-1.5 rounded border border-slate-200">
+                                <span class="text-slate-500 uppercase block font-semibold text-[8px]">Financial Alignment</span>
+                                <strong class="text-amber-700 font-bold block mt-0.5 text-[9.5px]">${sag.financialAlignmentLabel}</strong>
                             </div>
                         </div>
                     </div>
 
-                    <div class="space-y-1">
-                        <span class="font-bold text-maroon uppercase text-[10px] block"><i class="fa-solid fa-plane-departure text-gold mr-1"></i> Recommended Global Destination Countries</span>
-                        <div class="grid grid-cols-3 gap-2.5 text-xs">
+                    <div class="space-y-0.5">
+                        <span class="font-bold text-maroon uppercase text-[9.5px] block"><i class="fa-solid fa-plane-departure text-gold mr-1"></i> Recommended Global Destination Countries</span>
+                        <div class="grid grid-cols-4 gap-1.5 text-xs">
                             ${sag.countries.map(c => `
-                                <div class="bg-white p-3 rounded-xl border border-slate-200 shadow-sm space-y-1.5 flex flex-col justify-between">
+                                <div class="bg-white p-2 rounded-lg border border-slate-200 shadow-sm space-y-1 flex flex-col justify-between">
                                     <div>
-                                        <div class="flex items-center justify-between border-b border-slate-100 pb-1">
-                                            <span class="text-lg mr-1">${c.flag}</span>
-                                            <strong class="text-maroon font-bold text-[11px]">${c.name}</strong>
-                                            <span class="text-[8.5px] bg-slate-100 text-slate-700 px-1.5 py-0.5 rounded font-mono">${c.costCategory}</span>
+                                        <div class="flex items-center justify-between border-b border-slate-100 pb-0.5">
+                                            <span class="text-base mr-1">${c.flag}</span>
+                                            <strong class="text-maroon font-bold text-[10px] leading-tight">${c.name}</strong>
+                                            <span class="text-[7.5px] bg-slate-100 text-slate-700 px-1 py-0.2 rounded font-mono">${c.costCategory}</span>
                                         </div>
-                                        <p class="text-[9.5px] text-slate-600 leading-snug mt-1.5">${c.reason}</p>
+                                        <p class="text-[8.5px] text-slate-600 leading-snug mt-1">${c.reason}</p>
                                     </div>
-                                    <div class="text-[9px] bg-cream p-1.5 rounded border border-gold/30 text-slate-800">
-                                        <strong>Academic Route:</strong> ${c.academicRoute}
+                                    <div class="text-[8px] bg-cream p-1 rounded border border-gold/30 text-slate-800 leading-tight">
+                                        <strong>Route:</strong> ${c.academicRoute}
                                     </div>
                                 </div>
                             `).join('')}
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-2 gap-3 text-xs">
-                        <div class="bg-white p-3 rounded-xl border border-slate-200 space-y-1">
-                            <span class="font-bold text-maroon uppercase text-[10px] block border-b border-slate-100 pb-1 flex items-center justify-between">
+                    <div class="grid grid-cols-2 gap-2 text-xs">
+                        <div class="bg-white p-2 rounded-lg border border-slate-200 space-y-0.5">
+                            <span class="font-bold text-maroon uppercase text-[9.5px] block border-b border-slate-100 pb-0.5 flex items-center justify-between">
                                 <span><i class="fa-solid fa-graduation-cap text-gold mr-1"></i> Scholarships &amp; Funding Options</span>
-                                <span class="text-[8.5px] text-amber-700 font-normal">Explore &amp; Check Eligibility</span>
+                                <span class="text-[8px] text-amber-700 font-normal">Explore &amp; Check Eligibility</span>
                             </span>
-                            <ul class="space-y-1 text-[9.5px] text-slate-700 pt-0.5">
-                                ${sag.scholarships.map(s => `<li class="flex items-start gap-1.5"><i class="fa-solid fa-award text-gold text-[9px] mt-0.5"></i><span>${s}</span></li>`).join('')}
+                            <ul class="space-y-0.5 text-[8.5px] text-slate-700 pt-0.5">
+                                ${sag.scholarships.map(s => `<li class="flex items-start gap-1"><i class="fa-solid fa-award text-gold text-[8px] mt-0.5"></i><span>${s}</span></li>`).join('')}
                             </ul>
                         </div>
 
-                        <div class="bg-white p-3 rounded-xl border border-slate-200 space-y-1">
-                            <span class="font-bold text-maroon uppercase text-[10px] block border-b border-slate-100 pb-1">
+                        <div class="bg-white p-2 rounded-lg border border-slate-200 space-y-0.5">
+                            <span class="font-bold text-maroon uppercase text-[9.5px] block border-b border-slate-100 pb-0.5">
                                 <i class="fa-solid fa-book-bookmark text-maroon mr-1"></i> Target Global Degree Programs
                             </span>
-                            <ul class="space-y-1 text-[9.5px] text-slate-700 pt-0.5">
-                                ${sag.programs.map(p => `<li class="flex items-start gap-1.5"><i class="fa-solid fa-check text-emerald-600 text-[9px] mt-0.5"></i><span>${p}</span></li>`).join('')}
+                            <ul class="space-y-0.5 text-[8.5px] text-slate-700 pt-0.5">
+                                ${sag.programs.map(p => `<li class="flex items-start gap-1"><i class="fa-solid fa-check text-emerald-600 text-[8px] mt-0.5"></i><span>${p}</span></li>`).join('')}
                             </ul>
                         </div>
                     </div>
 
-                    <div class="border-t border-slate-200 pt-1.5 flex justify-between items-center text-xs text-slate-500 shrink-0">
+                    <div class="border-t border-slate-200 pt-1 flex justify-between items-center text-[9.5px] text-slate-500 shrink-0">
                         <span>Phase VI: Advanced Career Synthesis | Personalized Study Abroad Guide | ${name}</span>
                         <span>Ref: #${rid}</span>
                     </div>
@@ -3829,35 +3865,35 @@ export function buildClass10ExecutiveHTMLReport(
             const apr = universalData?.academicRoadmap || getAcademicProfileRoadmapData(student, scores);
             return `
             <section class="as-report-page avoid-break" id="page-54" data-page="54">
-                <div class="bg-white p-5 rounded-2xl border-2 border-gold shadow-xl flex flex-col justify-between h-full space-y-3">
-                    <div class="bg-maroon-dark text-white p-3.5 rounded-2xl shadow flex items-center justify-between border-b-4 border-gold shrink-0">
+                <div class="bg-white p-3.5 rounded-2xl border-2 border-gold shadow-xl flex flex-col justify-between h-full space-y-1.5">
+                    <div class="bg-maroon-dark text-white py-2 px-3.5 rounded-xl shadow flex items-center justify-between border-b-4 border-gold shrink-0">
                         <div>
-                            <span class="text-xs text-gold uppercase font-bold tracking-widest block">Phase VI — Advanced Career Synthesis</span>
-                            <h2 class="text-lg font-extrabold">Academic &amp; Profile Roadmap (${variantConfig.variant === 'junior' ? 'Middle School to Senior School' : variantConfig.variant === 'senior' ? 'Class 12 &amp; Beyond' : 'Class 10 to Career'})</h2>
+                            <span class="text-[10px] text-gold uppercase font-bold tracking-widest block">Phase VI — Advanced Career Synthesis</span>
+                            <h2 class="text-base font-extrabold leading-tight">Academic &amp; Profile Roadmap (${variantConfig.variant === 'junior' ? 'Middle School to Senior School' : variantConfig.variant === 'senior' ? 'Class 12 &amp; Beyond' : 'Class 10 to Career'})</h2>
                         </div>
-                        <span class="inline-block px-3 py-1 rounded-full bg-gold text-maroon-dark text-xs font-extrabold uppercase shadow">Page 54</span>
+                        <span class="inline-block px-2.5 py-0.5 rounded-full bg-gold text-maroon-dark text-xs font-extrabold uppercase shadow">Page 54</span>
                     </div>
 
-                    <div class="grid grid-cols-2 gap-2.5 text-xs flex-1 my-auto">
+                    <div class="grid grid-cols-2 gap-2 text-xs flex-1 my-auto">
                         ${apr.map(st => `
-                            <div class="bg-cream/70 p-3 rounded-xl border border-gold/40 shadow-sm space-y-1 flex flex-col justify-between">
+                            <div class="bg-cream/70 p-2 rounded-lg border border-gold/40 shadow-sm space-y-0.5 flex flex-col justify-between">
                                 <div>
-                                    <div class="flex items-center justify-between border-b border-slate-200 pb-1">
-                                        <span class="text-[9px] font-bold font-mono text-maroon bg-gold/20 px-1.5 py-0.5 rounded uppercase">${st.phase}</span>
-                                        <span class="text-base">${st.icon}</span>
+                                    <div class="flex items-center justify-between border-b border-slate-200 pb-0.5">
+                                        <span class="text-[8.5px] font-bold font-mono text-maroon bg-gold/20 px-1.5 py-0.5 rounded uppercase">${st.phase}</span>
+                                        <span class="text-sm">${st.icon}</span>
                                     </div>
-                                    <strong class="text-maroon font-bold block text-[11px] mt-1">${st.label}</strong>
-                                    <div class="text-[9.5px] text-slate-700 mt-1"><strong>Academic:</strong> ${st.academicGoal}</div>
-                                    <div class="text-[9.5px] text-slate-600 mt-0.5"><strong>Profile:</strong> ${st.profileGoal}</div>
+                                    <strong class="text-maroon font-bold block text-[10px] mt-0.5">${st.label}</strong>
+                                    <div class="text-[8.5px] text-slate-700 mt-0.5 leading-tight"><strong>Academic:</strong> ${st.academicGoal}</div>
+                                    <div class="text-[8.5px] text-slate-600 mt-0.5 leading-tight"><strong>Profile:</strong> ${st.profileGoal}</div>
                                 </div>
-                                <div class="pt-1 border-t border-slate-200/60 mt-1">
-                                    <div class="text-[9px] text-emerald-800 font-bold">🎯 Milestone: ${st.milestone}</div>
+                                <div class="pt-0.5 border-t border-slate-200/60 mt-0.5">
+                                    <div class="text-[8.5px] text-emerald-800 font-bold leading-tight">🎯 Milestone: ${st.milestone}</div>
                                 </div>
                             </div>
                         `).join('')}
                     </div>
 
-                    <div class="border-t border-slate-200 pt-1.5 flex justify-between items-center text-xs text-slate-500 shrink-0">
+                    <div class="border-t border-slate-200 pt-1 flex justify-between items-center text-[9.5px] text-slate-500 shrink-0">
                         <span>Phase VI: Advanced Career Synthesis | Academic &amp; Profile Roadmap | ${name}</span>
                         <span>Ref: #${rid}</span>
                     </div>
@@ -3871,72 +3907,72 @@ export function buildClass10ExecutiveHTMLReport(
             const sap = universalData?.actionPlan || getStudentActionPlanData(student, scores);
             return `
             <section class="as-report-page avoid-break" id="page-55" data-page="55">
-                <div class="bg-white p-5 rounded-2xl border-2 border-gold shadow-xl flex flex-col justify-between h-full space-y-3">
-                    <div class="bg-maroon-dark text-white p-3.5 rounded-2xl shadow flex items-center justify-between border-b-4 border-gold shrink-0">
+                <div class="bg-white p-3.5 rounded-2xl border-2 border-gold shadow-xl flex flex-col justify-between h-full space-y-1.5">
+                    <div class="bg-maroon-dark text-white py-2 px-3.5 rounded-xl shadow flex items-center justify-between border-b-4 border-gold shrink-0">
                         <div>
-                            <span class="text-xs text-gold uppercase font-bold tracking-widest block">Phase VI — Advanced Career Synthesis</span>
-                            <h2 class="text-lg font-extrabold">Student Individual Action Plan</h2>
+                            <span class="text-[10px] text-gold uppercase font-bold tracking-widest block">Phase VI — Advanced Career Synthesis</span>
+                            <h2 class="text-base font-extrabold leading-tight">Student Individual Action Plan</h2>
                         </div>
-                        <span class="inline-block px-3 py-1 rounded-full bg-gold text-maroon-dark text-xs font-extrabold uppercase shadow">Page 55</span>
+                        <span class="inline-block px-2.5 py-0.5 rounded-full bg-gold text-maroon-dark text-xs font-extrabold uppercase shadow">Page 55</span>
                     </div>
 
-                    <div class="grid grid-cols-3 gap-3 text-xs">
-                        <div class="bg-cream p-3 rounded-xl border border-gold/40 space-y-1.5 shadow-sm">
-                            <span class="font-bold text-maroon uppercase text-[10px] block border-b border-slate-200 pb-1 flex items-center gap-1">
+                    <div class="grid grid-cols-3 gap-2 text-xs">
+                        <div class="bg-cream/80 p-2 rounded-lg border border-gold/40 space-y-1 shadow-sm">
+                            <span class="font-bold text-maroon uppercase text-[9px] block border-b border-slate-200 pb-0.5 flex items-center gap-1">
                                 <i class="fa-solid fa-calendar-day text-gold"></i> THIS MONTH (IMMEDIATE)
                             </span>
-                            <ul class="space-y-1 text-[10px] text-slate-700">
-                                ${sap.thisMonth.map(m => `<li class="flex items-start gap-1.5"><i class="fa-solid fa-circle-check text-emerald-600 text-[9px] mt-0.5"></i><span>${m}</span></li>`).join('')}
+                            <ul class="space-y-0.5 text-[8.5px] text-slate-700 leading-tight">
+                                ${sap.thisMonth.map(m => `<li class="flex items-start gap-1"><i class="fa-solid fa-circle-check text-emerald-600 text-[8px] mt-0.5"></i><span>${m}</span></li>`).join('')}
                             </ul>
                         </div>
 
-                        <div class="bg-cream p-3 rounded-xl border border-gold/40 space-y-1.5 shadow-sm">
-                            <span class="font-bold text-maroon uppercase text-[10px] block border-b border-slate-200 pb-1 flex items-center gap-1">
+                        <div class="bg-cream/80 p-2 rounded-lg border border-gold/40 space-y-1 shadow-sm">
+                            <span class="font-bold text-maroon uppercase text-[9px] block border-b border-slate-200 pb-0.5 flex items-center gap-1">
                                 <i class="fa-solid fa-calendar-week text-gold"></i> NEXT 90 DAYS (QUARTERLY)
                             </span>
-                            <ul class="space-y-1 text-[10px] text-slate-700">
-                                ${sap.next90Days.map(m => `<li class="flex items-start gap-1.5"><i class="fa-solid fa-arrow-right text-amber-600 text-[9px] mt-0.5"></i><span>${m}</span></li>`).join('')}
+                            <ul class="space-y-0.5 text-[8.5px] text-slate-700 leading-tight">
+                                ${sap.next90Days.map(m => `<li class="flex items-start gap-1"><i class="fa-solid fa-arrow-right text-amber-600 text-[8px] mt-0.5"></i><span>${m}</span></li>`).join('')}
                             </ul>
                         </div>
 
-                        <div class="bg-cream p-3 rounded-xl border border-gold/40 space-y-1.5 shadow-sm">
-                            <span class="font-bold text-maroon uppercase text-[10px] block border-b border-slate-200 pb-1 flex items-center gap-1">
+                        <div class="bg-cream/80 p-2 rounded-lg border border-gold/40 space-y-1 shadow-sm">
+                            <span class="font-bold text-maroon uppercase text-[9px] block border-b border-slate-200 pb-0.5 flex items-center gap-1">
                                 <i class="fa-solid fa-bullseye text-gold"></i> THIS ACADEMIC YEAR
                             </span>
-                            <ul class="space-y-1 text-[10px] text-slate-700">
-                                ${sap.thisAcademicYear.map(m => `<li class="flex items-start gap-1.5"><i class="fa-solid fa-flag text-maroon text-[9px] mt-0.5"></i><span>${m}</span></li>`).join('')}
+                            <ul class="space-y-0.5 text-[8.5px] text-slate-700 leading-tight">
+                                ${sap.thisAcademicYear.map(m => `<li class="flex items-start gap-1"><i class="fa-solid fa-flag text-maroon text-[8px] mt-0.5"></i><span>${m}</span></li>`).join('')}
                             </ul>
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-2 gap-3 text-xs">
-                        <div class="bg-white p-3 rounded-xl border border-slate-200 space-y-1 shadow-sm">
-                            <span class="font-bold text-maroon uppercase text-[10px] block border-b border-slate-100 pb-1">
+                    <div class="grid grid-cols-2 gap-2 text-xs">
+                        <div class="bg-white p-2 rounded-lg border border-slate-200 space-y-0.5 shadow-sm">
+                            <span class="font-bold text-maroon uppercase text-[9px] block border-b border-slate-100 pb-0.5">
                                 <i class="fa-solid fa-wand-magic-sparkles text-gold mr-1"></i> Core Capabilities &amp; Skills to Build
                             </span>
-                            <ul class="space-y-1 text-[10px] text-slate-700">
-                                ${sap.skillsToBuild.map(s => `<li class="flex items-start gap-1.5"><i class="fa-solid fa-bolt text-gold text-[9px] mt-0.5"></i><span>${s}</span></li>`).join('')}
+                            <ul class="space-y-0.5 text-[8.5px] text-slate-700 leading-tight">
+                                ${sap.skillsToBuild.map(s => `<li class="flex items-start gap-1"><i class="fa-solid fa-bolt text-gold text-[8px] mt-0.5"></i><span>${s}</span></li>`).join('')}
                             </ul>
                         </div>
 
-                        <div class="bg-white p-3 rounded-xl border border-slate-200 space-y-1 shadow-sm">
-                            <span class="font-bold text-maroon uppercase text-[10px] block border-b border-slate-100 pb-1">
+                        <div class="bg-white p-2 rounded-lg border border-slate-200 space-y-0.5 shadow-sm">
+                            <span class="font-bold text-maroon uppercase text-[9px] block border-b border-slate-100 pb-0.5">
                                 <i class="fa-solid fa-user-tie text-maroon mr-1"></i> Counsellor Consultation Checkpoints
                             </span>
-                            <ul class="space-y-1 text-[10px] text-slate-700">
-                                ${sap.counsellorCheckpoint.map(c => `<li class="flex items-start gap-1.5"><i class="fa-solid fa-clipboard-check text-emerald-600 text-[9px] mt-0.5"></i><span>${c}</span></li>`).join('')}
+                            <ul class="space-y-0.5 text-[8.5px] text-slate-700 leading-tight">
+                                ${sap.counsellorCheckpoint.map(c => `<li class="flex items-start gap-1"><i class="fa-solid fa-clipboard-check text-emerald-600 text-[8px] mt-0.5"></i><span>${c}</span></li>`).join('')}
                             </ul>
                         </div>
                     </div>
 
-                    <div class="bg-maroon-dark text-white p-3 rounded-xl border border-gold shadow-sm text-xs space-y-1">
-                        <span class="font-bold text-gold uppercase text-[10px] block"><i class="fa-solid fa-handshake mr-1"></i> Individual Student Execution Commitment:</span>
-                        <div class="grid grid-cols-3 gap-2 text-[9.5px] text-slate-200">
+                    <div class="bg-maroon-dark text-white py-1.5 px-3 rounded-lg border border-gold shadow-sm text-xs space-y-0.5">
+                        <span class="font-bold text-gold uppercase text-[9px] block"><i class="fa-solid fa-handshake mr-1"></i> Individual Student Execution Commitment:</span>
+                        <div class="grid grid-cols-3 gap-2 text-[8.5px] text-slate-200 leading-tight">
                             ${sap.studentAction.map((a, i) => `<div><strong>${i+1}.</strong> ${a}</div>`).join('')}
                         </div>
                     </div>
 
-                    <div class="border-t border-slate-200 pt-1.5 flex justify-between items-center text-xs text-slate-500 shrink-0">
+                    <div class="border-t border-slate-200 pt-1 flex justify-between items-center text-[9.5px] text-slate-500 shrink-0">
                         <span>Phase VI: Advanced Career Synthesis | Student Action Plan | ${name}</span>
                         <span>Ref: #${rid}</span>
                     </div>
@@ -4025,7 +4061,7 @@ export function buildClass10ExecutiveHTMLReport(
                             </div>
                             <div>
                                 <span class="text-slate-400 block text-[9px] uppercase font-semibold">Advisory & Support Email</span>
-                                <a href="mailto:support@collegesimplified.in" class="text-white font-bold hover:underline text-xs">support@collegesimplified.in</a>
+                                <a href="mailto:support@clarvo.in" class="text-white font-bold hover:underline text-xs">support@clarvo.in</a>
                             </div>
                         </div>
                     </div>

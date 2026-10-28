@@ -1,15 +1,32 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createReview, getFeaturedReviews } from '@/lib/review-service';
+import { 
+  createReview, 
+  getReviewsByCategory, 
+  getCategoryCounts, 
+  sanitizeReviewForPublic 
+} from '@/lib/review-service';
 
 export async function GET(request: NextRequest) {
   try {
-    const featured = await getFeaturedReviews();
+    const { searchParams } = new URL(request.url);
+    const category = searchParams.get('category') || undefined;
+    const limitParam = searchParams.get('limit');
+    const limit = limitParam ? parseInt(limitParam, 10) : 25;
+
+    // Fetch approved & featured reviews supporting up to 25 authentic reviews per category
+    const rawReviews = await getReviewsByCategory(category, limit);
+    const categoryCounts = await getCategoryCounts();
+
+    // Sanitize for public consumption (strip private contact details and evidence dockets)
+    const sanitized = rawReviews.map(sanitizeReviewForPublic);
+
     return NextResponse.json({
       success: true,
-      reviews: featured,
+      reviews: sanitized,
+      categoryCounts,
     });
   } catch (error: any) {
-    console.error('Error fetching featured reviews:', error);
+    console.error('Error fetching reviews:', error);
     return NextResponse.json(
       { success: false, error: 'Failed to fetch reviews' },
       { status: 500 }
@@ -27,12 +44,15 @@ export async function POST(request: NextRequest) {
       email,
       school,
       grade,
+      category,
       reportType,
       rating = 5,
       headline,
       comment,
       impactTag,
       reportId,
+      consentRecorded = true,
+      allowSchoolDisplay = true,
     } = body;
 
     // Validation
@@ -64,24 +84,29 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // New review begins strictly in pending state and unverified until administrative verification
     const review = await createReview({
       name: name.trim(),
       role: role === 'parent' ? 'parent' : 'student',
       email: email ? email.trim() : undefined,
       school: school.trim(),
       grade: grade.trim(),
-      reportType: reportType ? reportType.trim() : 'Psychometric & Diagnostic Report',
+      category: ['stream', 'sat', 'international', 'research'].includes(category) ? category : 'stream',
+      reportType: reportType ? reportType.trim() : 'Diagnostic & Advisory Report',
       rating: Math.max(1, Math.min(5, Number(rating) || 5)),
-      headline: headline && headline.trim() ? headline.trim() : 'Valuable guidance and actionable clarity',
+      headline: headline && headline.trim() ? headline.trim() : 'Actionable clarity for academic planning',
       comment: comment.trim(),
       impactTag: impactTag ? impactTag.trim() : 'Academic Clarity',
       reportId: reportId ? String(reportId).trim() : undefined,
+      consentRecorded: Boolean(consentRecorded),
+      consentDate: new Date().toISOString(),
+      allowSchoolDisplay: Boolean(allowSchoolDisplay),
     });
 
     return NextResponse.json({
       success: true,
-      message: 'Thank you! Your review has been submitted for verification.',
-      review,
+      message: 'Thank you! Your feedback has been securely submitted for independent verification.',
+      id: review.id,
     });
   } catch (error: any) {
     console.error('Error submitting review:', error);

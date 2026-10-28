@@ -2,11 +2,12 @@ import React from 'react';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
+import { COMPANY_CONFIG } from '@/config/company';
 
 export const metadata: Metadata = {
-  title: 'Terms & Conditions | CLARVO',
+  title: `Terms & Conditions | ${COMPANY_CONFIG.brandName}`,
   description:
-    'Read the Terms and Conditions for using the CLARVO student development platform under Simplified Eduventures.',
+    `Read the Terms and Conditions for using the ${COMPANY_CONFIG.brandName} student development platform operated by ${COMPANY_CONFIG.legalName}.`,
   alternates: {
     canonical: 'https://clarvo.in/terms',
   },
@@ -21,7 +22,7 @@ export default function TermsAndConditionsPage() {
           <Link href="/" className="flex items-center gap-3.5 hover:opacity-90 transition-opacity">
             <Image
               src="/logo-transparent.png"
-              alt="CLARVO"
+              alt={COMPANY_CONFIG.brandName}
               width={48}
               height={48}
               className="w-[44px] h-[44px] object-contain shrink-0"
@@ -29,10 +30,10 @@ export default function TermsAndConditionsPage() {
             />
             <div>
               <div className="text-[20px] font-black text-[#080F1C] tracking-tight leading-none">
-                CLARVO
+                {COMPANY_CONFIG.brandName}
               </div>
-              <div className="mt-1 text-[9.5px] uppercase tracking-[0.2em] font-semibold text-[#64748B]">
-                A platform under Simplified Eduventures
+              <div className="mt-1 text-[9.5px] uppercase tracking-[0.15em] font-semibold text-[#64748B]">
+                {COMPANY_CONFIG.legalName}
               </div>
             </div>
           </Link>
@@ -56,10 +57,10 @@ export default function TermsAndConditionsPage() {
             Terms &amp; Conditions
           </h1>
           <p className="text-white/80 text-[15px] max-w-xl">
-            Please read these terms carefully before accessing or using the CLARVO platform.
+            Please read these terms carefully before accessing or using the {COMPANY_CONFIG.brandName} platform.
           </p>
           <p className="text-white/60 text-[13px] mt-2">
-            Last updated: October 2026 · Simplified Eduventures
+            Last updated: October 2026 · {COMPANY_CONFIG.legalName} (CIN: {COMPANY_CONFIG.cin})
           </p>
         </div>
       </div>
@@ -70,39 +71,44 @@ export default function TermsAndConditionsPage() {
           <section>
             <h2 className="text-xl font-bold text-[#080F1C] mb-3">1. Acceptance of Terms</h2>
             <p className="text-[15px]">
-              By accessing, browsing, or using CLARVO (&quot;Platform&quot;), operated under Simplified Eduventures, you agree to be bound by these Terms and Conditions and our Privacy Policy. If you do not agree with any part of these terms, you must not use our services.
+              By accessing, browsing, or using {COMPANY_CONFIG.brandName} (&quot;Platform&quot;), operated by {COMPANY_CONFIG.legalName} (CIN: {COMPANY_CONFIG.cin}), you agree to be bound by these Terms and Conditions and our Privacy Policy. If you do not agree with any part of these terms, you must not use our services.
             </p>
           </section>
 
           <section>
             <h2 className="text-xl font-bold text-[#080F1C] mb-3">2. Description of Services</h2>
             <p className="text-[15px] mb-3">
-              CLARVO provides student guidance, psychometric assessments, stream evaluation, SAT preparation frameworks, 1-to-1 tutoring, research mentorship, and university predictors for students in Grades 7–12.
+              {COMPANY_CONFIG.brandName} provides structured student guidance, 30-dimension psychometric diagnostics, Class 10 stream fitment evaluation, Digital SAT preparation frameworks, 1-to-1 tutoring, research mentoring, and university discovery engines for students in Grades 7–12.
             </p>
             <p className="text-[15px]">
-              Our psychometric assessments and predictive models provide guidance and analysis for informed decision-making. Final admissions and academic choices remain the sole prerogative of the student and their family.
+              Our psychometric assessments and predictive models provide structured guidance and analytical insights for informed decision-making. Final admissions, curricular selections, and academic pathways remain the sole prerogative of the student and their family.
             </p>
           </section>
 
           <section>
             <h2 className="text-xl font-bold text-[#080F1C] mb-3">3. User Accounts &amp; Privacy</h2>
             <p className="text-[15px]">
-              You agree to provide true, accurate, and current information during registration. You are responsible for safeguarding your login credentials. We do not sell or disclose your personal student responses or academic reports without explicit consent.
+              You agree to provide true, accurate, and current information during registration and consultation requests. You are responsible for safeguarding your login credentials. We do not sell or disclose your personal student responses or diagnostic reports without explicit parental and student consent.
             </p>
           </section>
 
           <section>
             <h2 className="text-xl font-bold text-[#080F1C] mb-3">4. Intellectual Property</h2>
             <p className="text-[15px]">
-              All diagnostic algorithms, question banks, assessment frameworks, visual graphics, and editorial reports are the proprietary intellectual property of Simplified Eduventures and CLARVO.
+              All diagnostic algorithms, question banks, assessment frameworks, visual graphics, and editorial reports are the proprietary intellectual property of {COMPANY_CONFIG.legalName}.
             </p>
           </section>
 
           <section>
-            <h2 className="text-xl font-bold text-[#080F1C] mb-3">5. Contact Information</h2>
-            <p className="text-[15px]">
-              For any legal or service inquiries, please contact us at <a href="mailto:support@clarvo.in" className="text-[#2563EB] font-bold underline">support@clarvo.in</a>.
-            </p>
+            <h2 className="text-xl font-bold text-[#080F1C] mb-3">5. Corporate &amp; Contact Information</h2>
+            <div className="text-[15px] space-y-2 bg-[#F8FAFC] p-5 rounded-xl border border-slate-200">
+              <p><strong>Legal Entity:</strong> {COMPANY_CONFIG.legalName}</p>
+              <p><strong>Corporate Identification Number (CIN):</strong> {COMPANY_CONFIG.cin}</p>
+              <p><strong>Email:</strong> <a href={COMPANY_CONFIG.mailtoLink} className="text-[#2563EB] font-bold underline">{COMPANY_CONFIG.email}</a></p>
+              <p><strong>Phone:</strong> <a href={COMPANY_CONFIG.telLink} className="text-[#2563EB] font-bold underline">{COMPANY_CONFIG.phoneFormatted}</a></p>
+              <p><strong>Head Office:</strong> {COMPANY_CONFIG.headOffice.fullAddress}</p>
+              <p><strong>{COMPANY_CONFIG.kolkataBranch.label}:</strong> {COMPANY_CONFIG.kolkataBranch.fullAddress}</p>
+            </div>
           </section>
         </div>
       </div>

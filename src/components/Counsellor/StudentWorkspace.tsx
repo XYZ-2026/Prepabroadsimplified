@@ -173,7 +173,7 @@ export default function StudentWorkspace({
       stream: student.stream || '',
       email: student.email || '',
       date: student.createdAtStr || new Date().toLocaleDateString(),
-      reportId: `AS-10-${(latestPsycho.id || '100000').substring(0, 6).toUpperCase()}`,
+      reportId: `CL-10-${(latestPsycho.id || '100000').substring(0, 6).toUpperCase()}`,
       parentName: '',
     };
 

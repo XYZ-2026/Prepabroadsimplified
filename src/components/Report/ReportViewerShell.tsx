@@ -291,6 +291,7 @@ export default function ReportViewerShell({
   const [mobileSectionsOpen, setMobileSectionsOpen] = useState(false);
   const [mobileZoomMode, setMobileZoomMode] = useState<'fit' | '100%'>('fit');
   const totalPages = mode === 'full' ? 56 : 15;
+  const cleanReportId = reportId ? reportId.replace(/^AS([-_])/i, 'CL$1') : reportId;
 
   useEffect(() => {
     const handleResize = () => {
@@ -625,7 +626,7 @@ export default function ReportViewerShell({
               📥 PDF
             </button>
             <a
-              href={`/submit-review?report=${mode}&reportId=${reportId}`}
+              href={`/submit-review?report=${mode}&reportId=${cleanReportId}`}
               target="_blank"
               rel="noopener noreferrer"
               style={{
@@ -820,7 +821,7 @@ export default function ReportViewerShell({
                   viewerRole={viewerRole}
                   studentName={studentName}
                   studentGrade={studentGrade}
-                  reportId={reportId}
+                  reportId={cleanReportId}
                   activePage={activePage}
                   isCollapsed={false}
                   onToggleCollapse={() => {}}
@@ -1060,7 +1061,7 @@ export default function ReportViewerShell({
 
           {/* Rate & Review Button */}
           <a
-            href={`/submit-review?report=${mode}&reportId=${reportId}`}
+            href={`/submit-review?report=${mode}&reportId=${cleanReportId}`}
             target="_blank"
             rel="noopener noreferrer"
             style={{
@@ -1108,7 +1109,7 @@ export default function ReportViewerShell({
           viewerRole={viewerRole}
           studentName={studentName}
           studentGrade={studentGrade}
-          reportId={reportId}
+          reportId={cleanReportId}
           activePage={activePage}
           isCollapsed={sidebarCollapsed}
           onToggleCollapse={() => setSidebarCollapsed(prev => !prev)}

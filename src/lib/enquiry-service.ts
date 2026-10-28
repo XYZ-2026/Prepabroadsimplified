@@ -9,6 +9,10 @@ export interface EnquiryRecord {
   email?: string;
   studentName?: string;
   academicLevel: string;
+  grade?: string;
+  schoolName?: string;
+  board?: string;
+  stream?: string;
   developmentAreas: string[];
   clarvoExploration: string[];
   preferredTimeFrame: string;

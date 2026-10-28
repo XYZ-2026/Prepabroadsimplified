@@ -16,20 +16,25 @@ import {
   Zap, 
   Layers, 
   HeartHandshake, 
-  TrendingUp 
+  TrendingUp,
+  Building2,
+  MapPin,
+  Mail,
+  Phone
 } from 'lucide-react';
+import { COMPANY_CONFIG } from '@/config/company';
 
 export const metadata: Metadata = {
-  title: 'About Simplified Eduventures | CLARVO',
+  title: `About ${COMPANY_CONFIG.brandName} | ${COMPANY_CONFIG.legalName}`,
   description:
-    'Simplified Eduventures exists to help students and families navigate important education decisions with greater clarity, structured guidance, and thoughtful planning.',
+    `${COMPANY_CONFIG.brandName} exists to help students and families navigate important education decisions with greater clarity, structured guidance, and thoughtful planning.`,
   alternates: {
     canonical: '/about-us',
   },
   openGraph: {
-    title: 'About Simplified Eduventures | CLARVO',
+    title: `About ${COMPANY_CONFIG.brandName} | ${COMPANY_CONFIG.legalName}`,
     description:
-      'Simplified Eduventures exists to help students and families navigate important education decisions with greater clarity, structured guidance, and thoughtful planning.',
+      `${COMPANY_CONFIG.brandName} exists to help students and families navigate important education decisions with greater clarity, structured guidance, and thoughtful planning.`,
     url: 'https://clarvo.in/about-us',
   },
 };
@@ -151,14 +156,14 @@ export default function AboutUsPage() {
   return (
     <div className="min-h-screen bg-[#F8FAFC] text-[#080F1C] font-sans flex flex-col selection:bg-[#2563EB] selection:text-white">
       
-      {/* ── SECTION 1: HERO — ABOUT SIMPLIFIED EDUVENTURES ── */}
+      {/* ── SECTION 1: HERO — ABOUT CLARVO EDUCATION PRIVATE LIMITED ── */}
       <section className="relative overflow-hidden pt-16 md:pt-24 pb-20 px-4 md:px-8 bg-gradient-to-b from-[#FFFFFF] via-[#F8FAFC] to-[#F1F5F9] border-b border-[#E4E7EC]">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[720px] h-[400px] bg-[#2563EB]/5 rounded-full blur-[140px] pointer-events-none" />
 
         <div className="max-w-4xl mx-auto text-center relative z-10">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#E8F0FF] border border-[#BFDBFE] text-[#2563EB] text-xs font-bold tracking-wider uppercase mb-6 shadow-sm">
             <Sparkles className="w-3.5 h-3.5 text-[#2563EB]" />
-            <span>ABOUT SIMPLIFIED EDUVENTURES</span>
+            <span>ABOUT {COMPANY_CONFIG.brandName}</span>
           </div>
 
           <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight text-[#080F1C] leading-[1.15] mb-6">
@@ -166,7 +171,7 @@ export default function AboutUsPage() {
           </h1>
 
           <p className="text-base sm:text-lg text-[#344054] leading-relaxed max-w-2xl mx-auto mb-10">
-            Simplified Eduventures exists to help students and families navigate important education decisions with greater clarity. From understanding individual strengths to exploring academic pathways and preparing for the future, our approach brings structured guidance and thoughtful planning into the student journey.
+            {COMPANY_CONFIG.brandName} exists to help students and families navigate important education decisions with greater clarity. Operated by {COMPANY_CONFIG.legalName}, our approach brings structured diagnostic assessments, personalized guidance, and thoughtful multi-year planning into the student journey.
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
@@ -188,7 +193,7 @@ export default function AboutUsPage() {
         </div>
       </section>
 
-      {/* ── SECTION 2: WHY SIMPLIFIED EDUVENTURES EXISTS ── */}
+      {/* ── SECTION 2: WHY CLARVO EDUCATION PRIVATE LIMITED EXISTS ── */}
       <section className="py-20 px-4 md:px-8 max-w-5xl mx-auto w-full">
         <div className="text-center max-w-2xl mx-auto mb-14">
           <span className="text-[#2563EB] font-bold text-xs tracking-widest uppercase mb-2 block">
@@ -227,7 +232,7 @@ export default function AboutUsPage() {
                 From Overload to Structured Direction
               </h3>
               <p className="text-slate-300 text-sm leading-relaxed mb-6">
-                Simplified Eduventures introduces a disciplined framework that translates complex psychometric data into clear, practical next steps. Every choice is benchmarked against personal cognitive potential rather than peer pressure.
+                CLARVO EDUCATION PRIVATE LIMITED introduces a disciplined framework that translates complex psychometric data into clear, practical next steps. Every choice is benchmarked against personal cognitive potential rather than peer pressure.
               </p>
             </div>
 
@@ -344,7 +349,7 @@ export default function AboutUsPage() {
               Meet CLARVO.
             </h2>
             <p className="text-[#344054] mt-3 text-base leading-relaxed">
-              CLARVO is a platform under Simplified Eduventures, built around the belief that students and families benefit from greater clarity, personalised support, and thoughtful planning.
+              CLARVO is operated by CLARVO EDUCATION PRIVATE LIMITED, built around the belief that students and families benefit from greater clarity, personalised support, and thoughtful planning.
             </p>
           </div>
 
@@ -384,13 +389,13 @@ export default function AboutUsPage() {
 
       {/* ── SECTION 6: THE PEOPLE BEHIND THE VISION ── */}
       <section className="py-20 px-4 md:px-8 max-w-5xl mx-auto w-full">
-        <div className="bg-white p-8 md:p-12 rounded-3xl border border-[#E4E7EC] shadow-sm">
+        <div className="bg-white p-8 md:p-12 rounded-3xl border border-[#E4E7EC] shadow-sm mb-12">
           <div className="max-w-2xl">
             <span className="text-[#2563EB] font-bold text-xs tracking-widest uppercase mb-2 block">
               Leadership Philosophy
             </span>
             <h2 className="text-3xl font-extrabold text-[#080F1C] tracking-tight mb-4">
-              The Thinking Behind Simplified Eduventures
+              The Thinking Behind {COMPANY_CONFIG.brandName}
             </h2>
             <p className="text-sm md:text-base text-[#344054] leading-relaxed mb-4">
               Our multidisciplinary team comprises psychometricians, educators, curriculum strategists, and academic advisors united by a single conviction: secondary school transitions demand transparent, data-backed guidance rather than speculative marketing.
@@ -398,6 +403,61 @@ export default function AboutUsPage() {
             <p className="text-sm md:text-base text-[#667085] leading-relaxed">
               By combining standardized global assessment models (CBSE, ICSE, IB, Cambridge) with empathetic one-to-one family counseling, we help students transition from secondary school into university with clarity and measurable purpose.
             </p>
+          </div>
+        </div>
+
+        {/* ── CORPORATE IDENTITY & LOCATIONS ── */}
+        <div className="bg-[#080F1C] text-white p-8 md:p-12 rounded-3xl border border-slate-800 shadow-xl">
+          <div className="max-w-3xl mb-8">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-bold tracking-wider uppercase mb-3">
+              <Building2 className="w-3.5 h-3.5" />
+              <span>Corporate Identity &amp; Presence</span>
+            </div>
+            <h3 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+              {COMPANY_CONFIG.legalName}
+            </h3>
+            <p className="text-slate-400 text-xs sm:text-sm mt-1">
+              CIN: <span className="font-mono text-slate-200">{COMPANY_CONFIG.cin}</span> · Registered in India
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-6 border-t border-slate-800">
+            <div className="bg-slate-900/60 p-6 rounded-2xl border border-slate-800/80">
+              <div className="flex items-center gap-2 text-blue-400 font-bold text-xs uppercase tracking-wider mb-2">
+                <MapPin className="w-4 h-4 shrink-0" />
+                <span>{COMPANY_CONFIG.headOffice.label}</span>
+              </div>
+              <p className="text-slate-300 text-sm leading-relaxed">
+                {COMPANY_CONFIG.headOffice.fullAddress}
+              </p>
+            </div>
+
+            <div className="bg-slate-900/60 p-6 rounded-2xl border border-slate-800/80">
+              <div className="flex items-center gap-2 text-blue-400 font-bold text-xs uppercase tracking-wider mb-2">
+                <MapPin className="w-4 h-4 shrink-0" />
+                <span>{COMPANY_CONFIG.kolkataBranch.label}</span>
+              </div>
+              <p className="text-slate-300 text-sm leading-relaxed">
+                {COMPANY_CONFIG.kolkataBranch.fullAddress}
+              </p>
+            </div>
+          </div>
+
+          <div className="flex flex-col sm:flex-row items-center gap-6 mt-8 pt-6 border-t border-slate-800 text-xs text-slate-400">
+            <div className="flex items-center gap-2">
+              <Phone className="w-4 h-4 text-blue-400" />
+              <span>Direct Phone:</span>
+              <a href={COMPANY_CONFIG.telLink} className="text-white font-bold hover:underline">
+                {COMPANY_CONFIG.phoneFormatted}
+              </a>
+            </div>
+            <div className="flex items-center gap-2">
+              <Mail className="w-4 h-4 text-blue-400" />
+              <span>Official Inquiries:</span>
+              <a href={COMPANY_CONFIG.mailtoLink} className="text-white font-bold hover:underline">
+                {COMPANY_CONFIG.email}
+              </a>
+            </div>
           </div>
         </div>
       </section>

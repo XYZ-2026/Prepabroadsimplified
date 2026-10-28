@@ -138,6 +138,21 @@ export default function CareerLibraryExplorer({
     return initialRoadmaps[selectedCareerId] || null;
   }, [selectedCareerId, initialRoadmaps]);
 
+  const topIndiaColleges = useMemo(() => {
+    if (!activeProfile && !activeRoadmap) return [];
+    return activeProfile?.topIndiaColleges || activeRoadmap?.topIndiaColleges || [];
+  }, [activeProfile, activeRoadmap]);
+
+  const studyAbroad = useMemo(() => {
+    if (!activeProfile && !activeRoadmap) return [];
+    return activeProfile?.studyAbroad || activeRoadmap?.studyAbroad || [];
+  }, [activeProfile, activeRoadmap]);
+
+  const collegeNotes = useMemo(() => {
+    if (!activeProfile && !activeRoadmap) return [];
+    return activeProfile?.collegeNotes || activeRoadmap?.collegeNotes || [];
+  }, [activeProfile, activeRoadmap]);
+
   // Helper to render rating dots
   const renderRatingDots = (rating: number, isScope: boolean = false) => {
     const dots = [];
@@ -173,7 +188,7 @@ export default function CareerLibraryExplorer({
             Back to Career Library
           </button>
 
-          {/* Detailed Header Card */}
+          {/* Detailed Header Card: Brief Information + Entrance Exam */}
           <div className={styles.detailHeaderCard}>
             <div className={styles.detailHeaderTags}>
               <span className={styles.branchClusterBadge}>
@@ -194,15 +209,67 @@ export default function CareerLibraryExplorer({
             <h1 className={styles.detailHeaderTitle}>{activeProfile.name}</h1>
             <p className={styles.detailHeaderDesc}>{activeProfile.desc}</p>
 
+            {/* Entrance Exam Required (If available, render; if not, skip) */}
             {activeRoadmap.entryRoute && (
-              <div className={styles.entryRouteBanner}>
-                <strong>Qualifying Route: </strong>
-                {activeRoadmap.entryRoute}
+              <div className={styles.entranceExamSection}>
+                <div className={styles.entranceExamHeader}>
+                  <svg className={styles.entranceExamIcon} width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+                    <path d="M6 12v5c3 3 9 3 12 0v-5"/>
+                  </svg>
+                  <span className={styles.entranceExamTitle}>Required Qualifying Route &amp; Entrance Exams</span>
+                </div>
+                <div className={styles.entranceExamContent}>
+                  {activeRoadmap.entryRoute}
+                </div>
               </div>
             )}
           </div>
 
-          {/* 2-Column Dashboard Details Grid */}
+          {/* Top Indian Colleges Section (Comes immediately after brief information & entrance exams) */}
+          {topIndiaColleges && topIndiaColleges.length > 0 && (
+            <div className={styles.collegesSectionCard}>
+              <div className={styles.collegesHeader}>
+                <div className={styles.collegesTitleGroup}>
+                  <h2 className={styles.collegesTitle}>
+                    <span style={{ fontSize: '20px' }}>🏛️</span>
+                    Top Premier Indian Colleges &amp; Universities
+                  </h2>
+                  <p className={styles.collegesSubtitle}>
+                    Ranked institutions, key campus groups, and admission entrance exams for {activeProfile.name}.
+                  </p>
+                </div>
+              </div>
+
+              <div className={styles.collegesGrid}>
+                {topIndiaColleges.map((college) => (
+                  <div key={college.rank} className={styles.collegeRowCard}>
+                    <div className={styles.collegeRankBadge}>
+                      #{college.rank}
+                    </div>
+                    <div className={styles.collegeDetails}>
+                      <div className={styles.collegeName}>
+                        {college.name}
+                      </div>
+                      {college.examples && college.examples.length > 0 && (
+                        <div className={styles.collegeExamples}>
+                          <strong>Key Campuses: </strong>
+                          {college.examples.join(' · ')}
+                        </div>
+                      )}
+                      {college.entry && (
+                        <div className={styles.collegeEntryBadge}>
+                          <span>📝 Entrance: {college.entry}</span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* 2-Column Dashboard Details Grid: All the other data */}
           <div className={styles.detailGrid}>
             {/* Left Column */}
             <div className={styles.colFlex}>
@@ -423,6 +490,60 @@ export default function CareerLibraryExplorer({
               </div>
             </div>
           </div>
+
+          {/* Top Study Abroad Destinations Section (At the end, card layout for desktop view) */}
+          {studyAbroad && studyAbroad.length > 0 && (
+            <div className={styles.abroadSectionCard}>
+              <div className={styles.abroadHeader}>
+                <h2 className={styles.abroadTitle}>
+                  <span style={{ fontSize: '22px' }}>🌐</span>
+                  Top Study Abroad Destinations &amp; Global Universities
+                </h2>
+                <p className={styles.abroadSubtitle}>
+                  Curated world-class institutions across 6 premier international study destinations for {activeProfile.name}.
+                </p>
+              </div>
+
+              <div className={styles.abroadDestinationsGrid}>
+                {studyAbroad.map((dest) => (
+                  <div key={dest.code} className={styles.abroadLocationCard}>
+                    <div className={styles.abroadCardTop}>
+                      <div className={styles.abroadLocationHeader}>
+                        <div className={styles.abroadCountryGroup}>
+                          <span className={styles.abroadFlag}>{dest.flag}</span>
+                          <span className={styles.abroadCountryName}>{dest.country}</span>
+                        </div>
+                        <span className={styles.abroadCodeBadge}>{dest.code}</span>
+                      </div>
+                      {dest.note && (
+                        <p className={styles.abroadCountryNote}>{dest.note}</p>
+                      )}
+                    </div>
+
+                    <ul className={styles.abroadUniList}>
+                      {dest.universities.map((uni) => (
+                        <li key={uni.rank} className={styles.abroadUniItem}>
+                          <span className={styles.abroadUniRank}>{uni.rank}</span>
+                          <span className={styles.abroadUniName}>{uni.name}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+
+              {collegeNotes && collegeNotes.length > 0 && (
+                <div className={styles.collegeNotesAlert}>
+                  <span style={{ fontSize: '16px' }}>ℹ️</span>
+                  <div>
+                    <strong>Admissions &amp; Recognition Advisory: </strong>
+                    {collegeNotes.join(' ')}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
         </div>
       ) : (
         /* Catalogue List View */

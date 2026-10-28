@@ -14,6 +14,11 @@ export async function PATCH(
     const allowedUpdates: any = {};
     if (body.status !== undefined) allowedUpdates.status = body.status;
     if (body.isFeatured !== undefined) allowedUpdates.isFeatured = Boolean(body.isFeatured);
+    if (body.isVerified !== undefined) allowedUpdates.isVerified = Boolean(body.isVerified);
+    if (body.consentRecorded !== undefined) allowedUpdates.consentRecorded = Boolean(body.consentRecorded);
+    if (body.allowSchoolDisplay !== undefined) allowedUpdates.allowSchoolDisplay = Boolean(body.allowSchoolDisplay);
+    if (body.category !== undefined) allowedUpdates.category = body.category;
+    if (body.anonymisedName !== undefined) allowedUpdates.anonymisedName = String(body.anonymisedName);
     if (body.adminNotes !== undefined) allowedUpdates.adminNotes = String(body.adminNotes);
     if (body.headline !== undefined) allowedUpdates.headline = String(body.headline);
     if (body.comment !== undefined) allowedUpdates.comment = String(body.comment);

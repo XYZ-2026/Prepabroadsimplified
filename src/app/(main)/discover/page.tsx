@@ -147,26 +147,57 @@ export default function DiscoverPage() {
         </div>
       </section>
 
-      {/* ── 2. TRUST / METRICS STRIP ── */}
-      <section className="bg-[#080F1C] border-y border-slate-800 py-8 px-4 md:px-8">
-        <div className="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6 text-center text-white">
-          {HOME_PAGE_CONFIG.trustMetrics.map((item, idx) => (
-            <div key={idx} className="flex flex-col items-center p-2">
-              <div className="font-display font-extrabold text-3xl md:text-4xl text-blue-400 tracking-tight">
-                {item.value}
+      {/* ── 2. DIAGNOSTIC CAPABILITY & METRICS SECTION ── */}
+      <section className="bg-[#080F1C] border-y border-slate-800 py-10 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+            {[
+              {
+                value: '30 Dimensions',
+                label: 'Diagnostic Matrix',
+                desc: 'Cognitive logic, RIASEC interest & Big 5 personality archetypes',
+              },
+              {
+                value: 'Grades 7–12',
+                label: 'Academic Framework',
+                desc: 'Structured progression for middle, secondary & senior secondary',
+              },
+              {
+                value: '5 Curriculums',
+                label: 'Curricular Coverage',
+                desc: 'CBSE, ICSE, IB Diploma, Cambridge & State Board alignment',
+              },
+              {
+                value: '1-to-1 Roadmaps',
+                label: 'Personalised Advisory',
+                desc: 'Student-centered milestone roadmaps & stream selection plans',
+              },
+            ].map((metric, idx) => (
+              <div
+                key={idx}
+                className="bg-[#0B1527] border border-blue-900/40 rounded-2xl p-5 sm:p-6 flex flex-col justify-between text-left hover:border-blue-700/60 transition-colors"
+              >
+                <div>
+                  <div className="text-[11px] font-bold uppercase tracking-widest text-blue-400 mb-1">
+                    {metric.label}
+                  </div>
+                  <div className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+                    {metric.value}
+                  </div>
+                </div>
+                <div className="text-xs text-slate-400 mt-3 leading-relaxed">
+                  {metric.desc}
+                </div>
               </div>
-              <div className="text-xs md:text-sm font-semibold text-slate-300 mt-1 uppercase tracking-wider">
-                {item.label}
-              </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* ── 3. NOTIFICATION TICKER PANEL ── */}
-      <div className="max-w-7xl mx-auto w-full px-4 md:px-8 -mt-4 relative z-20">
+      {/* ── 3. ADMISSIONS & SCHOLARSHIP REGISTRY FEED ── */}
+      <section className="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 -mt-6 sm:-mt-8 relative z-20">
         <NotificationPanel />
-      </div>
+      </section>
 
       {/* ── 4. INTERACTIVE SUITE: TOOLS & PREDICTORS ── */}
       <section className="py-20 px-4 md:px-8 max-w-7xl mx-auto w-full">

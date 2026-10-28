@@ -23,6 +23,26 @@ export interface RoadmapYear {
   items: string[];
 }
 
+export interface IndianCollege {
+  rank: number;
+  name: string;
+  examples: string[];
+  entry: string;
+}
+
+export interface UniversityAbroad {
+  rank: number;
+  name: string;
+}
+
+export interface StudyAbroadLocation {
+  code: string;
+  country: string;
+  flag: string;
+  note?: string;
+  universities: UniversityAbroad[];
+}
+
 export interface CareerRoadmap {
   whyFits: string;
   entryRoute?: string;
@@ -42,6 +62,9 @@ export interface CareerRoadmap {
   isFallback?: boolean;
   lastReviewed?: string;
   sourceNotes?: string;
+  topIndiaColleges?: IndianCollege[];
+  studyAbroad?: StudyAbroadLocation[];
+  collegeNotes?: string[];
 }
 
 export interface CareerProfile {
@@ -62,6 +85,9 @@ export interface CareerProfile {
   hasExplicitRoadmap: boolean;
   sourceNotes?: string;
   lastReviewed?: string;
+  topIndiaColleges?: IndianCollege[];
+  studyAbroad?: StudyAbroadLocation[];
+  collegeNotes?: string[];
 }
 
 export interface CareerMatchScore {

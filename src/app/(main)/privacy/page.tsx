@@ -2,11 +2,12 @@ import React from 'react';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
+import { COMPANY_CONFIG } from '@/config/company';
 
 export const metadata: Metadata = {
-  title: 'Privacy Policy | CLARVO',
+  title: `Privacy Policy | ${COMPANY_CONFIG.brandName}`,
   description:
-    'Learn how CLARVO and Simplified Eduventures protect your privacy and personal assessment data.',
+    `Learn how ${COMPANY_CONFIG.brandName} and ${COMPANY_CONFIG.legalName} protect your privacy and personal assessment data.`,
   alternates: {
     canonical: 'https://clarvo.in/privacy',
   },
@@ -21,7 +22,7 @@ export default function PrivacyPolicyPage() {
           <Link href="/" className="flex items-center gap-3.5 hover:opacity-90 transition-opacity">
             <Image
               src="/logo-transparent.png"
-              alt="CLARVO"
+              alt={COMPANY_CONFIG.brandName}
               width={48}
               height={48}
               className="w-[44px] h-[44px] object-contain shrink-0"
@@ -29,10 +30,10 @@ export default function PrivacyPolicyPage() {
             />
             <div>
               <div className="text-[20px] font-black text-[#080F1C] tracking-tight leading-none">
-                CLARVO
+                {COMPANY_CONFIG.brandName}
               </div>
-              <div className="mt-1 text-[9.5px] uppercase tracking-[0.2em] font-semibold text-[#64748B]">
-                A platform under Simplified Eduventures
+              <div className="mt-1 text-[9.5px] uppercase tracking-[0.15em] font-semibold text-[#64748B]">
+                {COMPANY_CONFIG.legalName}
               </div>
             </div>
           </Link>
@@ -59,7 +60,7 @@ export default function PrivacyPolicyPage() {
             We value your trust and are committed to safeguarding student and parent personal data.
           </p>
           <p className="text-white/60 text-[13px] mt-2">
-            Last updated: October 2026 · Simplified Eduventures
+            Last updated: October 2026 · {COMPANY_CONFIG.legalName} (CIN: {COMPANY_CONFIG.cin})
           </p>
         </div>
       </div>
@@ -70,29 +71,34 @@ export default function PrivacyPolicyPage() {
           <section>
             <h2 className="text-xl font-bold text-[#080F1C] mb-3">1. Information We Collect</h2>
             <p className="text-[15px]">
-              We collect information you provide directly to us when creating an account, completing psychometric diagnostics, answering survey questions, or communicating with advisors. This includes student names, grade levels, school backgrounds, and assessment responses.
+              We collect information you provide directly to us when creating an account, completing psychometric diagnostics, answering survey questions, or requesting a consultation. This includes student names, grade levels, school backgrounds, and assessment responses.
             </p>
           </section>
 
           <section>
             <h2 className="text-xl font-bold text-[#080F1C] mb-3">2. How We Use Information</h2>
             <p className="text-[15px]">
-              Your assessment data is strictly used to formulate personalized psychometric reports, career recommendations, and customized learning plans. We do not sell or monetize personal student data to third-party advertisers.
+              Your assessment data is strictly used to formulate personalized psychometric reports, career recommendations, and customized learning plans. We do not sell or monetize personal student data to third-party advertisers or marketing networks.
             </p>
           </section>
 
           <section>
-            <h2 className="text-xl font-bold text-[#080F1C] mb-3">3. Data Security</h2>
+            <h2 className="text-xl font-bold text-[#080F1C] mb-3">3. Data Security &amp; Minor Protection</h2>
             <p className="text-[15px]">
-              We implement industry-standard encryption, SSL transmission, and secure database access protocols to protect your personal and academic records.
+              Because {COMPANY_CONFIG.brandName} provides services to secondary and high school minors, we treat names, school affiliations, and academic responses with strict confidentiality. Industry-standard encryption, SSL transmission, and secure database access protocols are enforced at all times.
             </p>
           </section>
 
           <section>
-            <h2 className="text-xl font-bold text-[#080F1C] mb-3">4. Contact Privacy Team</h2>
-            <p className="text-[15px]">
-              For privacy-related questions or data deletion requests, contact us at <a href="mailto:support@clarvo.in" className="text-[#2563EB] font-bold underline">support@clarvo.in</a>.
-            </p>
+            <h2 className="text-xl font-bold text-[#080F1C] mb-3">4. Corporate &amp; Privacy Contact</h2>
+            <div className="text-[15px] space-y-2 bg-[#F8FAFC] p-5 rounded-xl border border-slate-200">
+              <p>For privacy-related questions or data deletion requests, contact our legal and data protection team:</p>
+              <p><strong>Entity:</strong> {COMPANY_CONFIG.legalName} (CIN: {COMPANY_CONFIG.cin})</p>
+              <p><strong>Email:</strong> <a href={COMPANY_CONFIG.mailtoLink} className="text-[#2563EB] font-bold underline">{COMPANY_CONFIG.email}</a></p>
+              <p><strong>Phone:</strong> <a href={COMPANY_CONFIG.telLink} className="text-[#2563EB] font-bold underline">{COMPANY_CONFIG.phoneFormatted}</a></p>
+              <p><strong>Head Office:</strong> {COMPANY_CONFIG.headOffice.fullAddress}</p>
+              <p><strong>{COMPANY_CONFIG.kolkataBranch.label}:</strong> {COMPANY_CONFIG.kolkataBranch.fullAddress}</p>
+            </div>
           </section>
         </div>
       </div>

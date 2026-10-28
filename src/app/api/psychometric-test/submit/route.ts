@@ -143,7 +143,7 @@ export async function POST(request: Request) {
           stream: student?.stream || '',
           email: student?.email || '',
           date: new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }),
-          reportId: `AS-${canonicalGradeAtAttempt}-${docId.substring(0, 6).toUpperCase()}`,
+          reportId: `CL-${canonicalGradeAtAttempt}-${docId.substring(0, 6).toUpperCase()}`,
         },
         scores: {
           aptitude: {

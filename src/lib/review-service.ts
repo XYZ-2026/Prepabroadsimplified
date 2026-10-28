@@ -2,13 +2,18 @@ import fs from 'fs';
 import path from 'path';
 import { adminDb } from '@/lib/firebase-admin';
 
+export type ReviewCategory = 'stream' | 'sat' | 'international' | 'research';
+
 export interface ReviewRecord {
   id: string;
   name: string;
+  anonymisedName?: string;
   role: 'student' | 'parent';
   email?: string;
   school: string;
+  allowSchoolDisplay?: boolean;
   grade: string;
+  category?: ReviewCategory;
   reportType: string;
   rating: number; // 1 to 5
   headline: string;
@@ -16,10 +21,30 @@ export interface ReviewRecord {
   impactTag?: string;
   status: 'pending' | 'approved' | 'rejected';
   isFeatured: boolean; // Flag controlled by admin to select what to be presented on the site!
-  adminNotes?: string;
+  isVerified?: boolean; // Explicit verification flag confirmed against evidence
+  consentRecorded?: boolean; // Permission to publish recorded
+  consentDate?: string;
+  evidenceRef?: string; // Stored privately, never exposed in public responses
+  adminNotes?: string; // Stored privately, never exposed in public responses
   createdAt: string;
   updatedAt: string;
   reportId?: string;
+}
+
+export interface PublicReview {
+  id: string;
+  name: string;
+  role: 'student' | 'parent';
+  school?: string;
+  grade: string;
+  category: ReviewCategory;
+  reportType: string;
+  rating: number;
+  headline: string;
+  comment: string;
+  impactTag?: string;
+  isVerified: boolean;
+  createdAt: string;
 }
 
 const LOCAL_REVIEWS_FILE = path.join(process.cwd(), 'src', 'data', 'reviews.json');
@@ -64,10 +89,45 @@ function writeLocalReviews(reviews: ReviewRecord[]): void {
 }
 
 /**
- * Create a new student or parent review
+ * Public Sanitization: strictly strips private student info, email, evidence refs, and admin notes
+ */
+export function sanitizeReviewForPublic(r: ReviewRecord): PublicReview {
+  // Respect minor privacy: if school display not authorized, show generic verified label
+  const displayName = r.anonymisedName || r.name;
+  const schoolLabel = r.allowSchoolDisplay !== false ? r.school : 'Leading Indian High School';
+
+  // Map category or infer from existing impact tag/report type if unset
+  let cat: ReviewCategory = r.category || 'stream';
+  if (!r.category) {
+    const lower = `${r.reportType} ${r.impactTag} ${r.headline} ${r.comment}`.toLowerCase();
+    if (lower.includes('sat')) cat = 'sat';
+    else if (lower.includes('ib') || lower.includes('cambridge') || lower.includes('a-level')) cat = 'international';
+    else if (lower.includes('research') || lower.includes('paper') || lower.includes('admit')) cat = 'research';
+    else cat = 'stream';
+  }
+
+  return {
+    id: r.id,
+    name: displayName,
+    role: r.role,
+    school: schoolLabel,
+    grade: r.grade,
+    category: cat,
+    reportType: r.reportType,
+    rating: Math.max(1, Math.min(5, Number(r.rating) || 5)),
+    headline: r.headline,
+    comment: r.comment,
+    impactTag: r.impactTag,
+    isVerified: Boolean(r.isVerified),
+    createdAt: r.createdAt,
+  };
+}
+
+/**
+ * Create a new student or parent review (starts in pending state, unverified until moderation)
  */
 export async function createReview(
-  data: Omit<ReviewRecord, 'id' | 'status' | 'isFeatured' | 'createdAt' | 'updatedAt'>
+  data: Omit<ReviewRecord, 'id' | 'status' | 'isFeatured' | 'isVerified' | 'createdAt' | 'updatedAt'>
 ): Promise<ReviewRecord> {
   const timestamp = new Date().toISOString();
   const id = `rev_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
@@ -77,7 +137,8 @@ export async function createReview(
     id,
     rating: Math.max(1, Math.min(5, Number(data.rating) || 5)),
     status: 'pending', // Starts in pending moderation
-    isFeatured: false, // Admin can toggle this to present on website
+    isFeatured: false, // Must be explicitly approved and featured by admin
+    isVerified: false, // Verification must be backed by authorized counselor docket
     createdAt: timestamp,
     updatedAt: timestamp,
   };
@@ -140,11 +201,56 @@ export async function getFeaturedReviews(): Promise<ReviewRecord[]> {
 }
 
 /**
- * Update review status, isFeatured flag, or admin notes (Admin only)
+ * Get approved reviews supporting up to 25 authentic reviews per category
+ */
+export async function getReviewsByCategory(
+  category?: string,
+  limit: number = 25
+): Promise<ReviewRecord[]> {
+  const approved = await getFeaturedReviews();
+
+  if (!category || category === 'all') {
+    return approved.slice(0, Math.min(limit, 100));
+  }
+
+  const filtered = approved.filter((r) => {
+    const pub = sanitizeReviewForPublic(r);
+    return pub.category === category;
+  });
+
+  // Supports up to 25 authentic reviews per category without fabrication
+  return filtered.slice(0, Math.min(limit, 25));
+}
+
+/**
+ * Calculate actual category counts from approved records
+ */
+export async function getCategoryCounts(): Promise<Record<string, number>> {
+  const approved = await getFeaturedReviews();
+  const counts: Record<string, number> = {
+    all: approved.length,
+    stream: 0,
+    sat: 0,
+    international: 0,
+    research: 0,
+  };
+
+  approved.forEach((r) => {
+    const pub = sanitizeReviewForPublic(r);
+    if (counts[pub.category] !== undefined) {
+      counts[pub.category]++;
+    }
+  });
+
+  return counts;
+}
+
+/**
+ * Update review status, isFeatured flag, verification, or admin notes (Admin only)
  */
 export async function updateReview(
   id: string,
-  updates: Partial<Pick<ReviewRecord, 'status' | 'isFeatured' | 'adminNotes' | 'headline' | 'comment' | 'impactTag'>>
+  updates: Partial<Pick<ReviewRecord, 'status' | 'isFeatured' | 'isVerified' | 'consentRecorded' | 'consentDate' | 'evidenceRef' | 'adminNotes' | 'headline' | 'comment' | 'impactTag' | 'category' | 'anonymisedName' | 'allowSchoolDisplay'>>
 ): Promise<ReviewRecord | null> {
   const timestamp = new Date().toISOString();
   let updatedRecord: ReviewRecord | null = null;

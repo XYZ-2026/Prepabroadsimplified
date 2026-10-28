@@ -113,7 +113,8 @@ export function buildClass10ExecutiveHTMLReport(
   const variantConfig: ReportVariantConfig = universalData?.config || getVariantConfig(variant);
   const name = student.name || 'Candidate';
   const firstName = name.split(' ')[0];
-  const rid = student.reportId || `PSY-2026-${(student.name || 'CAND').replace(/[^a-zA-Z0-9]/g, '').slice(0, 4).toUpperCase() || '1001'}`;
+  const rawRid = student.reportId || `${variantConfig.reportIdPrefix}-${(student.name || 'CAND').replace(/[^a-zA-Z0-9]/g, '').slice(0, 4).toUpperCase() || '1001'}`;
+  const rid = rawRid.toUpperCase().replace(/^AS([-_])/i, 'CL$1');
   const date = formatReportDate(student.date);
   const aptOverall = scores.aptitude?.overall || 82;
   const topCareer = scores.careerFitment?.[0]?.name || (variant === 'senior' ? 'Computer Science & AI Engineering' : variant === 'junior' ? 'Foundational STEM & Analytics' : 'STEM & Data Science Specialist');

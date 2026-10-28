@@ -21,6 +21,7 @@ interface Testimonial {
   outcomeMetric: string;
   quote: string;
   focusArea: string;
+  isVerified?: boolean;
 }
 
 const TESTIMONIALS: Testimonial[] = [
@@ -154,24 +155,24 @@ const TESTIMONIALS: Testimonial[] = [
   },
 ];
 
-const CATEGORIES = [
-  { id: 'all', label: 'All Stories (8)' },
-  { id: 'stream', label: 'Class 10 Stream Selection' },
-  { id: 'sat', label: 'Digital SAT & Scores' },
-  { id: 'international', label: 'IB & Cambridge Pathways' },
-  { id: 'research', label: 'Research & Global Admits' },
-];
-
 export default function StudentTestimonialsSection() {
   const shouldReduceMotion = useReducedMotion();
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [liveTestimonials, setLiveTestimonials] = useState<Testimonial[]>(TESTIMONIALS);
+  const [displayLimit, setDisplayLimit] = useState<number>(4);
+  const [categoryCounts, setCategoryCounts] = useState<Record<string, number>>({
+    all: TESTIMONIALS.length,
+    stream: TESTIMONIALS.filter(t => t.category === 'stream').length,
+    sat: TESTIMONIALS.filter(t => t.category === 'sat').length,
+    international: TESTIMONIALS.filter(t => t.category === 'international').length,
+    research: TESTIMONIALS.filter(t => t.category === 'research').length,
+  });
 
-  // Fetch approved & featured reviews selected by admin
+  // Fetch approved & verified reviews supporting up to 25 authentic reviews per category
   useEffect(() => {
     async function loadFeaturedReviews() {
       try {
-        const res = await fetch('/api/reviews');
+        const res = await fetch('/api/reviews?limit=25');
         const data = await res.json();
         if (data.success && Array.isArray(data.reviews) && data.reviews.length > 0) {
           const gradients = [
@@ -206,12 +207,13 @@ export default function StudentTestimonialsSection() {
               board: r.role === 'parent' ? 'Parent Review' : 'Verified Student',
               school: r.school || 'Leading Indian High School',
               city,
-              category: 'stream' as const,
+              category: (r.category || 'stream') as 'stream' | 'sat' | 'international' | 'research',
               categoryLabel: r.impactTag || 'Psychometric & Career Review',
               outcomeBadge: `${r.rating || 5}.0 ★ Verified Experience`,
               outcomeMetric: r.reportType || 'Official Diagnostic Report',
               quote: r.comment,
               focusArea: r.headline || 'Assessment Evaluation',
+              isVerified: Boolean(r.isVerified),
             };
           });
 
@@ -222,7 +224,20 @@ export default function StudentTestimonialsSection() {
             (t) => !existingIds.has(t.id) && !existingNames.has(t.name.toLowerCase())
           );
 
-          setLiveTestimonials([...mapped, ...remainingCurated]);
+          const combined = [...mapped, ...remainingCurated];
+          setLiveTestimonials(combined);
+
+          if (data.categoryCounts) {
+            setCategoryCounts(data.categoryCounts);
+          } else {
+            setCategoryCounts({
+              all: combined.length,
+              stream: combined.filter(t => t.category === 'stream').length,
+              sat: combined.filter(t => t.category === 'sat').length,
+              international: combined.filter(t => t.category === 'international').length,
+              research: combined.filter(t => t.category === 'research').length,
+            });
+          }
         }
       } catch (err) {
         console.error('Failed to load featured reviews:', err);
@@ -235,6 +250,16 @@ export default function StudentTestimonialsSection() {
   const filteredTestimonials = selectedCategory === 'all'
     ? liveTestimonials
     : liveTestimonials.filter((t) => t.category === selectedCategory);
+
+  const visibleTestimonials = filteredTestimonials.slice(0, displayLimit);
+
+  const categories = [
+    { id: 'all', label: `All Stories (${liveTestimonials.length})` },
+    { id: 'stream', label: `Class 10 Stream Selection (${categoryCounts.stream ?? liveTestimonials.filter(t => t.category === 'stream').length})` },
+    { id: 'sat', label: `Digital SAT & Scores (${categoryCounts.sat ?? liveTestimonials.filter(t => t.category === 'sat').length})` },
+    { id: 'international', label: `IB & Cambridge Pathways (${categoryCounts.international ?? liveTestimonials.filter(t => t.category === 'international').length})` },
+    { id: 'research', label: `Research & Global Admits (${categoryCounts.research ?? liveTestimonials.filter(t => t.category === 'research').length})` },
+  ];
 
   return (
     <section
@@ -284,7 +309,7 @@ export default function StudentTestimonialsSection() {
                 <span className="ml-1 text-[13px] font-extrabold text-[#080F1C]">4.9 / 5.0</span>
               </div>
               <div className="text-[12px] text-[#64748B] font-semibold mt-0.5">
-                From 15,000+ Enrolled Students &amp; Families
+                Independent Verified Evaluations
               </div>
             </div>
           </motion.div>
@@ -292,12 +317,15 @@ export default function StudentTestimonialsSection() {
 
         {/* Filter Tabs */}
         <div className="flex items-center gap-2 overflow-x-auto pb-4 mb-8 sm:mb-10 no-scrollbar">
-          {CATEGORIES.map((cat) => {
+          {categories.map((cat) => {
             const isActive = selectedCategory === cat.id;
             return (
               <button
                 key={cat.id}
-                onClick={() => setSelectedCategory(cat.id)}
+                onClick={() => {
+                  setSelectedCategory(cat.id);
+                  setDisplayLimit(4);
+                }}
                 className={`px-4 py-2 rounded-xl text-[13px] font-bold tracking-tight whitespace-nowrap transition-all cursor-pointer border ${
                   isActive
                     ? 'bg-[#2563EB] text-white border-[#2563EB] shadow-md shadow-blue-600/20'
@@ -316,7 +344,7 @@ export default function StudentTestimonialsSection() {
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 sm:gap-8"
         >
           <AnimatePresence mode="popLayout">
-            {filteredTestimonials.map((item, index) => (
+            {visibleTestimonials.map((item, index) => (
               <motion.div
                 key={item.id}
                 layout
@@ -345,9 +373,13 @@ export default function StudentTestimonialsSection() {
                           <h3 className="text-[17px] font-black text-[#080F1C] tracking-tight leading-snug">
                             {item.name}
                           </h3>
-                          <span className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full">
-                            <CheckCircle className="w-3 h-3 text-emerald-600" />
-                            Verified Student
+                          <span className={`inline-flex items-center gap-1 text-[11px] font-bold px-2 py-0.5 rounded-full ${
+                            item.isVerified !== false 
+                              ? 'text-emerald-700 bg-emerald-50 border border-emerald-200' 
+                              : 'text-slate-600 bg-slate-100 border border-slate-200'
+                          }`}>
+                            <CheckCircle className={`w-3 h-3 ${item.isVerified !== false ? 'text-emerald-600' : 'text-slate-400'}`} />
+                            {item.isVerified !== false ? 'Verified Student' : 'Student Feedback'}
                           </span>
                         </div>
 
@@ -409,6 +441,19 @@ export default function StudentTestimonialsSection() {
             ))}
           </AnimatePresence>
         </motion.div>
+
+        {/* Load More Stories within Category (supports up to 25 authentic reviews per category) */}
+        {displayLimit < filteredTestimonials.length && (
+          <div className="mt-10 text-center">
+            <button
+              onClick={() => setDisplayLimit((prev) => Math.min(prev + 4, 25))}
+              className="px-6 py-3 rounded-xl border border-slate-300 hover:border-blue-500 bg-white hover:bg-slate-50 text-slate-800 font-bold text-xs transition-all cursor-pointer shadow-xs inline-flex items-center gap-2"
+            >
+              <span>View More Stories ({filteredTestimonials.length - displayLimit} remaining in this category)</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </button>
+          </div>
+        )}
 
         {/* Section Bottom CTA Strip */}
         <div className="mt-14 sm:mt-16 bg-gradient-to-r from-[#080F1C] via-[#1E3A8A] to-[#2563EB] rounded-3xl p-8 sm:p-10 text-white flex flex-col md:flex-row items-center justify-between gap-6 shadow-xl">

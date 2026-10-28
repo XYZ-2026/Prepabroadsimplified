@@ -971,9 +971,9 @@ function MemoizedReportViewer({
   const variantConfig = useMemo(() => getVariantConfig(resolvedVariant), [resolvedVariant]);
 
   const stableReportId = useMemo(() => {
-    if (reportData?.id) return String(reportData.id).toUpperCase();
-    if (reportData?.resultId) return String(reportData.resultId).toUpperCase();
-    if (student.reportId) return String(student.reportId).toUpperCase();
+    if (reportData?.id) return String(reportData.id).toUpperCase().replace(/^AS([-_])/i, 'CL$1');
+    if (reportData?.resultId) return String(reportData.resultId).toUpperCase().replace(/^AS([-_])/i, 'CL$1');
+    if (student.reportId) return String(student.reportId).toUpperCase().replace(/^AS([-_])/i, 'CL$1');
     const seed = (student.email || student.name || 'CAND').replace(/[^a-zA-Z0-9]/g, '').slice(0, 6).toUpperCase() || 'REPORT';
     return `${variantConfig.reportIdPrefix}-${seed}`;
   }, [reportData?.id, reportData?.resultId, student.reportId, student.email, student.name, variantConfig.reportIdPrefix]);
@@ -1043,6 +1043,7 @@ function AssessmentPageContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const assessmentType = searchParams.get("type") || "senior";
+  const [resultVariant, setResultVariant] = useState<string | null>(null);
 
   const [screen, setScreen] = useState<Screen>(searchParams.get("resultId") ? "fetching" : "landing");
   const [existingResult, setExistingResult] = useState<any>(null);
@@ -1053,7 +1054,7 @@ function AssessmentPageContent() {
     name: "", grade: "", age: "", school: "", city: "", email: "", phone: "",
     password: "", stream: "not-selected", parentName: "", parentPhone: "",
     parentEmail: "", date: new Date().toLocaleDateString("en-IN", { day: "2-digit", month: "long", year: "numeric" }),
-    reportId: "AS-" + new Date().getFullYear() + "-" + String(Math.floor(10000 + Math.random() * 90000)),
+    reportId: "CL-" + new Date().getFullYear() + "-" + String(Math.floor(10000 + Math.random() * 90000)),
   });
   const [questions, setQuestions] = useState<typeof FBQ | null>(null);
   const [answers, setAnswers] = useState<Record<number, number>>({});
@@ -1122,10 +1123,26 @@ function AssessmentPageContent() {
             // Use academicGradeAtAttempt if present, falling back to student grade saved at time of test
             const rawStudent = data.result.student || data.result;
             const attemptGrade = data.result.academicGradeAtAttempt || rawStudent.grade || rawStudent.academicGrade;
+            const resolvedGradeStr = attemptGrade ? String(attemptGrade) : (rawStudent.grade ? String(rawStudent.grade) : "");
+            const sanitizedReportId = rawStudent.reportId 
+              ? String(rawStudent.reportId).replace(/^AS([-_])/i, 'CL$1') 
+              : rawStudent.reportId;
             setStudent({
               ...rawStudent,
-              grade: attemptGrade ? String(attemptGrade) : rawStudent.grade,
+              reportId: sanitizedReportId,
+              grade: resolvedGradeStr,
             });
+
+            // Update result variant from historical assessment record (Class 10 / Junior / Senior)
+            const loadedVar = data.result.variant || data.result.assessmentType || data.result.testType;
+            if (loadedVar) {
+              setResultVariant(loadedVar);
+            } else if (resolvedGradeStr) {
+              const gStr = resolvedGradeStr.toLowerCase();
+              if (gStr.includes('10')) setResultVariant('grade10');
+              else if (['7', '8', '9'].some(g => gStr.includes(g))) setResultVariant('junior');
+              else if (['11', '12'].some(g => gStr.includes(g))) setResultVariant('senior');
+            }
 
             if (data.result.questions) setQuestions(data.result.questions);
             if (data.result.answers) setAnswers(data.result.answers);
@@ -2179,7 +2196,8 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
       return;
     }
 
-    const resolvedVariant = resolveReportVariant(assessmentType, student.grade);
+    const effectiveVariantType = resultVariant || assessmentType;
+    const resolvedVariant = resolveReportVariant(effectiveVariantType, student.grade);
     const variantConfig = getVariantConfig(resolvedVariant);
     const isExec = reportType === 'executive';
 
@@ -2201,7 +2219,7 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
       stream: student.stream || '',
       email: student.email || '',
       date: student.date || new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }),
-      reportId: (reportData?.id || reportData?.resultId || `${variantConfig.reportIdPrefix}-${Math.floor(100000 + Math.random() * 900000)}`).toString().toUpperCase(),
+      reportId: (student.reportId || reportData?.id || reportData?.resultId || `${variantConfig.reportIdPrefix}-${Math.floor(100000 + Math.random() * 900000)}`).toString().toUpperCase().replace(/^AS([-_])/i, 'CL$1'),
       parentName: student.parentName || '',
     };
 
@@ -2778,7 +2796,7 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
             </div>
           ) : scores ? (
             <MemoizedReportViewer
-              assessmentType={assessmentType}
+              assessmentType={resultVariant || assessmentType}
               student={student}
               scores={scores}
               reportData={reportData}

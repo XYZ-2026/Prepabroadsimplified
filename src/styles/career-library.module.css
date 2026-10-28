@@ -920,3 +920,330 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* ── Entrance Exam Required Banner ── */
+.entranceExamSection {
+  margin-top: 20px;
+  padding: 16px 20px;
+  background: #F0F7FF;
+  border: 1.5px solid #BFDBFE;
+  border-left: 5px solid #2563EB;
+  border-radius: 14px;
+}
+
+.entranceExamHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.entranceExamIcon {
+  color: #2563EB;
+}
+
+.entranceExamTitle {
+  font-size: 12.5px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #1D4ED8;
+}
+
+.entranceExamContent {
+  font-size: 13.5px;
+  color: #1E293B;
+  line-height: 1.55;
+  font-weight: 500;
+}
+
+/* ── Top Indian Colleges Section ── */
+.collegesSectionCard {
+  background: #FFFFFF;
+  border: 1.5px solid #E4E7EC;
+  border-radius: 20px;
+  padding: 28px;
+  margin-bottom: 28px;
+  box-shadow: 0 4px 6px -1px rgba(8, 15, 28, 0.03);
+}
+
+.collegesHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1.5px solid #F1F5F9;
+}
+
+.collegesTitleGroup {
+  flex: 1;
+}
+
+.collegesTitle {
+  font-size: 20px;
+  font-weight: 800;
+  color: #080F1C;
+  letter-spacing: -0.01em;
+  margin: 0 0 4px 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.collegesSubtitle {
+  font-size: 13.5px;
+  color: #64748B;
+  margin: 0;
+}
+
+.collegesGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+@media (min-width: 768px) {
+  .collegesGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.collegeRowCard {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 16px 18px;
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 14px;
+  transition: all 0.2s ease;
+}
+
+.collegeRowCard:hover {
+  background: #FFFFFF;
+  border-color: #2563EB;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.08);
+  transform: translateY(-1px);
+}
+
+.collegeRankBadge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: #E8F0FF;
+  border: 1px solid #BFDBFE;
+  color: #2563EB;
+  font-size: 12px;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+.collegeDetails {
+  flex: 1;
+  min-width: 0;
+}
+
+.collegeName {
+  font-size: 14.5px;
+  font-weight: 700;
+  color: #080F1C;
+  line-height: 1.35;
+  margin-bottom: 4px;
+}
+
+.collegeExamples {
+  font-size: 12px;
+  color: #64748B;
+  line-height: 1.45;
+  margin-bottom: 8px;
+}
+
+.collegeEntryBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 8px;
+  border-radius: 6px;
+  background: #F0FDF4;
+  border: 1px solid #BBF7D0;
+  color: #166534;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+/* ── Study Abroad Section ── */
+.abroadSectionCard {
+  background: #FFFFFF;
+  border: 1.5px solid #E4E7EC;
+  border-radius: 20px;
+  padding: 28px;
+  margin-top: 28px;
+  box-shadow: 0 4px 6px -1px rgba(8, 15, 28, 0.03);
+}
+
+.abroadHeader {
+  margin-bottom: 22px;
+  padding-bottom: 16px;
+  border-bottom: 1.5px solid #F1F5F9;
+}
+
+.abroadTitle {
+  font-size: 20px;
+  font-weight: 800;
+  color: #080F1C;
+  letter-spacing: -0.01em;
+  margin: 0 0 4px 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.abroadSubtitle {
+  font-size: 13.5px;
+  color: #64748B;
+  margin: 0;
+}
+
+.abroadDestinationsGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 18px;
+}
+
+@media (min-width: 640px) {
+  .abroadDestinationsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .abroadDestinationsGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.abroadLocationCard {
+  background: #FFFFFF;
+  border: 1.5px solid #E4E7EC;
+  border-radius: 16px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: all 0.25s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.abroadLocationCard:hover {
+  border-color: #2563EB;
+  box-shadow: 0 8px 24px rgba(37, 99, 235, 0.08);
+  transform: translateY(-2px);
+}
+
+.abroadCardTop {
+  margin-bottom: 14px;
+}
+
+.abroadLocationHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.abroadCountryGroup {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.abroadFlag {
+  font-size: 22px;
+  line-height: 1;
+}
+
+.abroadCountryName {
+  font-size: 16px;
+  font-weight: 800;
+  color: #080F1C;
+}
+
+.abroadCodeBadge {
+  font-size: 11px;
+  font-weight: 800;
+  padding: 2px 7px;
+  border-radius: 6px;
+  background: #F1F5F9;
+  border: 1px solid #CBD5E1;
+  color: #475467;
+  letter-spacing: 0.04em;
+}
+
+.abroadCountryNote {
+  font-size: 11.5px;
+  color: #64748B;
+  line-height: 1.45;
+  margin: 0;
+}
+
+.abroadUniList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border-top: 1px solid #F1F5F9;
+  padding-top: 12px;
+}
+
+.abroadUniItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 12.5px;
+  color: #1E293B;
+  line-height: 1.4;
+}
+
+.abroadUniRank {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  color: #2563EB;
+  font-size: 10px;
+  font-weight: 800;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.abroadUniName {
+  font-weight: 600;
+}
+
+.collegeNotesAlert {
+  margin-top: 20px;
+  padding: 14px 18px;
+  background: #FFFBEB;
+  border: 1px solid #FDE68A;
+  border-radius: 12px;
+  font-size: 12px;
+  color: #92400E;
+  line-height: 1.5;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+

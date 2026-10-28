@@ -47,7 +47,9 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
         id: resultData.id,
         name: resultData.student?.name?.split(' ')[0] || resultData.studentInfo?.name?.split(' ')[0] || resultData.name?.split(' ')[0] || 'Student',
         date: resultData.createdAt || resultData.date,
-        assessmentType: resultData.testType || resultData.assessmentType || 'senior',
+        assessmentType: resultData.variant || resultData.assessmentType || resultData.testType || 
+          (String(resultData.academicGradeAtAttempt || resultData.student?.grade || '').includes('10') ? 'grade10' :
+           ['7', '8', '9'].some(g => String(resultData.academicGradeAtAttempt || resultData.student?.grade || '').includes(g)) ? 'junior' : 'senior'),
       };
       
       return NextResponse.json({

@@ -115,7 +115,7 @@ export async function POST(req: NextRequest) {
         graduationYear: studentObj.graduationYear || studentInfo.graduationYear || userProfileData?.graduationYear || '',
         email: studentObj.email || studentInfo.email || data.email || '',
         date: data.createdAt || data.date || new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }),
-        reportId: `${variantConfig.reportIdPrefix}-${resultId.substring(0, 6).toUpperCase()}`,
+        reportId: `${variantConfig.reportIdPrefix}-${resultId.substring(0, 6).toUpperCase()}`.replace(/^AS([-_])/i, 'CL$1'),
         parentName: data.parentName || studentObj.parentName || studentInfo.parentName || '',
       };
 
@@ -173,7 +173,7 @@ export async function POST(req: NextRequest) {
         graduationYear: reqStudent.graduationYear || '',
         email: reqStudent.email || '',
         date: reqStudent.date || new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }),
-        reportId: reqStudent.reportId || `${variantConfig.reportIdPrefix}-${Math.floor(100000 + Math.random() * 900000)}`,
+        reportId: (reqStudent.reportId ? String(reqStudent.reportId).replace(/^AS([-_])/i, 'CL$1') : `${variantConfig.reportIdPrefix}-${Math.floor(100000 + Math.random() * 900000)}`),
         parentName: reqStudent.parentName || '',
       };
 

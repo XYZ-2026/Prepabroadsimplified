@@ -106,5 +106,11 @@
     "icon": "🔭",
     "max": 2,
     "stream": "science-health"
+  },
+  "aviation-maritime": {
+    "name": "Aviation, Maritime & Transport",
+    "icon": "✈️",
+    "max": 1,
+    "stream": "engineering"
   }
 }

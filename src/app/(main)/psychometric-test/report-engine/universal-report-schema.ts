@@ -24,7 +24,7 @@ export interface ReportVariantConfig {
   variant: ReportVariant;
   editionName: string;                // e.g. "Junior (Class 7–9)", "Class 10", "Class 12 (Senior)"
   defaultGradeLabel: string;          // e.g. "Class 8", "Class 10", "Class 12"
-  reportIdPrefix: string;             // e.g. "AS-JR", "AS-10", "AS-12"
+  reportIdPrefix: string;             // e.g. "CL-JR", "CL-10", "CL-12"
   stageCode: string;                  // e.g. "CLASS_7_9", "CLASS_10", "CLASS_12"
   academicStage: string;              // e.g. "Class 7–9 (Middle School Foundation Stage)"
   shortStageLabel: string;            // e.g. "Class 7–9", "Class 10", "Class 12"
@@ -92,7 +92,7 @@ export function getVariantConfig(variant: ReportVariant): ReportVariantConfig {
         variant: 'junior',
         editionName: 'Junior (Class 7–9)',
         defaultGradeLabel: 'Class 8',
-        reportIdPrefix: 'AS-JR',
+        reportIdPrefix: 'CL-JR',
         stageCode: 'CLASS_7_9',
         academicStage: 'Class 7–9 (Middle School Foundation Stage)',
         shortStageLabel: 'Class 7–9',
@@ -138,7 +138,7 @@ export function getVariantConfig(variant: ReportVariant): ReportVariantConfig {
         variant: 'senior',
         editionName: 'Class 12 (Senior)',
         defaultGradeLabel: 'Class 12',
-        reportIdPrefix: 'AS-12',
+        reportIdPrefix: 'CL-12',
         stageCode: 'CLASS_12',
         academicStage: 'Class 12 (Senior Secondary / Pre-University Stage)',
         shortStageLabel: 'Class 12',
@@ -185,7 +185,7 @@ export function getVariantConfig(variant: ReportVariant): ReportVariantConfig {
         variant: 'grade10',
         editionName: 'Class 10',
         defaultGradeLabel: 'Class 10',
-        reportIdPrefix: 'AS-10',
+        reportIdPrefix: 'CL-10',
         stageCode: 'CLASS_10',
         academicStage: 'Class 10 (Secondary Stage)',
         shortStageLabel: 'Class 10',

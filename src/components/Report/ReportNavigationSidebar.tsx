@@ -204,7 +204,7 @@ export default function ReportNavigationSidebar({
   viewerRole = 'counsellor',
   studentName = 'Candidate',
   studentGrade = 'Class 10',
-  reportId = 'AS-10-EXECUTIVE',
+  reportId = 'CL-10-EXECUTIVE',
   activePage = 1,
   isCollapsed = false,
   onToggleCollapse,
@@ -370,7 +370,7 @@ export default function ReportNavigationSidebar({
             }}>
               <span>{studentGrade}</span>
               <span>•</span>
-              <span style={{ fontFamily: 'monospace', fontSize: '9px' }}>{reportId}</span>
+              <span style={{ fontFamily: 'monospace', fontSize: '9px' }}>{reportId ? reportId.replace(/^AS([-_])/i, 'CL$1') : 'CL-10-EXECUTIVE'}</span>
             </div>
           </div>
           <button

@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     'one-to-one tutoring',
     'research paper publication high school',
     'university admissions predictor',
-    'Simplified Eduventures',
+    'CLARVO EDUCATION PRIVATE LIMITED',
   ],
   alternates: {
     canonical: '/',
@@ -43,8 +43,8 @@ const jsonLd = {
       url: 'https://clarvo.in',
       parentOrganization: {
         '@type': 'Organization',
-        name: 'Simplified Eduventures',
-        url: 'https://simplifiededuventures.com',
+        name: 'CLARVO EDUCATION PRIVATE LIMITED',
+        url: 'https://clarvo.in',
       },
       description:
         'A premium student development platform for Grades 7–12 offering psychometric assessments, stream selection, SAT prep, 1-to-1 tutoring, and research profile building.',

@@ -158,6 +158,10 @@ export default function AuthForm({ defaultTab }: AuthFormProps = {}) {
   const [showRegPassword, setShowRegPassword] = useState(false);
   const [showRegConfirmPassword, setShowRegConfirmPassword] = useState(false);
 
+  // Google Onboarding State
+  const [isGoogleOnboarding, setIsGoogleOnboarding] = useState(false);
+  const [googleUid, setGoogleUid] = useState<string | null>(null);
+
   // Toggle goal selection
   const toggleGoal = (goalTitle: string) => {
     setRegGoals(prev =>
@@ -181,6 +185,7 @@ export default function AuthForm({ defaultTab }: AuthFormProps = {}) {
       const user = userCredential.user;
 
       let isNewUser = false;
+      let existingProfileData: any = null;
       try {
         const userRef = doc(clientDb, 'users', user.uid);
         const userSnap = await getDoc(userRef);
@@ -190,7 +195,7 @@ export default function AuthForm({ defaultTab }: AuthFormProps = {}) {
           await setDoc(userRef, {
             name: user.displayName || '',
             email: user.email || '',
-            mobile: '',
+            mobile: user.phoneNumber || '',
             role: 'student',
             grade: '',
             academicGrade: '',
@@ -208,8 +213,8 @@ export default function AuthForm({ defaultTab }: AuthFormProps = {}) {
             createdAt: serverTimestamp(),
           });
         } else {
-          const data = userSnap.data();
-          if (!data.grade && !data.academicGrade) {
+          existingProfileData = userSnap.data();
+          if (!existingProfileData.grade && !existingProfileData.academicGrade) {
             isNewUser = true;
           }
         }
@@ -230,10 +235,53 @@ export default function AuthForm({ defaultTab }: AuthFormProps = {}) {
       }
 
       const loginResult = await response.json().catch(() => ({}));
-      if (isNewUser) {
-        window.location.href = '/dashboard/student/update-profile';
-      } else {
+
+      // Check if existing user with complete profile
+      if (!isNewUser && (existingProfileData?.grade || existingProfileData?.academicGrade)) {
         window.location.href = loginResult.redirectUrl || '/dashboard/student/profile';
+        return;
+      }
+
+      // First-time or incomplete Google user: Route seamlessly into onboarding wizard
+      setIsGoogleOnboarding(true);
+      setGoogleUid(user.uid);
+      setRegName(user.displayName || existingProfileData?.name || '');
+      setRegEmail(user.email || existingProfileData?.email || '');
+      if (user.phoneNumber || existingProfileData?.mobile) {
+        setRegMobile(user.phoneNumber || existingProfileData?.mobile || '');
+      }
+      if (existingProfileData?.grade || existingProfileData?.academicGrade) {
+        setRegGrade(existingProfileData.grade || existingProfileData.academicGrade);
+      }
+      if (existingProfileData?.school || existingProfileData?.schoolName || existingProfileData?.currentSchool) {
+        setRegSchool(existingProfileData.school || existingProfileData.schoolName || existingProfileData.currentSchool);
+      }
+      if (existingProfileData?.board) {
+        setRegBoard(existingProfileData.board);
+      }
+      if (existingProfileData?.stream) {
+        setRegStream(existingProfileData.stream);
+      }
+      if (existingProfileData?.state) {
+        setRegState(existingProfileData.state);
+      }
+      if (existingProfileData?.city) {
+        setRegCity(existingProfileData.city);
+      }
+      if (existingProfileData?.goals?.length) {
+        setRegGoals(existingProfileData.goals);
+      }
+      if (existingProfileData?.declaredInterests?.length) {
+        setRegInterests(existingProfileData.declaredInterests);
+      }
+
+      setActiveTab('register');
+      // If mobile number is already captured, jump straight to Step 2 (Academic)
+      // If mobile number is needed, start at Step 1 with prefilled verified email and name
+      if (user.phoneNumber || existingProfileData?.mobile) {
+        setRegStep(2);
+      } else {
+        setRegStep(1);
       }
     } catch (err: any) {
       console.error(err);
@@ -244,6 +292,96 @@ export default function AuthForm({ defaultTab }: AuthFormProps = {}) {
       }
     } finally {
       setLoading(false);
+    }
+  };
+
+  // Authoritative submission for Google authenticated onboarding
+  const handleGoogleOnboardingSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (isSubmittingRef.current || loading) return;
+    setError('');
+    isSubmittingRef.current = true;
+    setLoading(true);
+
+    const cleanEmail = regEmail.trim().toLowerCase();
+    const normalizedGrade = regRole === 'student' && regGrade ? normalizeGrade(regGrade) : null;
+    const finalBoard = regBoard === 'Other' && regCustomBoard.trim() ? regCustomBoard.trim() : regBoard;
+    const isSenior = normalizedGrade === '11' || normalizedGrade === '12';
+
+    try {
+      // 1. Client-side Firestore non-blocking update
+      if (googleUid) {
+        try {
+          const userDocRef = doc(clientDb, 'users', googleUid);
+          await setDoc(userDocRef, {
+            name: regName.trim(),
+            email: cleanEmail,
+            mobile: regMobile.trim(),
+            role: regRole,
+            grade: normalizedGrade,
+            academicGrade: normalizedGrade,
+            school: regSchool.trim(),
+            schoolName: regSchool.trim(),
+            currentSchool: regSchool.trim(),
+            board: finalBoard,
+            stream: isSenior ? regStream : '',
+            state: regState,
+            city: regCity.trim(),
+            goals: regGoals,
+            declaredInterests: regInterests,
+            updatedAt: serverTimestamp(),
+          }, { merge: true });
+        } catch (clientFsErr: any) {
+          console.warn('[Google Onboarding] Client Firestore write notice:', clientFsErr?.message);
+        }
+      }
+
+      // 2. Authoritative server update via existing session cookie
+      const serverResponse = await fetch('/api/user/update-profile', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: regName.trim(),
+          mobile: regMobile.trim(),
+          role: regRole,
+          grade: normalizedGrade,
+          academicGrade: normalizedGrade,
+          school: regSchool.trim(),
+          schoolName: regSchool.trim(),
+          currentSchool: regSchool.trim(),
+          board: finalBoard,
+          stream: isSenior ? regStream : '',
+          state: regState,
+          city: regCity.trim(),
+          goals: regGoals,
+          declaredInterests: regInterests,
+          onboarding: { completed: true, completedAt: new Date().toISOString() },
+        }),
+      });
+
+      const serverData = await serverResponse.json().catch(() => ({}));
+      if (!serverResponse.ok) {
+        throw new Error(serverData.error || serverData.details || 'Failed to complete profile onboarding');
+      }
+
+      // 3. Resolve eligible assessment for Welcome screen
+      if (regRole === 'student' && normalizedGrade) {
+        const access = getStudentPsychometricAccess(normalizedGrade);
+        setWelcomeData({
+          name: regName.trim(),
+          grade: formatGradeLabel(normalizedGrade),
+          assessmentName: access.eligibleTestName,
+          href: access.eligibleHref,
+        });
+      } else {
+        router.push(regRole === 'counsellor' ? '/dashboard/counsellor' : '/dashboard/student/profile');
+      }
+    } catch (err: any) {
+      console.error('[Google Onboarding] Error:', err);
+      setError(err.message || 'Failed to complete profile onboarding. Please try again.');
+    } finally {
+      setLoading(false);
+      isSubmittingRef.current = false;
     }
   };
 
@@ -310,6 +448,12 @@ export default function AuthForm({ defaultTab }: AuthFormProps = {}) {
     }
     if (!cleanMobile || cleanMobile.length < 8) {
       setError('Please enter a valid mobile number');
+      return;
+    }
+
+    // If in Google onboarding mode, identity & email are already verified
+    if (isGoogleOnboarding) {
+      setRegStep(2);
       return;
     }
 
@@ -748,10 +892,21 @@ export default function AuthForm({ defaultTab }: AuthFormProps = {}) {
           </div>
 
           {/* ── STEP 1: Basic Identity ── */}
+          {/* ── STEP 1: Basic Identity ── */}
           {regStep === 1 && (
             <form onSubmit={handleStep1Next}>
               <h3 className={styles.wizardSectionTitle}>Basic Identity</h3>
               <p className={styles.wizardSectionSubtitle}>Let's start with your profile details.</p>
+
+              {isGoogleOnboarding && (
+                <div style={{ background: '#EFF6FF', border: '1px solid #BFDBFE', borderRadius: '10px', padding: '10px 14px', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" /><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" /><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" /><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" /></svg>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontSize: '12px', fontWeight: 700, color: '#1E40AF' }}>Google Account Connected</div>
+                    <div style={{ fontSize: '11px', color: '#3B82F6' }}>Verified email: {regEmail} · Complete the remaining details to finish setup.</div>
+                  </div>
+                </div>
+              )}
 
               <div className={styles.formGroup}>
                 <label htmlFor="reg-name">Full Name</label>
@@ -767,11 +922,13 @@ export default function AuthForm({ defaultTab }: AuthFormProps = {}) {
 
               <div className={styles.formRow}>
                 <div className={styles.formGroup}>
-                  <label htmlFor="reg-email">Email Address</label>
+                  <label htmlFor="reg-email">Email Address {isGoogleOnboarding && <span style={{ color: '#15803D', fontSize: '11px', fontWeight: 600 }}>(Verified via Google)</span>}</label>
                   <input
                     type="email"
                     id="reg-email"
                     required
+                    readOnly={isGoogleOnboarding}
+                    style={isGoogleOnboarding ? { background: '#F1F5F9', color: '#475569', cursor: 'not-allowed' } : {}}
                     autoCapitalize="none"
                     autoCorrect="off"
                     spellCheck={false}
@@ -844,22 +1001,26 @@ export default function AuthForm({ defaultTab }: AuthFormProps = {}) {
                 {isCheckingEmail ? 'Verifying Email Availability...' : 'Continue to Academic Profile →'}
               </button>
 
-              <div style={{ display: 'flex', alignItems: 'center', margin: '14px 0 10px 0' }}>
-                <div style={{ flex: 1, height: '1px', background: '#eaeaea' }}></div>
-                <span style={{ padding: '0 8px', color: '#888', fontSize: '11px' }}>OR</span>
-                <div style={{ flex: 1, height: '1px', background: '#eaeaea' }}></div>
-              </div>
+              {!isGoogleOnboarding && (
+                <>
+                  <div style={{ display: 'flex', alignItems: 'center', margin: '14px 0 10px 0' }}>
+                    <div style={{ flex: 1, height: '1px', background: '#eaeaea' }}></div>
+                    <span style={{ padding: '0 8px', color: '#888', fontSize: '11px' }}>OR</span>
+                    <div style={{ flex: 1, height: '1px', background: '#eaeaea' }}></div>
+                  </div>
 
-              <button
-                type="button"
-                onClick={handleGoogleSignIn}
-                disabled={loading}
-                className={`${componentsStyles.btn} ${styles.btnBlock}`}
-                style={{ background: '#fff', color: '#333', border: '1px solid #ddd', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
-              >
-                <svg width="16" height="16" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" /><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" /><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" /><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" /></svg>
-                Sign up with Google
-              </button>
+                  <button
+                    type="button"
+                    onClick={handleGoogleSignIn}
+                    disabled={loading}
+                    className={`${componentsStyles.btn} ${styles.btnBlock}`}
+                    style={{ background: '#fff', color: '#333', border: '1px solid #ddd', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
+                  >
+                    <svg width="16" height="16" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" /><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" /><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" /><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" /></svg>
+                    Sign up with Google
+                  </button>
+                </>
+              )}
             </form>
           )}
 
@@ -1089,7 +1250,7 @@ export default function AuthForm({ defaultTab }: AuthFormProps = {}) {
                   className={`${componentsStyles.btn} ${componentsStyles.btnPrimary}`}
                   style={{ flex: 2 }}
                 >
-                  Review &amp; Set Password →
+                  {isGoogleOnboarding ? 'Review & Complete Profile →' : 'Review & Set Password →'}
                 </button>
               </div>
             </form>
@@ -1097,10 +1258,12 @@ export default function AuthForm({ defaultTab }: AuthFormProps = {}) {
 
           {/* ── STEP 4: Account & Review Summary ── */}
           {regStep === 4 && (
-            <form onSubmit={handleRegister}>
+            <form onSubmit={isGoogleOnboarding ? handleGoogleOnboardingSubmit : handleRegister}>
               <h3 className={styles.wizardSectionTitle}>Account &amp; Review</h3>
               <p className={styles.wizardSectionSubtitle}>
-                Review your profile summary and secure your account.
+                {isGoogleOnboarding
+                  ? 'Confirm your academic profile details to complete first-time setup.'
+                  : 'Review your profile summary and secure your account.'}
               </p>
 
               {/* Profile Review Summary (Compact & Clean - NO password shown) */}
@@ -1122,21 +1285,23 @@ export default function AuthForm({ defaultTab }: AuthFormProps = {}) {
                         {regName || 'Student'} · <span style={{ color: '#690b1b' }}>{regEmail}</span>
                       </span>
                     </div>
-                    <button
-                      type="button"
-                      onClick={() => setRegStep(1)}
-                      style={{
-                        background: 'none',
-                        border: 'none',
-                        color: '#690b1b',
-                        fontWeight: 700,
-                        fontSize: '12px',
-                        cursor: 'pointer',
-                        padding: '4px 8px',
-                      }}
-                    >
-                      Change Email ✎
-                    </button>
+                    {!isGoogleOnboarding && (
+                      <button
+                        type="button"
+                        onClick={() => setRegStep(1)}
+                        style={{
+                          background: 'none',
+                          border: 'none',
+                          color: '#690b1b',
+                          fontWeight: 700,
+                          fontSize: '12px',
+                          cursor: 'pointer',
+                          padding: '4px 8px',
+                        }}
+                      >
+                        Change Email ✎
+                      </button>
+                    )}
                   </div>
                   <div className={styles.summaryItem}>
                     <span className={styles.summaryItemLabel}>Academic Stage</span>
@@ -1166,65 +1331,79 @@ export default function AuthForm({ defaultTab }: AuthFormProps = {}) {
                 </div>
               </div>
 
-              {/* Password Inputs */}
-              <div className={styles.formRow}>
-                <div className={styles.formGroup}>
-                  <label htmlFor="reg-password">Password</label>
-                  <div className={styles.passwordInputWrapper}>
-                    <input
-                      type={showRegPassword ? "text" : "password"}
-                      id="reg-password"
-                      required
-                      autoCapitalize="none"
-                      autoCorrect="off"
-                      spellCheck={false}
-                      placeholder="min 6 chars"
-                      value={regPassword}
-                      onChange={(e) => setRegPassword(e.target.value)}
-                    />
-                    <button
-                      type="button"
-                      className={styles.passwordToggleBtn}
-                      onClick={() => setShowRegPassword(!showRegPassword)}
-                      tabIndex={-1}
-                    >
-                      {showRegPassword ? (
-                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" /><line x1="1" y1="1" x2="23" y2="23" /></svg>
-                      ) : (
-                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" /><circle cx="12" cy="12" r="3" /></svg>
-                      )}
-                    </button>
+              {/* Password Inputs (Hidden for Google Onboarding) */}
+              {isGoogleOnboarding ? (
+                <div style={{ background: '#F0FDF4', border: '1px solid #BBF7D0', borderRadius: '12px', padding: '14px 16px', margin: '14px 0', display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
+                  <div style={{ width: '26px', height: '26px', borderRadius: '50%', background: '#22C55E', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: '13px', flexShrink: 0, marginTop: '2px' }}>
+                    ✓
+                  </div>
+                  <div>
+                    <h4 style={{ fontSize: '13px', fontWeight: 800, color: '#15803D', margin: 0 }}>Secure Google Authentication Verified</h4>
+                    <p style={{ fontSize: '12px', color: '#166534', margin: '4px 0 0 0', lineHeight: 1.5 }}>
+                      Your account is protected through your verified Google identity (<strong>{regEmail}</strong>). No separate password is required. You can sign in anytime using one-click Google Sign-In.
+                    </p>
                   </div>
                 </div>
-                <div className={styles.formGroup}>
-                  <label htmlFor="reg-confirm-password">Confirm Password</label>
-                  <div className={styles.passwordInputWrapper}>
-                    <input
-                      type={showRegConfirmPassword ? "text" : "password"}
-                      id="reg-confirm-password"
-                      required
-                      autoCapitalize="none"
-                      autoCorrect="off"
-                      spellCheck={false}
-                      placeholder="repeat password"
-                      value={regConfirmPassword}
-                      onChange={(e) => setRegConfirmPassword(e.target.value)}
-                    />
-                    <button
-                      type="button"
-                      className={styles.passwordToggleBtn}
-                      onClick={() => setShowRegConfirmPassword(!showRegConfirmPassword)}
-                      tabIndex={-1}
-                    >
-                      {showRegConfirmPassword ? (
-                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" /><line x1="1" y1="1" x2="23" y2="23" /></svg>
-                      ) : (
-                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" /><circle cx="12" cy="12" r="3" /></svg>
-                      )}
-                    </button>
+              ) : (
+                <div className={styles.formRow}>
+                  <div className={styles.formGroup}>
+                    <label htmlFor="reg-password">Password</label>
+                    <div className={styles.passwordInputWrapper}>
+                      <input
+                        type={showRegPassword ? "text" : "password"}
+                        id="reg-password"
+                        required
+                        autoCapitalize="none"
+                        autoCorrect="off"
+                        spellCheck={false}
+                        placeholder="min 6 chars"
+                        value={regPassword}
+                        onChange={(e) => setRegPassword(e.target.value)}
+                      />
+                      <button
+                        type="button"
+                        className={styles.passwordToggleBtn}
+                        onClick={() => setShowRegPassword(!showRegPassword)}
+                        tabIndex={-1}
+                      >
+                        {showRegPassword ? (
+                          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" /><line x1="1" y1="1" x2="23" y2="23" /></svg>
+                        ) : (
+                          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" /><circle cx="12" cy="12" r="3" /></svg>
+                        )}
+                      </button>
+                    </div>
+                  </div>
+                  <div className={styles.formGroup}>
+                    <label htmlFor="reg-confirm-password">Confirm Password</label>
+                    <div className={styles.passwordInputWrapper}>
+                      <input
+                        type={showRegConfirmPassword ? "text" : "password"}
+                        id="reg-confirm-password"
+                        required
+                        autoCapitalize="none"
+                        autoCorrect="off"
+                        spellCheck={false}
+                        placeholder="repeat password"
+                        value={regConfirmPassword}
+                        onChange={(e) => setRegConfirmPassword(e.target.value)}
+                      />
+                      <button
+                        type="button"
+                        className={styles.passwordToggleBtn}
+                        onClick={() => setShowRegConfirmPassword(!showRegConfirmPassword)}
+                        tabIndex={-1}
+                      >
+                        {showRegConfirmPassword ? (
+                          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" /><line x1="1" y1="1" x2="23" y2="23" /></svg>
+                        ) : (
+                          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" /><circle cx="12" cy="12" r="3" /></svg>
+                        )}
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </div>
+              )}
 
               {/* Submit & Back */}
               <div style={{ display: 'flex', gap: '10px', marginTop: '16px' }}>
@@ -1243,7 +1422,11 @@ export default function AuthForm({ defaultTab }: AuthFormProps = {}) {
                   style={{ flex: 2 }}
                   disabled={loading}
                 >
-                  {loading ? 'Creating Account...' : 'Complete Registration →'}
+                  {loading
+                    ? 'Saving Profile...'
+                    : isGoogleOnboarding
+                    ? 'Complete Onboarding & Go to Dashboard →'
+                    : 'Complete Registration →'}
                 </button>
               </div>
             </form>

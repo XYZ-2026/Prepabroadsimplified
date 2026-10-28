@@ -46,7 +46,8 @@ export function buildClass10ExecutiveSummaryHTMLReport(
   const name = student.name || 'Candidate';
   const firstName = name.split(' ')[0] || 'Candidate';
   const dateStr = formatReportDate(student.date);
-  const rid = (student.reportId || `AS-10-EXECUTIVE`).toUpperCase();
+  const rawRid = student.reportId || `${variantConfig.reportIdPrefix}-EXECUTIVE`;
+  const rid = rawRid.toUpperCase().replace(/^AS([-_])/i, 'CL$1');
 
   const careerFitmentList = scores.careerFitment || [];
   const primaryCareerName = careerFitmentList[0]?.name || (variant === 'senior' ? 'Computer Science & AI Engineering' : variant === 'junior' ? 'Foundational STEM & Analytics' : 'STEM & Engineering Pathway');

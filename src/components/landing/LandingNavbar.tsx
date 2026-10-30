@@ -45,12 +45,12 @@ export default function LandingNavbar() {
             priority
           />
           <div className="min-w-0">
-            <div className="text-[19px] sm:text-[23px] md:text-[25px] font-black tracking-[-0.03em] leading-none text-[#080F1C]">
+            <div className="text-[17px] xs:text-[20px] sm:text-[23px] md:text-[25px] font-black tracking-[-0.03em] leading-none text-[#080F1C]">
               CLARVO
             </div>
             <div className="hidden xs:flex mt-[3px] sm:mt-[5px] items-center gap-1.5 truncate">
               <span className="w-[3px] h-[3px] sm:w-[4px] sm:h-[4px] rounded-full bg-[#2563EB] shrink-0" />
-              <span className="text-[8px] xs:text-[9px] sm:text-[10px] uppercase tracking-[0.14em] sm:tracking-[0.18em] font-bold text-[#64748B] truncate">
+              <span className="text-[7.5px] xs:text-[8.5px] sm:text-[10px] uppercase tracking-[0.14em] sm:tracking-[0.18em] font-bold text-[#64748B] truncate">
                 Student Development Platform
               </span>
             </div>

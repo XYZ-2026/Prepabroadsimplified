@@ -75,7 +75,7 @@ export default function SampleReportsHubPage() {
   };
 
   return (
-    <div style={{ minHeight: '85vh', background: '#F8FAFC', padding: '56px 16px' }}>
+    <div style={{ minHeight: '85vh', background: '#F8FAFC', padding: 'clamp(28px, 5vw, 56px) clamp(12px, 4vw, 24px)' }}>
       <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
         
         {/* Navigation Breadcrumb */}
@@ -91,7 +91,7 @@ export default function SampleReportsHubPage() {
             Diagnostic Dossier Showcase
           </div>
 
-          <h1 style={{ fontSize: '38px', fontWeight: 800, color: '#080F1C', letterSpacing: '-0.02em', lineHeight: '1.2', margin: '0 0 16px 0' }}>
+          <h1 style={{ fontSize: 'clamp(24px, 6vw, 38px)', fontWeight: 800, color: '#080F1C', letterSpacing: '-0.02em', lineHeight: '1.18', margin: '0 0 16px 0' }}>
             Explore CLARVO Sample Reports
           </h1>
 
@@ -105,10 +105,10 @@ export default function SampleReportsHubPage() {
         </div>
 
         {/* Two Report Cards Grid */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', gap: '32px', marginBottom: '56px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 300px), 1fr))', gap: '32px', marginBottom: '56px' }}>
           
           {/* Card 1: Summary Sample Report */}
-          <div style={{ background: '#FFFFFF', borderRadius: '20px', border: '1px solid #E4E7EC', padding: '36px 32px', display: 'flex', flexDirection: 'column', justifyContent: 'between', boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.04)', position: 'relative' }}>
+          <div style={{ background: '#FFFFFF', borderRadius: '20px', border: '1px solid #E4E7EC', padding: 'clamp(20px, 4vw, 36px) clamp(16px, 3.5vw, 32px)', display: 'flex', flexDirection: 'column', justifyContent: 'between', boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.04)', position: 'relative' }}>
             <div>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '20px' }}>
                 <span style={{ background: '#E8F0FF', color: '#2563EB', padding: '4px 12px', borderRadius: '8px', fontSize: '12px', fontWeight: 700, textTransform: 'uppercase' }}>
@@ -190,7 +190,7 @@ export default function SampleReportsHubPage() {
           </div>
 
           {/* Card 2: Detailed Sample Report */}
-          <div style={{ background: '#FFFFFF', borderRadius: '20px', border: '1.5px solid #BFDBFE', padding: '36px 32px', display: 'flex', flexDirection: 'column', justifyContent: 'between', boxShadow: '0 10px 25px -5px rgba(37, 99, 235, 0.08)', position: 'relative' }}>
+          <div style={{ background: '#FFFFFF', borderRadius: '20px', border: '1.5px solid #BFDBFE', padding: 'clamp(20px, 4vw, 36px) clamp(16px, 3.5vw, 32px)', display: 'flex', flexDirection: 'column', justifyContent: 'between', boxShadow: '0 10px 25px -5px rgba(37, 99, 235, 0.08)', position: 'relative' }}>
             <div>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '20px' }}>
                 <span style={{ background: '#080F1C', color: '#FFFFFF', padding: '4px 12px', borderRadius: '8px', fontSize: '12px', fontWeight: 700, textTransform: 'uppercase' }}>

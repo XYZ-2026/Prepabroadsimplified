@@ -16,8 +16,8 @@ export default function DemoConfirmationPage() {
   }, []);
 
   return (
-    <div style={{ minHeight: '80vh', background: '#F8FAFC', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '48px 16px' }}>
-      <div style={{ maxWidth: '640px', width: '100%', background: '#FFFFFF', borderRadius: '24px', border: '1px solid #E4E7EC', padding: '48px 36px', textAlign: 'center', boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.05)' }}>
+    <div style={{ minHeight: '80vh', background: '#F8FAFC', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 'clamp(24px, 5vw, 48px) clamp(12px, 3.5vw, 20px)' }}>
+      <div style={{ maxWidth: '640px', width: '100%', background: '#FFFFFF', borderRadius: '24px', border: '1px solid #E4E7EC', padding: 'clamp(28px, 5vw, 48px) clamp(18px, 4vw, 36px)', textAlign: 'center', boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.05)' }}>
         
         {/* Success Icon */}
         <div style={{ width: '64px', height: '64px', borderRadius: '50%', background: '#E8F0FF', color: '#2563EB', fontSize: '28px', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 24px auto', border: '2px solid #BFDBFE' }}>

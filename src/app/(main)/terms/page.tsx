@@ -16,35 +16,7 @@ export const metadata: Metadata = {
 export default function TermsAndConditionsPage() {
   return (
     <div className="min-h-screen bg-[#F8FAFC] selection:bg-[#2563EB] selection:text-white">
-      {/* HEADER */}
-      <header className="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-[#E2E8F0]">
-        <div className="max-w-5xl mx-auto px-5 py-4 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-3.5 hover:opacity-90 transition-opacity">
-            <Image
-              src="/logo-transparent.png"
-              alt={COMPANY_CONFIG.brandName}
-              width={48}
-              height={48}
-              className="w-[44px] h-[44px] object-contain shrink-0"
-              priority
-            />
-            <div>
-              <div className="text-[20px] font-black text-[#080F1C] tracking-tight leading-none">
-                {COMPANY_CONFIG.brandName}
-              </div>
-              <div className="mt-1 text-[9.5px] uppercase tracking-[0.15em] font-semibold text-[#64748B]">
-                {COMPANY_CONFIG.legalName}
-              </div>
-            </div>
-          </Link>
-          <Link
-            href="/"
-            className="text-[13px] font-bold text-[#2563EB] hover:text-[#1D4ED8] transition-colors border border-[#2563EB]/20 px-4 py-2 rounded-full"
-          >
-            ← Back to Home
-          </Link>
-        </div>
-      </header>
+      {/* Header provided consistently by AppShell Topbar */}
 
       {/* HERO */}
       <div className="bg-gradient-to-br from-[#080F1C] via-[#1E3A8A] to-[#2563EB] text-white py-14 px-5">

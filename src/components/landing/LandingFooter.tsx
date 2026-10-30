@@ -8,9 +8,9 @@ export default function LandingFooter() {
   return (
     <footer className="bg-[#080F1C] px-4 sm:px-6 md:px-10 lg:px-16 pt-12 sm:pt-16 md:pt-20 pb-10 text-left border-t border-slate-800">
       <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-10 lg:gap-14">
+        <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-10 lg:gap-14">
           {/* BRAND */}
-          <div className="col-span-2 sm:col-span-2 lg:col-span-1 max-w-[320px]">
+          <div className="col-span-1 xs:col-span-2 lg:col-span-1 max-w-[360px]">
             <Link href="/" className="flex items-center gap-3.5 text-white hover:opacity-90 transition-opacity">
               <Image
                 src="/logo-transparent.png"

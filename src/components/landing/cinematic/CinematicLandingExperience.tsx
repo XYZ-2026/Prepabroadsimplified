@@ -6,6 +6,7 @@ import TopSchoolsTicker from './TopSchoolsTicker';
 import ServicesSection from './ServicesSection';
 import StatsStrip from './StatsStrip';
 import AssessmentMatrixSection from './AssessmentMatrixSection';
+import InteractiveReportDossier from './InteractiveReportDossier';
 import StudentJourneySection from './StudentJourneySection';
 import AcademicPillarsSection from './AcademicPillarsSection';
 import StudentTestimonialsSection from './StudentTestimonialsSection';
@@ -30,7 +31,10 @@ export default function CinematicLandingExperience() {
       {/* 4. The Assessment Matrix (Directly addresses user prompt & #assessments) */}
       <AssessmentMatrixSection />
 
-      {/* 4. The Student Development Journey */}
+      {/* 5. The Evidence Engine: Interactive Sample Report Dossier */}
+      <InteractiveReportDossier />
+
+      {/* 6. The Student Development Journey */}
       <StudentJourneySection />
 
       {/* 5. Grade-Specific Pathways & Academic Pillars */}

@@ -86,7 +86,7 @@ export default function DiscoverPage() {
     <div className="min-h-screen bg-[#F8FAFC] text-slate-900 font-sans flex flex-col selection:bg-[#2563EB] selection:text-white">
       
       {/* ── 1. HERO SECTION ── */}
-      <section className="bg-gradient-to-b from-[#FFFFFF] via-[#F8FAFC] to-[#F1F5F9] text-slate-900 pt-10 pb-20 px-4 md:px-8 relative overflow-hidden border-b border-slate-200">
+      <section className="bg-gradient-to-b from-[#FFFFFF] via-[#F8FAFC] to-[#F1F5F9] text-slate-900 pt-6 sm:pt-12 pb-10 sm:pb-18 px-3.5 sm:px-6 md:px-8 relative overflow-hidden border-b border-slate-200">
         <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-[#2563EB]/5 rounded-full blur-[140px] pointer-events-none" />
         <div className="absolute top-1/3 right-1/4 w-[500px] h-[500px] bg-blue-500/5 rounded-full blur-[130px] pointer-events-none" />
 
@@ -99,7 +99,7 @@ export default function DiscoverPage() {
               {HOME_PAGE_CONFIG.heroEyebrow}
             </div>
 
-            <h1 className="text-4xl md:text-6xl font-display font-extrabold tracking-tight leading-[1.08] text-slate-900 mb-6">
+            <h1 className="text-[28px] xs:text-[34px] sm:text-[46px] md:text-[56px] font-display font-extrabold tracking-tight leading-[1.1] text-slate-900 mb-4 sm:mb-6">
               {HOME_PAGE_CONFIG.heroHeadlineLine1} <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#2563EB] via-[#1D4ED8] to-[#1E40AF]">
                 {HOME_PAGE_CONFIG.heroHeadlineLine2}
@@ -112,7 +112,7 @@ export default function DiscoverPage() {
             </p>
 
             {/* Operational CTAs without redundant Sign In/Sign Up */}
-            <div className="flex flex-col sm:flex-row items-center gap-4 mb-8">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 mb-8 w-full sm:w-auto">
               <Link
                 href="/book-a-demo"
                 className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-extrabold text-sm tracking-wide shadow-xl shadow-blue-600/20 flex items-center justify-center gap-2.5 transition-all transform hover:-translate-y-0.5 cursor-pointer ring-1 ring-blue-400/30"

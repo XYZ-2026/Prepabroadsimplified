@@ -157,7 +157,7 @@ export default function AboutUsPage() {
     <div className="min-h-screen bg-[#F8FAFC] text-[#080F1C] font-sans flex flex-col selection:bg-[#2563EB] selection:text-white">
       
       {/* ── SECTION 1: HERO — ABOUT CLARVO EDUCATION PRIVATE LIMITED ── */}
-      <section className="relative overflow-hidden pt-16 md:pt-24 pb-20 px-4 md:px-8 bg-gradient-to-b from-[#FFFFFF] via-[#F8FAFC] to-[#F1F5F9] border-b border-[#E4E7EC]">
+      <section className="relative overflow-hidden pt-8 sm:pt-14 md:pt-20 pb-10 sm:pb-16 px-3.5 sm:px-6 md:px-8 bg-gradient-to-b from-[#FFFFFF] via-[#F8FAFC] to-[#F1F5F9] border-b border-[#E4E7EC]">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[720px] h-[400px] bg-[#2563EB]/5 rounded-full blur-[140px] pointer-events-none" />
 
         <div className="max-w-4xl mx-auto text-center relative z-10">
@@ -166,7 +166,7 @@ export default function AboutUsPage() {
             <span>ABOUT {COMPANY_CONFIG.brandName}</span>
           </div>
 
-          <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight text-[#080F1C] leading-[1.15] mb-6">
+          <h1 className="text-[28px] xs:text-[34px] sm:text-[46px] md:text-[54px] font-extrabold tracking-tight text-[#080F1C] leading-[1.12] mb-4 sm:mb-6">
             Making Education Decisions Simpler.
           </h1>
 
@@ -194,7 +194,7 @@ export default function AboutUsPage() {
       </section>
 
       {/* ── SECTION 2: WHY CLARVO EDUCATION PRIVATE LIMITED EXISTS ── */}
-      <section className="py-20 px-4 md:px-8 max-w-5xl mx-auto w-full">
+      <section className="py-10 sm:py-16 md:py-20 px-4 md:px-8 max-w-5xl mx-auto w-full">
         <div className="text-center max-w-2xl mx-auto mb-14">
           <span className="text-[#2563EB] font-bold text-xs tracking-widest uppercase mb-2 block">
             The Problem We Solve
@@ -255,7 +255,7 @@ export default function AboutUsPage() {
       </section>
 
       {/* ── SECTION 3: OUR PHILOSOPHY ── */}
-      <section className="py-20 px-4 md:px-8 bg-white border-y border-[#E4E7EC]">
+      <section className="py-10 sm:py-16 md:py-20 px-4 md:px-8 bg-white border-y border-[#E4E7EC]">
         <div className="max-w-6xl mx-auto">
           <div className="text-center max-w-2xl mx-auto mb-16">
             <span className="text-[#2563EB] font-bold text-xs tracking-widest uppercase mb-2 block">
@@ -300,7 +300,7 @@ export default function AboutUsPage() {
       </section>
 
       {/* ── SECTION 4: THE STUDENT JOURNEY ── */}
-      <section className="py-20 px-4 md:px-8 max-w-6xl mx-auto w-full">
+      <section className="py-10 sm:py-16 md:py-20 px-4 md:px-8 max-w-6xl mx-auto w-full">
         <div className="text-center max-w-2xl mx-auto mb-16">
           <span className="text-[#2563EB] font-bold text-xs tracking-widest uppercase mb-2 block">
             Multi-Stage Development
@@ -339,7 +339,7 @@ export default function AboutUsPage() {
       </section>
 
       {/* ── SECTION 5: INTRODUCING CLARVO ── */}
-      <section className="py-20 px-4 md:px-8 bg-[#F1F5F9] border-y border-[#E4E7EC]">
+      <section className="py-10 sm:py-16 md:py-20 px-4 md:px-8 bg-[#F1F5F9] border-y border-[#E4E7EC]">
         <div className="max-w-6xl mx-auto">
           <div className="text-center max-w-2xl mx-auto mb-16">
             <span className="text-[#2563EB] font-bold text-xs tracking-widest uppercase mb-2 block">
@@ -388,8 +388,8 @@ export default function AboutUsPage() {
       </section>
 
       {/* ── SECTION 6: THE PEOPLE BEHIND THE VISION ── */}
-      <section className="py-20 px-4 md:px-8 max-w-5xl mx-auto w-full">
-        <div className="bg-white p-8 md:p-12 rounded-3xl border border-[#E4E7EC] shadow-sm mb-12">
+      <section className="py-10 sm:py-16 md:py-20 px-4 md:px-8 max-w-5xl mx-auto w-full">
+        <div className="bg-white p-5 sm:p-8 md:p-12 rounded-2xl sm:rounded-3xl border border-[#E4E7EC] shadow-sm mb-8 sm:mb-12">
           <div className="max-w-2xl">
             <span className="text-[#2563EB] font-bold text-xs tracking-widest uppercase mb-2 block">
               Leadership Philosophy
@@ -407,7 +407,7 @@ export default function AboutUsPage() {
         </div>
 
         {/* ── CORPORATE IDENTITY & LOCATIONS ── */}
-        <div className="bg-[#080F1C] text-white p-8 md:p-12 rounded-3xl border border-slate-800 shadow-xl">
+        <div className="bg-[#080F1C] text-white p-4 sm:p-8 md:p-12 rounded-2xl sm:rounded-3xl border border-slate-800 shadow-xl">
           <div className="max-w-3xl mb-8">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-bold tracking-wider uppercase mb-3">
               <Building2 className="w-3.5 h-3.5" />
@@ -463,7 +463,7 @@ export default function AboutUsPage() {
       </section>
 
       {/* ── SECTION 7: OUR CORE VALUES ── */}
-      <section className="py-20 px-4 md:px-8 bg-white border-y border-[#E4E7EC]">
+      <section className="py-10 sm:py-16 md:py-20 px-4 md:px-8 bg-white border-y border-[#E4E7EC]">
         <div className="max-w-6xl mx-auto">
           <div className="text-center max-w-2xl mx-auto mb-16">
             <span className="text-[#2563EB] font-bold text-xs tracking-widest uppercase mb-2 block">
@@ -498,7 +498,7 @@ export default function AboutUsPage() {
       </section>
 
       {/* ── SECTION 8: OUR VISION ── */}
-      <section className="py-20 px-4 md:px-8 max-w-4xl mx-auto text-center w-full">
+      <section className="py-10 sm:py-16 md:py-20 px-4 md:px-8 max-w-4xl mx-auto text-center w-full">
         <span className="text-[#2563EB] font-bold text-xs tracking-widest uppercase mb-2 block">
           Our Vision
         </span>
@@ -541,7 +541,7 @@ export default function AboutUsPage() {
       </section>
 
       {/* ── SECTION 10: CLOSING CTA ── */}
-      <section className="py-20 px-4 md:px-8 max-w-5xl mx-auto text-center w-full">
+      <section className="py-10 sm:py-16 md:py-20 px-4 md:px-8 max-w-5xl mx-auto text-center w-full">
         <div className="bg-[#080F1C] text-white rounded-3xl p-8 md:p-14 border border-slate-800 shadow-xl">
           <span className="text-blue-400 font-bold text-xs uppercase tracking-wider block mb-2">
             Take The Next Step

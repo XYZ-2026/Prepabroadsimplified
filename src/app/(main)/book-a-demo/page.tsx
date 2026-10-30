@@ -364,7 +364,7 @@ export default function BookADemoPage() {
                             : 'bg-slate-200'
                         }`} 
                       />
-                      <span className={`text-[10px] sm:text-[11px] font-semibold text-center truncate ${
+                      <span className={`hidden sm:block text-[11px] font-semibold text-center truncate ${
                         isCurrent ? 'text-[#2563EB]' : isDone ? 'text-slate-700' : 'text-slate-400'
                       }`}>
                         {s.name}
@@ -376,7 +376,7 @@ export default function BookADemoPage() {
             </div>
 
             {/* FORM BODY */}
-            <div className="p-5 sm:p-8 md:p-10">
+            <div className="p-3.5 sm:p-8 md:p-10">
               <AnimatePresence mode="wait">
                 
                 {/* ── STEP 1: CONTACT & FAMILY INFO ── */}
@@ -880,7 +880,7 @@ export default function BookADemoPage() {
             </div>
 
             {/* WIZARD ACTIONS FOOTER */}
-            <div className="bg-[#FAFBFD] border-t border-[#E2E8F0] px-5 sm:px-8 py-4 flex items-center justify-between gap-4">
+            <div className="bg-[#FAFBFD] border-t border-[#E2E8F0] px-3.5 sm:px-8 py-3.5 sm:py-4 flex items-center justify-between gap-2.5 sm:gap-4">
               {currentStep > 1 ? (
                 <button
                   type="button"

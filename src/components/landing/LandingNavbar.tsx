@@ -3,11 +3,17 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 
 export default function LandingNavbar() {
   const router = useRouter();
+  const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const isActive = (href: string) => {
+    if (href === '/') return pathname === '/';
+    return pathname === href || pathname?.startsWith(`${href}/`);
+  };
 
   const handleScrollTo = (e: React.MouseEvent<HTMLAnchorElement>, targetId: string) => {
     e.preventDefault();
@@ -29,6 +35,7 @@ export default function LandingNavbar() {
     { label: 'The Journey', targetId: 'journey', href: '#journey' },
     { label: 'Student Stories', targetId: 'testimonials', href: '#testimonials' },
     { label: 'About Us', targetId: 'about-us', href: '/about-us', isPage: true },
+    { label: 'Blogs', targetId: 'blog', href: '/blog', isPage: true },
   ];
 
   return (
@@ -60,12 +67,17 @@ export default function LandingNavbar() {
         {/* CENTER - Navigation Pills (Desktop Only) */}
         <div className="hidden lg:flex items-center absolute left-1/2 -translate-x-1/2">
           <div className="flex items-center gap-1 bg-white/80 border border-[#E2E8F0] rounded-full px-2 py-1 shadow-xs backdrop-blur-md">
-            {navLinks.map((item) => (
-              item.isPage ? (
+            {navLinks.map((item) => {
+              const active = item.isPage ? isActive(item.href) : false;
+              return item.isPage ? (
                 <Link
                   key={item.label}
                   href={item.href}
-                  className="px-3.5 h-[36px] rounded-full flex items-center justify-center text-[13.5px] font-medium text-[#475569] hover:bg-[#2563EB] hover:text-white transition-all duration-200 cursor-pointer"
+                  className={`px-3.5 h-[36px] rounded-full flex items-center justify-center text-[13.5px] transition-all duration-200 cursor-pointer ${
+                    active
+                      ? "bg-[#2563EB] text-white font-bold shadow-xs"
+                      : "font-medium text-[#475569] hover:bg-[#2563EB] hover:text-white"
+                  }`}
                 >
                   {item.label}
                 </Link>
@@ -78,8 +90,8 @@ export default function LandingNavbar() {
                 >
                   {item.label}
                 </a>
-              )
-            ))}
+              );
+            })}
           </div>
         </div>
 
@@ -127,16 +139,21 @@ export default function LandingNavbar() {
       {mobileMenuOpen && (
         <div className="lg:hidden bg-white/98 backdrop-blur-xl border-b border-[#E2E8F0] shadow-xl px-4 py-5 space-y-3">
           <div className="space-y-1">
-            {navLinks.map((item) => (
-              item.isPage ? (
+            {navLinks.map((item) => {
+              const active = item.isPage ? isActive(item.href) : false;
+              return item.isPage ? (
                 <Link
                   key={item.label}
                   href={item.href}
                   onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-[15px] font-semibold text-[#334155] hover:bg-[#F1F5F9] hover:text-[#2563EB] transition-colors"
+                  className={`flex items-center justify-between px-3.5 py-2.5 rounded-xl text-[15px] transition-colors ${
+                    active
+                      ? "bg-[#2563EB] text-white font-bold"
+                      : "font-semibold text-[#334155] hover:bg-[#F1F5F9] hover:text-[#2563EB]"
+                  }`}
                 >
                   <span>{item.label}</span>
-                  <span className="text-[#94A3B8] text-sm">→</span>
+                  <span className={active ? "text-white" : "text-[#94A3B8]"}>→</span>
                 </Link>
               ) : (
                 <a
@@ -148,8 +165,8 @@ export default function LandingNavbar() {
                   <span>{item.label}</span>
                   <span className="text-[#94A3B8] text-sm">→</span>
                 </a>
-              )
-            ))}
+              );
+            })}
           </div>
 
           <div className="pt-3 border-t border-slate-100 flex flex-col gap-2.5">

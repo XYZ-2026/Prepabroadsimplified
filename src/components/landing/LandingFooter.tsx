@@ -90,6 +90,7 @@ export default function LandingFooter() {
             <div className="space-y-3">
               {[
                 { label: 'About CLARVO', href: '/about-us' },
+                { label: 'Research & Insights Blog', href: '/blog' },
                 { label: 'The Student Journey', href: '/#journey' },
                 { label: 'Academic Pathways', href: '/#programs' },
                 { label: 'Frequently Asked Questions', href: '/#faq' },

@@ -302,6 +302,87 @@ export async function saveCommunityLead(
 }
 
 /**
+ * Check if a lead is test data
+ */
+export function isTestLead(lead: Partial<CommunityLead>): boolean {
+  if (!lead) return false;
+  const email = (lead.email || '').toLowerCase();
+  const name = (lead.name || '').toLowerCase();
+  return (
+    email.includes('test') ||
+    email.includes('example.com') ||
+    email.includes('@clarvo.test') ||
+    name.includes('test') ||
+    name === 'aarav sharma'
+  );
+}
+
+/**
+ * Delete a single community lead by ID
+ */
+export async function deleteCommunityLead(leadId: string): Promise<boolean> {
+  // 1. Delete from local JSON
+  try {
+    ensureDirectoryExists(LEADS_FILE);
+    if (fs.existsSync(LEADS_FILE)) {
+      const content = fs.readFileSync(LEADS_FILE, 'utf-8');
+      const parsed = JSON.parse(content);
+      if (Array.isArray(parsed)) {
+        const filtered = parsed.filter((l: CommunityLead) => l.id !== leadId);
+        fs.writeFileSync(LEADS_FILE, JSON.stringify(filtered, null, 2), 'utf-8');
+      }
+    }
+  } catch (err) {
+    console.error('[Community Service] Error deleting local lead:', err);
+  }
+
+  // 2. Delete from Firestore
+  try {
+    if (isFirestoreReady()) {
+      await adminDb.collection('community_leads').doc(leadId).delete();
+    }
+  } catch (err) {
+    console.warn('[Community Service] Firestore delete lead error:', err);
+  }
+
+  return true;
+}
+
+/**
+ * Purge all test leads from storage
+ */
+export async function purgeTestLeads(): Promise<number> {
+  let count = 0;
+  try {
+    ensureDirectoryExists(LEADS_FILE);
+    if (fs.existsSync(LEADS_FILE)) {
+      const content = fs.readFileSync(LEADS_FILE, 'utf-8');
+      const parsed = JSON.parse(content);
+      if (Array.isArray(parsed)) {
+        const nonTest = parsed.filter((l: CommunityLead) => !isTestLead(l));
+        count += parsed.length - nonTest.length;
+        fs.writeFileSync(LEADS_FILE, JSON.stringify(nonTest, null, 2), 'utf-8');
+      }
+    }
+  } catch {}
+
+  try {
+    if (isFirestoreReady()) {
+      const snapshot = await adminDb.collection('community_leads').get();
+      for (const doc of snapshot.docs) {
+        const data = doc.data() as CommunityLead;
+        if (isTestLead(data)) {
+          await doc.ref.delete();
+          count++;
+        }
+      }
+    }
+  } catch {}
+
+  return count;
+}
+
+/**
  * Retrieve all community leads for the admin dashboard
  */
 export async function getCommunityLeads(): Promise<CommunityLead[]> {
@@ -315,7 +396,7 @@ export async function getCommunityLeads(): Promise<CommunityLead[]> {
       const parsed = JSON.parse(content);
       if (Array.isArray(parsed)) {
         for (const lead of parsed) {
-          if (lead && lead.id) {
+          if (lead && lead.id && !isTestLead(lead)) {
             leadsMap.set(lead.id, lead);
           }
         }
@@ -337,7 +418,7 @@ export async function getCommunityLeads(): Promise<CommunityLead[]> {
       if (!snapshot.empty) {
         snapshot.docs.forEach((doc) => {
           const data = doc.data() as CommunityLead;
-          if (data && data.id) {
+          if (data && data.id && !isTestLead(data)) {
             leadsMap.set(data.id, data);
           }
         });

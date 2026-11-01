@@ -18,7 +18,8 @@ import {
   RefreshCw, 
   ShieldCheck,
   CheckCircle2,
-  FileSpreadsheet
+  FileSpreadsheet,
+  Trash2
 } from 'lucide-react';
 import { CommunitySettings, CommunityLead } from '@/lib/community-service';
 
@@ -99,6 +100,45 @@ export default function CommunityManagementClient({ initialSettings, initialLead
   };
 
   const [refreshing, setRefreshing] = useState(false);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+
+  const handleDeleteLead = async (leadId: string) => {
+    if (!window.confirm('Are you sure you want to delete this lead?')) return;
+    setDeletingId(leadId);
+    try {
+      const res = await fetch(`/api/admin/community?id=${encodeURIComponent(leadId)}`, {
+        method: 'DELETE',
+      });
+      const data = await res.json();
+      if (data.success && Array.isArray(data.leads)) {
+        setLeads(data.leads);
+      } else {
+        setLeads((prev) => prev.filter((l) => l.id !== leadId));
+      }
+    } catch (err) {
+      console.error('Delete lead error:', err);
+    } finally {
+      setDeletingId(null);
+    }
+  };
+
+  const handlePurgeTestLeads = async () => {
+    if (!window.confirm('Remove all test leads from the community database?')) return;
+    setRefreshing(true);
+    try {
+      const res = await fetch('/api/admin/community?purgeTest=true', {
+        method: 'DELETE',
+      });
+      const data = await res.json();
+      if (data.success && Array.isArray(data.leads)) {
+        setLeads(data.leads);
+      }
+    } catch (err) {
+      console.error('Purge error:', err);
+    } finally {
+      setRefreshing(false);
+    }
+  };
 
   const handleRefresh = async () => {
     setRefreshing(true);
@@ -423,6 +463,16 @@ export default function CommunityManagementClient({ initialSettings, initialLead
             </button>
 
             <button
+              onClick={handlePurgeTestLeads}
+              disabled={refreshing}
+              className="h-9 px-3 rounded-xl bg-red-50 hover:bg-red-100 border border-red-200 text-red-700 text-xs font-bold inline-flex items-center gap-1.5 transition-all cursor-pointer"
+              title="Remove all mock / test entries"
+            >
+              <Trash2 className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">Clean Test Leads</span>
+            </button>
+
+            <button
               onClick={handleExportCSV}
               disabled={leads.length === 0}
               className="h-9 px-3.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-[#080F1C] text-xs font-bold inline-flex items-center gap-1.5 transition-all disabled:opacity-50 cursor-pointer"
@@ -450,6 +500,7 @@ export default function CommunityManagementClient({ initialSettings, initialLead
                   <th className="py-2.5 px-3">Priority / Looking For</th>
                   <th className="py-2.5 px-3">Submitted At</th>
                   <th className="py-2.5 px-3">Status</th>
+                  <th className="py-2.5 px-3 text-right">Action</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-[#E4E7EC]">
@@ -493,6 +544,16 @@ export default function CommunityManagementClient({ initialSettings, initialLead
                         <CheckCircle2 className="w-3 h-3 text-emerald-600" />
                         <span>Recorded</span>
                       </span>
+                    </td>
+                    <td className="py-3 px-3 text-right whitespace-nowrap">
+                      <button
+                        onClick={() => handleDeleteLead(lead.id)}
+                        disabled={deletingId === lead.id}
+                        className="p-1.5 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 transition-colors disabled:opacity-50 cursor-pointer"
+                        title="Delete Lead"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
                     </td>
                   </tr>
                 ))}

@@ -177,6 +177,55 @@ export default function CommunityLandingClient() {
     }
   };
 
+  const renderBenefits = () => (
+    <div className="space-y-3">
+      <div className="text-[11px] sm:text-[12px] font-black uppercase tracking-wider text-[#64748B]">
+        What You Receive Inside the Community
+      </div>
+
+      {/* Grid: 1 column on mobile (<640px) to prevent cutoffs; 2 columns on tablet and desktop */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3">
+        {COMMUNITY_BENEFITS.map((benefit, index) => {
+          const Icon = benefit.icon;
+          const isLastOdd = index === COMMUNITY_BENEFITS.length - 1 && COMMUNITY_BENEFITS.length % 2 !== 0;
+          return (
+            <div
+              key={benefit.num}
+              className={`p-3 sm:p-3.5 rounded-xl bg-white border border-[#E4E7EC] shadow-2xs hover:border-[#CBD5E1] transition-all flex items-start gap-3 ${
+                isLastOdd ? 'sm:col-span-2' : ''
+              }`}
+            >
+              <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 border ${benefit.accent} mt-0.5`}>
+                <Icon className="w-4 h-4" />
+              </div>
+              <div className="min-w-0 flex-1">
+                <h2 className="text-[12.5px] sm:text-[13px] font-bold text-[#080F1C] leading-snug whitespace-normal break-words">
+                  {benefit.fullTitle || benefit.title}
+                </h2>
+                <p className="text-[11px] sm:text-[11.5px] text-[#64748B] mt-1 leading-relaxed whitespace-normal break-words">
+                  {benefit.desc}
+                </p>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Trust Badges */}
+      <div className="flex items-center flex-wrap gap-2 text-[10.5px] text-[#64748B] pt-1">
+        <span className="flex items-center gap-1">
+          <ShieldCheck className="w-3.5 h-3.5 text-[#16A34A]" />
+          <span>Verified Admissions Guidance</span>
+        </span>
+        <span>·</span>
+        <span className="flex items-center gap-1">
+          <Lock className="w-3.5 h-3.5 text-[#2563EB]" />
+          <span>Zero Spam · Moderated Community</span>
+        </span>
+      </div>
+    </div>
+  );
+
   return (
     <div className="min-h-screen w-full bg-[#FAFBFD] flex flex-col justify-between selection:bg-[#2563EB] selection:text-white">
       {/* ── Compact Brand Bar ── */}
@@ -191,14 +240,9 @@ export default function CommunityLandingClient() {
               className="w-6 h-6 sm:w-7 sm:h-7 object-contain"
               priority
             />
-            <div className="flex items-baseline gap-1.5">
-              <span className="text-[16px] sm:text-[18px] font-black tracking-[-0.03em] text-[#080F1C]">
-                CLARVO
-              </span>
-              <span className="text-[10px] sm:text-[11px] font-bold text-[#64748B]">
-                · Student &amp; Parent Community
-              </span>
-            </div>
+            <span className="text-[16px] sm:text-[18px] font-black tracking-[-0.03em] text-[#080F1C]">
+              CLARVO
+            </span>
           </div>
 
           <div className="flex items-center gap-1 text-[9.5px] sm:text-[10.5px] font-bold text-[#16A34A] bg-[#DCFCE7] px-2 py-0.5 rounded-full border border-[#86EFAC]/40">
@@ -209,10 +253,10 @@ export default function CommunityLandingClient() {
       </header>
 
       {/* ── Main Content Container ── */}
-      <main className="flex-1 w-full max-w-6xl mx-auto px-3.5 sm:px-6 md:px-8 py-3 sm:py-6 lg:py-8 flex flex-col justify-center">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6 lg:gap-8 items-start">
+      <main className="flex-1 w-full max-w-6xl mx-auto px-3.5 sm:px-6 md:px-8 py-4 sm:py-6 lg:py-8 flex flex-col justify-center">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6 lg:gap-8 items-start">
           
-          {/* ── LEFT COLUMN (7 Cols on Desktop): Headline & 5 Benefit Cards ── */}
+          {/* ── LEFT COLUMN (7 Cols on Desktop): Headline & Desktop Benefit Cards ── */}
           <div className="lg:col-span-7 flex flex-col space-y-3 sm:space-y-4">
             <div>
               <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#E8F0FF] border border-[#2563EB]/25 text-[#2563EB] text-[9.5px] sm:text-[10.5px] font-bold tracking-[0.1em] uppercase mb-1.5 sm:mb-2">
@@ -230,76 +274,13 @@ export default function CommunityLandingClient() {
               </p>
             </div>
 
-            {/* 5 Community Benefit Cards */}
-            <div className="space-y-1.5 sm:space-y-2">
-              <div className="text-[10px] sm:text-[10.5px] font-black uppercase tracking-wider text-[#64748B]">
-                What You Receive Inside the Community
-              </div>
-
-              {/* Responsive Benefits Grid: 2 columns on all devices */}
-              <div className="grid grid-cols-2 gap-1.5 sm:gap-2">
-                {COMMUNITY_BENEFITS.slice(0, 4).map((benefit) => {
-                  const Icon = benefit.icon;
-                  return (
-                    <div
-                      key={benefit.num}
-                      className="p-2 sm:p-2.5 rounded-lg sm:rounded-xl bg-white border border-[#E4E7EC] shadow-2xs hover:border-[#CBD5E1] transition-all flex items-start gap-1.5 sm:gap-2"
-                    >
-                      <div className={`w-6 h-6 sm:w-7 sm:h-7 rounded-md flex items-center justify-center shrink-0 border ${benefit.accent}`}>
-                        <Icon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                      </div>
-                      <div className="min-w-0">
-                        <h2 className="text-[11px] sm:text-[12px] font-bold text-[#080F1C] leading-tight truncate sm:whitespace-normal">
-                          {benefit.title}
-                        </h2>
-                        <p className="hidden sm:block text-[10.5px] text-[#64748B] mt-0.5 leading-snug line-clamp-2">
-                          {benefit.desc}
-                        </p>
-                      </div>
-                    </div>
-                  );
-                })}
-
-                {/* 5th Benefit: Full width across both columns */}
-                {COMMUNITY_BENEFITS.slice(4).map((benefit) => {
-                  const Icon = benefit.icon;
-                  return (
-                    <div
-                      key={benefit.num}
-                      className="col-span-2 p-2 sm:p-2.5 rounded-lg sm:rounded-xl bg-white border border-[#E4E7EC] shadow-2xs hover:border-[#CBD5E1] transition-all flex items-start gap-1.5 sm:gap-2"
-                    >
-                      <div className={`w-6 h-6 sm:w-7 sm:h-7 rounded-md flex items-center justify-center shrink-0 border ${benefit.accent}`}>
-                        <Icon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                      </div>
-                      <div className="min-w-0">
-                        <h2 className="text-[11px] sm:text-[12px] font-bold text-[#080F1C] leading-tight">
-                          {benefit.title}
-                        </h2>
-                        <p className="hidden sm:block text-[10.5px] text-[#64748B] mt-0.5 leading-snug">
-                          {benefit.desc}
-                        </p>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* Trust Badges */}
-            <div className="hidden sm:flex items-center gap-2.5 text-[10.5px] text-[#64748B] pt-0.5">
-              <span className="flex items-center gap-1">
-                <ShieldCheck className="w-3 h-3 text-[#16A34A]" />
-                <span>Verified Admissions Guidance</span>
-              </span>
-              <span>·</span>
-              <span className="flex items-center gap-1">
-                <Lock className="w-3 h-3 text-[#2563EB]" />
-                <span>Zero Spam · Moderated Community</span>
-              </span>
+            {/* Desktop Only Benefits: Hidden on mobile (<1024px) so form is reached immediately */}
+            <div className="hidden lg:block pt-1">
+              {renderBenefits()}
             </div>
           </div>
 
-          {/* ── RIGHT COLUMN (5 Cols on Desktop): Exactly 5 Form Fields + CTA ── */}
+          {/* ── RIGHT COLUMN (5 Cols on Desktop): Form Fields + CTA ── */}
           <div className="lg:col-span-5 w-full">
             <div className="bg-white rounded-xl sm:rounded-2xl border border-[#CBD5E1] shadow-[0_8px_25px_rgba(8,15,28,0.06)] p-3.5 sm:p-5 lg:p-6">
               <div className="border-b border-[#E4E7EC] pb-2 sm:pb-2.5 mb-2.5 sm:mb-3">
@@ -520,6 +501,11 @@ export default function CommunityLandingClient() {
             </div>
           </div>
 
+        </div>
+
+        {/* ── MOBILE VIEW ONLY: Benefits section placed BELOW the form ── */}
+        <div className="block lg:hidden w-full mt-6 pt-5 border-t border-[#E4E7EC]">
+          {renderBenefits()}
         </div>
       </main>
 

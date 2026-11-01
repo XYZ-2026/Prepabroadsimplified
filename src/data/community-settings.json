@@ -1,24 +1,9 @@
 {
   "activeWhatsAppUrl": "https://chat.whatsapp.com/JevCH59LcE33ahR612sLEG",
   "qrLandingPageUrl": "/join-community",
-  "updatedAt": "2026-11-01T06:08:21.740Z",
-  "updatedBy": "admin@as.com",
+  "updatedAt": "2026-11-01T06:01:55.044Z",
+  "updatedBy": "System (Initial Setup)",
   "history": [
-    {
-      "id": "hist_1793513301740_i11n",
-      "url": "https://chat.whatsapp.com/JevCH59LcE33ahR612sLEG",
-      "previousUrl": "https://chat.whatsapp.com/https://chat.whatsapp.com/NEW_GROUP_INVITE_TEST_CODEevCH59LcE33ahR612sLEG",
-      "updatedBy": "admin@as.com",
-      "updatedAt": "2026-11-01T06:08:21.740Z",
-      "note": "Restored active official group invitation"
-    },
-    {
-      "id": "hist_1793513298656_onks",
-      "url": "https://chat.whatsapp.com/https://chat.whatsapp.com/NEW_GROUP_INVITE_TEST_CODEevCH59LcE33ahR612sLEG",
-      "previousUrl": "https://chat.whatsapp.com/JevCH59LcE33ahR612sLEG",
-      "updatedBy": "admin@as.com",
-      "updatedAt": "2026-11-01T06:08:18.656Z"
-    },
     {
       "id": "hist_initial",
       "url": "https://chat.whatsapp.com/JevCH59LcE33ahR612sLEG",

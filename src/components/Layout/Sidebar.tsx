@@ -323,6 +323,9 @@ export default function Sidebar({ userRole, userName, userEmail }: SidebarProps)
                 <Link href="/dashboard/admin/enquiries" onClick={handleLinkClick} className={`${styles.navSubLink} ${isActive('/dashboard/admin/enquiries') ? styles.navSubLinkActive : ''}`}>
                   Enquiries
                 </Link>
+                <Link href="/dashboard/admin/community" onClick={handleLinkClick} className={`${styles.navSubLink} ${isActive('/dashboard/admin/community') ? styles.navSubLinkActive : ''}`}>
+                  Community Landing Page
+                </Link>
                 <Link href="/dashboard/admin/reviews" onClick={handleLinkClick} className={`${styles.navSubLink} ${isActive('/dashboard/admin/reviews') ? styles.navSubLinkActive : ''}`}>
                   Reviews &amp; Testimonials
                 </Link>

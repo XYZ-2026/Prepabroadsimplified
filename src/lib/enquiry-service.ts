@@ -27,6 +27,12 @@ export interface EnquiryRecord {
 
 const LOCAL_STORAGE_FILE = path.join(process.cwd(), 'src', 'data', 'enquiries.json');
 
+function isFirestoreReady(): boolean {
+  if (!adminDb) return false;
+  const key = process.env.FIREBASE_ADMIN_PRIVATE_KEY;
+  return !!(key && key.length > 50 && process.env.FIREBASE_ADMIN_CLIENT_EMAIL);
+}
+
 // Ensure local data storage directory and file exist
 function ensureLocalStorageFile() {
   try {
@@ -94,7 +100,7 @@ export async function createEnquiry(
 
   // 2. Persist to Firestore if available
   try {
-    if (adminDb) {
+    if (isFirestoreReady()) {
       await adminDb.collection('demo_enquiries').doc(id).set({
         ...newRecord,
         timestamp: new Date(),
@@ -119,7 +125,7 @@ export async function getAllEnquiries(options?: {
 
   // 1. Fetch from Firestore if available
   try {
-    if (adminDb) {
+    if (isFirestoreReady()) {
       const snap = await adminDb.collection('demo_enquiries').orderBy('createdAt', 'desc').limit(200).get();
       snap.docs.forEach((doc) => {
         const d = doc.data();
@@ -213,7 +219,7 @@ export async function updateEnquiry(
 
   // 2. Update Firestore
   try {
-    if (adminDb) {
+    if (isFirestoreReady()) {
       await adminDb.collection('demo_enquiries').doc(id).set(
         {
           ...updates,
@@ -240,7 +246,7 @@ export async function deleteEnquiry(id: string): Promise<boolean> {
 
   // 2. Delete Firestore
   try {
-    if (adminDb) {
+    if (isFirestoreReady()) {
       await adminDb.collection('demo_enquiries').doc(id).delete();
     }
   } catch (fsErr) {

@@ -56,7 +56,10 @@ export default function ParentStudentHeroVisual() {
                 <span className="text-[11px] font-bold text-white/90">Grades 7–12</span>
               </div>
 
-              <h4 className="text-[15px] sm:text-[17px] font-black text-white tracking-tight leading-snug">
+              <h4 
+                className="text-[15px] sm:text-[17px] font-black !text-white text-white tracking-tight leading-snug"
+                style={{ color: '#ffffff' }}
+              >
                 Harmonizing Student Aptitude with Parental Vision
               </h4>
               <p className="text-[12px] sm:text-[12.5px] text-blue-100/90 mt-1.5 leading-relaxed font-normal">

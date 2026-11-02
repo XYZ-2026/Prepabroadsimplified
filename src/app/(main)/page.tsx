@@ -101,7 +101,7 @@ import CinematicLandingExperience from '@/components/landing/cinematic/Cinematic
 
 export default function HomePage() {
   return (
-    <div className="bg-[#F8FAFC] text-[#080F1C] overflow-x-hidden font-sans min-h-screen flex flex-col selection:bg-[#2563EB] selection:text-white">
+    <div className="bg-[#F8FAFC] text-[#080F1C] overflow-x-clip font-sans min-h-screen flex flex-col selection:bg-[#2563EB] selection:text-white">
       {/* Structured Data */}
       <script
         type="application/ld+json"

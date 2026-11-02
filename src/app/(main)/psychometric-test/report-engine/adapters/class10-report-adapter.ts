@@ -1,19 +1,21 @@
 /**
  * Class 10 Report Data Adapter
  * ─────────────────────────────────────────────────────────────────────────────
- * Authoritative baseline adapter that maintains 100% exact structural and
- * data parity with the approved Class 10 executive report.
+ * Adapts Class 10 assessment results into the Universal 56-Page Report Schema.
+ * Uses the authoritative Unified Roadmap Engine for single-source-of-truth
+ * deterministic pathway roadmaps with duplicate guard.
  */
 
 import type { EditorialStudent, EditorialScores, PersonalizationData } from '../../class10_editorial_engine';
 import type { AlignmentResult } from '../../comparison-engine';
 import type { ParentProfile } from '../../parent-scoring';
 import {
-  getPathwayRoadmapData,
+  getRoadmapByRank,
+  validateAndDeduplicateRoadmaps,
   getStudyAbroadGuideData,
   getAcademicProfileRoadmapData,
   getStudentActionPlanData,
-} from '../../class10_roadmap_engine';
+} from '../unified-roadmap-engine';
 import {
   type UniversalReportData,
   getVariantConfig,
@@ -29,33 +31,22 @@ export function adaptClass10ReportData(
   const config = getVariantConfig('grade10');
 
   // Extract top 3 pathways from careerFitment
-  const pathways = scores.careerFitment || [];
-  const primaryName = pathways[0]?.name || 'Science Stream — Engineering & Technology (PCM)';
-  const secondaryName = pathways[1]?.name || 'Commerce, Business & Management Stream';
-  const alternativeName = pathways[2]?.name || 'Humanities, Social Sciences & Creative Arts';
+  const pathways = scores.careerFitment && scores.careerFitment.length > 0
+    ? scores.careerFitment
+    : [
+        { id: 'pcm_stream', name: 'Science Stream – Engineering & Tech Track (PCM)', score: 94 },
+        { id: 'commerce_stream', name: 'Commerce, Business & Management Stream', score: 85 },
+        { id: 'humanities_stream', name: 'Humanities & Creative Arts Stream', score: 78 },
+      ];
 
-  const primaryRoadmap = getPathwayRoadmapData(
-    primaryName,
-    'PRIMARY PATHWAY (RANK 1)',
-    student,
-    scores,
-    comparisonData
-  );
+  const primaryRoadmap = getRoadmapByRank(1, pathways as any, 'grade10', student, scores, comparisonData);
+  const secondaryRoadmap = getRoadmapByRank(2, pathways as any, 'grade10', student, scores, comparisonData);
+  const alternativeRoadmap = getRoadmapByRank(3, pathways as any, 'grade10', student, scores, comparisonData);
 
-  const secondaryRoadmap = getPathwayRoadmapData(
-    secondaryName,
-    'SECONDARY PATHWAY (RANK 2)',
-    student,
-    scores,
-    comparisonData
-  );
-
-  const alternativeRoadmap = getPathwayRoadmapData(
-    alternativeName,
-    'STRATEGIC ALTERNATIVE (RANK 3)',
-    student,
-    scores,
-    comparisonData
+  const validatedRoadmaps = validateAndDeduplicateRoadmaps(
+    { primary: primaryRoadmap, secondary: secondaryRoadmap, alternative: alternativeRoadmap },
+    student.reportId || 'REP-CLASS10',
+    process.env.NODE_ENV === 'test'
   );
 
   const studyAbroad = getStudyAbroadGuideData(student, scores, comparisonData);
@@ -69,15 +60,14 @@ export function adaptClass10ReportData(
       ...student,
       grade: student.grade || 'Class 10',
     },
-    scores,
+    scores: {
+      ...scores,
+      careerFitment: pathways as any,
+    },
     personalization,
     comparisonData: comparisonData || null,
     parentProfile: parentProfile || null,
-    roadmaps: {
-      primary: primaryRoadmap,
-      secondary: secondaryRoadmap,
-      alternative: alternativeRoadmap,
-    },
+    roadmaps: validatedRoadmaps,
     studyAbroad,
     academicRoadmap,
     actionPlan,

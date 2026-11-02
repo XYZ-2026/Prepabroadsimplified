@@ -9,6 +9,9 @@ import { buildUniversalExecutiveHTMLReport } from '@/app/(main)/psychometric-tes
 import { buildUniversalExecutiveSummaryHTMLReport } from '@/app/(main)/psychometric-test/class10_executive_summary_builder';
 import { getVariantConfig } from '@/app/(main)/psychometric-test/report-engine/universal-report-schema';
 
+import { createReportJob } from '@/lib/report-job-service';
+import { runReportGenerationJob } from '@/lib/report-generator-runner';
+
 export const maxDuration = 120;
 export const dynamic = 'force-dynamic';
 
@@ -16,8 +19,9 @@ export async function POST(req: NextRequest) {
   let browser: any = null;
   try {
     const body = await req.json().catch(() => ({}));
-    const { resultId, student: reqStudent, scores: reqScores, reportType = 'full', isSample } = body;
+    const { resultId, student: reqStudent, scores: reqScores, reportType = 'full', isSample, async: isAsync } = body;
     const urlType = new URL(req.url).searchParams.get('type');
+    const isAsyncParam = new URL(req.url).searchParams.get('async') === 'true' || isAsync === true;
     const isExecutive = reportType === 'executive' || urlType === 'executive';
 
     const decodedClaims = await verifySessionCookie();
@@ -29,6 +33,41 @@ export async function POST(req: NextRequest) {
 
     if (!decodedClaims && !isSampleRequest && !isDirectPayload) {
       return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
+    }
+
+    // If async mode is requested, initialize background job record and return jobId immediately
+    if (isAsyncParam) {
+      const effectiveReportType = isExecutive ? 'executive' : 'full';
+      const studentName = reqStudent?.name || 'Candidate';
+      const job = createReportJob({
+        reportType: effectiveReportType,
+        resultId,
+        studentName,
+      });
+
+      runReportGenerationJob({
+        jobId: job.id,
+        resultId,
+        student: reqStudent,
+        scores: reqScores,
+        reportType: effectiveReportType,
+        assessmentType: body.assessmentType,
+        variant: body.variant,
+        isSample: isSampleRequest,
+        userId: decodedClaims?.uid,
+      }).catch(err => {
+        console.error(`[PDF Route] Async background job ${job.id} failed:`, err);
+      });
+
+      return NextResponse.json({
+        success: true,
+        jobId: job.id,
+        status: job.status,
+        percent: job.percent,
+        stage: job.stage,
+        stageDetail: job.stageDetail,
+        reportType: job.reportType,
+      });
     }
 
     let data: any = null;
@@ -245,6 +284,7 @@ export async function POST(req: NextRequest) {
     const puppeteer = (await import('puppeteer')).default;
     browser = await puppeteer.launch({
       headless: true,
+      pipe: true,
       ...(process.env.PUPPETEER_EXECUTABLE_PATH && {
         executablePath: process.env.PUPPETEER_EXECUTABLE_PATH,
       }),

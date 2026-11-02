@@ -1,10 +1,6 @@
 import type { Metadata } from 'next';
-import { Inter, Lexend } from 'next/font/google';
 import Script from 'next/script';
 import './globals.css';
-
-const inter = Inter({ subsets: ['latin'], variable: '--next-font-primary', display: 'swap' });
-const lexend = Lexend({ subsets: ['latin'], variable: '--next-font-heading', display: 'swap' });
 
 function getValidSiteUrl(urlInput?: string): string {
   const fallback = 'https://clarvo.in';
@@ -58,30 +54,17 @@ export const metadata: Metadata = {
   alternates: {
     canonical: '/',
   },
-  icons: {
-    icon: [
-      { url: '/favicon.ico?v=3', sizes: 'any' },
-      { url: '/favicon-32x32.png?v=3', type: 'image/png', sizes: '32x32' },
-      { url: '/favicon-16x16.png?v=3', type: 'image/png', sizes: '16x16' },
-      { url: '/favicon.png?v=3', type: 'image/png', sizes: '32x32' },
-      { url: '/icon.png?v=3', type: 'image/png', sizes: '512x512' },
-    ],
-    shortcut: '/favicon.ico?v=3',
-    apple: [
-      { url: '/apple-icon.png?v=3', sizes: '180x180', type: 'image/png' },
-    ],
-  },
   openGraph: {
-    title: 'CLARVO — Clarity for Their Future',
-    description:
-      'A premium student development platform for Grades 7–12, offering psychometric assessments, personalised career guidance, SAT preparation, one-to-one tutoring, and research/profile building.',
+    type: 'website',
+    locale: 'en_IN',
     url: siteUrl,
     siteName: 'CLARVO',
-    locale: 'en_US',
-    type: 'website',
+    title: 'CLARVO — Clarity for Their Future | Student Development Platform',
+    description:
+      'CLARVO helps parents and students make high-clarity decisions for Grades 7–12 with psychometric profiling, tailored stream roadmaps, SAT tutoring, and mentoring.',
     images: [
       {
-        url: '/study_abroad_hero.png',
+        url: '/og-image.png',
         width: 1200,
         height: 630,
         alt: 'CLARVO — Clarity for Their Future',
@@ -92,11 +75,8 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'CLARVO — Clarity for Their Future',
     description:
-      'A premium student development platform for Grades 7–12, offering psychometric assessments, personalised career guidance, SAT preparation, one-to-one tutoring, and research/profile building.',
-    images: ['/study_abroad_hero.png'],
-  },
-  verification: {
-    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || '',
+      'Psychometric assessments, personalized career roadmaps, and academic mentorship for Grades 7–12.',
+    images: ['/og-image.png'],
   },
   robots: {
     index: true,
@@ -109,6 +89,16 @@ export const metadata: Metadata = {
       'max-snippet': -1,
     },
   },
+  icons: {
+    icon: [
+      { url: '/favicon.ico' },
+      { url: '/favicon.png', type: 'image/png' },
+    ],
+    apple: [
+      { url: '/apple-touch-icon.png' },
+    ],
+  },
+  manifest: '/site.webmanifest',
 };
 
 export default function RootLayout({
@@ -157,8 +147,11 @@ export default function RootLayout({
   };
 
   return (
-    <html lang="en" className={`${inter.variable} ${lexend.variable}`} suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning>
       <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link href="https://fonts.googleapis.com/css2?family=Anton&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Lexend:wght@100..900&display=swap" rel="stylesheet" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{

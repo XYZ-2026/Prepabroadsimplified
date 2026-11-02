@@ -296,7 +296,7 @@ export default async function AssessmentsPage() {
                   <polyline points="10 9 9 9 8 9"/>
                 </svg>
               </div>
-              <p style={{ marginBottom: '24px', fontSize: '16px', fontWeight: '500' }}>You haven't taken any assessments yet.</p>
+              <p style={{ marginBottom: '24px', fontSize: '16px', fontWeight: '500' }}>You haven&apos;t taken any assessments yet.</p>
               {access.status === 'ELIGIBLE' && (
                 <Link href={access.eligibleHref} className={`${componentsStyles.btn} ${componentsStyles.btnPrimary}`}>
                   Take Your {access.eligibleAssessment?.shortName} →

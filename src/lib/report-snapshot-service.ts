@@ -1,5 +1,5 @@
 import { createHash } from 'crypto';
-import { adminDb } from '@/lib/firebase-admin';
+import { adminDb, hasAdminCredentials } from '@/lib/firebase-admin';
 import { generatePersonalization } from '@/app/(main)/psychometric-test/class10_personalization';
 import { callGroqAPI, callGeminiAPI } from '@/lib/ai/llm-service';
 import type { EditorialStudent, EditorialScores, PersonalizationData } from '@/app/(main)/psychometric-test/class10_editorial_engine';
@@ -53,6 +53,10 @@ export function computeReportInputHash(
     studentName: student.name,
     studentGrade: student.grade,
     studentEmail: student.email,
+    gradeBand: /12|senior/i.test(student.grade || '') ? 'senior' : /7|8|9|junior/i.test(student.grade || '') ? 'junior' : 'grade10',
+    pathwayIds: (scores.careerFitment || []).map((c: any) => c.id || c.name),
+    studentStream: student.stream || '',
+    mathStatus: student.mathStatus || '',
     scoresAptitude: scores.aptitude,
     scoresPersonality: scores.personality,
     topRiasec: scores.topRiasec,
@@ -98,6 +102,23 @@ export async function getOrGenerateFamilyInsightSnapshot(
   forceRegenerate: boolean = false
 ): Promise<{ narrative: string; fromCache: boolean; snapshot: FamilyInsightSnapshot }> {
   const currentInputHash = computeFamilyInsightHash(resultId, comparisonData);
+
+  if (!hasAdminCredentials || !adminDb) {
+    const fallbackNarrative = `Based on the diagnostic evaluation, the student and parent demonstrate an overall alignment of ${Math.round(comparisonData.overallScore || 75)}% (${comparisonData.overallIndicator}). Both parties share core educational aspirations, while specific planning discussions around financial expectations and career pathways will help harmonize future decisions. Open communication around Class 11 stream choices and long-term career milestones is highly recommended to maintain positive momentum.`;
+    return {
+      narrative: fallbackNarrative,
+      fromCache: false,
+      snapshot: {
+        status: 'ready',
+        inputHash: currentInputHash,
+        narrative: fallbackNarrative,
+        provider: 'fallback_deterministic',
+        model: 'deterministic',
+        generatedAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      },
+    };
+  }
   const docRef = adminDb.collection('psychometric_results').doc(resultId);
   const docSnap = await docRef.get();
 
@@ -251,6 +272,27 @@ export async function getOrGenerateReportSnapshot(
 ): Promise<{ personalization: PersonalizationData; fromCache: boolean; reportSnapshot: ReportSnapshot }> {
   const { resultId, student, scores, comparisonData, forceRegenerate = false } = options;
   const currentInputHash = computeReportInputHash(resultId, student, scores, comparisonData);
+
+  if (!hasAdminCredentials || !adminDb) {
+    const personalization = await generatePersonalization(student, scores, comparisonData);
+    const mockSnapshot: ReportSnapshot = {
+      status: 'ready',
+      reportVersion: 1,
+      inputHash: currentInputHash,
+      personalization,
+      generatedAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      provider: 'deterministic',
+      model: 'deterministic',
+      promptVersion: PROMPT_VERSION,
+      schemaVersion: REPORT_SCHEMA_VERSION,
+    };
+    return {
+      personalization,
+      fromCache: false,
+      reportSnapshot: mockSnapshot,
+    };
+  }
 
   const docRef = adminDb.collection('psychometric_results').doc(resultId);
   const docSnap = await docRef.get();

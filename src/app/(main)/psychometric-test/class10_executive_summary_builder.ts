@@ -18,6 +18,7 @@ import { formatReportDate } from './class10_html_report_builder';
 import type { UniversalReportData, ReportVariant, ReportVariantConfig } from './report-engine/universal-report-schema';
 import { getVariantConfig } from './report-engine/universal-report-schema';
 import { resolveReportVariant } from './report-engine/adapters';
+import { validateAndDeduplicateRoadmaps } from './report-engine/unified-roadmap-engine';
 import { LOGO_BASE64 } from '@/lib/logo-base64';
 
 export const totalExecutiveSummaryPages = 15;
@@ -42,6 +43,9 @@ export function buildClass10ExecutiveSummaryHTMLReport(
   universalData?: UniversalReportData
 ): string {
   const variant: ReportVariant = universalData?.variant || resolveReportVariant(undefined, student.grade);
+  if (universalData?.roadmaps) {
+    validateAndDeduplicateRoadmaps(universalData.roadmaps as any, student.reportId || 'REP-EXEC-DIAGNOSTIC');
+  }
   const variantConfig: ReportVariantConfig = universalData?.config || getVariantConfig(variant);
   const name = student.name || 'Candidate';
   const firstName = name.split(' ')[0] || 'Candidate';

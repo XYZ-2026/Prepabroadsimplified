@@ -79,4 +79,6 @@ try {
 adminAuth = getAuth(adminApp);
 adminDb = getFirestore(adminApp);
 
+export const hasAdminCredentials = Boolean((process.env.FIREBASE_ADMIN_PRIVATE_KEY || "").includes("BEGIN") && process.env.FIREBASE_ADMIN_CLIENT_EMAIL && process.env.FIREBASE_ADMIN_PROJECT_ID);
+
 export { adminApp, adminAuth, adminDb };

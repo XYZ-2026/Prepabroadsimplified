@@ -2,6 +2,7 @@
 
 import React, { useState, useRef, useCallback } from 'react';
 import Link from 'next/link';
+import { useReportJobProgress } from '@/hooks/useReportJobProgress';
 import { useSearchParams } from 'next/navigation';
 
 interface ReportHeaderProps {
@@ -13,20 +14,14 @@ interface ReportHeaderProps {
 export default function ReportHeader({ userRole, activeMode = 'full', onSwitchMode }: ReportHeaderProps) {
   const searchParams = useSearchParams();
   const source = searchParams.get('source');
-  const [downloadingFull, setDownloadingFull] = useState(false);
-  const [downloadingExec, setDownloadingExec] = useState(false);
-  const [fullProgress, setFullProgress] = useState(0);
-  const [execProgress, setExecProgress] = useState(0);
-  const fullIntervalRef = useRef<NodeJS.Timeout | null>(null);
-  const execIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
-  let backDestination = '/dashboard/student/assessments';
-  let backLabel = 'Back to Assessments';
+  let backDestination = '/dashboard/student';
+  let backLabel = 'Back to Student Dashboard';
 
-  if (source === 'admin' || userRole === 'admin') {
-    backDestination = '/dashboard/admin/assessments';
-    backLabel = 'Back to Admin Assessments';
-  } else if (source === 'counsellor' || userRole === 'counsellor') {
+  if (userRole === 'admin') {
+    backDestination = '/dashboard/admin';
+    backLabel = 'Back to Admin Dashboard';
+  } else if (userRole === 'counsellor') {
     backDestination = '/dashboard/counsellor';
     backLabel = 'Back to Counsellor Dashboard';
   }
@@ -39,67 +34,25 @@ export default function ReportHeader({ userRole, activeMode = 'full', onSwitchMo
     }
   };
 
-  const startProgress = useCallback((setProgress: (v: number) => void, intervalRef: React.MutableRefObject<NodeJS.Timeout | null>) => {
-    let progress = 0;
-    setProgress(0);
-    if (intervalRef.current) clearInterval(intervalRef.current);
-    intervalRef.current = setInterval(() => {
-      // Simulate realistic progress — fast start, slows down approaching 90%
-      const remaining = 90 - progress;
-      const increment = Math.max(0.3, remaining * 0.08 + Math.random() * 2);
-      progress = Math.min(90, progress + increment);
-      setProgress(Math.round(progress));
-    }, 150);
-  }, []);
-
-  const finishProgress = useCallback((setProgress: (v: number) => void, intervalRef: React.MutableRefObject<NodeJS.Timeout | null>, setDownloading: (v: boolean) => void) => {
-    if (intervalRef.current) clearInterval(intervalRef.current);
-    setProgress(100);
-    setTimeout(() => {
-      setDownloading(false);
-      setProgress(0);
-    }, 800);
-  }, []);
+  const {
+    jobState,
+    retryLastJob,
+    isGenerating,
+    isFullGenerating,
+    isExecGenerating,
+  } = useReportJobProgress();
 
   const handleDownloadFull = () => {
-    if (downloadingFull) return;
-    setDownloadingFull(true);
-    startProgress(setFullProgress, fullIntervalRef);
-
-    // Listen for completion
-    const onComplete = () => {
-      finishProgress(setFullProgress, fullIntervalRef, setDownloadingFull);
-      window.removeEventListener('pdf-download-complete', onComplete);
-    };
-    window.addEventListener('pdf-download-complete', onComplete);
-
-    // Trigger download
+    if (isGenerating) return;
     if (typeof (window as any).__triggerReportDownload === 'function') {
       (window as any).__triggerReportDownload('full');
     } else {
       window.dispatchEvent(new CustomEvent('trigger-pdf-download', { detail: { reportType: 'full' } }));
     }
-
-    // Safety timeout — finish after 60s even if no completion event fires
-    setTimeout(() => {
-      finishProgress(setFullProgress, fullIntervalRef, setDownloadingFull);
-      window.removeEventListener('pdf-download-complete', onComplete);
-    }, 60000);
   };
 
   const handleDownloadExecutive = () => {
-    if (downloadingExec) return;
-    setDownloadingExec(true);
-    startProgress(setExecProgress, execIntervalRef);
-
-    const onComplete = () => {
-      finishProgress(setExecProgress, execIntervalRef, setDownloadingExec);
-      window.removeEventListener('pdf-download-complete', onComplete);
-      window.removeEventListener('summary-download-complete', onComplete);
-    };
-    window.addEventListener('pdf-download-complete', onComplete);
-    window.addEventListener('summary-download-complete', onComplete);
-
+    if (isGenerating) return;
     if (typeof (window as any).__triggerSummaryDownload === 'function') {
       (window as any).__triggerSummaryDownload();
     } else if (typeof (window as any).__triggerReportDownload === 'function') {
@@ -108,14 +61,7 @@ export default function ReportHeader({ userRole, activeMode = 'full', onSwitchMo
       window.dispatchEvent(new CustomEvent('trigger-summary-download'));
       window.dispatchEvent(new CustomEvent('trigger-pdf-download', { detail: { reportType: 'executive' } }));
     }
-
-    setTimeout(() => {
-      finishProgress(setExecProgress, execIntervalRef, setDownloadingExec);
-      window.removeEventListener('pdf-download-complete', onComplete);
-      window.removeEventListener('summary-download-complete', onComplete);
-    }, 60000);
   };
-
   const handleClose = () => {
     if (window.history.length > 1) {
       window.close();
@@ -264,8 +210,8 @@ export default function ReportHeader({ userRole, activeMode = 'full', onSwitchMo
         <div className="download-btn-wrapper">
           <button 
             type="button"
-            onClick={handleDownloadFull} 
-            disabled={downloadingFull}
+            onClick={jobState.status === 'failed' && jobState.reportType === 'full' ? retryLastJob : handleDownloadFull}
+            disabled={isGenerating && !isFullGenerating}
             style={{
               display: 'flex',
               alignItems: 'center',
@@ -275,19 +221,19 @@ export default function ReportHeader({ userRole, activeMode = 'full', onSwitchMo
               fontSize: '12px',
               fontWeight: 700,
               letterSpacing: '0.2px',
-              cursor: downloadingFull ? 'not-allowed' : 'pointer',
+              cursor: isFullGenerating ? 'not-allowed' : 'pointer',
               transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
-              background: downloadingFull ? '#1D4ED8' : '#2563EB',
+              background: isFullGenerating ? '#1D4ED8' : '#2563EB',
               color: '#ffffff',
               border: '1px solid #1D4ED8',
               boxShadow: '0 2px 8px rgba(37, 99, 235, 0.3), 0 1px 2px rgba(0,0,0,0.1)',
-              opacity: downloadingFull ? 0.9 : 1,
+              opacity: (isGenerating && !isFullGenerating) ? 0.6 : 1,
               position: 'relative',
               overflow: 'hidden',
             }}
             title="Download Complete 56-Page Full Diagnostic PDF"
           >
-            {downloadingFull ? (
+            {isFullGenerating ? (
               <span className="download-spinner" />
             ) : (
               <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -296,10 +242,10 @@ export default function ReportHeader({ userRole, activeMode = 'full', onSwitchMo
                 <line x1="12" y1="15" x2="12" y2="3"></line>
               </svg>
             )}
-            <span>{downloadingFull ? `Generating… ${fullProgress}%` : 'Download Full PDF'}</span>
+            <span>{jobState.status === 'failed' && jobState.reportType === 'full' ? 'Failed (Retry)' : isFullGenerating ? (jobState.isStalled ? 'Still working...' : `${jobState.stageDetail ? `${jobState.stageDetail} (${jobState.percent}%)` : `Generating… ${jobState.percent}%`}`) : 'Download Full PDF'}</span>
           </button>
-          {downloadingFull && (
-            <div className="download-progress-bar" style={{ width: `${fullProgress}%` }} />
+          {isFullGenerating && (
+            <div className="download-progress-bar" style={{ width: `${jobState.percent}%`, transition: 'width 0.35s cubic-bezier(0.4, 0, 0.2, 1)' }} />
           )}
         </div>
 
@@ -307,8 +253,8 @@ export default function ReportHeader({ userRole, activeMode = 'full', onSwitchMo
         <div className="download-btn-wrapper">
           <button 
             type="button"
-            onClick={handleDownloadExecutive} 
-            disabled={downloadingExec}
+            onClick={jobState.status === 'failed' && jobState.reportType === 'executive' ? retryLastJob : handleDownloadExecutive}
+            disabled={isGenerating && !isExecGenerating}
             style={{
               display: 'flex',
               alignItems: 'center',
@@ -318,29 +264,29 @@ export default function ReportHeader({ userRole, activeMode = 'full', onSwitchMo
               fontSize: '12px',
               fontWeight: 700,
               letterSpacing: '0.2px',
-              cursor: downloadingExec ? 'not-allowed' : 'pointer',
+              cursor: isExecGenerating ? 'not-allowed' : 'pointer',
               transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
-              background: downloadingExec ? '#F1F5F9' : '#FFFFFF',
-              color: downloadingExec ? '#1D4ED8' : '#2563EB',
+              background: isExecGenerating ? '#F1F5F9' : '#FFFFFF',
+              color: isExecGenerating ? '#1D4ED8' : '#2563EB',
               border: '1.5px solid #2563EB',
               boxShadow: '0 2px 8px rgba(37, 99, 235, 0.15), inset 0 1px 0 rgba(255,255,255,0.8)',
-              opacity: downloadingExec ? 0.9 : 1,
+              opacity: (isGenerating && !isExecGenerating) ? 0.6 : 1,
               position: 'relative',
               overflow: 'hidden',
             }}
             title="Download Compact 15-Page Executive Career Summary PDF"
           >
-            {downloadingExec ? (
+            {isExecGenerating ? (
               <span className="download-spinner-outline" />
             ) : (
               <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2563EB" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                 <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
               </svg>
             )}
-            <span>{downloadingExec ? `Generating… ${execProgress}%` : 'Download Summary PDF'}</span>
+            <span>{jobState.status === 'failed' && jobState.reportType === 'executive' ? 'Failed (Retry)' : isExecGenerating ? (jobState.isStalled ? 'Still working...' : `${jobState.stageDetail ? `${jobState.stageDetail} (${jobState.percent}%)` : `Generating… ${jobState.percent}%`}`) : 'Download Summary PDF'}</span>
           </button>
-          {downloadingExec && (
-            <div className="download-progress-bar-outline" style={{ width: `${execProgress}%` }} />
+          {isExecGenerating && (
+            <div className="download-progress-bar-outline" style={{ width: `${jobState.percent}%`, transition: 'width 0.35s cubic-bezier(0.4, 0, 0.2, 1)' }} />
           )}
         </div>
 

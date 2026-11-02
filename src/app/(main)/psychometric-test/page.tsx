@@ -343,7 +343,8 @@ function computeScores(answers: Record<number, number>, questions: typeof FBQ, s
     const blended = rawPct * 0.82 + align * 0.18;
     riasecPct[k] = Math.max(1, Math.min(99, Math.round(blended)));
   });
-  const topRiasec = Object.entries(riasecPct).sort((a, b) => b[1] - a[1]).map(([k]) => k);
+  const sortedRiasec = Object.entries(riasecPct).sort((a, b) => b[1] - a[1]);
+  const topRiasec = sortedRiasec.map(([k]) => k).slice(0, 3);
 
   // ── VARK (choice) — raw proportions ─────────────────────────────────────────
   const varkSec = secs[3];
@@ -575,7 +576,7 @@ function computeScores(answers: Record<number, number>, questions: typeof FBQ, s
   const minInterestRaw = Math.min(...interestRawList, 0);
   const interestRange = maxInterestRaw - minInterestRaw || 1;
 
-  let careerFitment = compatibleClusters.map((cluster, idx) => {
+  let careerFitment: Array<{ id?: string; name: string; score: number; color: string; isCloseFit?: boolean }> = compatibleClusters.map((cluster, idx) => {
     // Normalize raw interest to [20, 90] range
     const interestNormalized = 20 + ((interestRawList[idx] - minInterestRaw) / interestRange) * 70;
 
@@ -588,7 +589,7 @@ function computeScores(answers: Record<number, number>, questions: typeof FBQ, s
     // Clamp between 10% and 95%
     const final = Math.max(10, Math.min(95, Math.round(blended)));
 
-    return { name: cluster.name, score: final, color: cluster.color };
+    return { name: cluster.name, score: final, color: cluster.color, isCloseFit: false };
   });
 
   if (assessmentType === "junior" || assessmentType === "grade10") {
@@ -612,13 +613,48 @@ function computeScores(answers: Record<number, number>, questions: typeof FBQ, s
     const humScore = getScoresForGroup(humNames);
 
     careerFitment = [
-      { name: "Humanities & Creative Arts Stream", score: humScore, color: "#7E3AF2" },
-      { name: "Science Stream – Engineering & Tech Track (PCM)", score: pcmScore, color: "#2563EB" },
-      { name: "Science Stream – Medical & Life Sciences Track (PCB)", score: pcbScore, color: "#057A55" },
-      { name: "Commerce, Business & Management Stream", score: commScore, color: "#0284C7" }
-    ].sort((a, b) => b.score - a.score);
+      { id: "pcm_stream", name: "Science Stream – Engineering & Tech Track (PCM)", score: pcmScore, color: "#2563EB", isCloseFit: false },
+      { id: "pcb_stream", name: "Science Stream – Medical & Life Sciences Track (PCB)", score: pcbScore, color: "#057A55", isCloseFit: false },
+      { id: "commerce_stream", name: "Commerce, Business & Management Stream", score: commScore, color: "#0284C7", isCloseFit: false },
+      { id: "humanities_stream", name: "Humanities & Creative Arts Stream", score: humScore, color: "#7E3AF2", isCloseFit: false }
+    ];
+
+    const getTiebreakWeight = (id: string) => {
+      if (id === "pcm_stream") return (aptitude.numerical || 75) * 0.6 + (aptitude.spatial || 75) * 0.4;
+      if (id === "pcb_stream") return (aptitude.reasoning || 75) * 0.6 + (aptitude.numerical || 75) * 0.4;
+      if (id === "commerce_stream") return (aptitude.numerical || 75) * 0.5 + (aptitude.verbal || 75) * 0.5;
+      return (aptitude.verbal || 75) * 0.7 + (aptitude.reasoning || 75) * 0.3;
+    };
+
+    careerFitment.sort((a, b) => {
+      if (b.score !== a.score) return b.score - a.score;
+      const tbA = getTiebreakWeight(a.id || a.name);
+      const tbB = getTiebreakWeight(b.id || b.name);
+      if (tbB !== tbA) return tbB - tbA;
+      return a.name.localeCompare(b.name);
+    });
+
+    for (let i = 0; i < careerFitment.length - 1; i++) {
+      if (Math.abs(careerFitment[i].score - careerFitment[i + 1].score) <= 2) {
+        careerFitment[i].isCloseFit = true;
+        careerFitment[i + 1].isCloseFit = true;
+      }
+    }
   } else {
-    careerFitment = careerFitment.sort((a, b) => b.score - a.score);
+    careerFitment.sort((a, b) => {
+      if (b.score !== a.score) return b.score - a.score;
+      const aptA = getClusterAptitudeScore(a.name, aptitude);
+      const aptB = getClusterAptitudeScore(b.name, aptitude);
+      if (aptB !== aptA) return aptB - aptA;
+      return a.name.localeCompare(b.name);
+    });
+
+    for (let i = 0; i < careerFitment.length - 1; i++) {
+      if (Math.abs(careerFitment[i].score - careerFitment[i + 1].score) <= 2) {
+        careerFitment[i].isCloseFit = true;
+        careerFitment[i + 1].isCloseFit = true;
+      }
+    }
   }
 
   return {
@@ -976,7 +1012,7 @@ function MemoizedReportViewer({
     if (student.reportId) return String(student.reportId).toUpperCase().replace(/^AS([-_])/i, 'CL$1');
     const seed = (student.email || student.name || 'CAND').replace(/[^a-zA-Z0-9]/g, '').slice(0, 6).toUpperCase() || 'REPORT';
     return `${variantConfig.reportIdPrefix}-${seed}`;
-  }, [reportData?.id, reportData?.resultId, student.reportId, student.email, student.name, variantConfig.reportIdPrefix]);
+  }, [reportData, student.reportId, student.email, student.name, variantConfig.reportIdPrefix]);
 
   const rawGrade = student.grade || variantConfig.defaultGradeLabel;
   const formattedGrade = rawGrade.toLowerCase().includes('class') || rawGrade.toLowerCase().includes('grade') ? rawGrade : `Class ${rawGrade}`;
@@ -2235,7 +2271,7 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
 
       console.log(`[PDF DOWNLOAD] mode=${isExec ? 'EXECUTIVE_SUMMARY' : 'FULL'} variant=${resolvedVariant} reportId=${targetResultId} source=SAVED_SNAPSHOT groq=false navigation=false`);
 
-      const res = await fetch('/api/psychometric-test/pdf', {
+      const res = await fetch('/api/psychometric-test/pdf/job', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
@@ -2250,23 +2286,30 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
 
       if (!res.ok) {
         const errData = await res.json().catch(() => ({}));
-        throw new Error(errData.error || 'Server failed to generate PDF');
+        throw new Error(errData.error || 'Server failed to initialize PDF generation job');
       }
 
-      const blob = await res.blob();
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      const filePrefix = (student.name || 'Candidate').replace(/\s+/g, '_');
-      const variantTag = resolvedVariant === 'junior' ? 'Junior' : resolvedVariant === 'senior' ? 'Class12' : 'Class10';
-      a.download = isExec
-        ? `${filePrefix}_${variantTag}_Executive_Career_Summary.pdf`
-        : `${filePrefix}_${variantTag}_Full_Psychometric_Report.pdf`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      setTimeout(() => URL.revokeObjectURL(url), 15000);
-      showToast(isExec ? "Executive Career Summary PDF downloaded successfully!" : "Full Psychometric Report PDF downloaded successfully!");
+      const jobData = await res.json();
+      if (!jobData.success || !jobData.jobId) {
+        throw new Error(jobData.error || 'Invalid report job ID from server');
+      }
+
+      const jobId = jobData.jobId;
+      try {
+        sessionStorage.setItem('clarvo_active_report_job_id', jobId);
+        const url = new URL(window.location.href);
+        url.searchParams.set('jobId', jobId);
+        window.history.replaceState(null, '', url.toString());
+      } catch (e) {
+        console.warn('Storage sync skipped:', e);
+      }
+
+      window.dispatchEvent(new CustomEvent('report-job-started', {
+        detail: {
+          jobId,
+          reportType,
+        }
+      }));
     } catch (e: any) {
       console.error("Direct Chromium PDF generation error:", e);
       const iframe = document.querySelector('iframe');
@@ -2277,7 +2320,6 @@ Return ONLY valid JSON: {"overview":"2-3 sentence personalised description","dur
       } else {
         showToast(`PDF Export Notice: ${e.message || 'Generation failed'}`);
       }
-    } finally {
       window.dispatchEvent(new CustomEvent('pdf-download-complete'));
       window.dispatchEvent(new CustomEvent('summary-download-complete'));
     }

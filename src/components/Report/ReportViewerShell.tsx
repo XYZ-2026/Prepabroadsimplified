@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import ReportNavigationSidebar from './ReportNavigationSidebar';
+import { useReportJobProgress } from '@/hooks/useReportJobProgress';
 
 /* ────────────────────────────────────────────────────────────
    ReportViewerShell
@@ -393,81 +394,33 @@ export default function ReportViewerShell({
   const GOLD = '#2563EB';
   const CREAM = '#FFFFFF';
 
-  // Download loading bar state
-  const [downloadingFull, setDownloadingFull] = useState(false);
-  const [downloadingExec, setDownloadingExec] = useState(false);
-  const [fullProgress, setFullProgress] = useState(0);
-  const [execProgress, setExecProgress] = useState(0);
-  const fullIntervalRef = useRef<NodeJS.Timeout | null>(null);
-  const execIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  // Download real progress state via useReportJobProgress
+  const {
+    jobState,
+    retryLastJob,
+    cancelJob,
+    isGenerating,
+    isFullGenerating,
+    isExecGenerating,
+  } = useReportJobProgress();
 
-  const startProgress = useCallback((setProgress: (v: number) => void, intervalRef: React.MutableRefObject<NodeJS.Timeout | null>) => {
-    let progress = 0;
-    setProgress(0);
-    if (intervalRef.current) clearInterval(intervalRef.current);
-    intervalRef.current = setInterval(() => {
-      const remaining = 90 - progress;
-      const increment = Math.max(0.3, remaining * 0.08 + Math.random() * 2);
-      progress = Math.min(90, progress + increment);
-      setProgress(Math.round(progress));
-    }, 150);
-  }, []);
-
-  const finishProgress = useCallback((setProgress: (v: number) => void, intervalRef: React.MutableRefObject<NodeJS.Timeout | null>, setDownloading: (v: boolean) => void) => {
-    if (intervalRef.current) clearInterval(intervalRef.current);
-    setProgress(100);
-    setTimeout(() => {
-      setDownloading(false);
-      setProgress(0);
-    }, 800);
-  }, []);
-
-  const handleFullWithProgress = useCallback(async () => {
-    if (downloadingFull) return;
-    setDownloadingFull(true);
-    startProgress(setFullProgress, fullIntervalRef);
-    let completed = false;
-    const onComplete = () => {
-      if (completed) return;
-      completed = true;
-      finishProgress(setFullProgress, fullIntervalRef, setDownloadingFull);
-      window.removeEventListener('pdf-download-complete', onComplete);
-    };
-    window.addEventListener('pdf-download-complete', onComplete);
+  const handleFullClick = useCallback(async () => {
+    if (isGenerating) return;
     try {
       await Promise.resolve(onDownloadFull());
-    } catch {
-      onComplete();
+    } catch (e) {
+      console.error('Download full error:', e);
     }
-    setTimeout(() => {
-      onComplete();
-    }, 60000);
-  }, [downloadingFull, onDownloadFull, startProgress, finishProgress]);
+  }, [isGenerating, onDownloadFull]);
 
-  const handleExecWithProgress = useCallback(async () => {
-    if (downloadingExec) return;
-    setDownloadingExec(true);
-    startProgress(setExecProgress, execIntervalRef);
-    let completed = false;
-    const onComplete = () => {
-      if (completed) return;
-      completed = true;
-      finishProgress(setExecProgress, execIntervalRef, setDownloadingExec);
-      window.removeEventListener('pdf-download-complete', onComplete);
-      window.removeEventListener('summary-download-complete', onComplete);
-    };
-    window.addEventListener('pdf-download-complete', onComplete);
-    window.addEventListener('summary-download-complete', onComplete);
+  const handleExecClick = useCallback(async () => {
+    if (isGenerating) return;
     try {
       await Promise.resolve(onDownloadSummary());
-    } catch {
-      onComplete();
+    } catch (e) {
+      console.error('Download summary error:', e);
     }
-    setTimeout(() => {
-      onComplete();
-    }, 60000);
-  }, [downloadingExec, onDownloadSummary, startProgress, finishProgress]);
-
+  }, [isGenerating, onDownloadSummary]);
   if (isMobile) {
     return (
       <div
@@ -607,8 +560,8 @@ export default function ReportViewerShell({
             </button>
             <button
               type="button"
-              onClick={mode === 'full' ? handleFullWithProgress : handleExecWithProgress}
-              disabled={downloadingFull || downloadingExec}
+              onClick={mode === 'full' ? handleFullClick : handleExecClick}
+              disabled={isGenerating}
               style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -989,8 +942,8 @@ export default function ReportViewerShell({
           <div className="vs-dl-wrapper">
             <button
               type="button"
-              onClick={handleFullWithProgress}
-              disabled={downloadingFull}
+              onClick={jobState.status === 'failed' && jobState.reportType === 'full' ? retryLastJob : handleFullClick}
+              disabled={isGenerating && !isFullGenerating}
               style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -1000,33 +953,33 @@ export default function ReportViewerShell({
                 fontSize: '12px',
                 fontWeight: 700,
                 letterSpacing: '0.2px',
-                cursor: downloadingFull ? 'not-allowed' : 'pointer',
+                cursor: isFullGenerating ? 'not-allowed' : 'pointer',
                 transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
-                background: downloadingFull ? '#1D4ED8' : '#2563EB',
+                background: isFullGenerating ? '#1D4ED8' : '#2563EB',
                 color: '#ffffff',
                 border: '1px solid #1D4ED8',
                 boxShadow: '0 2px 8px rgba(37, 99, 235, 0.3), 0 1px 2px rgba(0,0,0,0.1)',
-                opacity: downloadingFull ? 0.9 : 1,
+                opacity: (isGenerating && !isFullGenerating) ? 0.6 : 1,
                 position: 'relative',
                 overflow: 'hidden',
               }}
             >
-              {downloadingFull ? (
+              {isFullGenerating ? (
                 <span className="vs-spinner" />
               ) : (
                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line x1="12" y1="15" x2="12" y2="3" />
                 </svg>
               )}
-              <span>{downloadingFull ? `Generating… ${fullProgress}%` : 'Download Full PDF'}</span>
+              <span>{jobState.status === 'failed' && jobState.reportType === 'full' ? 'Failed (Retry)' : isFullGenerating ? (jobState.isStalled ? 'Still working...' : `${jobState.stageDetail ? `${jobState.stageDetail} (${jobState.percent}%)` : `Generating… ${jobState.percent}%`}`) : 'Download Full PDF'}</span>
             </button>
-            {downloadingFull && <div className="vs-dl-bar" style={{ width: `${fullProgress}%` }} />}
+            {isFullGenerating && <div className="vs-dl-bar" style={{ width: `${jobState.percent}%`, transition: 'width 0.35s cubic-bezier(0.4, 0, 0.2, 1)' }} />}
           </div>
           <div className="vs-dl-wrapper">
             <button
               type="button"
-              onClick={handleExecWithProgress}
-              disabled={downloadingExec}
+              onClick={jobState.status === 'failed' && jobState.reportType === 'executive' ? retryLastJob : handleExecClick}
+              disabled={isGenerating && !isExecGenerating}
               style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -1036,27 +989,27 @@ export default function ReportViewerShell({
                 fontSize: '12px',
                 fontWeight: 700,
                 letterSpacing: '0.2px',
-                cursor: downloadingExec ? 'not-allowed' : 'pointer',
+                cursor: isExecGenerating ? 'not-allowed' : 'pointer',
                 transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
-                background: downloadingExec ? '#F1F5F9' : '#FFFFFF',
-                color: downloadingExec ? '#1D4ED8' : '#080F1C',
+                background: isExecGenerating ? '#F1F5F9' : '#FFFFFF',
+                color: isExecGenerating ? '#1D4ED8' : '#080F1C',
                 border: '1.5px solid #E4E7EC',
                 boxShadow: '0 1px 3px rgba(0, 0, 0, 0.06)',
-                opacity: downloadingExec ? 0.9 : 1,
+                opacity: (isGenerating && !isExecGenerating) ? 0.6 : 1,
                 position: 'relative',
                 overflow: 'hidden',
               }}
             >
-              {downloadingExec ? (
+              {isExecGenerating ? (
                 <span className="vs-spinner-alt" />
               ) : (
                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2563EB" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                   <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
                 </svg>
               )}
-              <span>{downloadingExec ? `Generating… ${execProgress}%` : 'Download Summary PDF'}</span>
+              <span>{jobState.status === 'failed' && jobState.reportType === 'executive' ? 'Failed (Retry)' : isExecGenerating ? (jobState.isStalled ? 'Still working...' : `${jobState.stageDetail ? `${jobState.stageDetail} (${jobState.percent}%)` : `Generating… ${jobState.percent}%`}`) : 'Download Summary PDF'}</span>
             </button>
-            {downloadingExec && <div className="vs-dl-bar-alt" style={{ width: `${execProgress}%` }} />}
+            {isExecGenerating && <div className="vs-dl-bar-alt" style={{ width: `${jobState.percent}%`, transition: 'width 0.35s cubic-bezier(0.4, 0, 0.2, 1)' }} />}
           </div>
 
           {/* Rate & Review Button */}

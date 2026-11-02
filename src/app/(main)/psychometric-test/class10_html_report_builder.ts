@@ -15,6 +15,7 @@ import { getPathwayRoadmapData, getStudyAbroadGuideData, getAcademicProfileRoadm
 import type { UniversalReportData, ReportVariant, ReportVariantConfig } from './report-engine/universal-report-schema';
 import { getVariantConfig, REPORT_ORGANIZATION_IDENTITY } from './report-engine/universal-report-schema';
 import { resolveReportVariant } from './report-engine/adapters';
+import { validateAndDeduplicateRoadmaps } from './report-engine/unified-roadmap-engine';
 import { LOGO_BASE64 } from '@/lib/logo-base64';
 
 export const totalReportPages = 56;
@@ -110,6 +111,9 @@ export function buildClass10ExecutiveHTMLReport(
   universalData?: UniversalReportData
 ): string {
   const variant: ReportVariant = universalData?.variant || resolveReportVariant(undefined, student.grade);
+  if (universalData?.roadmaps) {
+    validateAndDeduplicateRoadmaps(universalData.roadmaps as any, student.reportId || 'REP-DIAGNOSTIC');
+  }
   const variantConfig: ReportVariantConfig = universalData?.config || getVariantConfig(variant);
   const name = student.name || 'Candidate';
   const firstName = name.split(' ')[0];
@@ -134,8 +138,34 @@ export function buildClass10ExecutiveHTMLReport(
   const topVarkCode = scores.topVark || 'V';
   const topVarkLabel = topVarkCode === 'V' ? 'Visual' : topVarkCode === 'A' ? 'Auditory' : topVarkCode === 'R' ? 'Read/Write' : 'Kinesthetic';
 
-  const topRiasecCodes = scores.topRiasec && scores.topRiasec.length > 0 ? scores.topRiasec : ['R', 'I', 'E'];
-  const riasecScore = scores.riasec?.[topRiasecCodes[0]] || Math.round(reasSc * 0.95);
+  // Rule 9: RIASEC sorted descending by score, top 3 for display, numeric scores for bars
+  const riasecMap: Record<string, number> = scores.riasec || {};
+  const riasecNameMap: Record<string, string> = {
+    R: 'Realistic',
+    I: 'Investigative',
+    A: 'Artistic',
+    S: 'Social',
+    E: 'Enterprising',
+    C: 'Conventional',
+  };
+  const sortedRiasecEntries = Object.entries(riasecMap).sort((a, b) => (b[1] || 0) - (a[1] || 0));
+  const sortedRiasecCodes = sortedRiasecEntries.length > 0
+    ? sortedRiasecEntries.map(([code]) => code).slice(0, 3)
+    : (scores.topRiasec && scores.topRiasec.length > 0 ? scores.topRiasec.slice(0, 3) : ['R', 'I', 'E']);
+
+  const topRiasecCodes = sortedRiasecCodes;
+  const riasec1Code = topRiasecCodes[0] || 'I';
+  const riasec2Code = topRiasecCodes[1] || 'R';
+  const riasec3Code = topRiasecCodes[2] || 'E';
+
+  const riasec1Name = riasecNameMap[riasec1Code] || riasec1Code;
+  const riasec2Name = riasecNameMap[riasec2Code] || riasec2Code;
+  const riasec3Name = riasecNameMap[riasec3Code] || riasec3Code;
+
+  const riasec1Score = riasecMap[riasec1Code] ?? Math.round(reasSc * 0.95);
+  const riasec2Score = riasecMap[riasec2Code] ?? Math.round(riasec1Score * 0.88);
+  const riasec3Score = riasecMap[riasec3Code] ?? Math.round(riasec1Score * 0.78);
+  const riasecScore = riasec1Score;
 
   // Normalized VARK distribution (guaranteed 100% sum)
   const vRaw = scores.vark?.V ?? (topVarkCode === 'V' ? 35 : 22);
@@ -1042,9 +1072,9 @@ export function buildClass10ExecutiveHTMLReport(
       mechanism: "John Holland's Vocational Personalities theory maps six interest environments (Realistic, Investigative, Artistic, Social, Enterprising, Conventional) to target academic streams.",
       subfacet_desc: `Primary Interest Congruence (${riasecScore}%) indicates high intrinsic motivation and sustained task engagement when studying aligned subjects.`,
       facets: [
-        ["Primary Vector", `${topRiasecCodes[0] || 'Investigative'} Alignment`, "Peak vocational interest driving natural curiosity and subject engagement."],
-        ["Secondary Vector", `${topRiasecCodes[1] || 'Realistic'} Alignment`, "Complementary interest domain expanding secondary stream compatibility."],
-        ["Tertiary Vector", `${topRiasecCodes[2] || 'Enterprising'} Alignment`, "Supporting interest vector providing leadership and execution balance."],
+        [`Primary Vector (${riasec1Name})`, `${riasec1Score}%`, "Peak vocational interest driving natural curiosity and subject engagement."],
+        [`Secondary Vector (${riasec2Name})`, `${riasec2Score}%`, "Complementary interest domain expanding secondary stream compatibility."],
+        [`Tertiary Vector (${riasec3Name})`, `${riasec3Score}%`, "Supporting interest vector providing leadership and execution balance."],
         ["Vocational Congruence", `${riasecScore}%`, "High alignment between intrinsic interest profile and target secondary stream."]
       ],
       low_behavior: "Mismatched vocational interests; risk of subject burnout or low academic engagement.",
@@ -3470,7 +3500,7 @@ export function buildClass10ExecutiveHTMLReport(
                     <div class="bg-maroon-dark text-white py-1.5 px-3 rounded-xl shadow flex items-center justify-between border-b-4 border-gold shrink-0">
                         <div>
                             <span class="text-[10px] text-gold uppercase font-bold tracking-widest block">${primaryRoadmap.pathwayRankLabel}</span>
-                            <h2 class="text-base font-extrabold leading-tight">${primaryRoadmap.pathwayTitle}</h2>
+                            <div class="flex items-center gap-2 flex-wrap"><h2 class="text-base font-extrabold leading-tight">${primaryRoadmap.pathwayTitle}</h2>${primaryRoadmap.isCloseFit ? `<span class="bg-gold/20 text-white border border-gold text-[9px] font-bold px-2 py-0.5 rounded-full">Close Fit</span>` : ''}</div>
                         </div>
                         <div class="text-right">
                             <span class="inline-block px-2.5 py-0.5 rounded-full bg-gold text-maroon-dark text-xs font-extrabold uppercase shadow">
@@ -3576,7 +3606,7 @@ export function buildClass10ExecutiveHTMLReport(
                     <div class="bg-maroon-dark text-white py-1.5 px-3 rounded-xl shadow flex items-center justify-between border-b-4 border-gold shrink-0">
                         <div>
                             <span class="text-[10px] text-gold uppercase font-bold tracking-widest block">${secondaryRoadmap.pathwayRankLabel}</span>
-                            <h2 class="text-base font-extrabold leading-tight">${secondaryRoadmap.pathwayTitle}</h2>
+                            <div class="flex items-center gap-2 flex-wrap"><h2 class="text-base font-extrabold leading-tight">${secondaryRoadmap.pathwayTitle}</h2>${secondaryRoadmap.isCloseFit ? `<span class="bg-gold/20 text-white border border-gold text-[9px] font-bold px-2 py-0.5 rounded-full">Close Fit</span>` : ''}</div>
                         </div>
                         <div class="text-right">
                             <span class="inline-block px-2.5 py-0.5 rounded-full bg-gold text-maroon-dark text-xs font-extrabold uppercase shadow">
@@ -3682,7 +3712,7 @@ export function buildClass10ExecutiveHTMLReport(
                     <div class="bg-maroon-dark text-white py-1.5 px-3 rounded-xl shadow flex items-center justify-between border-b-4 border-gold shrink-0">
                         <div>
                             <span class="text-[10px] text-gold uppercase font-bold tracking-widest block">${alternativeRoadmap.pathwayRankLabel}</span>
-                            <h2 class="text-base font-extrabold leading-tight">${alternativeRoadmap.pathwayTitle}</h2>
+                            <div class="flex items-center gap-2 flex-wrap"><h2 class="text-base font-extrabold leading-tight">${alternativeRoadmap.pathwayTitle}</h2>${alternativeRoadmap.isCloseFit ? `<span class="bg-gold/20 text-white border border-gold text-[9px] font-bold px-2 py-0.5 rounded-full">Close Fit</span>` : ''}</div>
                         </div>
                         <div class="text-right">
                             <span class="inline-block px-2.5 py-0.5 rounded-full bg-gold text-maroon-dark text-xs font-extrabold uppercase shadow">

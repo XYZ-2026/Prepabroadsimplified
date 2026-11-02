@@ -11,6 +11,26 @@
 
 /* ── CSS Custom Properties ── */
 :root {
+  /* ── DESIGN.md Redesign Tokens (Brochure Design System) ── */
+  --clarvo-blue:           #1258DE;
+  --midnight:              #171822;
+  --paper:                 #F5F7FB;
+  --sky:                   #E6EDFF;
+  --ink:                   #12131C;
+  --muted:                 #5B6275;
+  --line:                  #DDE3F0;
+
+  /* Redesign Fluid Type Tokens */
+  --text-display:          clamp(2.75rem, 6vw, 5.5rem);
+  --text-h2:               clamp(2rem, 4vw, 3.25rem);
+  --text-stage:            clamp(7rem, 22vw, 20rem);
+
+  /* Redesign Radius & Shadow Tokens */
+  --radius-panel:          28px;
+  --radius-card:           14px;
+  --radius-photo:          20px;
+  --radius-pill:           9999px;
+  --shadow-clarvo-elevated: 0 24px 60px -24px rgba(18, 88, 222, 0.25);
   /* Brand Identity Tokens */
   --clarvo-blue-primary:   #2563EB;
   --clarvo-blue-hover:     #1D4ED8;
@@ -87,8 +107,13 @@
   --border-light:        var(--color-gray-100);
 
   /* Typography */
+  --next-font-primary: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --next-font-heading: 'Lexend', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-dm-sans: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-anton: 'Anton', Impact, sans-serif;
   --font-primary: var(--next-font-primary), 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-heading: var(--next-font-primary), 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-heading: var(--next-font-heading), 'Lexend', -apple-system, BlinkMacSystemFont, sans-serif;
+
   --font-size-xs:   11px;
   --font-size-sm:   13px;
   --font-size-base: 15px;
@@ -131,7 +156,7 @@ html {
 
 html, body {
   max-width: 100vw;
-  overflow-x: hidden;
+  overflow-x: clip;
   box-sizing: border-box;
 }
 
@@ -147,7 +172,7 @@ body {
   margin: 0;
   padding: 0;
   line-height: 1.6;
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 a {
@@ -497,6 +522,51 @@ body:has(.report-viewer-shell) .page-transition,
 .no-scrollbar {
   -ms-overflow-style: none !important;
   scrollbar-width: none !important;
+}
+
+/* ── DESIGN.md Typography Scale & Interactive Primitives ── */
+.font-display {
+  font-family: var(--font-dm-sans), 'DM Sans', sans-serif;
+}
+
+.text-display {
+  font-family: var(--font-dm-sans), 'DM Sans', sans-serif;
+  font-size: var(--text-display);
+  font-weight: 700;
+  line-height: 1.02;
+  letter-spacing: -0.03em;
+}
+
+.font-h2 {
+  font-family: var(--font-dm-sans), 'DM Sans', sans-serif;
+}
+
+.text-h2 {
+  font-family: var(--font-dm-sans), 'DM Sans', sans-serif;
+  font-size: var(--text-h2);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+}
+
+.font-body-clarvo {
+  font-family: var(--font-dm-sans), 'DM Sans', sans-serif;
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  max-width: 62ch;
+}
+
+.font-stage-word {
+  font-family: var(--font-anton), 'Anton', Impact, sans-serif;
+  font-size: var(--text-stage);
+  line-height: 0.85;
+  text-transform: uppercase;
+}
+
+/* Ensure accessible focus rings across all interactive redesign elements */
+.focus-ring-clarvo:focus-visible {
+  outline: 2px solid #1258DE;
+  outline-offset: 2px;
 }
 
 

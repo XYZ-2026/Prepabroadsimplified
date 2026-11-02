@@ -1,53 +1,62 @@
 'use client';
 
 import React from 'react';
-import CinematicHero from './CinematicHero';
+import SmoothScrollProvider from '@/components/providers/SmoothScrollProvider';
+import HeroThePath from '../redesign/HeroThePath';
 import TopSchoolsTicker from './TopSchoolsTicker';
-import ServicesSection from './ServicesSection';
-import StatsStrip from './StatsStrip';
-import AssessmentMatrixSection from './AssessmentMatrixSection';
-import InteractiveReportDossier from './InteractiveReportDossier';
-import StudentJourneySection from './StudentJourneySection';
-import AcademicPillarsSection from './AcademicPillarsSection';
-import StudentTestimonialsSection from './StudentTestimonialsSection';
-import FAQSection from './FAQSection';
-import PreFooterCTA from './PreFooterCTA';
+import SupportBento from '../redesign/SupportBento';
+import StatsStripCountup from '../redesign/StatsStripCountup';
+import PinnedAssessmentStory from '../redesign/PinnedAssessmentStory';
+import Class10Pillars from '../redesign/Class10Pillars';
+import DeskReportDossier from '../redesign/DeskReportDossier';
+import GlobalJourneyStepper from '../redesign/GlobalJourneyStepper';
+import GradePillarsSegmented from '../redesign/GradePillarsSegmented';
+import TestimonialGrid from '../redesign/TestimonialGrid';
+import ConsultationBanner from '../redesign/ConsultationBanner';
+import AccordionFAQ from '../redesign/AccordionFAQ';
 
 export default function CinematicLandingExperience() {
   return (
-    <div className="flex flex-col w-full selection:bg-[#2563EB] selection:text-white">
-      {/* 1. Cinematic Hero Section */}
-      <CinematicHero />
+    <SmoothScrollProvider>
+      <div className="flex flex-col w-full selection:bg-[#1258DE] selection:text-white">
+        {/* Section 2: Hero "The Path" (DESIGN.md Section 2) */}
+        <HeroThePath />
 
-      {/* 2. Top Schools Marquee Ticker (Directly below Hero section) */}
-      <TopSchoolsTicker />
+        {/* Section 3: Top Schools Marquee Ticker (LOCKED: code, speed, direction, content untouched) */}
+        <div className="relative z-20">
+          <TopSchoolsTicker />
+        </div>
 
-      {/* 3. Dedicated Core Services Section (Immediately following ticker) */}
-      <ServicesSection />
+        {/* Section 4: Support for Every Stage (Bento Grid) */}
+        <SupportBento />
 
-      {/* 3. Micro Stats Strip */}
-      <StatsStrip />
+        {/* Section 5: Midnight Stats Strip (Single Count-Up on First View) */}
+        <StatsStripCountup />
 
-      {/* 4. The Assessment Matrix (Directly addresses user prompt & #assessments) */}
-      <AssessmentMatrixSection />
+        {/* Section 6: Assessment Matrix (Pinned, Scroll-Scrubbed Story on Midnight) */}
+        <PinnedAssessmentStory />
 
-      {/* 5. The Evidence Engine: Interactive Sample Report Dossier */}
-      <InteractiveReportDossier />
+        {/* Section 7: Class 10 Strategic Value (Three Pillars) */}
+        <Class10Pillars />
 
-      {/* 6. The Student Development Journey */}
-      <StudentJourneySection />
+        {/* Section 8: Report Dossier Flipbook (Physical Report-on-a-Desk) */}
+        <DeskReportDossier />
 
-      {/* 5. Grade-Specific Pathways & Academic Pillars */}
-      <AcademicPillarsSection />
+        {/* Section 9: Self-Discovery to Global Admissions (5-Step Numbered Stepper) */}
+        <GlobalJourneyStepper />
 
-      {/* 6. Student Testimonials (Real students from real schools without photos) */}
-      <StudentTestimonialsSection />
+        {/* Section 10: Grade-Specific Pathways & Academic Pillars (Segmented Control) */}
+        <GradePillarsSegmented />
 
-      {/* 8. Frequently Asked Questions */}
-      <FAQSection />
+        {/* Section 11: Student & Parent Testimonials (Static Grid, Verified Chips, No Marquee) */}
+        <TestimonialGrid />
 
-      {/* 9. Pre-Footer High Impact CTA */}
-      <PreFooterCTA />
-    </div>
+        {/* Section 12: Consultation CTA (Solid Clarvo-Blue Panel with Breakout Cutout) */}
+        <ConsultationBanner />
+
+        {/* Section 13: Frequently Asked Questions (Accessible 250ms Accordion) */}
+        <AccordionFAQ />
+      </div>
+    </SmoothScrollProvider>
   );
 }

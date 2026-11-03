@@ -40,7 +40,7 @@ export default function LandingNavbar() {
 
   return (
     <nav className="sticky top-0 z-50 w-full bg-[#F8FAFC]/95 backdrop-blur-xl border-b border-[#E2E8F0]">
-      <div className="w-full h-[62px] sm:h-[76px] md:h-[84px] px-3.5 sm:px-6 md:px-8 lg:px-12 flex items-center justify-between">
+      <div className="w-full max-w-7xl mx-auto h-[62px] sm:h-[76px] md:h-[84px] px-3.5 sm:px-6 md:px-8 xl:px-12 grid grid-cols-2 lg:grid-cols-[auto_1fr_auto] items-center justify-between gap-4">
         {/* LEFT - Logo & Website Name */}
         <Link href="/" className="flex items-center gap-2 sm:gap-3 cursor-pointer hover:opacity-90 transition-opacity min-w-0">
           <Image
@@ -55,7 +55,7 @@ export default function LandingNavbar() {
             <div className="text-[17px] xs:text-[20px] sm:text-[23px] md:text-[25px] font-black tracking-[-0.03em] leading-none text-[#080F1C]">
               CLARVO
             </div>
-            <div className="hidden xs:flex mt-[3px] sm:mt-[5px] items-center gap-1.5 truncate">
+            <div className="hidden xl:flex mt-[3px] sm:mt-[5px] items-center gap-1.5 truncate">
               <span className="w-[3px] h-[3px] sm:w-[4px] sm:h-[4px] rounded-full bg-[#2563EB] shrink-0" />
               <span className="text-[7.5px] xs:text-[8.5px] sm:text-[10px] uppercase tracking-[0.14em] sm:tracking-[0.18em] font-bold text-[#64748B] truncate">
                 Student Development Platform
@@ -64,16 +64,16 @@ export default function LandingNavbar() {
           </div>
         </Link>
 
-        {/* CENTER - Navigation Pills (Desktop Only) */}
-        <div className="hidden lg:flex items-center absolute left-1/2 -translate-x-1/2">
-          <div className="flex items-center gap-1 bg-white/80 border border-[#E2E8F0] rounded-full px-2 py-1 shadow-xs backdrop-blur-md">
+        {/* CENTER - Navigation Pills (Three-column grid, centered in middle column, NO absolute positioning) */}
+        <div className="hidden lg:flex items-center justify-center min-w-0">
+          <div className="flex items-center gap-0.5 xl:gap-1 bg-white/80 border border-[#E2E8F0] rounded-full px-2 py-1 shadow-xs backdrop-blur-md">
             {navLinks.map((item) => {
               const active = item.isPage ? isActive(item.href) : false;
               return item.isPage ? (
                 <Link
                   key={item.label}
                   href={item.href}
-                  className={`px-3.5 h-[36px] rounded-full flex items-center justify-center text-[13.5px] transition-all duration-200 cursor-pointer ${
+                  className={`px-2.5 xl:px-3.5 h-[34px] xl:h-[36px] rounded-full flex items-center justify-center text-[12.5px] xl:text-[13.5px] transition-all duration-200 cursor-pointer whitespace-nowrap ${
                     active
                       ? "bg-[#2563EB] text-white font-bold shadow-xs"
                       : "font-medium text-[#475569] hover:bg-[#2563EB] hover:text-white"
@@ -86,7 +86,7 @@ export default function LandingNavbar() {
                   key={item.label}
                   href={item.href}
                   onClick={(e) => handleScrollTo(e, item.targetId)}
-                  className="px-3.5 h-[36px] rounded-full flex items-center justify-center text-[13.5px] font-medium text-[#475569] hover:bg-[#2563EB] hover:text-white transition-all duration-200 cursor-pointer"
+                  className="px-2.5 xl:px-3.5 h-[34px] xl:h-[36px] rounded-full flex items-center justify-center text-[12.5px] xl:text-[13.5px] font-medium text-[#475569] hover:bg-[#2563EB] hover:text-white transition-all duration-200 cursor-pointer whitespace-nowrap"
                 >
                   {item.label}
                 </a>
@@ -96,7 +96,7 @@ export default function LandingNavbar() {
         </div>
 
         {/* RIGHT - Auth & Actions */}
-        <div className="flex items-center gap-2 sm:gap-3.5 shrink-0">
+        <div className="flex items-center justify-end gap-2 sm:gap-3.5 shrink-0">
           {/* Sign In - Tablet & Desktop */}
           <Link
             href="/auth?tab=login"

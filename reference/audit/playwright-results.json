@@ -1,0 +1,3559 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "C:\\Users\\Agam\\Downloads\\Prepabroadsimplified-main\\Prepabroadsimplified-main\\node_modules\\@playwright\\test\\cli.js",
+      "test"
+    ],
+    "configFile": "C:\\Users\\Agam\\Downloads\\Prepabroadsimplified-main\\Prepabroadsimplified-main\\playwright.config.ts",
+    "rootDir": "C:/Users/Agam/Downloads/Prepabroadsimplified-main/Prepabroadsimplified-main/tests",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Users/Agam/Downloads/Prepabroadsimplified-main/Prepabroadsimplified-main/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "mobile-390x844",
+        "name": "mobile-390x844",
+        "testDir": "C:/Users/Agam/Downloads/Prepabroadsimplified-main/Prepabroadsimplified-main/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 45000
+      },
+      {
+        "outputDir": "C:/Users/Agam/Downloads/Prepabroadsimplified-main/Prepabroadsimplified-main/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "tablet-portrait-768x1024",
+        "name": "tablet-portrait-768x1024",
+        "testDir": "C:/Users/Agam/Downloads/Prepabroadsimplified-main/Prepabroadsimplified-main/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 45000
+      },
+      {
+        "outputDir": "C:/Users/Agam/Downloads/Prepabroadsimplified-main/Prepabroadsimplified-main/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "tablet-portrait-820x1180",
+        "name": "tablet-portrait-820x1180",
+        "testDir": "C:/Users/Agam/Downloads/Prepabroadsimplified-main/Prepabroadsimplified-main/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 45000
+      },
+      {
+        "outputDir": "C:/Users/Agam/Downloads/Prepabroadsimplified-main/Prepabroadsimplified-main/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "tablet-portrait-834x1194",
+        "name": "tablet-portrait-834x1194",
+        "testDir": "C:/Users/Agam/Downloads/Prepabroadsimplified-main/Prepabroadsimplified-main/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 45000
+      },
+      {
+        "outputDir": "C:/Users/Agam/Downloads/Prepabroadsimplified-main/Prepabroadsimplified-main/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "tablet-landscape-1024x768",
+        "name": "tablet-landscape-1024x768",
+        "testDir": "C:/Users/Agam/Downloads/Prepabroadsimplified-main/Prepabroadsimplified-main/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 45000
+      },
+      {
+        "outputDir": "C:/Users/Agam/Downloads/Prepabroadsimplified-main/Prepabroadsimplified-main/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "tablet-landscape-1180x820",
+        "name": "tablet-landscape-1180x820",
+        "testDir": "C:/Users/Agam/Downloads/Prepabroadsimplified-main/Prepabroadsimplified-main/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 45000
+      },
+      {
+        "outputDir": "C:/Users/Agam/Downloads/Prepabroadsimplified-main/Prepabroadsimplified-main/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "tablet-landscape-1366x1024",
+        "name": "tablet-landscape-1366x1024",
+        "testDir": "C:/Users/Agam/Downloads/Prepabroadsimplified-main/Prepabroadsimplified-main/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 45000
+      },
+      {
+        "outputDir": "C:/Users/Agam/Downloads/Prepabroadsimplified-main/Prepabroadsimplified-main/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "desktop-1440x900",
+        "name": "desktop-1440x900",
+        "testDir": "C:/Users/Agam/Downloads/Prepabroadsimplified-main/Prepabroadsimplified-main/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 45000
+      },
+      {
+        "outputDir": "C:/Users/Agam/Downloads/Prepabroadsimplified-main/Prepabroadsimplified-main/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "desktop-1920x1080",
+        "name": "desktop-1920x1080",
+        "testDir": "C:/Users/Agam/Downloads/Prepabroadsimplified-main/Prepabroadsimplified-main/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 45000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Users\\Agam\\Downloads\\Prepabroadsimplified-main\\Prepabroadsimplified-main\\test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "mobile-390x844",
+        "testDir": "C:\\Users\\Agam\\Downloads\\Prepabroadsimplified-main\\Prepabroadsimplified-main\\tests",
+        "snapshotDir": "C:\\Users\\Agam\\Downloads\\Prepabroadsimplified-main\\Prepabroadsimplified-main\\tests",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 45000,
+        "use": {
+          "baseURL": "http://127.0.0.1:3005",
+          "trace": "off",
+          "video": "off",
+          "viewport": {
+            "width": 390,
+            "height": 844
+          },
+          "hasTouch": true,
+          "isMobile": true
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "mobile-390x844"
+      },
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Users\\Agam\\Downloads\\Prepabroadsimplified-main\\Prepabroadsimplified-main\\test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "tablet-portrait-768x1024",
+        "testDir": "C:\\Users\\Agam\\Downloads\\Prepabroadsimplified-main\\Prepabroadsimplified-main\\tests",
+        "snapshotDir": "C:\\Users\\Agam\\Downloads\\Prepabroadsimplified-main\\Prepabroadsimplified-main\\tests",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 45000,
+        "use": {
+          "baseURL": "http://127.0.0.1:3005",
+          "trace": "off",
+          "video": "off",
+          "viewport": {
+            "width": 768,
+            "height": 1024
+          },
+          "hasTouch": true,
+          "isMobile": true
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "tablet-portrait-768x1024"
+      },
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Users\\Agam\\Downloads\\Prepabroadsimplified-main\\Prepabroadsimplified-main\\test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "tablet-portrait-820x1180",
+        "testDir": "C:\\Users\\Agam\\Downloads\\Prepabroadsimplified-main\\Prepabroadsimplified-main\\tests",
+        "snapshotDir": "C:\\Users\\Agam\\Downloads\\Prepabroadsimplified-main\\Prepabroadsimplified-main\\tests",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 45000,
+        "use": {
+          "baseURL": "http://127.0.0.1:3005",
+          "trace": "off",
+          "video": "off",
+          "viewport": {
+            "width": 820,
+            "height": 1180
+          },
+          "hasTouch": true,
+          "isMobile": true
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "tablet-portrait-820x1180"
+      },
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Users\\Agam\\Downloads\\Prepabroadsimplified-main\\Prepabroadsimplified-main\\test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "tablet-portrait-834x1194",
+        "testDir": "C:\\Users\\Agam\\Downloads\\Prepabroadsimplified-main\\Prepabroadsimplified-main\\tests",
+        "snapshotDir": "C:\\Users\\Agam\\Downloads\\Prepabroadsimplified-main\\Prepabroadsimplified-main\\tests",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 45000,
+        "use": {
+          "baseURL": "http://127.0.0.1:3005",
+          "trace": "off",
+          "video": "off",
+          "viewport": {
+            "width": 834,
+            "height": 1194
+          },
+          "hasTouch": true,
+          "isMobile": true
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "tablet-portrait-834x1194"
+      },
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Users\\Agam\\Downloads\\Prepabroadsimplified-main\\Prepabroadsimplified-main\\test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "tablet-landscape-1024x768",
+        "testDir": "C:\\Users\\Agam\\Downloads\\Prepabroadsimplified-main\\Prepabroadsimplified-main\\tests",
+        "snapshotDir": "C:\\Users\\Agam\\Downloads\\Prepabroadsimplified-main\\Prepabroadsimplified-main\\tests",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 45000,
+        "use": {
+          "baseURL": "http://127.0.0.1:3005",
+          "trace": "off",
+          "video": "off",
+          "viewport": {
+            "width": 1024,
+            "height": 768
+          },
+          "hasTouch": true,
+          "isMobile": true
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "tablet-landscape-1024x768"
+      },
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Users\\Agam\\Downloads\\Prepabroadsimplified-main\\Prepabroadsimplified-main\\test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "tablet-landscape-1180x820",
+        "testDir": "C:\\Users\\Agam\\Downloads\\Prepabroadsimplified-main\\Prepabroadsimplified-main\\tests",
+        "snapshotDir": "C:\\Users\\Agam\\Downloads\\Prepabroadsimplified-main\\Prepabroadsimplified-main\\tests",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 45000,
+        "use": {
+          "baseURL": "http://127.0.0.1:3005",
+          "trace": "off",
+          "video": "off",
+          "viewport": {
+            "width": 1180,
+            "height": 820
+          },
+          "hasTouch": true,
+          "isMobile": true
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "tablet-landscape-1180x820"
+      },
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Users\\Agam\\Downloads\\Prepabroadsimplified-main\\Prepabroadsimplified-main\\test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "tablet-landscape-1366x1024",
+        "testDir": "C:\\Users\\Agam\\Downloads\\Prepabroadsimplified-main\\Prepabroadsimplified-main\\tests",
+        "snapshotDir": "C:\\Users\\Agam\\Downloads\\Prepabroadsimplified-main\\Prepabroadsimplified-main\\tests",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 45000,
+        "use": {
+          "baseURL": "http://127.0.0.1:3005",
+          "trace": "off",
+          "video": "off",
+          "viewport": {
+            "width": 1366,
+            "height": 1024
+          },
+          "hasTouch": true,
+          "isMobile": true
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "tablet-landscape-1366x1024"
+      },
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Users\\Agam\\Downloads\\Prepabroadsimplified-main\\Prepabroadsimplified-main\\test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "desktop-1440x900",
+        "testDir": "C:\\Users\\Agam\\Downloads\\Prepabroadsimplified-main\\Prepabroadsimplified-main\\tests",
+        "snapshotDir": "C:\\Users\\Agam\\Downloads\\Prepabroadsimplified-main\\Prepabroadsimplified-main\\tests",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 45000,
+        "use": {
+          "baseURL": "http://127.0.0.1:3005",
+          "trace": "off",
+          "video": "off",
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "hasTouch": false,
+          "isMobile": false
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "desktop-1440x900"
+      },
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Users\\Agam\\Downloads\\Prepabroadsimplified-main\\Prepabroadsimplified-main\\test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "desktop-1920x1080",
+        "testDir": "C:\\Users\\Agam\\Downloads\\Prepabroadsimplified-main\\Prepabroadsimplified-main\\tests",
+        "snapshotDir": "C:\\Users\\Agam\\Downloads\\Prepabroadsimplified-main\\Prepabroadsimplified-main\\tests",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 45000,
+        "use": {
+          "baseURL": "http://127.0.0.1:3005",
+          "trace": "off",
+          "video": "off",
+          "viewport": {
+            "width": 1920,
+            "height": 1080
+          },
+          "hasTouch": false,
+          "isMobile": false
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "desktop-1920x1080"
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "reference/audit/playwright-results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": {
+      "command": "npx next dev -p 3005",
+      "url": "http://127.0.0.1:3005",
+      "reuseExistingServer": true,
+      "timeout": 120000
+    }
+  },
+  "suites": [
+    {
+      "title": "landing-design-audit.spec.ts",
+      "file": "landing-design-audit.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "DESIGN.md Section 7 Audit Matrix",
+          "file": "landing-design-audit.spec.ts",
+          "line": 9,
+          "column": 6,
+          "specs": [
+            {
+              "title": "Check 1: No horizontal scroll",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "mobile-390x844",
+                  "projectName": "mobile-390x844",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 8885,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-03T19:58:07.197Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "de8c239af0983f9aae97-ffb36c9046a543d8bfc2",
+              "file": "landing-design-audit.spec.ts",
+              "line": 18,
+              "column": 7
+            },
+            {
+              "title": "Check 2: Hero chips do not intersect face-safe zones (widened by 3%)",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "mobile-390x844",
+                  "projectName": "mobile-390x844",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 9156,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-03T19:58:17.395Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "de8c239af0983f9aae97-460e46875f5cc7d155b0",
+              "file": "landing-design-audit.spec.ts",
+              "line": 34,
+              "column": 7
+            },
+            {
+              "title": "Check 2b: Hero headline and subcopy do not collide with hero photo",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "mobile-390x844",
+                  "projectName": "mobile-390x844",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 6344,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-03T19:58:26.664Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "de8c239af0983f9aae97-b74472c37036646d822e",
+              "file": "landing-design-audit.spec.ts",
+              "line": 95,
+              "column": 7
+            },
+            {
+              "title": "Check 2c: Hero chips have complete text without truncation or ellipsis",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "mobile-390x844",
+                  "projectName": "mobile-390x844",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 5457,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-03T19:58:33.128Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "de8c239af0983f9aae97-22c1e8cc09a961e7dfb2",
+              "file": "landing-design-audit.spec.ts",
+              "line": 127,
+              "column": 7
+            },
+            {
+              "title": "Check 3: MediaFrames cover mode has no empty band and cutout mode is flush at bottom",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "mobile-390x844",
+                  "projectName": "mobile-390x844",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 11345,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-03T19:58:38.665Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "de8c239af0983f9aae97-c3da20f53b9df1bf5367",
+              "file": "landing-design-audit.spec.ts",
+              "line": 149,
+              "column": 7
+            },
+            {
+              "title": "Check 4: \"PATH\" is fully visible or absent",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "mobile-390x844",
+                  "projectName": "mobile-390x844",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 11746,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-03T19:58:50.109Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "de8c239af0983f9aae97-e62e71432e46010476f7",
+              "file": "landing-design-audit.spec.ts",
+              "line": 210,
+              "column": 7
+            },
+            {
+              "title": "Check 5: CTA photo is at least 96% of panel height and flush at bottom",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "mobile-390x844",
+                  "projectName": "mobile-390x844",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 7435,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-03T19:59:02.037Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "de8c239af0983f9aae97-2de2e665cc22133798de",
+              "file": "landing-design-audit.spec.ts",
+              "line": 239,
+              "column": 7
+            },
+            {
+              "title": "Check 6: Pinned scroll and mouse parallax are inactive when pointer is coarse",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "mobile-390x844",
+                  "projectName": "mobile-390x844",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 6812,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-03T19:59:09.730Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "de8c239af0983f9aae97-b6408dbea28b21a2c121",
+              "file": "landing-design-audit.spec.ts",
+              "line": 285,
+              "column": 7
+            },
+            {
+              "title": "Check 7: Testimonial review categories exist and contain at least 25 reviews each",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "mobile-390x844",
+                  "projectName": "mobile-390x844",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 5891,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-03T19:59:16.616Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "de8c239af0983f9aae97-1c4525c06783939c9638",
+              "file": "landing-design-audit.spec.ts",
+              "line": 307,
+              "column": 7
+            },
+            {
+              "title": "Capture Screenshot for /reference/after/",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "mobile-390x844",
+                  "projectName": "mobile-390x844",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 6004,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-03T19:59:22.563Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "de8c239af0983f9aae97-97c6ed56225492ccf269",
+              "file": "landing-design-audit.spec.ts",
+              "line": 330,
+              "column": 7
+            },
+            {
+              "title": "Check 1: No horizontal scroll",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "tablet-portrait-768x1024",
+                  "projectName": "tablet-portrait-768x1024",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 7251,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-03T19:59:42.152Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "de8c239af0983f9aae97-f2d14a2e1083849eff47",
+              "file": "landing-design-audit.spec.ts",
+              "line": 18,
+              "column": 7
+            },
+            {
+              "title": "Check 2: Hero chips do not intersect face-safe zones (widened by 3%)",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "tablet-portrait-768x1024",
+                  "projectName": "tablet-portrait-768x1024",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 6265,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-03T19:59:51.057Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "de8c239af0983f9aae97-d6c70c8af0d90bb3bb10",
+              "file": "landing-design-audit.spec.ts",
+              "line": 34,
+              "column": 7
+            },
+            {
+              "title": "Check 2b: Hero headline and subcopy do not collide with hero photo",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "tablet-portrait-768x1024",
+                  "projectName": "tablet-portrait-768x1024",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 14741,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-03T19:59:57.580Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "de8c239af0983f9aae97-f0a9a3d507c64e3da26b",
+              "file": "landing-design-audit.spec.ts",
+              "line": 95,
+              "column": 7
+            },
+            {
+              "title": "Check 2c: Hero chips have complete text without truncation or ellipsis",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "tablet-portrait-768x1024",
+                  "projectName": "tablet-portrait-768x1024",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 11976,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-03T20:00:12.709Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "de8c239af0983f9aae97-8227254dcc387326ae29",
+              "file": "landing-design-audit.spec.ts",
+              "line": 127,
+              "column": 7
+            },
+            {
+              "title": "Check 3: MediaFrames cover mode has no empty band and cutout mode is flush at bottom",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "tablet-portrait-768x1024",
+                  "projectName": "tablet-portrait-768x1024",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 9662,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-03T20:00:24.811Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "de8c239af0983f9aae97-2b63f1d776cb817c1e1b",
+              "file": "landing-design-audit.spec.ts",
+              "line": 149,
+              "column": 7
+            },
+            {
+              "title": "Check 4: \"PATH\" is fully visible or absent",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "tablet-portrait-768x1024",
+                  "projectName": "tablet-portrait-768x1024",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 6276,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-03T20:00:34.564Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "de8c239af0983f9aae97-3cbe4441ac5ae599ed31",
+              "file": "landing-design-audit.spec.ts",
+              "line": 210,
+              "column": 7
+            },
+            {
+              "title": "Check 5: CTA photo is at least 96% of panel height and flush at bottom",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "tablet-portrait-768x1024",
+                  "projectName": "tablet-portrait-768x1024",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 5988,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-03T20:00:40.945Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "de8c239af0983f9aae97-b180c4e64adde7432e33",
+              "file": "landing-design-audit.spec.ts",
+              "line": 239,
+              "column": 7
+            },
+            {
+              "title": "Check 6: Pinned scroll and mouse parallax are inactive when pointer is coarse",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "tablet-portrait-768x1024",
+                  "projectName": "tablet-portrait-768x1024",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 8298,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-03T20:00:47.058Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "de8c239af0983f9aae97-51dc1dacea665a40543f",
+              "file": "landing-design-audit.spec.ts",
+              "line": 285,
+              "column": 7
+            },
+            {
+              "title": "Check 7: Testimonial review categories exist and contain at least 25 reviews each",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "tablet-portrait-768x1024",
+                  "projectName": "tablet-portrait-768x1024",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 7572,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-03T20:00:55.443Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "de8c239af0983f9aae97-552758a4cf9f93628086",
+              "file": "landing-design-audit.spec.ts",
+              "line": 307,
+              "column": 7
+            },
+            {
+              "title": "Capture Screenshot for /reference/after/",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "tablet-portrait-768x1024",
+                  "projectName": "tablet-portrait-768x1024",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 11899,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-03T20:01:03.292Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "de8c239af0983f9aae97-ccbbbb8d7b9333bb4b1a",
+              "file": "landing-design-audit.spec.ts",
+              "line": 330,
+              "column": 7
+            },
+            {
+              "title": "Check 1: No horizontal scroll",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "tablet-portrait-820x1180",
+                  "projectName": "tablet-portrait-820x1180",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 7962,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-03T20:01:30.916Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "de8c239af0983f9aae97-461a867210d72096ea48",
+              "file": "landing-design-audit.spec.ts",
+              "line": 18,
+              "column": 7
+            },
+            {
+              "title": "Check 2: Hero chips do not intersect face-safe zones (widened by 3%)",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "tablet-portrait-820x1180",
+                  "projectName": "tablet-portrait-820x1180",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 8418,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-03T20:01:40.270Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "de8c239af0983f9aae97-2a201effad9a5d81366b",
+              "file": "landing-design-audit.spec.ts",
+              "line": 34,
+              "column": 7
+            },
+            {
+              "title": "Check 2b: Hero headline and subcopy do not collide with hero photo",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "tablet-portrait-820x1180",
+                  "projectName": "tablet-portrait-820x1180",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 4908,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-03T20:01:48.820Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "de8c239af0983f9aae97-82021f9deadbdb8a592a",
+              "file": "landing-design-audit.spec.ts",
+              "line": 95,
+              "column": 7
+            },
+            {
+              "title": "Check 2c: Hero chips have complete text without truncation or ellipsis",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "tablet-portrait-820x1180",
+                  "projectName": "tablet-portrait-820x1180",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 3935,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-03T20:01:53.770Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "de8c239af0983f9aae97-95405e2120c46e3777e4",
+              "file": "landing-design-audit.spec.ts",
+              "line": 127,
+              "column": 7
+            },
+            {
+              "title": "Check 3: MediaFrames cover mode has no empty band and cutout mode is flush at bottom",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "tablet-portrait-820x1180",
+                  "projectName": "tablet-portrait-820x1180",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 8133,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-03T20:01:57.751Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "de8c239af0983f9aae97-28e69fb5092b18e909a9",
+              "file": "landing-design-audit.spec.ts",
+              "line": 149,
+              "column": 7
+            },
+            {
+              "title": "Check 4: \"PATH\" is fully visible or absent",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "tablet-portrait-820x1180",
+                  "projectName": "tablet-portrait-820x1180",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 4464,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-03T20:02:05.933Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "de8c239af0983f9aae97-4369d1773c5ee6184eab",
+              "file": "landing-design-audit.spec.ts",
+              "line": 210,
+              "column": 7
+            },
+            {
+              "title": "Check 5: CTA photo is at least 96% of panel height and flush at bottom",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "tablet-portrait-820x1180",
+                  "projectName": "tablet-portrait-820x1180",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 7662,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-03T20:02:10.485Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "de8c239af0983f9aae97-09bde47189398505e898",
+              "file": "landing-design-audit.spec.ts",
+              "line": 239,
+              "column": 7
+            },
+            {
+              "title": "Check 6: Pinned scroll and mouse parallax are inactive when pointer is coarse",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "tablet-portrait-820x1180",
+                  "projectName": "tablet-portrait-820x1180",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 7772,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-03T20:02:18.206Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "de8c239af0983f9aae97-efd070c394efaff6ef2a",
+              "file": "landing-design-audit.spec.ts",
+              "line": 285,
+              "column": 7
+            },
+            {
+              "title": "Check 7: Testimonial review categories exist and contain at least 25 reviews each",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "tablet-portrait-820x1180",
+                  "projectName": "tablet-portrait-820x1180",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 10016,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-03T20:02:26.059Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "de8c239af0983f9aae97-492a67f051e263497c44",
+              "file": "landing-design-audit.spec.ts",
+              "line": 307,
+              "column": 7
+            },
+            {
+              "title": "Capture Screenshot for /reference/after/",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "tablet-portrait-820x1180",
+                  "projectName": "tablet-portrait-820x1180",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 10778,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-03T20:02:36.156Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "de8c239af0983f9aae97-69a01978be2f86d06bc2",
+              "file": "landing-design-audit.spec.ts",
+              "line": 330,
+              "column": 7
+            },
+            {
+              "title": "Check 1: No horizontal scroll",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "tablet-portrait-834x1194",
+                  "projectName": "tablet-portrait-834x1194",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 15148,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-03T20:03:01.699Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "de8c239af0983f9aae97-5e3e51f94a24ad34500c",
+              "file": "landing-design-audit.spec.ts",
+              "line": 18,
+              "column": 7
+            },
+            {
+              "title": "Check 2: Hero chips do not intersect face-safe zones (widened by 3%)",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "tablet-portrait-834x1194",
+                  "projectName": "tablet-portrait-834x1194",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 9321,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-03T20:03:19.289Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "de8c239af0983f9aae97-5a77b132ec339e16c1d5",
+              "file": "landing-design-audit.spec.ts",
+              "line": 34,
+              "column": 7
+            },
+            {
+              "title": "Check 2b: Hero headline and subcopy do not collide with hero photo",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "tablet-portrait-834x1194",
+                  "projectName": "tablet-portrait-834x1194",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 9701,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-03T20:03:28.731Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "de8c239af0983f9aae97-a45986ee503f086c7c99",
+              "file": "landing-design-audit.spec.ts",
+              "line": 95,
+              "column": 7
+            },
+            {
+              "title": "Check 2c: Hero chips have complete text without truncation or ellipsis",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "tablet-portrait-834x1194",
+                  "projectName": "tablet-portrait-834x1194",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 7400,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-03T20:03:38.570Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "de8c239af0983f9aae97-1af7936f9db1f17b9991",
+              "file": "landing-design-audit.spec.ts",
+              "line": 127,
+              "column": 7
+            },
+            {
+              "title": "Check 3: MediaFrames cover mode has no empty band and cutout mode is flush at bottom",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "tablet-portrait-834x1194",
+                  "projectName": "tablet-portrait-834x1194",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 21601,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-03T20:03:46.249Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "de8c239af0983f9aae97-530c1c9018adfc89635d",
+              "file": "landing-design-audit.spec.ts",
+              "line": 149,
+              "column": 7
+            },
+            {
+              "title": "Check 4: \"PATH\" is fully visible or absent",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "tablet-portrait-834x1194",
+                  "projectName": "tablet-portrait-834x1194",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 7503,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-03T20:04:07.940Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "de8c239af0983f9aae97-5fbcf0b050c78aa0f8ee",
+              "file": "landing-design-audit.spec.ts",
+              "line": 210,
+              "column": 7
+            },
+            {
+              "title": "Check 5: CTA photo is at least 96% of panel height and flush at bottom",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "tablet-portrait-834x1194",
+                  "projectName": "tablet-portrait-834x1194",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 7109,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-03T20:04:15.624Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "de8c239af0983f9aae97-8bc1572df2ef7c2b9bed",
+              "file": "landing-design-audit.spec.ts",
+              "line": 239,
+              "column": 7
+            },
+            {
+              "title": "Check 6: Pinned scroll and mouse parallax are inactive when pointer is coarse",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "tablet-portrait-834x1194",
+                  "projectName": "tablet-portrait-834x1194",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 6628,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-03T20:04:22.820Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "de8c239af0983f9aae97-ada084fc0c566b6d8367",
+              "file": "landing-design-audit.spec.ts",
+              "line": 285,
+              "column": 7
+            },
+            {
+              "title": "Check 7: Testimonial review categories exist and contain at least 25 reviews each",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "tablet-portrait-834x1194",
+                  "projectName": "tablet-portrait-834x1194",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 7339,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-03T20:04:29.518Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "de8c239af0983f9aae97-19585609dfeaab402021",
+              "file": "landing-design-audit.spec.ts",
+              "line": 307,
+              "column": 7
+            },
+            {
+              "title": "Capture Screenshot for /reference/after/",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "tablet-portrait-834x1194",
+                  "projectName": "tablet-portrait-834x1194",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 6986,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-03T20:04:37.060Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "de8c239af0983f9aae97-15eb8f0ad920eae4ee65",
+              "file": "landing-design-audit.spec.ts",
+              "line": 330,
+              "column": 7
+            },
+            {
+              "title": "Check 1: No horizontal scroll",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "tablet-landscape-1024x768",
+                  "projectName": "tablet-landscape-1024x768",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 5113,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-03T20:04:54.921Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "de8c239af0983f9aae97-b2068043d9b3b6555a48",
+              "file": "landing-design-audit.spec.ts",
+              "line": 18,
+              "column": 7
+            },
+            {
+              "title": "Check 2: Hero chips do not intersect face-safe zones (widened by 3%)",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "tablet-landscape-1024x768",
+                  "projectName": "tablet-landscape-1024x768",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 3946,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-03T20:05:01.455Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "de8c239af0983f9aae97-e2468c26ebb458374d84",
+              "file": "landing-design-audit.spec.ts",
+              "line": 34,
+              "column": 7
+            },
+            {
+              "title": "Check 2b: Hero headline and subcopy do not collide with hero photo",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "tablet-landscape-1024x768",
+                  "projectName": "tablet-landscape-1024x768",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 6111,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-03T20:05:05.449Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "de8c239af0983f9aae97-5667231e3e95b5ba1c17",
+              "file": "landing-design-audit.spec.ts",
+              "line": 95,
+              "column": 7
+            },
+            {
+              "title": "Check 2c: Hero chips have complete text without truncation or ellipsis",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "tablet-landscape-1024x768",
+                  "projectName": "tablet-landscape-1024x768",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 5252,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-03T20:05:11.652Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "de8c239af0983f9aae97-77a663d88dc8f8455e4b",
+              "file": "landing-design-audit.spec.ts",
+              "line": 127,
+              "column": 7
+            },
+            {
+              "title": "Check 3: MediaFrames cover mode has no empty band and cutout mode is flush at bottom",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "tablet-landscape-1024x768",
+                  "projectName": "tablet-landscape-1024x768",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 7647,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-03T20:05:16.986Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "de8c239af0983f9aae97-ff73b9c7a4d4d5619a55",
+              "file": "landing-design-audit.spec.ts",
+              "line": 149,
+              "column": 7
+            },
+            {
+              "title": "Check 4: \"PATH\" is fully visible or absent",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "tablet-landscape-1024x768",
+                  "projectName": "tablet-landscape-1024x768",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 7613,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-03T20:05:24.856Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "de8c239af0983f9aae97-04bce097e4b837e96b26",
+              "file": "landing-design-audit.spec.ts",
+              "line": 210,
+              "column": 7
+            },
+            {
+              "title": "Check 5: CTA photo is at least 96% of panel height and flush at bottom",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "tablet-landscape-1024x768",
+                  "projectName": "tablet-landscape-1024x768",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 10688,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-03T20:05:32.569Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "de8c239af0983f9aae97-be35ad76c3cd39e835a7",
+              "file": "landing-design-audit.spec.ts",
+              "line": 239,
+              "column": 7
+            },
+            {
+              "title": "Check 6: Pinned scroll and mouse parallax are inactive when pointer is coarse",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "tablet-landscape-1024x768",
+                  "projectName": "tablet-landscape-1024x768",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 10309,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-03T20:05:43.473Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "de8c239af0983f9aae97-64a39827c3855320c773",
+              "file": "landing-design-audit.spec.ts",
+              "line": 285,
+              "column": 7
+            },
+            {
+              "title": "Check 7: Testimonial review categories exist and contain at least 25 reviews each",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "tablet-landscape-1024x768",
+                  "projectName": "tablet-landscape-1024x768",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 10601,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-03T20:05:53.909Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "de8c239af0983f9aae97-f3e3d2a7578210829b9a",
+              "file": "landing-design-audit.spec.ts",
+              "line": 307,
+              "column": 7
+            },
+            {
+              "title": "Capture Screenshot for /reference/after/",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "tablet-landscape-1024x768",
+                  "projectName": "tablet-landscape-1024x768",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 12909,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-03T20:06:04.607Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "de8c239af0983f9aae97-59e7709c688643e06b8d",
+              "file": "landing-design-audit.spec.ts",
+              "line": 330,
+              "column": 7
+            },
+            {
+              "title": "Check 1: No horizontal scroll",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "tablet-landscape-1180x820",
+                  "projectName": "tablet-landscape-1180x820",
+                  "results": [
+                    {
+                      "workerIndex": 5,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 9019,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-03T20:06:28.944Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "de8c239af0983f9aae97-ceaa3451b4f3eee417a5",
+              "file": "landing-design-audit.spec.ts",
+              "line": 18,
+              "column": 7
+            },
+            {
+              "title": "Check 2: Hero chips do not intersect face-safe zones (widened by 3%)",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "tablet-landscape-1180x820",
+                  "projectName": "tablet-landscape-1180x820",
+                  "results": [
+                    {
+                      "workerIndex": 5,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 4230,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-03T20:06:41.436Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "de8c239af0983f9aae97-f2442a0f423c7cdc1ee4",
+              "file": "landing-design-audit.spec.ts",
+              "line": 34,
+              "column": 7
+            },
+            {
+              "title": "Check 2b: Hero headline and subcopy do not collide with hero photo",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "tablet-landscape-1180x820",
+                  "projectName": "tablet-landscape-1180x820",
+                  "results": [
+                    {
+                      "workerIndex": 5,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 9781,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-03T20:06:45.731Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "de8c239af0983f9aae97-986a30c5846ce8b57e7d",
+              "file": "landing-design-audit.spec.ts",
+              "line": 95,
+              "column": 7
+            },
+            {
+              "title": "Check 2c: Hero chips have complete text without truncation or ellipsis",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "tablet-landscape-1180x820",
+                  "projectName": "tablet-landscape-1180x820",
+                  "results": [
+                    {
+                      "workerIndex": 5,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 7785,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-03T20:06:55.827Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "de8c239af0983f9aae97-851d4f79b9852f3db101",
+              "file": "landing-design-audit.spec.ts",
+              "line": 127,
+              "column": 7
+            },
+            {
+              "title": "Check 3: MediaFrames cover mode has no empty band and cutout mode is flush at bottom",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "tablet-landscape-1180x820",
+                  "projectName": "tablet-landscape-1180x820",
+                  "results": [
+                    {
+                      "workerIndex": 5,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 15729,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-03T20:07:03.749Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "de8c239af0983f9aae97-418a5b5858d6eaba2228",
+              "file": "landing-design-audit.spec.ts",
+              "line": 149,
+              "column": 7
+            },
+            {
+              "title": "Check 4: \"PATH\" is fully visible or absent",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "tablet-landscape-1180x820",
+                  "projectName": "tablet-landscape-1180x820",
+                  "results": [
+                    {
+                      "workerIndex": 5,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 10466,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-03T20:07:19.756Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "de8c239af0983f9aae97-498127bf4835ff7f15b3",
+              "file": "landing-design-audit.spec.ts",
+              "line": 210,
+              "column": 7
+            },
+            {
+              "title": "Check 5: CTA photo is at least 96% of panel height and flush at bottom",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "tablet-landscape-1180x820",
+                  "projectName": "tablet-landscape-1180x820",
+                  "results": [
+                    {
+                      "workerIndex": 5,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 9518,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-03T20:07:30.370Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "de8c239af0983f9aae97-d3918e6a19a17fbaba80",
+              "file": "landing-design-audit.spec.ts",
+              "line": 239,
+              "column": 7
+            },
+            {
+              "title": "Check 6: Pinned scroll and mouse parallax are inactive when pointer is coarse",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "tablet-landscape-1180x820",
+                  "projectName": "tablet-landscape-1180x820",
+                  "results": [
+                    {
+                      "workerIndex": 5,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 10295,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-03T20:07:39.985Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "de8c239af0983f9aae97-ad78a4c650b0ac169c3e",
+              "file": "landing-design-audit.spec.ts",
+              "line": 285,
+              "column": 7
+            },
+            {
+              "title": "Check 7: Testimonial review categories exist and contain at least 25 reviews each",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "tablet-landscape-1180x820",
+                  "projectName": "tablet-landscape-1180x820",
+                  "results": [
+                    {
+                      "workerIndex": 5,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 8164,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-03T20:07:50.379Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "de8c239af0983f9aae97-78d14f836f95285451e2",
+              "file": "landing-design-audit.spec.ts",
+              "line": 307,
+              "column": 7
+            },
+            {
+              "title": "Capture Screenshot for /reference/after/",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "tablet-landscape-1180x820",
+                  "projectName": "tablet-landscape-1180x820",
+                  "results": [
+                    {
+                      "workerIndex": 5,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 8463,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-03T20:07:58.649Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "de8c239af0983f9aae97-c886d5367c639bc0cd99",
+              "file": "landing-design-audit.spec.ts",
+              "line": 330,
+              "column": 7
+            },
+            {
+              "title": "Check 1: No horizontal scroll",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "tablet-landscape-1366x1024",
+                  "projectName": "tablet-landscape-1366x1024",
+                  "results": [
+                    {
+                      "workerIndex": 6,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 14157,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-03T20:08:28.113Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "de8c239af0983f9aae97-42507920cdc0fece0913",
+              "file": "landing-design-audit.spec.ts",
+              "line": 18,
+              "column": 7
+            },
+            {
+              "title": "Check 2: Hero chips do not intersect face-safe zones (widened by 3%)",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "tablet-landscape-1366x1024",
+                  "projectName": "tablet-landscape-1366x1024",
+                  "results": [
+                    {
+                      "workerIndex": 6,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 6822,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-03T20:08:49.877Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "de8c239af0983f9aae97-3ef84a35e9d9174dee4b",
+              "file": "landing-design-audit.spec.ts",
+              "line": 34,
+              "column": 7
+            },
+            {
+              "title": "Check 2b: Hero headline and subcopy do not collide with hero photo",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "tablet-landscape-1366x1024",
+                  "projectName": "tablet-landscape-1366x1024",
+                  "results": [
+                    {
+                      "workerIndex": 6,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 6246,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-03T20:08:56.777Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "de8c239af0983f9aae97-eee0f55840b70efecaa0",
+              "file": "landing-design-audit.spec.ts",
+              "line": 95,
+              "column": 7
+            },
+            {
+              "title": "Check 2c: Hero chips have complete text without truncation or ellipsis",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "tablet-landscape-1366x1024",
+                  "projectName": "tablet-landscape-1366x1024",
+                  "results": [
+                    {
+                      "workerIndex": 6,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 6351,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-03T20:09:03.142Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "de8c239af0983f9aae97-ee27bd415b029498d349",
+              "file": "landing-design-audit.spec.ts",
+              "line": 127,
+              "column": 7
+            },
+            {
+              "title": "Check 3: MediaFrames cover mode has no empty band and cutout mode is flush at bottom",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "tablet-landscape-1366x1024",
+                  "projectName": "tablet-landscape-1366x1024",
+                  "results": [
+                    {
+                      "workerIndex": 6,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 7294,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-03T20:09:09.614Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "de8c239af0983f9aae97-7ab1d6d31ab9f2536f3f",
+              "file": "landing-design-audit.spec.ts",
+              "line": 149,
+              "column": 7
+            },
+            {
+              "title": "Check 4: \"PATH\" is fully visible or absent",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "tablet-landscape-1366x1024",
+                  "projectName": "tablet-landscape-1366x1024",
+                  "results": [
+                    {
+                      "workerIndex": 6,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 4866,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-03T20:09:16.954Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "de8c239af0983f9aae97-97fc16233acdd3f9e399",
+              "file": "landing-design-audit.spec.ts",
+              "line": 210,
+              "column": 7
+            },
+            {
+              "title": "Check 5: CTA photo is at least 96% of panel height and flush at bottom",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "tablet-landscape-1366x1024",
+                  "projectName": "tablet-landscape-1366x1024",
+                  "results": [
+                    {
+                      "workerIndex": 6,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 5858,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-03T20:09:21.878Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "de8c239af0983f9aae97-353680d58948645722ff",
+              "file": "landing-design-audit.spec.ts",
+              "line": 239,
+              "column": 7
+            },
+            {
+              "title": "Check 6: Pinned scroll and mouse parallax are inactive when pointer is coarse",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "tablet-landscape-1366x1024",
+                  "projectName": "tablet-landscape-1366x1024",
+                  "results": [
+                    {
+                      "workerIndex": 6,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 6368,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-03T20:09:27.844Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "de8c239af0983f9aae97-4a2e108cbbc20d044183",
+              "file": "landing-design-audit.spec.ts",
+              "line": 285,
+              "column": 7
+            },
+            {
+              "title": "Check 7: Testimonial review categories exist and contain at least 25 reviews each",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "tablet-landscape-1366x1024",
+                  "projectName": "tablet-landscape-1366x1024",
+                  "results": [
+                    {
+                      "workerIndex": 6,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 4176,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-03T20:09:34.276Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "de8c239af0983f9aae97-4462984190b9b87a8ef7",
+              "file": "landing-design-audit.spec.ts",
+              "line": 307,
+              "column": 7
+            },
+            {
+              "title": "Capture Screenshot for /reference/after/",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "tablet-landscape-1366x1024",
+                  "projectName": "tablet-landscape-1366x1024",
+                  "results": [
+                    {
+                      "workerIndex": 6,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 5371,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-03T20:09:38.508Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "de8c239af0983f9aae97-295c722fe5585092179b",
+              "file": "landing-design-audit.spec.ts",
+              "line": 330,
+              "column": 7
+            },
+            {
+              "title": "Check 1: No horizontal scroll",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "desktop-1440x900",
+                  "projectName": "desktop-1440x900",
+                  "results": [
+                    {
+                      "workerIndex": 7,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 6915,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-03T20:09:50.835Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "de8c239af0983f9aae97-fb14482138e2f927b35d",
+              "file": "landing-design-audit.spec.ts",
+              "line": 18,
+              "column": 7
+            },
+            {
+              "title": "Check 2: Hero chips do not intersect face-safe zones (widened by 3%)",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "desktop-1440x900",
+                  "projectName": "desktop-1440x900",
+                  "results": [
+                    {
+                      "workerIndex": 7,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 3233,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-03T20:09:58.430Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "de8c239af0983f9aae97-da204e2e3dbe55d68f98",
+              "file": "landing-design-audit.spec.ts",
+              "line": 34,
+              "column": 7
+            },
+            {
+              "title": "Check 2b: Hero headline and subcopy do not collide with hero photo",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "desktop-1440x900",
+                  "projectName": "desktop-1440x900",
+                  "results": [
+                    {
+                      "workerIndex": 7,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 4380,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-03T20:10:01.708Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "de8c239af0983f9aae97-94e7a525cf594697c999",
+              "file": "landing-design-audit.spec.ts",
+              "line": 95,
+              "column": 7
+            },
+            {
+              "title": "Check 2c: Hero chips have complete text without truncation or ellipsis",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "desktop-1440x900",
+                  "projectName": "desktop-1440x900",
+                  "results": [
+                    {
+                      "workerIndex": 7,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 4446,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-03T20:10:06.160Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "de8c239af0983f9aae97-6cb2483e621b1e06bbce",
+              "file": "landing-design-audit.spec.ts",
+              "line": 127,
+              "column": 7
+            },
+            {
+              "title": "Check 3: MediaFrames cover mode has no empty band and cutout mode is flush at bottom",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "desktop-1440x900",
+                  "projectName": "desktop-1440x900",
+                  "results": [
+                    {
+                      "workerIndex": 7,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 5847,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-03T20:10:10.646Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "de8c239af0983f9aae97-7fc4c94f7cfb9738b9fb",
+              "file": "landing-design-audit.spec.ts",
+              "line": 149,
+              "column": 7
+            },
+            {
+              "title": "Check 4: \"PATH\" is fully visible or absent",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "desktop-1440x900",
+                  "projectName": "desktop-1440x900",
+                  "results": [
+                    {
+                      "workerIndex": 7,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 4564,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-03T20:10:16.537Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "de8c239af0983f9aae97-b1114e65d4a139fa181d",
+              "file": "landing-design-audit.spec.ts",
+              "line": 210,
+              "column": 7
+            },
+            {
+              "title": "Check 5: CTA photo is at least 96% of panel height and flush at bottom",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "desktop-1440x900",
+                  "projectName": "desktop-1440x900",
+                  "results": [
+                    {
+                      "workerIndex": 7,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 4937,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-03T20:10:21.153Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "de8c239af0983f9aae97-0e0a2552d559d0533595",
+              "file": "landing-design-audit.spec.ts",
+              "line": 239,
+              "column": 7
+            },
+            {
+              "title": "Check 6: Pinned scroll and mouse parallax are inactive when pointer is coarse",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "desktop-1440x900",
+                  "projectName": "desktop-1440x900",
+                  "results": [
+                    {
+                      "workerIndex": 7,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 4824,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-03T20:10:26.130Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "de8c239af0983f9aae97-77c94f54f16599bcdbdb",
+              "file": "landing-design-audit.spec.ts",
+              "line": 285,
+              "column": 7
+            },
+            {
+              "title": "Check 7: Testimonial review categories exist and contain at least 25 reviews each",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "desktop-1440x900",
+                  "projectName": "desktop-1440x900",
+                  "results": [
+                    {
+                      "workerIndex": 7,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 5650,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-03T20:10:30.992Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "de8c239af0983f9aae97-0401c2275bd5dc7960d2",
+              "file": "landing-design-audit.spec.ts",
+              "line": 307,
+              "column": 7
+            },
+            {
+              "title": "Capture Screenshot for /reference/after/",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "desktop-1440x900",
+                  "projectName": "desktop-1440x900",
+                  "results": [
+                    {
+                      "workerIndex": 7,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 7257,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-03T20:10:36.689Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "de8c239af0983f9aae97-fa09e7625b8a91823766",
+              "file": "landing-design-audit.spec.ts",
+              "line": 330,
+              "column": 7
+            },
+            {
+              "title": "Check 1: No horizontal scroll",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "desktop-1920x1080",
+                  "projectName": "desktop-1920x1080",
+                  "results": [
+                    {
+                      "workerIndex": 8,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 6287,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-03T20:11:00.971Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "de8c239af0983f9aae97-d171f76e3457fc055b7e",
+              "file": "landing-design-audit.spec.ts",
+              "line": 18,
+              "column": 7
+            },
+            {
+              "title": "Check 2: Hero chips do not intersect face-safe zones (widened by 3%)",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "desktop-1920x1080",
+                  "projectName": "desktop-1920x1080",
+                  "results": [
+                    {
+                      "workerIndex": 8,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 9326,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-03T20:11:09.090Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "de8c239af0983f9aae97-b89bcb517c0cd7700aa5",
+              "file": "landing-design-audit.spec.ts",
+              "line": 34,
+              "column": 7
+            },
+            {
+              "title": "Check 2b: Hero headline and subcopy do not collide with hero photo",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "desktop-1920x1080",
+                  "projectName": "desktop-1920x1080",
+                  "results": [
+                    {
+                      "workerIndex": 8,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 5574,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-03T20:11:18.475Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "de8c239af0983f9aae97-ee46d5fb3a2958370968",
+              "file": "landing-design-audit.spec.ts",
+              "line": 95,
+              "column": 7
+            },
+            {
+              "title": "Check 2c: Hero chips have complete text without truncation or ellipsis",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "desktop-1920x1080",
+                  "projectName": "desktop-1920x1080",
+                  "results": [
+                    {
+                      "workerIndex": 8,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 4287,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-03T20:11:24.100Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "de8c239af0983f9aae97-8ceaacf2ae8a478309c1",
+              "file": "landing-design-audit.spec.ts",
+              "line": 127,
+              "column": 7
+            },
+            {
+              "title": "Check 3: MediaFrames cover mode has no empty band and cutout mode is flush at bottom",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "desktop-1920x1080",
+                  "projectName": "desktop-1920x1080",
+                  "results": [
+                    {
+                      "workerIndex": 8,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 6111,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-03T20:11:28.462Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "de8c239af0983f9aae97-60007cfdbb6a30ac6413",
+              "file": "landing-design-audit.spec.ts",
+              "line": 149,
+              "column": 7
+            },
+            {
+              "title": "Check 4: \"PATH\" is fully visible or absent",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "desktop-1920x1080",
+                  "projectName": "desktop-1920x1080",
+                  "results": [
+                    {
+                      "workerIndex": 8,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 4212,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-03T20:11:34.619Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "de8c239af0983f9aae97-21304b364f8395d77448",
+              "file": "landing-design-audit.spec.ts",
+              "line": 210,
+              "column": 7
+            },
+            {
+              "title": "Check 5: CTA photo is at least 96% of panel height and flush at bottom",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "desktop-1920x1080",
+                  "projectName": "desktop-1920x1080",
+                  "results": [
+                    {
+                      "workerIndex": 8,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 4704,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-03T20:11:38.873Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "de8c239af0983f9aae97-9806c597db157502ad5f",
+              "file": "landing-design-audit.spec.ts",
+              "line": 239,
+              "column": 7
+            },
+            {
+              "title": "Check 6: Pinned scroll and mouse parallax are inactive when pointer is coarse",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "desktop-1920x1080",
+                  "projectName": "desktop-1920x1080",
+                  "results": [
+                    {
+                      "workerIndex": 8,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 4857,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-03T20:11:43.641Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "de8c239af0983f9aae97-cb175d27844314576021",
+              "file": "landing-design-audit.spec.ts",
+              "line": 285,
+              "column": 7
+            },
+            {
+              "title": "Check 7: Testimonial review categories exist and contain at least 25 reviews each",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "desktop-1920x1080",
+                  "projectName": "desktop-1920x1080",
+                  "results": [
+                    {
+                      "workerIndex": 8,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 4102,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-03T20:11:48.599Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "de8c239af0983f9aae97-b4e7ac18f846f9452e90",
+              "file": "landing-design-audit.spec.ts",
+              "line": 307,
+              "column": 7
+            },
+            {
+              "title": "Capture Screenshot for /reference/after/",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 45000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "desktop-1920x1080",
+                  "projectName": "desktop-1920x1080",
+                  "results": [
+                    {
+                      "workerIndex": 8,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 5780,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-03T20:11:52.740Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "de8c239af0983f9aae97-3c741c9352cb550aeb54",
+              "file": "landing-design-audit.spec.ts",
+              "line": 330,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-03T19:57:02.462Z",
+    "duration": 903348.862,
+    "expected": 90,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

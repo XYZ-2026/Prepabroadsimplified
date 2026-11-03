@@ -1,0 +1,137 @@
+[
+  {
+    "viewport": {
+      "name": "1440x900",
+      "width": 1440,
+      "height": 900
+    },
+    "data": {
+      "hasHorizontalScroll": false,
+      "panelBox": {
+        "width": 1216,
+        "height": 535.71875,
+        "top": 100.3125,
+        "bottom": 636.03125
+      },
+      "imgBox": {
+        "width": 705.265625,
+        "height": 567.859375,
+        "top": 68.171875,
+        "bottom": 636.03125
+      },
+      "headlineText": "Your child’s right path can start here.",
+      "photoRatioOfPanel": 57.99881784539473,
+      "photoHeightRatio": 105.99953333722219,
+      "bottomDiff": 0,
+      "breakoutPx": 32.140625
+    }
+  },
+  {
+    "viewport": {
+      "name": "1920x1080",
+      "width": 1920,
+      "height": 1080
+    },
+    "data": {
+      "hasHorizontalScroll": false,
+      "panelBox": {
+        "width": 1216,
+        "height": 542.3125,
+        "top": 100.3125,
+        "bottom": 642.625
+      },
+      "imgBox": {
+        "width": 705.265625,
+        "height": 574.84375,
+        "top": 67.78125,
+        "bottom": 642.625
+      },
+      "headlineText": "Your child’s right path can start here.",
+      "photoRatioOfPanel": 57.99881784539473,
+      "photoHeightRatio": 105.99861703353695,
+      "bottomDiff": 0,
+      "breakoutPx": 32.53125
+    }
+  },
+  {
+    "viewport": {
+      "name": "1024x768",
+      "width": 1024,
+      "height": 768
+    },
+    "data": {
+      "hasHorizontalScroll": false,
+      "panelBox": {
+        "width": 960,
+        "height": 834.203125,
+        "top": 99.71875,
+        "bottom": 933.921875
+      },
+      "imgBox": {
+        "width": 560,
+        "height": 373.328125,
+        "top": 560.59375,
+        "bottom": 933.921875
+      },
+      "headlineText": "Your child’s right path can start here.",
+      "photoRatioOfPanel": 58.333333333333336,
+      "photoHeightRatio": 44.75266440652569,
+      "bottomDiff": 0,
+      "breakoutPx": 0
+    }
+  },
+  {
+    "viewport": {
+      "name": "768x1024",
+      "width": 768,
+      "height": 1024
+    },
+    "data": {
+      "hasHorizontalScroll": false,
+      "panelBox": {
+        "width": 720,
+        "height": 834.203125,
+        "top": 99.828125,
+        "bottom": 934.03125
+      },
+      "imgBox": {
+        "width": 560,
+        "height": 373.328125,
+        "top": 560.703125,
+        "bottom": 934.03125
+      },
+      "headlineText": "Your child’s right path can start here.",
+      "photoRatioOfPanel": 77.77777777777779,
+      "photoHeightRatio": 44.75266440652569,
+      "bottomDiff": 0,
+      "breakoutPx": 0
+    }
+  },
+  {
+    "viewport": {
+      "name": "390x844",
+      "width": 390,
+      "height": 844
+    },
+    "data": {
+      "hasHorizontalScroll": false,
+      "panelBox": {
+        "width": 358,
+        "height": 775.90625,
+        "top": 84.03125,
+        "bottom": 859.9375
+      },
+      "imgBox": {
+        "width": 310,
+        "height": 206.65625,
+        "top": 653.28125,
+        "bottom": 859.9375
+      },
+      "headlineText": "Your child’s right path can start here.",
+      "photoRatioOfPanel": 86.59217877094973,
+      "photoHeightRatio": 26.634177775987755,
+      "bottomDiff": 0,
+      "breakoutPx": 0
+    }
+  }
+]

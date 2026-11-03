@@ -25,8 +25,8 @@ export async function POST(req: NextRequest) {
     const isExecutive = reportType === 'executive' || urlType === 'executive';
 
     const decodedClaims = await verifySessionCookie();
-    const isSampleRequest = isSample || 
-      resultId?.toString().toUpperCase().includes('SAMPLE') || 
+    const isSampleRequest = isSample ||
+      resultId?.toString().toUpperCase().includes('SAMPLE') ||
       reqStudent?.reportId?.toString().toUpperCase().includes('SAMPLE') ||
       reqStudent?.name?.toString().toLowerCase().includes('sample');
     const isDirectPayload = !resultId && reqStudent && reqScores;
@@ -86,9 +86,9 @@ export async function POST(req: NextRequest) {
           }
           const wfState = await getWorkflowState(resultId);
           if (wfState !== 'report_unlocked') {
-            return NextResponse.json({ 
-              success: false, 
-              error: 'Report is locked. Complete the compulsory Parent Psychometric Assessment to unlock.' 
+            return NextResponse.json({
+              success: false,
+              error: 'Report is locked. Complete the compulsory Parent Psychometric Assessment to unlock.'
             }, { status: 403 });
           }
         }
@@ -120,7 +120,7 @@ export async function POST(req: NextRequest) {
       const studentInfo = data.studentInfo || {};
       const studentObj = data.student || {};
       studentName = studentObj.name || studentInfo.name || data.name || data.userName || 'Candidate';
-      
+
       let userProfileData: any = null;
       if (data.userId) {
         try {
@@ -135,7 +135,7 @@ export async function POST(req: NextRequest) {
           console.warn('[PDF Route] Could not fetch name from user record:', e);
         }
       }
-      
+
       const rawGrade = studentObj.grade || studentInfo.grade || userProfileData?.grade || userProfileData?.academicGrade || variantConfig.defaultGradeLabel;
       const formattedGrade = rawGrade.toLowerCase().includes('class') || rawGrade.toLowerCase().includes('grade') ? rawGrade : `Class ${rawGrade}`;
       const defaultAge = resolvedVariant === 'junior' ? '13' : resolvedVariant === 'senior' ? '17' : '15';
@@ -160,9 +160,9 @@ export async function POST(req: NextRequest) {
 
       const overallApt = Math.round(
         ((data.scores?.aptitude?.numerical || 75) +
-         (data.scores?.aptitude?.reasoning || 80) +
-         (data.scores?.aptitude?.verbal || 75) +
-         (data.scores?.aptitude?.spatial || 74)) / 4
+          (data.scores?.aptitude?.reasoning || 80) +
+          (data.scores?.aptitude?.verbal || 75) +
+          (data.scores?.aptitude?.spatial || 74)) / 4
       );
 
       scores = {
@@ -218,9 +218,9 @@ export async function POST(req: NextRequest) {
 
       const overallApt = Math.round(
         ((reqScores?.aptitude?.numerical || 75) +
-         (reqScores?.aptitude?.reasoning || 80) +
-         (reqScores?.aptitude?.verbal || 75) +
-         (reqScores?.aptitude?.spatial || 74)) / 4
+          (reqScores?.aptitude?.reasoning || 80) +
+          (reqScores?.aptitude?.verbal || 75) +
+          (reqScores?.aptitude?.spatial || 74)) / 4
       );
 
       scores = {
@@ -284,7 +284,6 @@ export async function POST(req: NextRequest) {
     const puppeteer = (await import('puppeteer')).default;
     browser = await puppeteer.launch({
       headless: true,
-      pipe: true,
       ...(process.env.PUPPETEER_EXECUTABLE_PATH && {
         executablePath: process.env.PUPPETEER_EXECUTABLE_PATH,
       }),
@@ -300,14 +299,14 @@ export async function POST(req: NextRequest) {
     });
 
     const page = await browser.newPage();
-    
+
     // Set 120s timeouts so large 56-page reports never hit the default 30000ms timeout
     page.setDefaultTimeout(120000);
     page.setDefaultNavigationTimeout(120000);
 
     // Set viewport to standard A4 resolution at 96 DPI
     await page.setViewport({ width: 794, height: 1123, deviceScaleFactor: 2 });
-    
+
     await page.setContent(targetHTMLReport, {
       waitUntil: 'domcontentloaded',
       timeout: 120000
@@ -339,7 +338,7 @@ export async function POST(req: NextRequest) {
     browser = null;
 
     const variantTag = resolvedVariant === 'junior' ? 'Junior' : resolvedVariant === 'senior' ? 'Class12' : 'Class10';
-    const safeFileName = isExecutive 
+    const safeFileName = isExecutive
       ? `${studentName.replace(/[^a-zA-Z0-9]/g, '_')}_${variantTag}_Executive_Career_Summary.pdf`
       : `${studentName.replace(/[^a-zA-Z0-9]/g, '_')}_${variantTag}_Full_Psychometric_Report.pdf`;
 
@@ -355,7 +354,7 @@ export async function POST(req: NextRequest) {
 
   } catch (error: any) {
     if (browser) {
-      await browser.close().catch(() => {});
+      await browser.close().catch(() => { });
     }
     console.error('Error generating PDF via Chromium:', error);
     return NextResponse.json(

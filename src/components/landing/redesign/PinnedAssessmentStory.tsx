@@ -108,15 +108,17 @@ export default function PinnedAssessmentStory() {
   const [activePhaseIdx, setActivePhaseIdx] = useState<number>(0);
   const [isMobileFallback, setIsMobileFallback] = useState<boolean>(false);
 
-  // Check screen width on mount / resize
+  // Check capabilities on mount / resize: Gate pinned scroll with (hover: hover) and (pointer: fine) per DESIGN.md section 2
   useEffect(() => {
     if (typeof window === 'undefined') return;
-    const checkWidth = () => {
-      setIsMobileFallback(window.innerWidth < 768 || prefersReducedMotion);
+    const checkCapabilities = () => {
+      const isFinePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+      const isBelowDesktop = window.innerWidth < 1024;
+      setIsMobileFallback(!isFinePointer || isBelowDesktop || prefersReducedMotion);
     };
-    checkWidth();
-    window.addEventListener('resize', checkWidth);
-    return () => window.removeEventListener('resize', checkWidth);
+    checkCapabilities();
+    window.addEventListener('resize', checkCapabilities);
+    return () => window.removeEventListener('resize', checkCapabilities);
   }, [prefersReducedMotion]);
 
   // GSAP ScrollTrigger Scrub & Snap inside gsap.context
@@ -203,7 +205,7 @@ export default function PinnedAssessmentStory() {
           <div className="absolute inset-0 bg-gradient-to-b from-[#171822] via-[#1258DE]/15 to-[#171822]" />
         </div>
 
-        <div className="relative z-10 max-w-4xl mx-auto space-y-8">
+        <div className="relative z-10 max-w-5xl mx-auto space-y-8">
           <div>
             <span className="text-xs font-dmsans font-bold text-[#E6EDFF] bg-[#1258DE] px-3 py-1 rounded-full inline-block mb-3">
               Assessment matrix
@@ -216,7 +218,7 @@ export default function PinnedAssessmentStory() {
             </p>
           </div>
 
-          <div className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6">
             {PHASES.map((phase, idx) => (
               <div
                 key={phase.id}
@@ -290,19 +292,19 @@ export default function PinnedAssessmentStory() {
     );
   }
 
-  // ── DESKTOP PINNED STORY: 400vh tall outer wrapper with 100vh sticky inner container ──
+  // ── DESKTOP PINNED STORY: 400svh tall outer wrapper with 100svh sticky inner container ──
   return (
     <div
       ref={wrapperRef}
       id="assessments"
       aria-label="Clarvo Assessment Matrix"
       className="relative w-full bg-[#171822] text-white selection:bg-[#1258DE] selection:text-white"
-      style={{ height: '400vh' }}
+      style={{ height: '400svh' }}
     >
-      {/* ── Sticky 100vh Inner Stage: Pinned to viewport ── */}
+      {/* ── Sticky 100svh Inner Stage: Pinned to viewport ── */}
       <div
         ref={pinnedStageRef}
-        className="sticky top-0 h-screen w-full overflow-hidden flex flex-col justify-between py-6 sm:py-8 lg:py-10 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto z-10"
+        className="sticky top-0 h-[100svh] w-full overflow-hidden flex flex-col justify-between py-6 sm:py-8 lg:py-10 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto z-10"
       >
         {/* Background photo inside pinned container with midnight gradient overlay */}
         <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden" aria-hidden="true">
@@ -311,6 +313,7 @@ export default function PinnedAssessmentStory() {
             alt=""
             fill
             sizes="100vw"
+            loading="lazy"
             className="object-cover object-center filter grayscale mix-blend-luminosity opacity-[0.07]"
           />
           <div className="absolute inset-0 bg-gradient-to-b from-[#171822] via-[#1258DE]/15 to-[#171822]" />

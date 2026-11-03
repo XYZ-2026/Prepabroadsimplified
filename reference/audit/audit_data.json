@@ -1,0 +1,389 @@
+[
+  {
+    "viewport": {
+      "name": "mobile_390x844",
+      "width": 390,
+      "height": 844
+    },
+    "heroMetrics": {
+      "hasHorizontalScroll": false,
+      "scrollWidth": 390,
+      "innerWidth": 390,
+      "photoBox": {},
+      "chips": [
+        {
+          "text": "Sample reportStream fit: Science + Computing",
+          "r": {},
+          "relX": 1.9989525139664805,
+          "relY": 16.87034450651769
+        },
+        {
+          "text": "Sample reportStrength: Analytical reasoning",
+          "r": {},
+          "relX": 34.47101955307262,
+          "relY": -9.945297951582868
+        },
+        {
+          "text": "Sample reportNext step: Talk to a counsellor",
+          "r": {},
+          "relX": -4.4692737430167595,
+          "relY": -235.33519553072625
+        }
+      ],
+      "hasPathLine": true,
+      "wordBox": {},
+      "navPillsBox": {},
+      "logoBox": {}
+    },
+    "sectionMetrics": {
+      "ctaPanelBox": {},
+      "ctaImgBox": {},
+      "pinnedStyleHeight": "",
+      "hasSticky": false
+    }
+  },
+  {
+    "viewport": {
+      "name": "tablet_portrait_768x1024",
+      "width": 768,
+      "height": 1024
+    },
+    "heroMetrics": {
+      "hasHorizontalScroll": false,
+      "scrollWidth": 768,
+      "innerWidth": 768,
+      "photoBox": {},
+      "chips": [
+        {
+          "text": "Sample reportStream fit: Science + Computing",
+          "r": {},
+          "relX": -5.862068965517241,
+          "relY": 27.169540229885058
+        },
+        {
+          "text": "Sample reportStrength: Analytical reasoning",
+          "r": {},
+          "relX": 62.88254310344827,
+          "relY": 11.724137931034482
+        },
+        {
+          "text": "Sample reportNext step: Talk to a counsellor",
+          "r": {},
+          "relX": 65.79202586206897,
+          "relY": 75.02873563218391
+        }
+      ],
+      "hasPathLine": true,
+      "wordBox": {},
+      "navPillsBox": {},
+      "logoBox": {}
+    },
+    "sectionMetrics": {
+      "ctaPanelBox": {},
+      "ctaImgBox": {},
+      "pinnedStyleHeight": "400vh",
+      "hasSticky": true
+    }
+  },
+  {
+    "viewport": {
+      "name": "tablet_portrait_820x1180",
+      "width": 820,
+      "height": 1180
+    },
+    "heroMetrics": {
+      "hasHorizontalScroll": false,
+      "scrollWidth": 820,
+      "innerWidth": 820,
+      "photoBox": {},
+      "chips": [
+        {
+          "text": "Sample reportStream fit: Science + Computing",
+          "r": {},
+          "relX": -9.897629310344827,
+          "relY": 27.169540229885058
+        },
+        {
+          "text": "Sample reportStrength: Analytical reasoning",
+          "r": {},
+          "relX": 66.82650862068965,
+          "relY": 11.724137931034482
+        },
+        {
+          "text": "Sample reportNext step: Talk to a counsellor",
+          "r": {},
+          "relX": 69.91648706896552,
+          "relY": 75.02873563218391
+        }
+      ],
+      "hasPathLine": true,
+      "wordBox": {},
+      "navPillsBox": {},
+      "logoBox": {}
+    },
+    "sectionMetrics": {
+      "ctaPanelBox": {},
+      "ctaImgBox": {},
+      "pinnedStyleHeight": "400vh",
+      "hasSticky": true
+    }
+  },
+  {
+    "viewport": {
+      "name": "tablet_portrait_834x1194",
+      "width": 834,
+      "height": 1194
+    },
+    "heroMetrics": {
+      "hasHorizontalScroll": false,
+      "scrollWidth": 834,
+      "innerWidth": 834,
+      "photoBox": {},
+      "chips": [
+        {
+          "text": "Sample reportStream fit: Science + Computing",
+          "r": {},
+          "relX": -10.983297413793103,
+          "relY": 27.169540229885058
+        },
+        {
+          "text": "Sample reportStrength: Analytical reasoning",
+          "r": {},
+          "relX": 67.88793103448276,
+          "relY": 11.724137931034482
+        },
+        {
+          "text": "Sample reportNext step: Talk to a counsellor",
+          "r": {},
+          "relX": 71.02640086206897,
+          "relY": 75.02873563218391
+        }
+      ],
+      "hasPathLine": true,
+      "wordBox": {},
+      "navPillsBox": {},
+      "logoBox": {}
+    },
+    "sectionMetrics": {
+      "ctaPanelBox": {},
+      "ctaImgBox": {},
+      "pinnedStyleHeight": "400vh",
+      "hasSticky": true
+    }
+  },
+  {
+    "viewport": {
+      "name": "tablet_landscape_1024x768",
+      "width": 1024,
+      "height": 768
+    },
+    "heroMetrics": {
+      "hasHorizontalScroll": false,
+      "scrollWidth": 1024,
+      "innerWidth": 1024,
+      "photoBox": {},
+      "chips": [
+        {
+          "text": "Sample reportStream fit: Science + Computing",
+          "r": {},
+          "relX": 4.998999628433419,
+          "relY": 6.63109756097561
+        },
+        {
+          "text": "Sample reportStrength: Analytical reasoning",
+          "r": {},
+          "relX": 49.71560865464315,
+          "relY": -13.170731707317074
+        },
+        {
+          "text": "Sample reportNext step: Talk to a counsellor",
+          "r": {},
+          "relX": 52.17080629948266,
+          "relY": 69.84756097560975
+        }
+      ],
+      "hasPathLine": true,
+      "wordBox": {},
+      "navPillsBox": {},
+      "logoBox": {}
+    },
+    "sectionMetrics": {
+      "ctaPanelBox": {},
+      "ctaImgBox": {},
+      "pinnedStyleHeight": "400vh",
+      "hasSticky": true
+    }
+  },
+  {
+    "viewport": {
+      "name": "tablet_landscape_1180x820",
+      "width": 1180,
+      "height": 820
+    },
+    "heroMetrics": {
+      "hasHorizontalScroll": false,
+      "scrollWidth": 1180,
+      "innerWidth": 1180,
+      "photoBox": {},
+      "chips": [
+        {
+          "text": "Sample reportStream fit: Science + Computing",
+          "r": {},
+          "relX": 4.998652324128298,
+          "relY": 19.95556717198118
+        },
+        {
+          "text": "Sample reportStrength: Analytical reasoning",
+          "r": {},
+          "relX": 56.036362745338266,
+          "relY": 2.9796131730266597
+        },
+        {
+          "text": "Sample reportNext step: Talk to a counsellor",
+          "r": {},
+          "relX": 58.425424517899586,
+          "relY": 74.15054887611082
+        }
+      ],
+      "hasPathLine": true,
+      "wordBox": {},
+      "navPillsBox": {},
+      "logoBox": {}
+    },
+    "sectionMetrics": {
+      "ctaPanelBox": {},
+      "ctaImgBox": {},
+      "pinnedStyleHeight": "400vh",
+      "hasSticky": true
+    }
+  },
+  {
+    "viewport": {
+      "name": "tablet_landscape_1366x1024",
+      "width": 1366,
+      "height": 1024
+    },
+    "heroMetrics": {
+      "hasHorizontalScroll": false,
+      "scrollWidth": 1366,
+      "innerWidth": 1366,
+      "photoBox": {},
+      "chips": [
+        {
+          "text": "Sample reportStream fit: Science + Computing",
+          "r": {},
+          "relX": 1.8149038461538463,
+          "relY": 21.474358974358974
+        },
+        {
+          "text": "Sample reportStrength: Analytical reasoning",
+          "r": {},
+          "relX": 59.87019230769231,
+          "relY": 4.82051282051282
+        },
+        {
+          "text": "Sample reportNext step: Talk to a counsellor",
+          "r": {},
+          "relX": 62.394230769230774,
+          "relY": 74.64102564102564
+        }
+      ],
+      "hasPathLine": true,
+      "wordBox": {},
+      "navPillsBox": {},
+      "logoBox": {}
+    },
+    "sectionMetrics": {
+      "ctaPanelBox": {},
+      "ctaImgBox": {},
+      "pinnedStyleHeight": "400vh",
+      "hasSticky": true
+    }
+  },
+  {
+    "viewport": {
+      "name": "desktop_1440x900",
+      "width": 1440,
+      "height": 900
+    },
+    "heroMetrics": {
+      "hasHorizontalScroll": false,
+      "scrollWidth": 1440,
+      "innerWidth": 1440,
+      "photoBox": {},
+      "chips": [
+        {
+          "text": "Sample reportStream fit: Science + Computing",
+          "r": {},
+          "relX": 1.8149038461538463,
+          "relY": 21.474358974358974
+        },
+        {
+          "text": "Sample reportStrength: Analytical reasoning",
+          "r": {},
+          "relX": 59.87019230769231,
+          "relY": 4.82051282051282
+        },
+        {
+          "text": "Sample reportNext step: Talk to a counsellor",
+          "r": {},
+          "relX": 62.394230769230774,
+          "relY": 74.64102564102564
+        }
+      ],
+      "hasPathLine": true,
+      "wordBox": {},
+      "navPillsBox": {},
+      "logoBox": {}
+    },
+    "sectionMetrics": {
+      "ctaPanelBox": {},
+      "ctaImgBox": {},
+      "pinnedStyleHeight": "400vh",
+      "hasSticky": true
+    }
+  },
+  {
+    "viewport": {
+      "name": "desktop_1920x1080",
+      "width": 1920,
+      "height": 1080
+    },
+    "heroMetrics": {
+      "hasHorizontalScroll": false,
+      "scrollWidth": 1920,
+      "innerWidth": 1920,
+      "photoBox": {},
+      "chips": [
+        {
+          "text": "Sample reportStream fit: Science + Computing",
+          "r": {},
+          "relX": 1.8149038461538463,
+          "relY": 21.474358974358974
+        },
+        {
+          "text": "Sample reportStrength: Analytical reasoning",
+          "r": {},
+          "relX": 59.87019230769231,
+          "relY": 4.82051282051282
+        },
+        {
+          "text": "Sample reportNext step: Talk to a counsellor",
+          "r": {},
+          "relX": 62.394230769230774,
+          "relY": 74.64102564102564
+        }
+      ],
+      "hasPathLine": true,
+      "wordBox": {},
+      "navPillsBox": {},
+      "logoBox": {}
+    },
+    "sectionMetrics": {
+      "ctaPanelBox": {},
+      "ctaImgBox": {},
+      "pinnedStyleHeight": "400vh",
+      "hasSticky": true
+    }
+  }
+]

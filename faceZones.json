@@ -1,0 +1,55 @@
+{
+  "source": "DESIGN.md Section 3",
+  "widenPercent": 3,
+  "zones": [
+    {
+      "name": "Top-left girl",
+      "original": { "xMin": 6, "xMax": 16, "yMin": 19, "yMax": 32 },
+      "widened": { "xMin": 3, "xMax": 19, "yMin": 16, "yMax": 35 }
+    },
+    {
+      "name": "Front-left boy (headphones)",
+      "original": { "xMin": 20, "xMax": 30, "yMin": 38, "yMax": 50 },
+      "widened": { "xMin": 17, "xMax": 33, "yMin": 35, "yMax": 53 }
+    },
+    {
+      "name": "Boy with glasses",
+      "original": { "xMin": 32, "xMax": 41, "yMin": 34, "yMax": 45 },
+      "widened": { "xMin": 29, "xMax": 44, "yMin": 31, "yMax": 48 }
+    },
+    {
+      "name": "Middle girl",
+      "original": { "xMin": 47, "xMax": 57, "yMin": 25, "yMax": 40 },
+      "widened": { "xMin": 44, "xMax": 60, "yMin": 22, "yMax": 43 }
+    },
+    {
+      "name": "Front girl (curly hair)",
+      "original": { "xMin": 56, "xMax": 67, "yMin": 45, "yMax": 59 },
+      "widened": { "xMin": 53, "xMax": 70, "yMin": 42, "yMax": 62 }
+    },
+    {
+      "name": "Back boy",
+      "original": { "xMin": 68, "xMax": 77, "yMin": 18, "yMax": 30 },
+      "widened": { "xMin": 65, "xMax": 80, "yMin": 15, "yMax": 33 }
+    },
+    {
+      "name": "Front-right boy",
+      "original": { "xMin": 78, "xMax": 87, "yMin": 40, "yMax": 51 },
+      "widened": { "xMin": 75, "xMax": 90, "yMin": 37, "yMax": 54 }
+    },
+    {
+      "name": "Top-right girl (glasses)",
+      "original": { "xMin": 86, "xMax": 94, "yMin": 25, "yMax": 36 },
+      "widened": { "xMin": 83, "xMax": 97, "yMin": 22, "yMax": 39 }
+    }
+  ],
+  "forbiddenYBand": {
+    "yMin": 15,
+    "yMax": 62,
+    "description": "Nothing overlays the photo between y = 15% and y = 62%"
+  },
+  "allowedYBands": {
+    "topBand": { "yMin": -6, "yMax": 10 },
+    "bottomBand": { "yMin": 72, "yMax": 94 }
+  }
+}

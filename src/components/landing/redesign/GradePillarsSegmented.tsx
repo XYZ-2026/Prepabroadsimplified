@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState } from 'react';
-import Image from 'next/image';
 import Link from 'next/link';
 import { 
   Sparkles, 
@@ -16,6 +15,7 @@ import {
   ChevronRight
 } from 'lucide-react';
 import { Container, SectionHeading, Chip, Button } from './primitives';
+import MediaFrame from './MediaFrame';
 import { useReducedMotionPreference } from '@/hooks/useReducedMotionPreference';
 
 interface GradePillarData {
@@ -27,7 +27,9 @@ interface GradePillarData {
   desc: string;
   imageSrc: string;
   imageAlt: string;
+  imageMode: 'cover' | 'cutout';
   imageBg: 'paper' | 'sky' | 'midnight';
+  focalPoint?: string;
   actionHref: string;
   actionText: string;
   modules: {
@@ -49,26 +51,28 @@ const GRADE_TIERS: GradePillarData[] = [
     desc: 'Middle school is the decisive window to establish learning styles, cognitive processing stamina, and intellectual interests without the high-stakes anxiety of public examinations.',
     imageSrc: '/images/home/07-brand-moodboard.webp',
     imageAlt: 'Clarvo foundation learning and cognitive exploration for middle school students',
+    imageMode: 'cover',
     imageBg: 'sky',
+    focalPoint: '62% 55%',
     actionHref: '/discover',
     actionText: 'Explore middle school modules',
     modules: [
       {
-        code: 'G7-8',
+        code: 'Diagnostic',
         title: 'Diagnostic cognitive evaluation',
         subtitle: 'Foundational Aptitude',
         desc: 'Evaluates working memory, spatial reasoning, and processing speed across 30 cognitive parameters.',
         href: '/psychometric-test',
       },
       {
-        code: 'INT',
+        code: 'Internships',
         title: 'Social impact & micro-internships',
         subtitle: 'Grades 7–8 Impact',
         desc: 'Structured community initiatives, NGO volunteering, and early leadership exploration.',
         href: '/discover',
       },
       {
-        code: 'ADV',
+        code: 'Advisory',
         title: 'Parent & counselor advisory',
         subtitle: 'Development Strategy',
         desc: 'Objective consultations with certified educational psychologists to guide extracurricular choices.',
@@ -85,26 +89,27 @@ const GRADE_TIERS: GradePillarData[] = [
     desc: 'Stream choice in Class 10 sets the foundation for undergraduate eligibility. We combine cognitive aptitude, numerical stamina, and RIASEC vocational interest mapping to ensure complete family clarity.',
     imageSrc: '/images/home/04-girl-win-cutout.webp',
     imageAlt: 'Student celebrating confident Class 10 stream choice with Clarvo',
-    imageBg: 'paper',
+    imageMode: 'cutout',
+    imageBg: 'sky',
     actionHref: '/discover',
     actionText: 'Explore Class 10 stream selection',
     modules: [
       {
-        code: 'G9-10',
+        code: 'Stream Choice',
         title: 'Stream fitment index',
         subtitle: 'High-Stakes Decision',
         desc: 'Scientific alignment for PCM, PCB, Commerce & Humanities selection with RIASEC fitment.',
         href: '/discover',
       },
       {
-        code: '1-ON-1',
+        code: 'Mentoring',
         title: '1-to-1 subject mentoring',
         subtitle: 'Board Readiness',
         desc: 'Personalized private tutoring across IB MYP, Cambridge IGCSE, CBSE and ICSE syllabi.',
         href: '/book-a-demo',
       },
       {
-        code: 'ROAD',
+        code: 'Roadmap',
         title: 'Multi-year academic roadmap',
         subtitle: 'Pre-University Planning',
         desc: 'Strategic milestone mapping connecting high-school subjects to 100+ modern global careers.',
@@ -121,26 +126,27 @@ const GRADE_TIERS: GradePillarData[] = [
     desc: 'Senior high school requires flawless execution across standardized tests, academic rigor, and distinctive profile spikes. We guide students into premier Indian and international institutions.',
     imageSrc: '/images/home/05-presenter-cutout.webp',
     imageAlt: 'Clarvo senior high student presenting research project for university admissions',
+    imageMode: 'cutout',
     imageBg: 'midnight',
     actionHref: '/university-finder',
     actionText: 'Explore university predictor',
     modules: [
       {
-        code: 'SAT',
+        code: 'SAT Prep',
         title: 'Digital SAT 1500+ prep',
         subtitle: 'Adaptive Mastery',
         desc: 'Diagnostic adaptive mock tests, question banks, Desmos shortcuts, and 1-on-1 coaching.',
         href: '/iq-test',
       },
       {
-        code: 'RES',
+        code: 'Research',
         title: 'Research & peer-reviewed papers',
         subtitle: 'Intellectual Spike',
         desc: 'Mentored academic research papers published in indexed high school and undergraduate journals.',
         href: '/discover',
       },
       {
-        code: 'UNI',
+        code: 'Admissions',
         title: 'Global university matcher',
         subtitle: '500+ Colleges',
         desc: 'Data-driven admit chance estimations for top domestic universities and global colleges.',
@@ -225,29 +231,21 @@ export default function GradePillarsSegmented() {
         >
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
             
-            {/* Left Column (5 Cols): Stage Photo with Cutout Placement */}
-            <div className="lg:col-span-5 flex flex-col">
-              <div 
-                className={`relative w-full h-[320px] sm:h-[400px] lg:h-full min-h-[340px] rounded-[24px] sm:rounded-[28px] border overflow-hidden flex flex-col justify-end p-6 ${
-                  currentTier.imageBg === 'midnight'
-                    ? 'bg-[#171822] border-[#2A2B3A] text-white'
-                    : currentTier.imageBg === 'sky'
-                    ? 'bg-[#E6EDFF] border-[#C8D8FF] text-[#12131C]'
-                    : 'bg-[#F5F7FB] border-[#DDE3F0] text-[#12131C]'
-                }`}
+            {/* Left Column (5 Cols): Stage Photo with MediaFrame */}
+            <div className="lg:col-span-5 flex flex-col justify-start">
+              <MediaFrame
+                src={currentTier.imageSrc}
+                alt={currentTier.imageAlt}
+                mode={currentTier.imageMode}
+                backdrop={currentTier.imageBg}
+                ratioDesktop="4/5"
+                ratioTablet="16/10"
+                focalPoint={currentTier.focalPoint}
+                sizes="(max-width: 1024px) 100vw, 42vw"
               >
-                {/* Photo Element */}
-                <Image
-                  src={currentTier.imageSrc}
-                  alt={currentTier.imageAlt}
-                  fill
-                  sizes="(max-width: 1024px) 100vw, 42vw"
-                  className="object-contain object-bottom transition-transform duration-300 hover:scale-[1.02]"
-                />
-                
                 {/* Visual Label Pill at Bottom */}
-                <div className="relative z-10">
-                  <div className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-dmsans font-bold border backdrop-blur-md ${
+                <div className="absolute bottom-4 left-4 z-20 pointer-events-auto">
+                  <div className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-dmsans font-bold border backdrop-blur-md shadow-2xs ${
                     currentTier.imageBg === 'midnight'
                       ? 'bg-[#171822]/85 text-white border-white/20'
                       : 'bg-white/90 text-[#12131C] border-[#DDE3F0]'
@@ -256,7 +254,7 @@ export default function GradePillarsSegmented() {
                     <span>{currentTier.title}</span>
                   </div>
                 </div>
-              </div>
+              </MediaFrame>
             </div>
 
             {/* Right Column (7 Cols): Headline, Description, Module Cards */}

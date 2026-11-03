@@ -33,14 +33,11 @@ export default function SmoothScrollProvider({ children }: SmoothScrollProviderP
     // 1. Guard against SSR
     if (typeof window === 'undefined') return;
 
-    // 2. Disable smooth scroll on touch devices or if prefers-reduced-motion is active
-    const isTouchDevice =
-      'ontouchstart' in window ||
-      navigator.maxTouchPoints > 0 ||
-      window.matchMedia('(pointer: coarse)').matches;
+    // 2. Gate Lenis strictly to fine pointer devices per DESIGN.md section 2
+    const isFinePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 
-    if (isTouchDevice || prefersReducedMotion) {
-      // Allow native browser scrolling without Lenis momentum interception
+    if (!isFinePointer || prefersReducedMotion) {
+      // Allow native browser scrolling without Lenis momentum interception on touch devices
       return;
     }
 

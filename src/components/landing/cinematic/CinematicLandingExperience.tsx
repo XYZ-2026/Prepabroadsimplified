@@ -6,7 +6,6 @@ import HeroThePath from '../redesign/HeroThePath';
 import TopSchoolsTicker from './TopSchoolsTicker';
 import SupportBento from '../redesign/SupportBento';
 import StatsStripCountup from '../redesign/StatsStripCountup';
-import PinnedAssessmentStory from '../redesign/PinnedAssessmentStory';
 import Class10Pillars from '../redesign/Class10Pillars';
 import DeskReportDossier from '../redesign/DeskReportDossier';
 import GlobalJourneyStepper from '../redesign/GlobalJourneyStepper';
@@ -23,7 +22,7 @@ export default function CinematicLandingExperience() {
         <HeroThePath />
 
         {/* Section 3: Top Schools Marquee Ticker (LOCKED: code, speed, direction, content untouched) */}
-        <div className="relative z-20">
+        <div className="relative z-20 -mt-6 sm:-mt-8 lg:-mt-10">
           <TopSchoolsTicker />
         </div>
 
@@ -33,10 +32,7 @@ export default function CinematicLandingExperience() {
         {/* Section 5: Midnight Stats Strip (Single Count-Up on First View) */}
         <StatsStripCountup />
 
-        {/* Section 6: Assessment Matrix (Pinned, Scroll-Scrubbed Story on Midnight) */}
-        <PinnedAssessmentStory />
-
-        {/* Section 7: Class 10 Strategic Value (Three Pillars) */}
+        {/* Section 6: Class 10 Strategic Value (Three Pillars) */}
         <Class10Pillars />
 
         {/* Section 8: Report Dossier Flipbook (Physical Report-on-a-Desk) */}

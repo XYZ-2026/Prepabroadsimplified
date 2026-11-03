@@ -52,12 +52,14 @@ export default function Class10Pillars() {
           />
         </div>
 
-        {/* 3 Pillars Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-7">
-          {PILLARS.map((pillar) => (
+        {/* 3 Pillars Grid: Responsive on tablet portrait */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-7">
+          {PILLARS.map((pillar, pIdx) => (
             <div
               key={pillar.num}
-              className="bg-white rounded-[24px] sm:rounded-[28px] border border-[#DDE3F0] p-6 sm:p-8 flex flex-col justify-between hover:border-[#1258DE] transition-all duration-200 group shadow-xs hover:shadow-clarvo-elevated"
+              className={`bg-white rounded-[24px] sm:rounded-[28px] border border-[#DDE3F0] p-6 sm:p-8 flex flex-col justify-between hover:border-[#1258DE] transition-all duration-200 group shadow-xs hover:shadow-clarvo-elevated ${
+                pIdx === 2 ? 'md:col-span-2 lg:col-span-1' : ''
+              }`}
             >
               <div>
                 <div className="flex items-center justify-between mb-5">

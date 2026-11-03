@@ -1,0 +1,154 @@
+[
+  {
+    "viewport": {
+      "name": "1440x900",
+      "width": 1440,
+      "height": 900
+    },
+    "data": {
+      "hasHorizontalScroll": false,
+      "scrollWidth": 1440,
+      "innerWidth": 1440,
+      "photoBox": {},
+      "wordBox": {},
+      "chips": [
+        {
+          "text": "Sample reportStream fit: Science + Computing",
+          "isVisible": true,
+          "r": {},
+          "relX": 1.9993569907165536,
+          "relY": 3.9974279284106737
+        },
+        {
+          "text": "Sample reportStrength: Analytical reasoning",
+          "isVisible": true,
+          "r": {},
+          "relX": 67.70887754691958,
+          "relY": 3.9974279284106737
+        },
+        {
+          "text": "Sample reportNext step: Talk to a counsellor",
+          "isVisible": true,
+          "r": {},
+          "relX": 69.70823453763614,
+          "relY": 79.44218197406494
+        }
+      ],
+      "hasSvgPathLine": false
+    }
+  },
+  {
+    "viewport": {
+      "name": "1920x1080",
+      "width": 1920,
+      "height": 1080
+    },
+    "data": {
+      "hasHorizontalScroll": false,
+      "scrollWidth": 1920,
+      "innerWidth": 1920,
+      "photoBox": {},
+      "wordBox": {},
+      "chips": [
+        {
+          "text": "Sample reportStream fit: Science + Computing",
+          "isVisible": true,
+          "r": {},
+          "relX": 2,
+          "relY": 4
+        },
+        {
+          "text": "Sample reportStrength: Analytical reasoning",
+          "isVisible": true,
+          "r": {},
+          "relX": 74,
+          "relY": 4
+        },
+        {
+          "text": "Sample reportNext step: Talk to a counsellor",
+          "isVisible": true,
+          "r": {},
+          "relX": 76,
+          "relY": 80.9
+        }
+      ],
+      "hasSvgPathLine": false
+    }
+  },
+  {
+    "viewport": {
+      "name": "1024x768",
+      "width": 1024,
+      "height": 768
+    },
+    "data": {
+      "hasHorizontalScroll": false,
+      "scrollWidth": 1024,
+      "innerWidth": 1024,
+      "photoBox": {},
+      "wordBox": {},
+      "chips": [
+        {
+          "text": "Sample reportStream fit: Science + Computing",
+          "isVisible": true,
+          "r": {},
+          "relX": 1.9969019396551724,
+          "relY": 3.996048850574713
+        },
+        {
+          "text": "Sample reportStrength: Analytical reasoning",
+          "isVisible": true,
+          "r": {},
+          "relX": 48.589035560344826,
+          "relY": 3.996048850574713
+        },
+        {
+          "text": "Sample reportNext step: Talk to a counsellor",
+          "isVisible": true,
+          "r": {},
+          "relX": 50.589304956896555,
+          "relY": 75.00897988505747
+        }
+      ],
+      "hasSvgPathLine": false
+    }
+  },
+  {
+    "viewport": {
+      "name": "768x1024",
+      "width": 768,
+      "height": 1024
+    },
+    "data": {
+      "hasHorizontalScroll": false,
+      "scrollWidth": 768,
+      "innerWidth": 768,
+      "photoBox": {},
+      "wordBox": {},
+      "chips": [
+        {
+          "text": "Sample reportStream fit: Science + Computing",
+          "isVisible": true,
+          "r": {},
+          "relX": 1.9986979166666665,
+          "relY": 3.9988425925925926
+        },
+        {
+          "text": "Sample reportStrength: Analytical reasoning",
+          "isVisible": true,
+          "r": {},
+          "relX": 65.44487847222223,
+          "relY": 3.9988425925925926
+        },
+        {
+          "text": "Sample reportNext step: Talk to a counsellor",
+          "isVisible": false,
+          "r": {},
+          "relX": -3.3333333333333335,
+          "relY": -104.1377314814815
+        }
+      ],
+      "hasSvgPathLine": false
+    }
+  }
+]

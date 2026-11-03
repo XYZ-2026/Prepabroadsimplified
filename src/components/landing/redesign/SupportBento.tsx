@@ -1,7 +1,6 @@
 'use client';
 
 import React from 'react';
-import Image from 'next/image';
 import Link from 'next/link';
 import { 
   Rocket, 
@@ -10,10 +9,11 @@ import {
   Award, 
   Globe, 
   ArrowRight, 
-  Sparkles,
+  Sparkles, 
   ChevronRight
 } from 'lucide-react';
 import { Chip, Container, SectionHeading } from './primitives';
+import MediaFrame from './MediaFrame';
 
 export default function SupportBento() {
   return (
@@ -64,18 +64,20 @@ export default function SupportBento() {
               </p>
             </div>
 
-            {/* Framed Photo inside Bento Tile */}
-            <div className="relative w-full h-[200px] sm:h-[240px] rounded-[18px] sm:rounded-[20px] overflow-hidden border border-[#DDE3F0] bg-[#F5F7FB] mt-2">
-              <Image
-                src="/images/home/08-building-product.webp"
-                alt="High school students building real-world ventures in Clarvo Entrepreneurship Programme"
-                fill
-                sizes="(max-width: 1024px) 100vw, 55vw"
-                className="object-cover object-center group-hover:scale-[1.02] transition-transform duration-300"
-              />
+            {/* Framed Photo inside Bento Tile using MediaFrame */}
+            <MediaFrame
+              src="/images/home/08-building-product.webp"
+              alt="High school students building real-world ventures in Clarvo Entrepreneurship Programme"
+              mode="cover"
+              ratioDesktop="16/10"
+              ratioTablet="16/10"
+              focalPoint="55% 50%"
+              sizes="(max-width: 1024px) 100vw, 55vw"
+              className="mt-4"
+            >
               <div className="absolute inset-0 bg-gradient-to-t from-[#171822]/40 via-transparent to-transparent pointer-events-none" />
               
-              <div className="absolute bottom-3 left-4 right-4 flex items-center justify-between text-white text-xs font-dmsans font-bold">
+              <div className="absolute bottom-3 left-4 right-4 flex flex-wrap sm:flex-nowrap items-center justify-between gap-2 text-white text-xs font-dmsans font-bold pointer-events-auto">
                 <span className="bg-[#171822]/80 backdrop-blur-md px-3 py-1 rounded-full border border-white/20">
                   Founder mentorship &amp; venture demo day
                 </span>
@@ -84,11 +86,14 @@ export default function SupportBento() {
                   <ArrowRight className="w-3.5 h-3.5" />
                 </span>
               </div>
-            </div>
+            </MediaFrame>
           </div>
 
           {/* TILE 2: Psychometric Assessments & Diagnostics (5 Cols on Desktop) */}
-          <div className="lg:col-span-5 bg-white rounded-[24px] sm:rounded-[28px] border border-[#DDE3F0] p-6 sm:p-8 flex flex-col justify-between hover:border-[#1258DE] transition-all duration-200 group shadow-xs hover:shadow-clarvo-elevated">
+          <div 
+            id="assessments"
+            className="scroll-mt-24 lg:col-span-5 bg-white rounded-[24px] sm:rounded-[28px] border border-[#DDE3F0] p-6 sm:p-8 flex flex-col justify-between hover:border-[#1258DE] transition-all duration-200 group shadow-xs hover:shadow-clarvo-elevated"
+          >
             <div>
               <div className="flex flex-wrap items-center gap-2 mb-4">
                 <Chip variant="sky" size="sm">
@@ -113,18 +118,20 @@ export default function SupportBento() {
               </p>
             </div>
 
-            {/* Framed Photo inside Bento Tile */}
-            <div className="relative w-full h-[180px] sm:h-[220px] rounded-[18px] sm:rounded-[20px] overflow-hidden border border-[#DDE3F0] bg-[#F5F7FB] mt-2">
-              <Image
-                src="/images/home/06-mentoring-laptop.webp"
-                alt="1-on-1 counselor and student reviewing psychometric assessment insights"
-                fill
-                sizes="(max-width: 1024px) 100vw, 40vw"
-                className="object-cover object-center group-hover:scale-[1.02] transition-transform duration-300"
-              />
+            {/* Framed Photo inside Bento Tile using MediaFrame */}
+            <MediaFrame
+              src="/images/home/06-mentoring-laptop.webp"
+              alt="1-on-1 counselor and student reviewing psychometric assessment insights"
+              mode="cover"
+              ratioDesktop="16/10"
+              ratioTablet="16/10"
+              focalPoint="50% 45%"
+              sizes="(max-width: 1024px) 100vw, 40vw"
+              className="mt-4"
+            >
               <div className="absolute inset-0 bg-gradient-to-t from-[#171822]/40 via-transparent to-transparent pointer-events-none" />
 
-              <div className="absolute bottom-3 left-4 right-4 flex items-center justify-between text-white text-xs font-dmsans font-bold">
+              <div className="absolute bottom-3 left-4 right-4 flex flex-wrap sm:flex-nowrap items-center justify-between gap-2 text-white text-xs font-dmsans font-bold pointer-events-auto">
                 <span className="bg-[#171822]/80 backdrop-blur-md px-3 py-1 rounded-full border border-white/20">
                   Psychological evidence base
                 </span>
@@ -136,7 +143,7 @@ export default function SupportBento() {
                   <ArrowRight className="w-3.5 h-3.5" />
                 </Link>
               </div>
-            </div>
+            </MediaFrame>
           </div>
 
           {/* TILE 3: Stream Selection & Career Roadmaps (4 Cols) */}

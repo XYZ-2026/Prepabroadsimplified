@@ -9,7 +9,7 @@
  * - Assemble & Upload: 10% (90 -> 100%)
  */
 
-import { adminDb, hasAdminCredentials } from '@/lib/firebase-admin';
+import { adminDb } from '@/lib/firebase-admin';
 import type { EditorialStudent, EditorialScores } from '@/app/(main)/psychometric-test/class10_editorial_engine';
 import { getOrGenerateReportSnapshot } from '@/lib/report-snapshot-service';
 import { getWorkflowState } from '@/lib/assessment-workflow';
@@ -49,8 +49,8 @@ export async function runReportGenerationJob(params: GenerateReportJobParams): P
     let comparisonData: any = null;
     let parentProfile: any = null;
 
-    if (resultId && hasAdminCredentials && adminDb) {
-      try {
+    if (resultId) {
+      if (adminDb) {
         const resultSnap = await adminDb.collection('psychometric_results').doc(resultId).get();
         if (resultSnap.exists) {
           data = resultSnap.data();
@@ -66,8 +66,6 @@ export async function runReportGenerationJob(params: GenerateReportJobParams): P
         if (parentSnap.exists) {
           parentProfile = parentSnap.data()?.parentProfile;
         }
-      } catch (err) {
-        console.warn('[Report Runner] Firestore read error:', err);
       }
     }
 
@@ -131,9 +129,9 @@ export async function runReportGenerationJob(params: GenerateReportJobParams): P
 
       const overallApt = Math.round(
         ((data.scores?.aptitude?.numerical || 75) +
-         (data.scores?.aptitude?.reasoning || 80) +
-         (data.scores?.aptitude?.verbal || 75) +
-         (data.scores?.aptitude?.spatial || 74)) / 4
+          (data.scores?.aptitude?.reasoning || 80) +
+          (data.scores?.aptitude?.verbal || 75) +
+          (data.scores?.aptitude?.spatial || 74)) / 4
       );
 
       scores = {
@@ -189,9 +187,9 @@ export async function runReportGenerationJob(params: GenerateReportJobParams): P
 
       const overallApt = Math.round(
         ((reqScores?.aptitude?.numerical || 75) +
-         (reqScores?.aptitude?.reasoning || 80) +
-         (reqScores?.aptitude?.verbal || 75) +
-         (reqScores?.aptitude?.spatial || 74)) / 4
+          (reqScores?.aptitude?.reasoning || 80) +
+          (reqScores?.aptitude?.verbal || 75) +
+          (reqScores?.aptitude?.spatial || 74)) / 4
       );
 
       scores = {
@@ -283,7 +281,6 @@ export async function runReportGenerationJob(params: GenerateReportJobParams): P
     const puppeteer = (await import('puppeteer')).default;
     browser = await puppeteer.launch({
       headless: true,
-      pipe: true,
       ...(process.env.PUPPETEER_EXECUTABLE_PATH && {
         executablePath: process.env.PUPPETEER_EXECUTABLE_PATH,
       }),
@@ -397,7 +394,7 @@ export async function runReportGenerationJob(params: GenerateReportJobParams): P
 
   } catch (error: any) {
     if (browser) {
-      await browser.close().catch(() => {});
+      await browser.close().catch(() => { });
     }
     console.error(`[Report Runner] Job ${jobId} failed:`, error);
     updateReportJob(jobId, {
@@ -407,4 +404,3 @@ export async function runReportGenerationJob(params: GenerateReportJobParams): P
     });
   }
 }
-

@@ -7,15 +7,13 @@ import { useState, useEffect } from 'react';
  * When true, all animations and parallax effects must immediately fall back to their final static state.
  */
 export function useReducedMotionPreference(): boolean {
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState<boolean>(() => {
-    if (typeof window === 'undefined' || !window.matchMedia) return false;
-    return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  });
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState<boolean>(false);
 
   useEffect(() => {
     if (typeof window === 'undefined' || !window.matchMedia) return;
 
     const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    setPrefersReducedMotion(mediaQuery.matches);
 
     const listener = (event: MediaQueryListEvent) => {
       setPrefersReducedMotion(event.matches);

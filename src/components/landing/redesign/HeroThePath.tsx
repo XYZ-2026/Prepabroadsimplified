@@ -142,11 +142,11 @@ export default function HeroThePath() {
             });
           }
 
-          // 18px on the photo
+          // 10px on the photo for subtle depth without text encroachment
           if (cutoutRef.current) {
             gsap.to(cutoutRef.current, {
-              x: clampedX * 18,
-              y: clampedY * 10,
+              x: clampedX * 10,
+              y: clampedY * 6,
               duration: 0.9,
               ease: 'power1.out',
               overwrite: 'auto',
@@ -156,8 +156,8 @@ export default function HeroThePath() {
           // Subtle chip parallax
           if (chipsRef.current) {
             gsap.to('.hero-chip', {
-              x: clampedX * 24,
-              y: clampedY * 14,
+              x: clampedX * 14,
+              y: clampedY * 8,
               duration: 1.0,
               ease: 'power1.out',
               overwrite: 'auto',
@@ -180,17 +180,17 @@ export default function HeroThePath() {
     <section
       ref={containerRef}
       aria-label="Clarvo Hero - Find the path that fits your child"
-      className="relative w-full bg-[#F5F7FB] overflow-hidden pt-4 sm:pt-6 lg:pt-8 pb-0 select-none flex flex-col justify-between min-h-[calc(100svh-62px)] sm:min-h-[calc(100svh-76px)] md:min-h-[calc(100svh-84px)]"
+      className="relative w-full bg-[#F5F7FB] overflow-x-clip pt-3 sm:pt-6 lg:pt-8 pb-0 select-none flex flex-col justify-between min-h-[calc(100svh-62px)] sm:min-h-[calc(100svh-76px)] md:min-h-[calc(100svh-84px)]"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex-1 flex flex-col justify-center">
-        {/* Layout Modes: Single column below 1024; 6/6 at 1024-1279; 5/7 at 1280+ */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-8 xl:gap-10 items-end w-full">
+        {/* Layout Modes: Single column below 1024; 5/7 at 1024+ with right-aligned stage to prevent headline collisions */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-8 xl:gap-12 items-end w-full">
           
           {/* ── LEFT COLUMN: Text Content ── */}
-          <div className="w-full lg:col-span-6 xl:col-span-5 flex flex-col justify-center pt-2 sm:pt-6 lg:pt-8 pb-4 sm:pb-8 lg:pb-12 text-left z-20">
+          <div className="w-full lg:col-span-5 xl:col-span-5 flex flex-col justify-center pt-2 sm:pt-6 lg:pt-8 pb-4 sm:pb-8 lg:pb-12 text-left z-20 pr-0 lg:pr-4">
             
             {/* Main Headline (DM Sans, 700, strictly sentence case per DESIGN.md Section 3) */}
-            <h1 className="text-[clamp(2.35rem,4.5vw,3.75rem)] font-dmsans font-bold leading-[1.04] tracking-[-0.03em] text-[#12131C]">
+            <h1 className="text-[clamp(2.35rem,4.2vw,3.75rem)] font-dmsans font-bold leading-[1.04] tracking-[-0.03em] text-[#12131C] max-w-[20ch]">
               <span className="block overflow-hidden pb-1">
                 <span className="hero-headline-line block">Find the path</span>
               </span>
@@ -202,8 +202,8 @@ export default function HeroThePath() {
               </span>
             </h1>
 
-            {/* Subcopy (max 48ch, wrapped cleanly with clear margin from stage) */}
-            <p className="hero-sub text-[15px] sm:text-[1.0625rem] leading-[1.6] text-[#5B6275] max-w-[48ch] mt-3.5 sm:mt-5 font-dmsans font-normal">
+            {/* Subcopy (max 46ch, wrapped cleanly with clear margin from stage) */}
+            <p className="hero-sub text-[15px] sm:text-[1.0625rem] leading-[1.6] text-[#5B6275] max-w-[46ch] mt-3.5 sm:mt-5 font-dmsans font-normal">
               Scientific assessments, expert counsellors and a clear roadmap, so students and parents choose a stream, career and university with evidence instead of guesswork.
             </p>
 
@@ -262,19 +262,19 @@ export default function HeroThePath() {
           </div>
 
           {/* ── RIGHT COLUMN: Stage (Photo + Centred PATH + Face-safe Chips) ── */}
-          <div className="w-full lg:col-span-6 xl:col-span-7 flex flex-col items-center lg:items-center xl:items-start justify-end relative z-10 self-end overflow-visible">
+          <div className="w-full lg:col-span-7 xl:col-span-7 flex flex-col items-center lg:items-end justify-end relative z-10 self-end overflow-visible">
             
-            {/* Stage Wrapper: Sized to column on tablet landscape, clamp on desktop, max 720 on tablet portrait */}
+            {/* Stage Wrapper: Sized responsively to column width without overflowing into the text column */}
             <div
               ref={stageRef}
-              className="relative w-full max-w-[480px] sm:max-w-[720px] lg:max-w-[500px] xl:max-w-[960px] xl:w-[clamp(520px,50vw,960px)] flex flex-col items-center justify-end overflow-visible"
+              className="relative w-full max-w-[480px] sm:max-w-[620px] lg:max-w-[560px] xl:max-w-[760px] 2xl:max-w-[840px] flex flex-col items-center justify-end overflow-visible"
             >
               
               {/* Layer 1 (Back): Giant Anton word "PATH" centred behind photo, width equal to photo */}
               <div
                 ref={wordRef}
                 aria-hidden="true"
-                className="hero-stage-word font-anton text-[#E6EDFF] select-none pointer-events-none absolute -top-4 sm:-top-8 md:-top-12 lg:-top-20 left-1/2 -translate-x-1/2 max-w-[calc(100vw-32px)] text-center text-[clamp(2.75rem,11.5vw,13.5rem)] leading-[0.8] tracking-tight sm:tracking-normal lg:tracking-wider z-0 overflow-visible"
+                className="hero-stage-word font-anton text-[#E6EDFF] select-none pointer-events-none absolute -top-4 sm:-top-8 md:-top-12 lg:-top-16 left-1/2 -translate-x-1/2 max-w-[calc(100vw-32px)] text-center text-[clamp(2.75rem,11.5vw,12rem)] leading-[0.8] tracking-tight sm:tracking-normal lg:tracking-wider z-0 overflow-visible"
                 style={{ willChange: 'transform, opacity' }}
               >
                 PATH
@@ -303,13 +303,13 @@ export default function HeroThePath() {
                 />
               </div>
 
-              {/* Layer 3 (Front): Floating Chips strictly within Face-Safe Zones */}
+              {/* Layer 3 (Front): Floating Chips strictly within Face-Safe Zones across ALL views */}
               <div ref={chipsRef} className="absolute inset-0 w-full h-full pointer-events-none z-20">
                 
-                {/* Chip 1: Top band, left 2% (y = 0.5% <= 10%, strictly above faces) */}
+                {/* Chip 1: Top band, left side (y = 0.5% <= 10%, strictly above faces) */}
                 {/* Visible on Tablet portrait, Tablet landscape, Desktop; hidden on Mobile */}
                 <div
-                  className="hero-chip absolute top-[0.5%] left-[2%] pointer-events-auto hidden md:block"
+                  className="hero-chip absolute top-[0.5%] left-[2%] sm:left-[3%] pointer-events-auto hidden md:block"
                   style={{ willChange: 'transform, opacity' }}
                 >
                   <div className="bg-white/95 backdrop-blur-md border border-[#DDE3F0] rounded-full px-3.5 py-1.5 shadow-[0_12px_28px_-8px_rgba(18,88,222,0.22)] flex items-center gap-2.5">
@@ -320,17 +320,17 @@ export default function HeroThePath() {
                       <span className="text-[10px] font-medium text-[#5B6275] leading-none">
                         Sample report
                       </span>
-                      <span className="text-[13px] font-dmsans font-bold text-[#12131C] leading-tight mt-0.5">
+                      <span className="text-[12.5px] sm:text-[13px] font-dmsans font-bold text-[#12131C] leading-tight mt-0.5">
                         Stream fit: Science + Computing
                       </span>
                     </div>
                   </div>
                 </div>
 
-                {/* Chip 2: Top band, right 4% (y = 0.5% <= 10%, strictly above faces) */}
+                {/* Chip 2: Top band, right side (y = 0.5% <= 10%, strictly above faces) */}
                 {/* Visible on Tablet portrait, Tablet landscape, Desktop; hidden on Mobile */}
                 <div
-                  className="hero-chip absolute top-[0.5%] right-[4%] pointer-events-auto hidden md:block"
+                  className="hero-chip absolute top-[0.5%] right-[2%] sm:right-[3%] pointer-events-auto hidden md:block"
                   style={{ willChange: 'transform, opacity' }}
                 >
                   <div className="bg-white/95 backdrop-blur-md border border-[#DDE3F0] rounded-full px-3.5 py-1.5 shadow-[0_12px_28px_-8px_rgba(18,88,222,0.22)] flex items-center gap-2.5">
@@ -341,17 +341,17 @@ export default function HeroThePath() {
                       <span className="text-[10px] font-medium text-[#5B6275] leading-none">
                         Sample report
                       </span>
-                      <span className="text-[13px] font-dmsans font-bold text-[#12131C] leading-tight mt-0.5">
+                      <span className="text-[12.5px] sm:text-[13px] font-dmsans font-bold text-[#12131C] leading-tight mt-0.5">
                         Strength: Analytical reasoning
                       </span>
                     </div>
                   </div>
                 </div>
 
-                {/* Chip 3: Bottom band, right 2% (y = bottom 14% >= 72%, strictly below faces) */}
-                {/* Visible on Mobile & Desktop/Landscape; Hidden on Tablet portrait (so tablet portrait shows exactly 2 chips) */}
+                {/* Chip 3: Bottom band, right side (y = bottom 10%-13% >= 72%, strictly below faces across legs) */}
+                {/* Visible on Mobile & Desktop/Landscape; Hidden on Tablet portrait per DESIGN.md Section 3 */}
                 <div
-                  className="hero-chip absolute bottom-[14%] right-[2%] pointer-events-auto block md:hidden lg:block max-w-[calc(100%-16px)]"
+                  className="hero-chip absolute bottom-[10%] sm:bottom-[13%] right-[2%] sm:right-[3%] pointer-events-auto block md:hidden lg:block max-w-[calc(100%-16px)]"
                   style={{ willChange: 'transform, opacity' }}
                 >
                   <div className="bg-white/95 backdrop-blur-md border border-[#DDE3F0] rounded-full px-3.5 py-1.5 shadow-[0_12px_28px_-8px_rgba(18,88,222,0.22)] flex items-center gap-2.5">

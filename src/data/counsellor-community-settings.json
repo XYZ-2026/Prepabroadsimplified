@@ -1,0 +1,23 @@
+{
+  "activeWhatsAppUrl": "https://chat.whatsapp.com/C6UVHin2Qkv9rhBqON8BHQ",
+  "qrLandingPageUrl": "/join-counsellor-community",
+  "updatedAt": "2026-11-03T20:57:28.417Z",
+  "updatedBy": "Admin Test",
+  "history": [
+    {
+      "id": "hist_counsellor_1793739448417_6qhf",
+      "url": "https://chat.whatsapp.com/C6UVHin2Qkv9rhBqON8BHQ",
+      "previousUrl": "https://chat.whatsapp.com/C6UVHin2Qkv9rhBqON8BHQ",
+      "updatedBy": "Admin Test",
+      "updatedAt": "2026-11-03T20:57:28.417Z",
+      "note": "Verification check"
+    },
+    {
+      "id": "hist_counsellor_initial",
+      "url": "https://chat.whatsapp.com/C6UVHin2Qkv9rhBqON8BHQ",
+      "updatedBy": "System (Initial Setup)",
+      "updatedAt": "2026-11-04T02:15:00.000Z",
+      "note": "Initial official Global Counselling Association WhatsApp group link configured."
+    }
+  ]
+}

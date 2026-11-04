@@ -12,12 +12,15 @@ import {
 export async function GET(req: NextRequest) {
   try {
     const claims = await requireAdmin();
-    const settings = await getCommunitySettings();
+    const studentSettings = await getCommunitySettings('student_parent');
+    const counsellorSettings = await getCommunitySettings('counsellor_mentor');
     const leads = await getCommunityLeads();
 
     return NextResponse.json({
       success: true,
-      settings,
+      settings: studentSettings, // For backwards compatibility
+      studentSettings,
+      counsellorSettings,
       leads,
       count: leads.length,
       user: {
@@ -38,7 +41,7 @@ export async function POST(req: NextRequest) {
   try {
     const claims = await requireAdmin();
     const body = await req.json();
-    const { activeWhatsAppUrl, note } = body;
+    const { activeWhatsAppUrl, note, communityType = 'student_parent' } = body;
 
     const validation = validateWhatsAppUrl(activeWhatsAppUrl);
     if (!validation.valid) {
@@ -48,16 +51,21 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    const type = communityType === 'counsellor_mentor' ? 'counsellor_mentor' : 'student_parent';
     const updatedSettings = await updateCommunityWhatsAppUrl(
       activeWhatsAppUrl,
       claims.email || 'Administrator',
-      note
+      note,
+      type
     );
+
+    const communityLabel = type === 'counsellor_mentor' ? 'Counsellor Community' : 'Student & Parent Community';
 
     return NextResponse.json({
       success: true,
-      message: 'Active WhatsApp community URL successfully updated.',
+      message: `Active WhatsApp URL for ${communityLabel} successfully updated.`,
       settings: updatedSettings,
+      communityType: type,
     });
   } catch (error: any) {
     console.error('[Admin Community POST] Error:', error);

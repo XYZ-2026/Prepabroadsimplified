@@ -3,15 +3,19 @@ import path from 'path';
 import { adminDb } from '@/lib/firebase-admin';
 import { createEnquiry } from '@/lib/enquiry-service';
 
+export type CommunityCampaign = 'clarvo_student_parent_community' | 'mentor_counsellor_community';
+export type CommunityType = 'student_parent' | 'counsellor_mentor';
+
 export interface CommunityLead {
   id: string;
   name: string;
   phone: string;
   email: string;
-  schoolName: string;
-  grade: string;
+  schoolName?: string;
+  grade?: string;
   priorityGoal?: string;
-  source: 'clarvo_student_parent_community';
+  linkedInUrl?: string;
+  source: CommunityCampaign;
   status: 'new' | 'contacted' | 'converted' | 'archived';
   createdAt: string;
   updatedAt: string;
@@ -37,9 +41,11 @@ export interface CommunitySettings {
 }
 
 const SETTINGS_FILE = path.join(process.cwd(), 'src', 'data', 'community-settings.json');
+const COUNSELLOR_SETTINGS_FILE = path.join(process.cwd(), 'src', 'data', 'counsellor-community-settings.json');
 const LEADS_FILE = path.join(process.cwd(), 'src', 'data', 'community-leads.json');
 
 const INITIAL_WHATSAPP_URL = 'https://chat.whatsapp.com/JevCH59LcE33ahR612sLEG';
+const INITIAL_COUNSELLOR_WHATSAPP_URL = 'https://chat.whatsapp.com/C6UVHin2Qkv9rhBqON8BHQ';
 
 const DEFAULT_SETTINGS: CommunitySettings = {
   activeWhatsAppUrl: INITIAL_WHATSAPP_URL,
@@ -53,6 +59,22 @@ const DEFAULT_SETTINGS: CommunitySettings = {
       updatedBy: 'System (Initial Setup)',
       updatedAt: new Date().toISOString(),
       note: 'Initial official WhatsApp Community group link configured.',
+    },
+  ],
+};
+
+const DEFAULT_COUNSELLOR_SETTINGS: CommunitySettings = {
+  activeWhatsAppUrl: INITIAL_COUNSELLOR_WHATSAPP_URL,
+  qrLandingPageUrl: '/join-counsellor-community',
+  updatedAt: new Date().toISOString(),
+  updatedBy: 'System (Initial Setup)',
+  history: [
+    {
+      id: 'hist_counsellor_initial',
+      url: INITIAL_COUNSELLOR_WHATSAPP_URL,
+      updatedBy: 'System (Initial Setup)',
+      updatedAt: new Date().toISOString(),
+      note: 'Initial official Global Counselling Association WhatsApp group link configured.',
     },
   ],
 };
@@ -125,46 +147,51 @@ export function validateWhatsAppUrl(rawUrl: string): { valid: boolean; error?: s
 /**
  * Get active community settings from Firestore with local JSON fallback
  */
-export async function getCommunitySettings(): Promise<CommunitySettings> {
+export async function getCommunitySettings(communityType: CommunityType = 'student_parent'): Promise<CommunitySettings> {
+  const isCounsellor = communityType === 'counsellor_mentor';
+  const docId = isCounsellor ? 'counsellor_whatsapp_config' : 'whatsapp_config';
+  const filePath = isCounsellor ? COUNSELLOR_SETTINGS_FILE : SETTINGS_FILE;
+  const defaultSettings = isCounsellor ? DEFAULT_COUNSELLOR_SETTINGS : DEFAULT_SETTINGS;
+
   // 1. Try Firestore if available
   try {
     if (isFirestoreReady()) {
-      const doc = await adminDb.collection('community_settings').doc('whatsapp_config').get();
+      const doc = await adminDb.collection('community_settings').doc(docId).get();
       if (doc.exists) {
         const data = doc.data() as CommunitySettings;
         if (data?.activeWhatsAppUrl) {
           return {
-            ...DEFAULT_SETTINGS,
+            ...defaultSettings,
             ...data,
           };
         }
       }
     }
   } catch (err) {
-    console.warn('[Community Service] Firestore read error, falling back to local file:', err);
+    console.warn(`[Community Service] Firestore read error for ${communityType}, falling back to local file:`, err);
   }
 
   // 2. Fallback to local JSON storage
   try {
-    ensureDirectoryExists(SETTINGS_FILE);
-    if (fs.existsSync(SETTINGS_FILE)) {
-      const content = fs.readFileSync(SETTINGS_FILE, 'utf-8');
+    ensureDirectoryExists(filePath);
+    if (fs.existsSync(filePath)) {
+      const content = fs.readFileSync(filePath, 'utf-8');
       const parsed = JSON.parse(content);
       if (parsed && typeof parsed.activeWhatsAppUrl === 'string') {
         return parsed as CommunitySettings;
       }
     }
   } catch (err) {
-    console.error('[Community Service] Local settings file read error:', err);
+    console.error(`[Community Service] Local settings file read error for ${communityType}:`, err);
   }
 
   // 3. Fallback to default initial settings and seed file
   try {
-    ensureDirectoryExists(SETTINGS_FILE);
-    fs.writeFileSync(SETTINGS_FILE, JSON.stringify(DEFAULT_SETTINGS, null, 2), 'utf-8');
+    ensureDirectoryExists(filePath);
+    fs.writeFileSync(filePath, JSON.stringify(defaultSettings, null, 2), 'utf-8');
   } catch {}
 
-  return DEFAULT_SETTINGS;
+  return defaultSettings;
 }
 
 /**
@@ -173,17 +200,22 @@ export async function getCommunitySettings(): Promise<CommunitySettings> {
 export async function updateCommunityWhatsAppUrl(
   newUrl: string,
   updatedBy: string,
-  note?: string
+  note?: string,
+  communityType: CommunityType = 'student_parent'
 ): Promise<CommunitySettings> {
   const validation = validateWhatsAppUrl(newUrl);
   if (!validation.valid) {
     throw new Error(validation.error || 'Invalid WhatsApp URL');
   }
 
-  const current = await getCommunitySettings();
+  const isCounsellor = communityType === 'counsellor_mentor';
+  const docId = isCounsellor ? 'counsellor_whatsapp_config' : 'whatsapp_config';
+  const filePath = isCounsellor ? COUNSELLOR_SETTINGS_FILE : SETTINGS_FILE;
+
+  const current = await getCommunitySettings(communityType);
   const now = new Date().toISOString();
   const historyItem: LinkHistoryItem = {
-    id: `hist_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
+    id: `hist_${isCounsellor ? 'counsellor_' : ''}${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
     url: newUrl.trim(),
     previousUrl: current.activeWhatsAppUrl,
     updatedBy: updatedBy || 'Administrator',
@@ -201,40 +233,45 @@ export async function updateCommunityWhatsAppUrl(
 
   // 1. Write to local JSON storage
   try {
-    ensureDirectoryExists(SETTINGS_FILE);
-    fs.writeFileSync(SETTINGS_FILE, JSON.stringify(updatedSettings, null, 2), 'utf-8');
+    ensureDirectoryExists(filePath);
+    fs.writeFileSync(filePath, JSON.stringify(updatedSettings, null, 2), 'utf-8');
   } catch (err) {
-    console.error('[Community Service] Failed writing local settings:', err);
+    console.error(`[Community Service] Failed writing local settings for ${communityType}:`, err);
   }
 
   // 2. Write to Firestore
   try {
     if (isFirestoreReady()) {
-      await adminDb.collection('community_settings').doc('whatsapp_config').set(updatedSettings);
+      await adminDb.collection('community_settings').doc(docId).set(updatedSettings);
     }
   } catch (err) {
-    console.warn('[Community Service] Firestore settings write error:', err);
+    console.warn(`[Community Service] Firestore settings write error for ${communityType}:`, err);
   }
 
   return updatedSettings;
+}
+
+export interface SaveCommunityLeadInput {
+  name: string;
+  phone: string;
+  email: string;
+  schoolName?: string;
+  grade?: string;
+  priorityGoal?: string;
+  linkedInUrl?: string;
+  campaign?: CommunityCampaign;
 }
 
 /**
  * Save a new community lead from the landing page
  */
 export async function saveCommunityLead(
-  data: {
-    name: string;
-    phone: string;
-    email: string;
-    schoolName: string;
-    grade: string;
-    priorityGoal?: string;
-  },
+  data: SaveCommunityLeadInput,
   metadata?: { ip?: string; userAgent?: string }
 ): Promise<CommunityLead> {
   const now = new Date().toISOString();
-  const id = `comm_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
+  const isCounsellor = data.campaign === 'mentor_counsellor_community';
+  const id = `comm_${isCounsellor ? 'couns_' : ''}${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
   const priorityGoal = data.priorityGoal?.trim() || '';
 
   const lead: CommunityLead = {
@@ -242,10 +279,11 @@ export async function saveCommunityLead(
     name: data.name.trim(),
     phone: data.phone.trim(),
     email: data.email.trim().toLowerCase(),
-    schoolName: data.schoolName.trim(),
-    grade: data.grade.trim(),
-    priorityGoal,
-    source: 'clarvo_student_parent_community',
+    schoolName: data.schoolName ? data.schoolName.trim() : undefined,
+    grade: data.grade ? data.grade.trim() : undefined,
+    priorityGoal: priorityGoal || undefined,
+    linkedInUrl: data.linkedInUrl ? data.linkedInUrl.trim() : undefined,
+    source: isCounsellor ? 'mentor_counsellor_community' : 'clarvo_student_parent_community',
     status: 'new',
     createdAt: now,
     updatedAt: now,
@@ -268,10 +306,13 @@ export async function saveCommunityLead(
     console.error('[Community Service] Local lead write error:', err);
   }
 
-  // 2. Save to Firestore community_leads collection
+  // 2. Save to Firestore community_leads collection (filtering out any undefined fields)
   try {
     if (isFirestoreReady()) {
-      await adminDb.collection('community_leads').doc(id).set(lead);
+      const cleanDoc = Object.fromEntries(
+        Object.entries(lead).filter(([_, v]) => v !== undefined)
+      );
+      await adminDb.collection('community_leads').doc(id).set(cleanDoc);
     }
   } catch (err) {
     console.warn('[Community Service] Firestore lead write error:', err);
@@ -279,21 +320,39 @@ export async function saveCommunityLead(
 
   // 3. Mirror into demo_enquiries for centralized admin visibility
   try {
-    await createEnquiry({
-      parentName: lead.name,
-      phone: lead.phone,
-      email: lead.email,
-      studentName: lead.name,
-      academicLevel: 'High School (Grades 7-12)',
-      grade: lead.grade,
-      schoolName: lead.schoolName,
-      developmentAreas: [priorityGoal || 'WhatsApp Community'],
-      clarvoExploration: ['Student & Parent WhatsApp Community'],
-      preferredTimeFrame: 'Immediate',
-      notes: `Joined CLARVO Student & Parent WhatsApp Community via QR Landing Page (/join-community).${priorityGoal ? ` Priority: ${priorityGoal}.` : ''}`,
-      consent: true,
-      sourcePage: '/join-community',
-    });
+    if (isCounsellor) {
+      await createEnquiry({
+        parentName: lead.name,
+        phone: lead.phone,
+        email: lead.email,
+        studentName: lead.name,
+        academicLevel: 'Counsellor / Mentor Community',
+        grade: 'Professional Counsellor / Mentor',
+        schoolName: lead.linkedInUrl || 'Independent / Educational Counsellor',
+        developmentAreas: ['Global Counselling Association', 'Mentor Network'],
+        clarvoExploration: ['Global Counselling Association WhatsApp Community'],
+        preferredTimeFrame: 'Immediate',
+        notes: `Joined CLARVO Global Counselling Association WhatsApp Community via QR Landing Page (/join-counsellor-community).${lead.linkedInUrl ? ` LinkedIn: ${lead.linkedInUrl}` : ''}`,
+        consent: true,
+        sourcePage: '/join-counsellor-community',
+      });
+    } else {
+      await createEnquiry({
+        parentName: lead.name,
+        phone: lead.phone,
+        email: lead.email,
+        studentName: lead.name,
+        academicLevel: 'High School (Grades 7-12)',
+        grade: lead.grade || '',
+        schoolName: lead.schoolName || '',
+        developmentAreas: [priorityGoal || 'WhatsApp Community'],
+        clarvoExploration: ['Student & Parent WhatsApp Community'],
+        preferredTimeFrame: 'Immediate',
+        notes: `Joined CLARVO Student & Parent WhatsApp Community via QR Landing Page (/join-community).${priorityGoal ? ` Priority: ${priorityGoal}.` : ''}`,
+        consent: true,
+        sourcePage: '/join-community',
+      });
+    }
   } catch (err) {
     console.warn('[Community Service] Mirror to enquiry error:', err);
   }
@@ -383,9 +442,9 @@ export async function purgeTestLeads(): Promise<number> {
 }
 
 /**
- * Retrieve all community leads for the admin dashboard
+ * Retrieve all community leads for the admin dashboard (optional filter by campaign)
  */
-export async function getCommunityLeads(): Promise<CommunityLead[]> {
+export async function getCommunityLeads(campaign?: CommunityCampaign): Promise<CommunityLead[]> {
   const leadsMap = new Map<string, CommunityLead>();
 
   // 1. First populate from local file (always instant and resilient)
@@ -397,7 +456,9 @@ export async function getCommunityLeads(): Promise<CommunityLead[]> {
       if (Array.isArray(parsed)) {
         for (const lead of parsed) {
           if (lead && lead.id && !isTestLead(lead)) {
-            leadsMap.set(lead.id, lead);
+            if (!campaign || lead.source === campaign) {
+              leadsMap.set(lead.id, lead);
+            }
           }
         }
       }
@@ -409,11 +470,16 @@ export async function getCommunityLeads(): Promise<CommunityLead[]> {
   // 2. Fetch and merge from Firestore community_leads collection
   try {
     if (isFirestoreReady()) {
-      const snapshot = await adminDb
+      let query: FirebaseFirestore.Query = adminDb
         .collection('community_leads')
         .orderBy('createdAt', 'desc')
-        .limit(200)
-        .get();
+        .limit(200);
+
+      if (campaign) {
+        query = query.where('source', '==', campaign);
+      }
+
+      const snapshot = await query.get();
 
       if (!snapshot.empty) {
         snapshot.docs.forEach((doc) => {

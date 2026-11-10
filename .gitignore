@@ -78,3 +78,6 @@ fbq_grade10_ts.txt
 # ── AI / Gemini tooling ──────────────────────────────────
 .gemini/
 CLAUDE.md
+
+# Pre-generated sample reports are served from /public and must ship with the app
+!public/sample-reports/*.pdf

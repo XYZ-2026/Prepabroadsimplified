@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { renderReportPdf } from '@/lib/report-pdf-render';
+import { injectSampleWatermark } from '@/lib/sample-watermark';
 import { adminDb } from '@/lib/firebase-admin';
 import { verifySessionCookie, getUserRole } from '@/lib/auth';
 import type { EditorialStudent, EditorialScores } from '@/app/(main)/psychometric-test/class10_editorial_engine';
@@ -307,32 +309,9 @@ export async function POST(req: NextRequest) {
     // Set viewport to standard A4 resolution at 96 DPI
     await page.setViewport({ width: 794, height: 1123, deviceScaleFactor: 2 });
 
-    await page.setContent(targetHTMLReport, {
-      waitUntil: 'domcontentloaded',
-      timeout: 120000
-    });
-
-    // Wait for document fonts and canvas charts to finish rendering without hanging on remote CDNs
-    await page.evaluate(async () => {
-      if (document.fonts) {
-        await Promise.race([
-          document.fonts.ready,
-          new Promise(r => setTimeout(r, 2500))
-        ]);
-      }
-      await new Promise(r => setTimeout(r, 500));
-    });
-
-    await page.emulateMediaType('print');
-
-    const pdfBuffer = await page.pdf({
-      format: 'A4',
-      printBackground: true,
-      preferCSSPageSize: true,
-      margin: { top: '0', right: '0', bottom: '0', left: '0' },
-      displayHeaderFooter: false,
-      timeout: 120000
-    });
+    // Wait for Tailwind, fonts and Chart.js before printing (see lib/report-pdf-render.ts)
+    const htmlToRender = isSampleRequest ? injectSampleWatermark(targetHTMLReport) : targetHTMLReport;
+    const pdfBuffer = await renderReportPdf(page, htmlToRender);
 
     await browser.close();
     browser = null;
@@ -342,7 +321,7 @@ export async function POST(req: NextRequest) {
       ? `${studentName.replace(/[^a-zA-Z0-9]/g, '_')}_${variantTag}_Executive_Career_Summary.pdf`
       : `${studentName.replace(/[^a-zA-Z0-9]/g, '_')}_${variantTag}_Full_Psychometric_Report.pdf`;
 
-    return new NextResponse(pdfBuffer, {
+    return new NextResponse(Buffer.from(pdfBuffer), {
       status: 200,
       headers: {
         'Content-Type': 'application/pdf',

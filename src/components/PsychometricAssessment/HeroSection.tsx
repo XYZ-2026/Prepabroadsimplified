@@ -1,324 +1,201 @@
 'use client';
 
-import React, { useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import gsap from 'gsap';
-import {
-  Compass,
-  ArrowRight,
-  FileText,
-  UserCheck,
-  Sparkles,
-  MapPin,
-  ChevronRight,
-} from 'lucide-react';
+import { m, useScroll, useTransform, useReducedMotion } from 'motion/react';
+import { ArrowRight, FileText } from 'lucide-react';
 import { PSYCHOMETRIC_CONTENT } from '@/content/psychometricContent';
-import { useReducedMotion } from '@/hooks/useReducedMotion';
+import { usePointerFine } from '@/hooks/usePointerFine';
+import CountUp from './motion/CountUp';
+import { springData, springUi } from './motion/tokens';
 
+const hero = PSYCHOMETRIC_CONTENT.hero;
+const facts = PSYCHOMETRIC_CONTENT.facts;
+
+/**
+ * Hero (spec 5.1). Headline, sub, CTAs and photo animate in CSS (psychometric.css)
+ * so they start before hydration. The profile card is the signature moment:
+ * it springs in and its bars fill while the numbers count up.
+ *
+ * Face-safe rule (faceZones-psychometric.json): faces occupy x 21–76%, y 9–53%.
+ * Below 1024 the card starts at y 72% and hangs below the photo; from 1024
+ * it sits above the heads (its bottom edge at y 8%).
+ */
 export default function HeroSection() {
-  const containerRef = useRef<HTMLElement>(null);
-  const headlineRef = useRef<HTMLHeadingElement>(null);
-  const photoRef = useRef<HTMLDivElement>(null);
-  const stepRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const sectionRef = useRef<HTMLElement>(null);
+  const isFine = usePointerFine();
+  const reduced = useReducedMotion();
+  const parallax = isFine && !reduced;
 
-  const prefersReduced = useReducedMotion();
+  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ['start start', 'end start'] });
+  const photoY = useTransform(scrollYProgress, [0, 1], [0, parallax ? -24 : 0]);
+  const cardY = useTransform(scrollYProgress, [0, 1], [0, parallax ? -12 : 0]);
 
-  const heroData = PSYCHOMETRIC_CONTENT.hero;
-  const factsData = PSYCHOMETRIC_CONTENT.facts;
-
-  useEffect(() => {
-    // If reduced motion is requested, instantly set final state
-    if (prefersReduced) {
-      return;
-    }
-
-    const ctx = gsap.context(() => {
-      const h1Lines = headlineRef.current?.querySelectorAll('.h1-line-inner');
-      const photoEl = photoRef.current;
-      const steps = stepRefs.current.filter(Boolean) as HTMLDivElement[];
-
-      // Initial states
-      if (h1Lines && h1Lines.length > 0) {
-        gsap.set(h1Lines, { y: '105%', opacity: 0 });
-      }
-      if (photoEl) {
-        gsap.set(photoEl, { y: '5%', opacity: 0 });
-      }
-
-      // GSAP Sequence
-      const tl = gsap.timeline({
-        delay: 0.05,
-        defaults: { ease: 'power3.out' },
-      });
-
-      // 1. H1 lines slide up from masks (80ms stagger, expo.out)
-      if (h1Lines && h1Lines.length > 0) {
-        tl.to(
-          h1Lines,
-          {
-            y: '0%',
-            opacity: 1,
-            duration: 0.65,
-            stagger: 0.08,
-            ease: 'expo.out',
-          },
-          0
-        );
-      }
-
-      // 2. Photo rises smoothly and fades in
-      if (photoEl) {
-        tl.to(
-          photoEl,
-          {
-            y: '0%',
-            opacity: 1,
-            duration: 0.75,
-            ease: 'power3.out',
-          },
-          0.15
-        );
-      }
-
-      // 3. Three-step line highlights each step in turn, then rests
-      if (steps.length > 0) {
-        steps.forEach((step, i) => {
-          const startTime = 0.6 + i * 0.12;
-          tl.to(
-            step,
-            {
-              backgroundColor: '#E6EDFF', // sky
-              borderColor: '#1258DE', // clarvo-blue
-              scale: 1.03,
-              duration: 0.12,
-              ease: 'power1.out',
-            },
-            startTime
-          );
-          tl.to(
-            step,
-            {
-              backgroundColor: 'transparent',
-              borderColor: 'transparent',
-              scale: 1,
-              duration: 0.15,
-              ease: 'power1.in',
-            },
-            startTime + 0.12
-          );
-        });
-      }
-    }, containerRef);
-
-    return () => {
-      ctx.revert();
-    };
-  }, [prefersReduced]);
+  const factPills = [
+    `${facts.modulesCount} modules`,
+    `${facts.phasesCount} phases`,
+    `${facts.grade10FullReportPages}-page report`,
+    facts.testDuration,
+    facts.numberOfQuestions ? `${facts.numberOfQuestions} questions` : null,
+  ].filter(Boolean) as string[];
 
   return (
     <section
-      ref={containerRef}
+      ref={sectionRef}
       aria-label="CLARVO Psychometric Assessment Overview"
-      className="relative w-full bg-paper border-b border-line pt-6 sm:pt-8 lg:pt-10 pb-0 overflow-hidden"
+      className="relative w-full bg-paper border-b border-line"
+      style={{ overflowX: 'clip' }}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-6 xl:gap-10 items-end">
-          
-          {/* ── LEFT COLUMN: COPY, CTAS, 3-STEP LINE, FACTS ── */}
-          <div className="lg:col-span-7 xl:col-span-6 space-y-5 pb-8 sm:pb-10 lg:pb-12 text-left z-10">
-            {/* Chip: Sentence case */}
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-sky border border-line text-[13px] font-bold text-clarvo-blue font-dmsans">
-              <Compass className="w-3.5 h-3.5" />
-              <span>{heroData.chip}</span>
-            </div>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 sm:pt-10 lg:pt-12">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-y-6 lg:gap-x-8 lg:items-end lg:min-h-[min(760px,calc(100svh-118px))]">
+          {/* ── Copy ── */}
+          <div className="lg:col-span-6 xl:col-span-6 lg:self-center lg:pb-16 space-y-5 sm:space-y-6">
+            <span className="psy-fade inline-flex items-center px-3.5 py-1.5 rounded-full bg-sky text-[13px] font-bold text-clarvo-blue">
+              {hero.chip}
+            </span>
 
-            {/* H1 Headline with Line-Mask Wrappers */}
-            <h1
-              ref={headlineRef}
-              className="text-3xl sm:text-4xl lg:text-[44px] xl:text-[48px] font-bold font-dmsans text-ink tracking-tight leading-[1.12]"
-            >
-              <span className="block overflow-hidden py-0.5">
-                <span className="h1-line-inner block">
-                  Know how your child
-                </span>
+            <h1 className="font-dmsans font-bold text-ink tracking-tight leading-[1.08] text-[clamp(2.125rem,8.6vw,3.75rem)] lg:text-[clamp(2.5rem,3.5vw,3.5rem)] m-0">
+              <span className="psy-line">
+                <span>{hero.headlineLines[0]}</span>
               </span>
-              <span className="block overflow-hidden py-0.5">
-                <span className="h1-line-inner block text-clarvo-blue">
-                  thinks, learns and decides.
-                </span>
+              <span className="psy-line">
+                <span className="text-clarvo-blue">{hero.headlineLines[1]}</span>
               </span>
             </h1>
 
-            {/* Subcopy: >= 17px body */}
-            <p className="text-[17px] sm:text-[18px] text-muted font-dmsans leading-relaxed max-w-xl">
-              {heroData.subcopy}
+            <p
+              className="psy-fade text-[17px] sm:text-[19px] text-muted leading-relaxed max-w-[34ch] m-0"
+              style={{ animationDelay: '0.2s' }}
+            >
+              {hero.subcopy}
             </p>
 
-            {/* CTAs */}
-            <div className="flex flex-wrap items-center gap-3 pt-1">
-              {/* Primary CTA */}
-              <Link
-                href={heroData.ctas.primary.href}
-                className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full text-[14px] sm:text-[15px] font-bold text-white bg-clarvo-blue hover:bg-[#0F47B8] shadow-sm hover:shadow-md transition-all active:scale-[0.98]"
-              >
-                <span>{heroData.ctas.primary.label}</span>
-                <ArrowRight className="w-4 h-4" />
-              </Link>
-
-              {/* Secondary CTA */}
-              <a
-                href={heroData.ctas.secondary.href}
-                className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full text-[14px] sm:text-[15px] font-bold text-ink bg-white hover:bg-sky border border-line transition-all active:scale-[0.98]"
-              >
-                <FileText className="w-4 h-4 text-clarvo-blue" />
-                <span>{heroData.ctas.secondary.label}</span>
-              </a>
-
-              {/* Tertiary Text Link */}
-              <Link
-                href={heroData.ctas.tertiary.href}
-                className="inline-flex items-center gap-1.5 text-[14px] sm:text-[15px] font-semibold text-muted hover:text-ink transition-colors px-2 py-2"
-              >
-                <span>{heroData.ctas.tertiary.label}</span>
-                <ArrowRight className="w-3.5 h-3.5 text-clarvo-blue" />
-              </Link>
+            {/* Desktop CTAs (mobile CTAs sit under the photo) */}
+            <div className="hidden lg:flex flex-wrap items-center gap-3 psy-fade" style={{ animationDelay: '0.3s' }}>
+              <HeroCtas />
             </div>
 
-            {/* ── THREE-STEP LINE UNDER CTAS ── */}
-            <div className="pt-1">
-              <div className="inline-flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-1.5 xl:gap-2 p-1.5 rounded-2xl bg-white/70 border border-line/80 backdrop-blur-xs text-ink w-full sm:w-auto max-w-full">
-                {heroData.threeStepLine.map((stepItem, idx) => {
-                  const icons = [
-                    <UserCheck key="1" className="w-4 h-4 text-clarvo-blue shrink-0" />,
-                    <Sparkles key="2" className="w-4 h-4 text-clarvo-blue shrink-0" />,
-                    <MapPin key="3" className="w-4 h-4 text-clarvo-blue shrink-0" />,
-                  ];
-
-                  return (
-                    <React.Fragment key={stepItem.step}>
-                      <div
-                        ref={(el) => {
-                          stepRefs.current[idx] = el;
-                        }}
-                        className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1.5 rounded-xl border border-transparent transition-all"
-                      >
-                        <span className="flex items-center justify-center w-5 h-5 rounded-full bg-sky text-[12px] font-bold text-clarvo-blue shrink-0">
-                          {stepItem.step}
-                        </span>
-                        {icons[idx]}
-                        <span className="text-[12px] sm:text-[12.5px] xl:text-[13px] font-medium text-ink whitespace-nowrap">
-                          {stepItem.label}
-                        </span>
-                      </div>
-                      {idx < heroData.threeStepLine.length - 1 && (
-                        <ChevronRight className="w-3.5 h-3.5 text-muted/60 shrink-0 hidden sm:block" />
-                      )}
-                    </React.Fragment>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* ── FACTS STRIP (Section 4 Spec) ── */}
-            <div className="pt-5 border-t border-line flex flex-wrap items-center gap-4 sm:gap-6 text-left">
-              <div>
-                <div className="text-xl sm:text-2xl font-bold text-ink font-dmsans">
-                  {factsData.modulesCount}
-                </div>
-                <div className="text-[13px] text-muted font-medium">
-                  Modules
-                </div>
-              </div>
-
-              <div className="h-8 w-px bg-line hidden sm:block" />
-
-              <div>
-                <div className="text-xl sm:text-2xl font-bold text-ink font-dmsans">
-                  {factsData.phasesCount}
-                </div>
-                <div className="text-[13px] text-muted font-medium">
-                  Phases
-                </div>
-              </div>
-
-              {/* Class 10 Full Report Pages (Verified) */}
-              {factsData.grade10FullReportPages && (
-                <>
-                  <div className="h-8 w-px bg-line hidden sm:block" />
-                  <div>
-                    <div className="text-xl sm:text-2xl font-bold text-ink font-dmsans">
-                      {factsData.grade10FullReportPages}-page
-                    </div>
-                    <div className="text-[13px] text-muted font-medium">
-                      Class 10 report
-                    </div>
-                  </div>
-                </>
-              )}
-
-              {/* Optional Owner Facts rendered ONLY when provided */}
-              {factsData.testDuration && (
-                <>
-                  <div className="h-8 w-px bg-line hidden sm:block" />
-                  <div>
-                    <div className="text-xl sm:text-2xl font-bold text-ink font-dmsans">
-                      {factsData.testDuration}
-                    </div>
-                    <div className="text-[13px] text-muted font-medium">
-                      Duration
-                    </div>
-                  </div>
-                </>
-              )}
-
-              {factsData.numberOfQuestions && (
-                <>
-                  <div className="h-8 w-px bg-line hidden sm:block" />
-                  <div>
-                    <div className="text-xl sm:text-2xl font-bold text-ink font-dmsans">
-                      {factsData.numberOfQuestions}
-                    </div>
-                    <div className="text-[13px] text-muted font-medium">
-                      Questions
-                    </div>
-                  </div>
-                </>
-              )}
-            </div>
-
+            <ul className="hidden lg:flex flex-wrap gap-2 list-none p-0 m-0 psy-fade" style={{ animationDelay: '0.4s' }}>
+              {factPills.map((f) => (
+                <FactPill key={f} label={f} />
+              ))}
+            </ul>
           </div>
 
-          {/* ── RIGHT COLUMN: LARGE, PROMINENT PHOTO CUTOUT (NO OVERLAYS COVERING IT) ── */}
-          <div className="lg:col-span-5 xl:col-span-6 relative w-full flex items-end justify-center lg:justify-end self-end">
-            <div
-              ref={photoRef}
-              className="relative w-full max-w-[620px] lg:max-w-none flex items-end justify-center lg:justify-end self-end"
-            >
-              {/* Photo Container: Flush bottom, prominent size matching left column */}
+          {/* ── Photo + profile card ── */}
+          <div className="lg:col-span-6 relative lg:-mr-8 xl:-mr-16 mb-[92px] lg:mb-0">
+            <m.div style={{ y: photoY }} className="psy-photo-in relative">
               <div
-                className="relative w-full flex items-end justify-center lg:justify-end overflow-visible"
                 style={{
-                  maskImage:
-                    'linear-gradient(to right, transparent 0, #000 3%, #000 97%, transparent 100%)',
-                  WebkitMaskImage:
-                    'linear-gradient(to right, transparent 0, #000 3%, #000 97%, transparent 100%)',
+                  maskImage: 'linear-gradient(to right, transparent 0, #000 6%, #000 94%, transparent 100%)',
+                  WebkitMaskImage: 'linear-gradient(to right, transparent 0, #000 6%, #000 94%, transparent 100%)',
                 }}
               >
                 <Image
-                  src="/images/psychometric/psy-01-hero-family-cutout.webp"
-                  alt="Parent and student reviewing psychometric insights on a laptop"
+                  src={hero.photo.src}
+                  alt={hero.photo.alt}
                   width={1536}
                   height={1024}
                   priority
-                  className="w-full h-auto object-contain object-bottom select-none block max-h-[500px] sm:max-h-[560px] lg:max-h-[580px] xl:max-h-[640px]"
+                  sizes="(min-width: 1024px) 58vw, 100vw"
+                  className="block w-full h-auto select-none"
                 />
               </div>
-            </div>
+
+              <m.div
+                style={{ y: cardY }}
+                className="absolute left-0 sm:left-[2%] top-[72%] lg:top-auto lg:bottom-[92%] lg:left-[4%] z-10"
+              >
+                <ProfileCard />
+              </m.div>
+            </m.div>
           </div>
 
+          {/* Mobile CTAs + facts */}
+          <div className="lg:hidden space-y-5 pb-10">
+            <div className="flex flex-col sm:flex-row gap-3">
+              <HeroCtas />
+            </div>
+            <ul className="flex flex-wrap gap-2 list-none p-0 m-0">
+              {factPills.map((f) => (
+                <FactPill key={f} label={f} />
+              ))}
+            </ul>
+          </div>
         </div>
       </div>
     </section>
+  );
+}
+
+function HeroCtas() {
+  return (
+    <>
+      <m.div whileTap={{ scale: 0.97 }} transition={springUi} className="w-full sm:w-auto">
+        <Link
+          href={hero.ctas.primary.href}
+          data-hero-cta=""
+          className="w-full sm:w-auto inline-flex items-center justify-center gap-2 h-[52px] px-7 rounded-full text-[16px] font-bold text-white bg-clarvo-blue hover:bg-[#0F47B8] shadow-clarvo-elevated transition-colors no-underline"
+        >
+          {hero.ctas.primary.label}
+          <ArrowRight className="w-4 h-4" aria-hidden="true" />
+        </Link>
+      </m.div>
+      <m.div whileTap={{ scale: 0.97 }} transition={springUi} className="w-full sm:w-auto">
+        <a
+          href={hero.ctas.secondary.href}
+          className="w-full sm:w-auto inline-flex items-center justify-center gap-2 h-[52px] px-7 rounded-full text-[16px] font-bold text-ink bg-white hover:bg-sky border border-line transition-colors no-underline"
+        >
+          <FileText className="w-4 h-4 text-clarvo-blue" aria-hidden="true" />
+          {hero.ctas.secondary.label}
+        </a>
+      </m.div>
+    </>
+  );
+}
+
+function FactPill({ label }: { label: string }) {
+  return (
+    <li className="px-3.5 py-1.5 rounded-full bg-white border border-line text-[14px] font-semibold text-ink">
+      {label}
+    </li>
+  );
+}
+
+function ProfileCard() {
+  const card = hero.profileCard;
+  return (
+    <m.div
+      data-reveal=""
+      initial={{ opacity: 0, y: 16, scale: 0.96 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      transition={{ ...springUi, delay: 0.55 }}
+      className="w-[224px] sm:w-[252px] rounded-[14px] bg-white/95 backdrop-blur border border-line shadow-clarvo-elevated p-3.5 sm:p-4"
+    >
+      <div className="text-[13px] font-semibold text-muted mb-2.5">{card.label}</div>
+      <ul className="space-y-2.5 list-none p-0 m-0">
+        {card.traits.map((t, i) => (
+          <li key={t.name}>
+            <div className="flex items-baseline justify-between text-[13px] mb-1">
+              <span className="font-semibold text-ink">{t.name}</span>
+              <span className="font-bold text-clarvo-blue">
+                <CountUp value={t.score} delay={0.75 + i * 0.1} duration={0.9} />
+              </span>
+            </div>
+            <div className="h-1.5 rounded-full bg-sky overflow-hidden">
+              <m.div
+                data-reveal=""
+                className="h-full rounded-full bg-clarvo-blue origin-left"
+                style={{ width: `${t.score}%` }}
+                initial={{ scaleX: 0 }}
+                animate={{ scaleX: 1 }}
+                transition={{ ...springData, delay: 0.75 + i * 0.1 }}
+              />
+            </div>
+          </li>
+        ))}
+      </ul>
+    </m.div>
   );
 }

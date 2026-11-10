@@ -1,265 +1,177 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { FileText, Download, BookOpen, ArrowRight, CheckCircle2 } from 'lucide-react';
-import SampleReportModal from '@/components/Report/SampleReportModal';
+import { AnimatePresence, m, useMotionValue, useReducedMotion, useSpring } from 'motion/react';
+import { BookOpen, Download } from 'lucide-react';
+import { PSYCHOMETRIC_CONTENT } from '@/content/psychometricContent';
+import { usePointerFine } from '@/hooks/usePointerFine';
+import Reveal from './motion/Reveal';
+import { EASE_FLIP, EASE_OUT, springUi } from './motion/tokens';
 
-interface SampleReportItem {
-  id: string;
-  gradeBadge: string;
-  gradeTitle: string;
-  subtitle: string;
-  pages: string;
-  focus: string;
-  desc: string;
-  keyInsights: string[];
-  pdfUrl: string;
-  coverUrl: string;
-  browserUrl: string;
-}
+const content = PSYCHOMETRIC_CONTENT.sampleReports;
+const reports = content.items;
 
-const SAMPLE_REPORTS: SampleReportItem[] = [
-  {
-    id: 'junior',
-    gradeBadge: 'Grades 7–9',
-    gradeTitle: 'Junior Diagnostic Report',
-    subtitle: 'Foundation & Learning Agility',
-    pages: '50+ Pages',
-    focus: 'Learning style calibration & curiosity drivers',
-    desc: 'Analyzes sensory learning modalities (VARK), abstract pattern logic, and foundational persistence habits to help students build academic stamina before high-stakes board years.',
-    keyInsights: [
-      'Visual vs. Kinesthetic learning modality ratio',
-      'Abstract pattern reasoning & problem agility',
-      'Curiosity vectors & initial subject affinities',
-      'Parental guidance for early study habit architecture',
-    ],
-    pdfUrl: '/sample-reports/sample-report-grades-7-9.pdf',
-    coverUrl: '/sample-reports/cover-grades-7-9.png',
-    browserUrl: '/sample-report?type=junior',
-  },
-  {
-    id: 'grade10',
-    gradeBadge: 'Grade 10',
-    gradeTitle: 'Secondary Stream Selection Report',
-    subtitle: 'Stream Alignment & Subject Choices',
-    pages: '56 Pages',
-    focus: 'PCM vs. PCB vs. Commerce vs. Humanities validation',
-    desc: 'Our flagship 30-module evaluation calibrating cognitive aptitude, RIASEC vocational interests, and emotional stability to eliminate guesswork in Class 11 stream selection.',
-    keyInsights: [
-      'Empirical % fit for all 4 academic streams',
-      'Quantitative ceiling & numerical aptitude percentile',
-      'Detailed subject combinations (Maths vs. Applied Maths)',
-      '3-year high school roadmap towards university admission',
-    ],
-    pdfUrl: '/sample-reports/sample-report-grade-10.pdf',
-    coverUrl: '/sample-reports/cover-grade-10.png',
-    browserUrl: '/sample-report?type=grade10',
-  },
-  {
-    id: 'senior',
-    gradeBadge: 'Grades 11–12',
-    gradeTitle: 'Senior University & Career Fitment Report',
-    subtitle: 'Degree Fit & Global Admissions',
-    pages: '50+ Pages',
-    focus: 'University majors, SAT strategy & industry clusters',
-    desc: 'Synthesizes specialized academic strengths, leadership EQ, and career convergence to guide international and domestic university applications, internships, and research papers.',
-    keyInsights: [
-      'Holland RIASEC vocational code synthesis',
-      'Top 5 aligned career clusters with industry projections',
-      'Standardized testing suitability (SAT / ACT / Competitive)',
-      'Academic research & extracurricular spike roadmap',
-    ],
-    pdfUrl: '/sample-reports/sample-report-grades-11-12.pdf',
-    coverUrl: '/sample-reports/cover-grades-11-12.png',
-    browserUrl: '/sample-report?type=grade12',
-  },
-];
-
+/**
+ * Sample reports (spec 5.7). Signature motion: the cover flips on grade change;
+ * text cross-fades. Pointer tilt on fine pointers only.
+ */
 export default function SampleReportGallery() {
-  const [showGradeModal, setShowGradeModal] = useState<boolean>(false);
+  const [index, setIndex] = useState(1); // Grade 10 first: the flagship report
+  const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
+  const report = reports[index];
+
+  const onKey = (e: React.KeyboardEvent, i: number) => {
+    if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+    e.preventDefault();
+    const next = (i + (e.key === 'ArrowRight' ? 1 : -1) + reports.length) % reports.length;
+    setIndex(next);
+    tabRefs.current[next]?.focus();
+  };
 
   return (
-    <section
-      id="sample-reports"
-      aria-label="Psychometric Assessment Sample Reports"
-      className="w-full py-16 sm:py-24 bg-[#F8FAFC] border-y border-[#E4E7EC]"
-    >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
-        {/* Section Header */}
-        <div className="max-w-3xl mx-auto text-center space-y-4 mb-12 sm:mb-16">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#E8F0FF] border border-[#BFDBFE] text-xs font-bold text-[#1258DE] font-dmsans">
-            <FileText className="w-3.5 h-3.5" />
-            <span>Interactive Sample Reports</span>
-          </div>
-          <h2 className="text-3xl sm:text-4xl font-bold font-dmsans text-[#080F1C] tracking-tight">
-            See exactly what families receive before you begin.
-          </h2>
-          <p className="text-base text-[#64748B] font-dmsans leading-relaxed">
-            Every CLARVO assessment generates a comprehensive 50+ page executive dossier. View our real, unedited reports directly in your browser or download the static PDF.
-          </p>
-        </div>
+    <section id="sample-reports" aria-label="Psychometric Assessment Sample Reports" className="w-full bg-white border-b border-line scroll-mt-20">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-20 lg:py-24">
+        <Reveal as="h2" className="font-dmsans font-bold text-ink tracking-tight text-[clamp(1.875rem,6vw,3rem)] leading-[1.1] m-0 mb-7 sm:mb-10">
+          {content.sectionHeadline}
+        </Reveal>
 
-        {/* 3-Column Sample Report Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 items-stretch">
-          {SAMPLE_REPORTS.map((report) => {
-            const isFeatured = report.id === 'grade10';
+        <div role="tablist" aria-label="Choose a grade" className="grid grid-cols-3 p-1 rounded-full bg-paper border border-line mb-8 lg:mb-12 max-w-lg">
+          {reports.map((r, i) => {
+            const isActive = i === index;
             return (
-              <div
-                key={report.id}
-                className={`flex flex-col justify-between rounded-2xl bg-white border transition-all duration-200 overflow-hidden shadow-sm hover:shadow-lg ${
-                  isFeatured
-                    ? 'border-[#2563EB] ring-2 ring-[#2563EB]/15'
-                    : 'border-[#E4E7EC] hover:border-[#CBD5E1]'
+              <button
+                key={r.id}
+                ref={(el) => {
+                  tabRefs.current[i] = el;
+                }}
+                type="button"
+                role="tab"
+                id={`grade-tab-${r.id}`}
+                aria-selected={isActive}
+                aria-controls="grade-panel"
+                tabIndex={isActive ? 0 : -1}
+                onClick={() => setIndex(i)}
+                onKeyDown={(e) => onKey(e, i)}
+                className={`relative h-11 rounded-full border-0 bg-transparent cursor-pointer text-[14px] sm:text-[15px] font-bold transition-colors ${
+                  isActive ? 'text-white' : 'text-muted hover:text-ink'
                 }`}
               >
-                {/* Card Top: Cover Preview Area (Click opens browser view) */}
-                <Link
-                  href={report.browserUrl}
-                  className="group relative w-full aspect-[4/3] bg-gradient-to-b from-[#F0F5FF] to-[#E2E8F0] overflow-hidden border-b border-[#E4E7EC] flex items-center justify-center p-4 cursor-pointer"
-                  title={`Click to view ${report.gradeTitle} in browser`}
-                >
-                  {/* Real Cover Thumbnail Image with fallback */}
-                  <div className="relative w-[150px] sm:w-[170px] aspect-[1/1.414] rounded-md shadow-lg overflow-hidden border border-[#CBD5E1] bg-white transform group-hover:scale-105 transition-transform duration-300">
-                    <Image
-                      src={report.coverUrl}
-                      alt={`Cover preview for CLARVO ${report.gradeTitle}`}
-                      fill
-                      sizes="200px"
-                      className="object-cover object-top"
-                    />
-                    {/* Hover overlay hint */}
-                    <div className="absolute inset-0 bg-[#080F1C]/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                      <span className="text-xs font-bold text-white bg-[#1258DE] px-3 py-1.5 rounded-full shadow-md flex items-center gap-1.5">
-                        <BookOpen className="w-3.5 h-3.5" />
-                        <span>View in Browser</span>
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Badges on top of preview */}
-                  <div className="absolute top-3 left-3">
-                    <span className="text-xs font-bold text-[#1258DE] bg-white/90 backdrop-blur-xs px-2.5 py-1 rounded-full border border-[#DDE3F0] shadow-xs">
-                      {report.gradeBadge}
-                    </span>
-                  </div>
-                  <div className="absolute top-3 right-3">
-                    <span className="text-xs font-medium text-[#475569] bg-white/90 backdrop-blur-xs px-2.5 py-1 rounded-full border border-[#DDE3F0] shadow-xs">
-                      {report.pages}
-                    </span>
-                  </div>
-                </Link>
-
-                {/* Card Middle: Content & Highlights */}
-                <div className="p-6 flex-1 flex flex-col justify-between space-y-5">
-                  <div className="space-y-3">
-                    <div>
-                      <div className="text-xs font-bold uppercase tracking-wider text-[#1258DE]">
-                        {report.subtitle}
-                      </div>
-                      <h3 className="text-xl font-bold font-dmsans text-[#080F1C] mt-0.5">
-                        {report.gradeTitle}
-                      </h3>
-                    </div>
-
-                    <p className="text-xs sm:text-sm text-[#64748B] leading-relaxed">
-                      {report.desc}
-                    </p>
-
-                    <div className="pt-2 border-t border-[#F1F5F9]">
-                      <div className="text-xs font-bold text-[#080F1C] mb-2 font-dmsans">
-                        Included in this report:
-                      </div>
-                      <ul className="space-y-1.5">
-                        {report.keyInsights.map((insight, idx) => (
-                          <li
-                            key={idx}
-                            className="flex items-start gap-2 text-xs text-[#475569]"
-                          >
-                            <CheckCircle2 className="w-3.5 h-3.5 text-[#16A34A] shrink-0 mt-0.5" />
-                            <span>{insight}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  </div>
-
-                  {/* Card Bottom: Both Browser View & PDF Download Options */}
-                  <div className="space-y-2 pt-4 border-t border-[#E4E7EC]">
-                    {/* Primary Action: View in Browser */}
-                    <Link
-                      href={report.browserUrl}
-                      className="w-full inline-flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl text-xs sm:text-sm font-bold text-white bg-[#1258DE] hover:bg-[#0F47B8] transition-colors shadow-xs"
-                    >
-                      <BookOpen className="w-4 h-4" />
-                      <span>View in Browser</span>
-                    </Link>
-
-                    {/* Secondary Action: Download Static PDF */}
-                    <a
-                      href={report.pdfUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="w-full inline-flex items-center justify-center gap-2 py-2 px-4 rounded-xl text-xs sm:text-sm font-semibold text-[#475569] hover:text-[#080F1C] bg-[#F1F5F9] hover:bg-[#E2E8F0] transition-colors border border-[#E2E8F0]"
-                    >
-                      <Download className="w-4 h-4" />
-                      <span>Download Sample PDF</span>
-                    </a>
-
-                    {/* Tertiary: Take Test */}
-                    <Link
-                      href="/psychometric-test"
-                      className="w-full inline-flex items-center justify-center gap-1.5 py-1 px-4 text-xs font-semibold text-[#1258DE] hover:underline"
-                    >
-                      <span>Take {report.gradeBadge} Assessment</span>
-                      <ArrowRight className="w-3.5 h-3.5" />
-                    </Link>
-                  </div>
-                </div>
-
-              </div>
+                {isActive && <m.span layoutId="grade-pill" className="absolute inset-0 rounded-full bg-clarvo-blue" transition={springUi} />}
+                <span className="relative">{r.gradeBadge}</span>
+              </button>
             );
           })}
         </div>
 
-        {/* Reassurance Footer Banner with Modal Trigger */}
-        <div className="mt-12 p-6 rounded-2xl bg-white border border-[#E4E7EC] flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
-          <div className="space-y-1">
-            <div className="text-sm font-bold text-[#080F1C] font-dmsans">
-              Fictional Synthetic Sample Data
-            </div>
-            <p className="text-xs text-[#64748B]">
-              All sample reports feature synthetic student data strictly for demonstration. Real assessments are 100% confidential and individual.
-            </p>
+        <div
+          id="grade-panel"
+          role="tabpanel"
+          aria-labelledby={`grade-tab-${report.id}`}
+          className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-14 items-center"
+        >
+          <div className="md:col-span-5 flex justify-center">
+            <Cover src={report.coverImage} alt={`Cover of the ${report.gradeBadge} sample report`} id={report.id} />
           </div>
-          <div className="flex flex-wrap items-center gap-3 shrink-0">
-            <button
-              type="button"
-              onClick={() => setShowGradeModal(true)}
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-xs font-bold text-[#1258DE] bg-[#E8F0FF] hover:bg-[#DBEAFE] border border-[#BFDBFE] transition-colors cursor-pointer"
-            >
-              <BookOpen className="w-3.5 h-3.5" />
-              <span>Select Grade in Modal</span>
-            </button>
-            <Link
-              href="/psychometric-test"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-xs font-bold text-white bg-[#080F1C] hover:bg-[#1E293B] transition-colors"
-            >
-              <span>Start Free Diagnostic</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </Link>
+
+          <div className="md:col-span-7">
+            <AnimatePresence mode="wait" initial={false}>
+              <m.div
+                key={report.id}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2, ease: EASE_OUT }}
+              >
+                <div className="text-[14px] font-semibold text-muted mb-1">
+                  {report.gradeBadge} · {report.pages}
+                </div>
+                <h3 className="text-[clamp(1.5rem,3.4vw,2.25rem)] font-bold text-ink tracking-tight leading-tight m-0 mb-5">
+                  {report.gradeTitle}
+                </h3>
+                <ul className="flex flex-wrap gap-2 list-none p-0 m-0 mb-7">
+                  {report.highlights.map((h) => (
+                    <li key={h} className="px-3.5 py-1.5 rounded-full bg-sky text-[14px] font-semibold text-clarvo-blue">
+                      {h}
+                    </li>
+                  ))}
+                </ul>
+
+                {report.isAvailable ? (
+                  <div className="flex flex-col sm:flex-row gap-3">
+                    <Link
+                      href={report.browserUrl}
+                      className="inline-flex items-center justify-center gap-2 h-[52px] px-7 rounded-full text-[16px] font-bold text-white bg-clarvo-blue hover:bg-[#0F47B8] transition-colors no-underline"
+                    >
+                      <BookOpen className="w-4 h-4" aria-hidden="true" />
+                      {content.viewLabel}
+                    </Link>
+                    <a
+                      href={report.pdfUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center justify-center gap-2 h-[52px] px-7 rounded-full text-[16px] font-bold text-ink bg-white hover:bg-sky border border-line transition-colors no-underline"
+                    >
+                      <Download className="w-4 h-4 text-clarvo-blue" aria-hidden="true" />
+                      {content.downloadLabel}
+                    </a>
+                  </div>
+                ) : (
+                  <button type="button" disabled className="h-[52px] px-7 rounded-full text-[16px] font-bold text-muted bg-paper border border-line cursor-not-allowed">
+                    {content.comingSoonLabel}
+                  </button>
+                )}
+              </m.div>
+            </AnimatePresence>
           </div>
         </div>
 
-        {/* Grade Selector Modal */}
-        <SampleReportModal
-          isOpen={showGradeModal}
-          onClose={() => setShowGradeModal(false)}
-        />
-
+        <p className="text-[13px] text-muted mt-8 mb-0">{content.footerNote}</p>
       </div>
     </section>
+  );
+}
+
+function Cover({ src, alt, id }: { src: string; alt: string; id: string }) {
+  const isFine = usePointerFine();
+  const reduced = useReducedMotion();
+  const rx = useMotionValue(0);
+  const ry = useMotionValue(0);
+  const rotateX = useSpring(rx, { stiffness: 150, damping: 20 });
+  const rotateY = useSpring(ry, { stiffness: 150, damping: 20 });
+
+  const onMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!isFine || reduced) return;
+    const r = e.currentTarget.getBoundingClientRect();
+    rx.set(((r.height / 2 - (e.clientY - r.top)) / (r.height / 2)) * 6);
+    ry.set((((e.clientX - r.left) - r.width / 2) / (r.width / 2)) * 6);
+  };
+
+  return (
+    <div
+      style={{ perspective: 1400 }}
+      onPointerMove={onMove}
+      onPointerLeave={() => {
+        rx.set(0);
+        ry.set(0);
+      }}
+    >
+      <m.div className="psy-3d relative w-[min(62vw,280px)] lg:w-[320px] aspect-[784/1158]" style={{ rotateX, rotateY }}>
+        <div className="absolute inset-0 translate-x-[5px] translate-y-[5px] rounded-[10px] bg-line" aria-hidden="true" />
+        <AnimatePresence mode="wait" initial={false}>
+          <m.div
+            key={id}
+            className="psy-backface absolute inset-0 rounded-[10px] overflow-hidden shadow-clarvo-elevated border border-line bg-white"
+            initial={{ rotateY: -90, opacity: 0.6 }}
+            animate={{ rotateY: 0, opacity: 1 }}
+            exit={{ rotateY: 90, opacity: 0.6 }}
+            transition={{ duration: 0.3, ease: EASE_FLIP }}
+          >
+            <Image src={src} alt={alt} fill sizes="(min-width: 1024px) 320px, 62vw" className="object-cover" />
+          </m.div>
+        </AnimatePresence>
+      </m.div>
+    </div>
   );
 }

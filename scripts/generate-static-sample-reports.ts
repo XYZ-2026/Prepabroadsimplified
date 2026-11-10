@@ -12,6 +12,8 @@ import {
 } from '../src/config/sample-report-data.config';
 import { adaptReportData } from '../src/app/(main)/psychometric-test/report-engine/adapters';
 import { buildUniversalExecutiveHTMLReport } from '../src/app/(main)/psychometric-test/class10_html_report_builder';
+import { checkReportRender, loadReportHtml, REPORT_PDF_OPTIONS } from '../src/lib/report-pdf-render';
+import { injectSampleWatermark } from '../src/lib/sample-watermark';
 
 async function generateSampleReports() {
   const outputDir = path.resolve(process.cwd(), 'public', 'sample-reports');
@@ -25,7 +27,6 @@ async function generateSampleReports() {
       student: SAMPLE_STUDENT_79,
       variant: 'junior' as const,
       pdfName: 'sample-report-grades-7-9.pdf',
-      coverName: 'cover-grades-7-9.png',
       label: 'Grades 7–9 (Junior Diagnostic Report)',
     },
     {
@@ -33,7 +34,6 @@ async function generateSampleReports() {
       student: SAMPLE_STUDENT_10,
       variant: 'grade10' as const,
       pdfName: 'sample-report-grade-10.pdf',
-      coverName: 'cover-grade-10.png',
       label: 'Grade 10 (Secondary Stream Selection Report)',
     },
     {
@@ -41,7 +41,6 @@ async function generateSampleReports() {
       student: SAMPLE_STUDENT_12,
       variant: 'senior' as const,
       pdfName: 'sample-report-grades-11-12.pdf',
-      coverName: 'cover-grades-11-12.png',
       label: 'Grades 11–12 (Senior University & Career Fitment Report)',
     },
   ];
@@ -82,31 +81,25 @@ async function generateSampleReports() {
       report.variant
     );
 
-    const html = buildUniversalExecutiveHTMLReport(adaptedData);
+    const html = injectSampleWatermark(buildUniversalExecutiveHTMLReport(adaptedData));
     console.log(`  HTML built: ${html.length.toLocaleString()} characters.`);
 
-    await page.setContent(html, { waitUntil: 'domcontentloaded' });
-    await page.evaluateHandle('document.fonts.ready');
+    await loadReportHtml(page, html);
 
-    // 1. Generate full PDF
+    // Fail loudly rather than ship another unstyled or chart-less PDF.
+    const check = await checkReportRender(page);
+    console.log(`  Render check: ${check.pages} pages, tailwind=${check.tailwindApplied}, charts=${check.charts}`);
+    if (check.pages < 1 || !check.tailwindApplied || check.charts < 1) {
+      throw new Error(`Render incomplete for ${report.label}: ${JSON.stringify(check)} (are the Tailwind/Chart.js CDNs reachable?)`);
+    }
+
+    await page.emulateMediaType('print');
     const pdfPath = path.join(outputDir, report.pdfName);
-    const pdfBuffer = await page.pdf({
-      format: 'A4',
-      printBackground: true,
-      margin: { top: 0, right: 0, bottom: 0, left: 0 },
-      preferCSSPageSize: true,
-    });
+    const pdfBuffer = await page.pdf(REPORT_PDF_OPTIONS);
     fs.writeFileSync(pdfPath, pdfBuffer);
     console.log(`  ✅ PDF saved: ${pdfPath} (${(pdfBuffer.length / 1024 / 1024).toFixed(2)} MB)`);
-
-    // 2. Generate cover image (first page)
-    const coverPath = path.join(outputDir, report.coverName);
-    // Clip viewport to exactly page 1 dimensions (794 x 1123)
-    await page.screenshot({
-      path: coverPath,
-      clip: { x: 0, y: 0, width: 794, height: 1123 },
-    });
-    console.log(`  ✅ Cover preview saved: ${coverPath}`);
+    // The cover PNGs in public/sample-reports are intentionally left untouched.
+    await page.emulateMediaType('screen');
   }
 
   await browser.close();

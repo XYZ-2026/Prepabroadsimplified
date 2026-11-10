@@ -4130,7 +4130,7 @@ export function buildClass10ExecutiveHTMLReport(
             new Chart(ctxRadar, {
                 type: 'radar',
                 data: {
-                    labels: ['Openness (${oSc}%)', 'Conscientiousness (${cSc}%)', 'Extraversion (${eSc}%)', 'Agreeableness (${aSc}%)', 'Emotional Stability (${esSc}%)', 'Fluid Logic (${reasSc}%)', 'Visual Learning (${topVarkCode === 'V' ? 90 : 75}%)', 'EQ (${aSc}%)'],
+                    labels: [['Openness', '(${oSc}%)'], ['Conscientiousness', '(${cSc}%)'], ['Extraversion', '(${eSc}%)'], ['Agreeableness', '(${aSc}%)'], ['Emotional Stability', '(${esSc}%)'], ['Fluid Logic', '(${reasSc}%)'], ['Visual Learning', '(${topVarkCode === 'V' ? 90 : 75}%)'], ['EQ', '(${aSc}%)']],
                     datasets: [{
                         label: '${name} Profile',
                         data: [${oSc}, ${cSc}, ${eSc}, ${aSc}, ${esSc}, ${reasSc}, ${topVarkCode === 'V' ? 90 : 75}, ${aSc}],
@@ -4146,6 +4146,7 @@ export function buildClass10ExecutiveHTMLReport(
                     responsive: true,
                     maintainAspectRatio: true,
                     aspectRatio: 1.35,
+                    layout: { padding: { left: 10, right: 10, top: 6, bottom: 6 } },
                     scales: {
                         r: {
                             suggestedMin: 0,

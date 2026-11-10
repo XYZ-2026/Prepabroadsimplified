@@ -1,0 +1,103 @@
+/*
+ * Page-level styles for /psychometric-assessment (Design_psychometric_v2.md).
+ * The hero intro runs in CSS so it starts before hydration (protects LCP).
+ */
+
+/* ── Scoped border reset ────────────────────────────────────────────────────
+ * Tailwind preflight is off in this project, so `border` utilities only set a
+ * width: divs show no border and buttons fall back to the UA "outset" style.
+ * :where() keeps specificity at 0 so every utility still wins. Scoped to
+ * <main> so the shared nav and footer are untouched. */
+:where(.psy-main) *,
+:where(.psy-main) *::before,
+:where(.psy-main) *::after {
+  border-width: 0;
+  border-style: solid;
+  border-color: var(--line, #dde3f0);
+}
+/* Form controls don't inherit type without preflight. */
+:where(.psy-main) :where(button, input, select, textarea) {
+  font: inherit;
+  letter-spacing: inherit;
+}
+
+/* ── Hero intro ─────────────────────────────────────────────────────────── */
+.psy-line {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.08em;
+  margin-bottom: -0.08em;
+}
+.psy-line > span {
+  display: block;
+  animation: psy-rise 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.psy-line:nth-child(2) > span {
+  animation-delay: 0.08s;
+}
+.psy-fade {
+  animation: psy-fade-up 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.psy-photo-in {
+  animation: psy-fade-up-lg 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.15s both;
+}
+
+@keyframes psy-rise {
+  from { transform: translateY(105%); }
+  to { transform: none; }
+}
+@keyframes psy-fade-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes psy-fade-up-lg {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* ── Horizontal swipe rows (phases, report pages) ───────────────────────── */
+/* No `display` here: markup adds `flex` so responsive `lg:hidden` still wins. */
+.psy-swipe {
+  gap: 12px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: 16px;
+  padding-inline: 16px;
+  margin-inline: -16px;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+.psy-swipe::-webkit-scrollbar {
+  display: none;
+}
+.psy-swipe > * {
+  scroll-snap-align: start;
+  flex-shrink: 0;
+}
+
+/* ── 3D helpers ─────────────────────────────────────────────────────────── */
+.psy-3d {
+  transform-style: preserve-3d;
+}
+.psy-backface {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* ── Fallbacks: no JS (see <noscript> in page.tsx) and reduced motion ──── */
+@media (prefers-reduced-motion: reduce) {
+  .psy-line > span,
+  .psy-fade,
+  .psy-photo-in {
+    animation: none;
+  }
+  [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  [data-reveal-path] {
+    stroke-dasharray: none !important;
+    stroke-dashoffset: 0 !important;
+  }
+}

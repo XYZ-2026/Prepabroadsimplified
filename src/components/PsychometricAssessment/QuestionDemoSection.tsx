@@ -1,408 +1,320 @@
 'use client';
 
-import React, { useState, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import { AnimatePresence, m } from 'motion/react';
+import { Check } from 'lucide-react';
 import { PSYCHOMETRIC_CONTENT } from '@/content/psychometricContent';
-import { usePointerFine } from '@/hooks/usePointerFine';
-import { HelpCircle, Check, ArrowRight, Sparkles, Brain, BookOpen } from 'lucide-react';
+import Reveal from './motion/Reveal';
+import { EASE_OUT, springData, springUi } from './motion/tokens';
 
+const content = PSYCHOMETRIC_CONTENT.sampleQuestions;
+
+type TabId = 'personality' | 'reasoning' | 'study';
+const TABS: Array<{ id: TabId; title: string }> = [
+  { id: 'personality', title: content.personality.title },
+  { id: 'reasoning', title: content.reasoning.title },
+  { id: 'study', title: content.studyHabits.title },
+];
+
+// Sequence rotates 90° clockwise each step: up → right → down → left.
+const SHAPES = {
+  up: '24,6 42,38 6,38',
+  right: '42,24 10,42 10,6',
+  down: '24,42 6,10 42,10',
+  left: '6,24 38,6 38,42',
+};
+const REASONING_OPTIONS: Array<{ id: string; points: string }> = [
+  { id: 'A', points: SHAPES.up },
+  { id: 'B', points: SHAPES.right },
+  { id: 'C', points: SHAPES.left },
+  { id: 'D', points: SHAPES.down },
+];
+const REASONING_CORRECT = 'C';
+
+/**
+ * Try a question (spec 5.4). Signature motion: the chosen option springs,
+ * the live trait bar springs to its new value and an "Added to profile" tag
+ * appears for 1.2s.
+ */
 export default function QuestionDemoSection() {
-  const [activeTab, setActiveTab] = useState<'personality' | 'reasoning' | 'study_habits'>('personality');
-  const [personalityScore, setPersonalityScore] = useState<number>(4);
-  const [reasoningAnswer, setReasoningAnswer] = useState<string>('A');
-  const [studyHabitAnswer, setStudyHabitAnswer] = useState<string>('diagrams');
+  const [tab, setTab] = useState<TabId>('personality');
+  const [personality, setPersonality] = useState<number | null>(null);
+  const [reasoning, setReasoning] = useState<string | null>(null);
+  const [study, setStudy] = useState<string | null>(null);
+  const [pulse, setPulse] = useState(0);
+  const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
-  const tabListRef = useRef<HTMLDivElement>(null);
-  const isPointerFine = usePointerFine();
+  const answered = () => setPulse((n) => n + 1);
 
-  const content = PSYCHOMETRIC_CONTENT.sampleQuestions;
-
-  // Accessible keyboard tab navigation
-  const handleKeyDown = (e: React.KeyboardEvent, index: number) => {
-    const tabs: Array<'personality' | 'reasoning' | 'study_habits'> = ['personality', 'reasoning', 'study_habits'];
-    if (e.key === 'ArrowRight') {
-      const nextIndex = (index + 1) % tabs.length;
-      setActiveTab(tabs[nextIndex]);
-      const nextTabEl = tabListRef.current?.querySelectorAll<HTMLButtonElement>('[role="tab"]')[nextIndex];
-      nextTabEl?.focus();
-    } else if (e.key === 'ArrowLeft') {
-      const prevIndex = (index - 1 + tabs.length) % tabs.length;
-      setActiveTab(tabs[prevIndex]);
-      const prevTabEl = tabListRef.current?.querySelectorAll<HTMLButtonElement>('[role="tab"]')[prevIndex];
-      prevTabEl?.focus();
-    }
-  };
-
-  // Trait calculation for live profile bar
-  const getLiveBarInfo = () => {
-    if (activeTab === 'personality') {
-      const pct = (personalityScore / 5) * 100;
+  const bar = (() => {
+    if (tab === 'personality') {
       return {
-        trait: 'Conscientiousness & Structure',
-        value: `${personalityScore}/5`,
-        pct,
-        description: 'Measures preference for planned schedules, method, and structured execution.',
+        trait: content.personality.trait,
+        value: personality ? `${personality} of 5` : null,
+        pct: personality ? personality * 20 : 0,
       };
     }
-    if (activeTab === 'reasoning') {
-      const isCorrect = reasoningAnswer === 'A';
+    if (tab === 'reasoning') {
+      const correct = reasoning === REASONING_CORRECT;
       return {
-        trait: 'Abstract Spatial Agility',
-        value: isCorrect ? 'Optimal logic' : 'Developing pattern',
-        pct: isCorrect ? 92 : 65,
-        description: isCorrect
-          ? 'Identified 90° clockwise rotational deduction accurately.'
-          : 'Selected alternative rotational projection.',
+        trait: content.reasoning.trait,
+        value: reasoning ? (correct ? content.reasoning.correctLabel : content.reasoning.otherLabel) : null,
+        pct: reasoning ? (correct ? 92 : 58) : 0,
       };
     }
-    // Study habits
-    const studyMap: Record<string, { trait: string; pct: number; label: string }> = {
-      diagrams: { trait: 'Visual-Schematic Modality', pct: 90, label: 'High visual retention' },
-      notes: { trait: 'Read/Write Synthesizing', pct: 85, label: 'High verbal retention' },
-      practice: { trait: 'Kinesthetic/Active Trial', pct: 88, label: 'High experiential retention' },
-    };
-    const s = studyMap[studyHabitAnswer] || studyMap.diagrams;
-    return {
-      trait: s.trait,
-      value: s.label,
-      pct: s.pct,
-      description: 'Captures the sensory channel through which the student retains complex concepts.',
-    };
-  };
+    const opt = content.studyHabits.options.find((o) => o.id === study);
+    return { trait: opt ? opt.trait : 'Learning style', value: opt ? `${opt.pct}%` : null, pct: opt ? opt.pct : 0 };
+  })();
 
-  const liveBar = getLiveBarInfo();
+  const onTabKey = (e: React.KeyboardEvent, i: number) => {
+    if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+    e.preventDefault();
+    const next = (i + (e.key === 'ArrowRight' ? 1 : -1) + TABS.length) % TABS.length;
+    setTab(TABS[next].id);
+    tabRefs.current[next]?.focus();
+  };
 
   return (
-    <section
-      aria-label="What a Psychometric Question Looks Like"
-      className="w-full py-16 sm:py-20 lg:py-24 bg-paper border-b border-line text-left"
-    >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
-        {/* Section Header */}
-        <div className="max-w-3xl mb-12 sm:mb-16 space-y-4">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-sky border border-line text-[13px] font-bold text-clarvo-blue font-dmsans">
-            <HelpCircle className="w-3.5 h-3.5" />
-            <span>{content.sectionChip}</span>
-          </div>
-
-          <h2 className="text-3xl sm:text-4xl lg:text-[42px] font-bold font-dmsans text-ink tracking-tight leading-[1.15]">
+    <section aria-label="What a Psychometric Question Looks Like" className="w-full bg-paper border-b border-line">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-20 lg:py-24">
+        <Reveal className="mb-7 sm:mb-10">
+          <h2 className="font-dmsans font-bold text-ink tracking-tight text-[clamp(1.875rem,6vw,3rem)] leading-[1.1] m-0">
             {content.sectionHeadline}
           </h2>
+          <p className="text-[17px] sm:text-[18px] text-muted mt-3 mb-0">{content.sectionSubcopy}</p>
+        </Reveal>
 
-          <p className="text-[17px] sm:text-[18px] text-muted font-dmsans leading-relaxed">
-            {content.sectionSubcopy}
-          </p>
-        </div>
-
-        {/* ── ACCESSIBLE TABLIST (role=tablist) ── */}
-        <div
-          ref={tabListRef}
-          role="tablist"
-          aria-label="Sample Question Categories"
-          className="flex items-center gap-2 sm:gap-3 p-1.5 bg-white border border-line rounded-2xl w-fit mb-8 max-w-full overflow-x-auto shadow-2xs"
-        >
-          {content.tabs.map((tab, idx) => {
-            const isActive = activeTab === tab.id;
-            const tabIcons = {
-              personality: <Sparkles className="w-4 h-4 shrink-0" />,
-              reasoning: <Brain className="w-4 h-4 shrink-0" />,
-              study_habits: <BookOpen className="w-4 h-4 shrink-0" />,
-            };
-
+        {/* Segmented control */}
+        <div role="tablist" aria-label="Sample question types" className="relative grid grid-cols-3 p-1 rounded-full bg-white border border-line mb-5 max-w-md">
+          {TABS.map((t, i) => {
+            const isActive = tab === t.id;
             return (
               <button
-                key={tab.id}
+                key={t.id}
+                ref={(el) => {
+                  tabRefs.current[i] = el;
+                }}
                 role="tab"
-                id={`tab-${tab.id}`}
+                id={`q-tab-${t.id}`}
                 aria-selected={isActive}
-                aria-controls={`panel-${tab.id}`}
+                aria-controls="q-panel"
                 tabIndex={isActive ? 0 : -1}
-                onClick={() => setActiveTab(tab.id as typeof activeTab)}
-                onKeyDown={(e) => handleKeyDown(e, idx)}
                 type="button"
-                className={`flex items-center gap-2 px-4 sm:px-5 py-2.5 rounded-xl text-[14px] font-bold font-dmsans transition-all cursor-pointer whitespace-nowrap ${
-                  isActive
-                    ? 'bg-clarvo-blue text-white shadow-xs'
-                    : 'text-muted hover:text-ink hover:bg-sky/50'
+                onClick={() => setTab(t.id)}
+                onKeyDown={(e) => onTabKey(e, i)}
+                className={`relative h-11 rounded-full border-0 bg-transparent cursor-pointer text-[14px] sm:text-[15px] font-bold transition-colors ${
+                  isActive ? 'text-white' : 'text-muted hover:text-ink'
                 }`}
               >
-                {tabIcons[tab.id as keyof typeof tabIcons]}
-                <span>{tab.title}</span>
+                {isActive && (
+                  <m.span layoutId="q-tab-pill" className="absolute inset-0 rounded-full bg-clarvo-blue" transition={springUi} />
+                )}
+                <span className="relative">{t.title}</span>
               </button>
             );
           })}
         </div>
 
-        {/* ── TABPANEL & LIVE PROFILE BAR CONTAINER ── */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
-          
-          {/* LEFT: INTERACTIVE QUESTION CARD */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-6">
+          {/* Question card */}
           <div
             role="tabpanel"
-            id={`panel-${activeTab}`}
-            aria-labelledby={`tab-${activeTab}`}
-            className="lg:col-span-8 p-6 sm:p-8 xl:p-10 rounded-3xl bg-white border border-line shadow-sm flex flex-col justify-between space-y-6"
+            id="q-panel"
+            aria-labelledby={`q-tab-${tab}`}
+            className="lg:col-span-8 rounded-[28px] bg-white border border-line p-5 sm:p-8 min-h-[300px]"
           >
-            <div>
-              {/* Card Meta & Notice */}
-              <div className="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-line/60">
-                <span className="text-[12px] font-bold text-clarvo-blue bg-sky px-3 py-1 rounded-full">
-                  Sample question
-                </span>
-                <span className="text-[12px] font-semibold text-muted">
-                  {activeTab === 'personality' && 'Phase 1 • Personality Architecture'}
-                  {activeTab === 'reasoning' && 'Phase 2 • Cognitive Processing'}
-                  {activeTab === 'study_habits' && 'Phase 3 • Learning Modalities'}
-                </span>
-              </div>
+            <span className="inline-block px-3 py-1 rounded-full bg-sky text-[13px] font-semibold text-clarvo-blue mb-4">
+              {content.notice}
+            </span>
 
-              {/* ── TAB 1: PERSONALITY LIKERT SCALE ── */}
-              {activeTab === 'personality' && (
-                <div className="space-y-6 pt-4">
-                  <h3 className="text-xl sm:text-2xl font-bold font-dmsans text-ink leading-snug">
-                    &ldquo;When preparing for a major exam, I prefer to build a detailed multi-week study schedule rather than revising spontaneously.&rdquo;
-                  </h3>
-
-                  <p className="text-[14px] text-muted">
-                    Choose the rating that most accurately reflects your natural habit:
-                  </p>
-
-                  <div className="flex items-center justify-between gap-2 pt-2">
-                    {[
-                      { num: 1, label: 'Strongly disagree' },
-                      { num: 2, label: 'Disagree' },
-                      { num: 3, label: 'Neutral' },
-                      { num: 4, label: 'Agree' },
-                      { num: 5, label: 'Strongly agree' },
-                    ].map((opt) => {
-                      const isSelected = personalityScore === opt.num;
-                      return (
-                        <button
-                          key={opt.num}
-                          type="button"
-                          onClick={() => setPersonalityScore(opt.num)}
-                          className={`flex-1 flex flex-col items-center justify-center p-3 sm:p-4 rounded-2xl border transition-all cursor-pointer ${
-                            isSelected
-                              ? 'bg-clarvo-blue text-white border-clarvo-blue shadow-md scale-102'
-                              : 'bg-paper text-ink border-line hover:border-clarvo-blue/50 hover:bg-sky/40'
-                          } ${isPointerFine ? 'hover:scale-[1.02] active:scale-[0.98]' : 'active:scale-95'}`}
-                          aria-label={opt.label}
-                        >
-                          <span className="text-lg sm:text-xl font-bold mb-1">
-                            {isSelected ? <Check className="w-5 h-5 stroke-[3] inline" /> : opt.num}
-                          </span>
-                          <span
-                            className={`text-[12px] font-medium text-center hidden sm:block ${
-                              isSelected ? 'text-white/90' : 'text-muted'
+            <AnimatePresence mode="wait" initial={false}>
+              <m.div
+                key={tab}
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                transition={{ duration: 0.2, ease: EASE_OUT }}
+              >
+                {tab === 'personality' && (
+                  <fieldset className="border-0 p-0 m-0">
+                    <legend className="text-[20px] sm:text-[24px] font-bold text-ink leading-snug mb-5 p-0">
+                      “{content.personality.prompt}”
+                    </legend>
+                    <div className="grid grid-cols-5 gap-2">
+                      {content.personality.scaleLabels.map((label, i) => {
+                        const value = i + 1;
+                        const selected = personality === value;
+                        return (
+                          <m.button
+                            key={label}
+                            type="button"
+                            aria-label={label}
+                            aria-pressed={selected}
+                            onClick={() => {
+                              setPersonality(value);
+                              answered();
+                            }}
+                            whileTap={{ scale: 0.94 }}
+                            animate={{ scale: selected ? 1.06 : 1 }}
+                            transition={springUi}
+                            className={`h-14 sm:h-16 rounded-[14px] border text-[18px] font-bold cursor-pointer transition-colors ${
+                              selected ? 'bg-clarvo-blue border-clarvo-blue text-white' : 'bg-paper border-line text-ink hover:border-clarvo-blue/50'
                             }`}
                           >
+                            {value}
+                          </m.button>
+                        );
+                      })}
+                    </div>
+                    <div className="flex justify-between text-[13px] text-muted mt-2">
+                      <span>{content.personality.scaleEnds[0]}</span>
+                      <span>{content.personality.scaleEnds[1]}</span>
+                    </div>
+                  </fieldset>
+                )}
+
+                {tab === 'reasoning' && (
+                  <fieldset className="border-0 p-0 m-0">
+                    <legend className="text-[20px] sm:text-[24px] font-bold text-ink leading-snug mb-5 p-0">
+                      {content.reasoning.prompt}
+                    </legend>
+                    <div className="flex items-center justify-center gap-2 sm:gap-3 mb-5" aria-label="Pattern: triangle pointing up, right, down, then unknown">
+                      {[SHAPES.up, SHAPES.right, SHAPES.down].map((pts, i) => (
+                        <Tile key={i} points={pts} />
+                      ))}
+                      <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-[14px] border-2 border-dashed border-clarvo-blue bg-sky flex items-center justify-center text-[22px] font-bold text-clarvo-blue">
+                        ?
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-4 gap-2">
+                      {REASONING_OPTIONS.map((opt) => {
+                        const selected = reasoning === opt.id;
+                        return (
+                          <m.button
+                            key={opt.id}
+                            type="button"
+                            aria-label={`Option ${opt.id}`}
+                            aria-pressed={selected}
+                            onClick={() => {
+                              setReasoning(opt.id);
+                              answered();
+                            }}
+                            whileTap={{ scale: 0.94 }}
+                            animate={{ scale: selected ? 1.06 : 1 }}
+                            transition={springUi}
+                            className={`h-20 rounded-[14px] border flex flex-col items-center justify-center gap-1 cursor-pointer transition-colors ${
+                              selected ? 'bg-clarvo-blue border-clarvo-blue text-white' : 'bg-paper border-line text-ink hover:border-clarvo-blue/50'
+                            }`}
+                          >
+                            <svg width="30" height="30" viewBox="0 0 48 48" aria-hidden="true">
+                              <polygon points={opt.points} fill={selected ? '#FFFFFF' : '#1258DE'} />
+                            </svg>
+                            <span className="text-[13px] font-bold">{opt.id}</span>
+                          </m.button>
+                        );
+                      })}
+                    </div>
+                  </fieldset>
+                )}
+
+                {tab === 'study' && (
+                  <fieldset className="border-0 p-0 m-0">
+                    <legend className="text-[20px] sm:text-[24px] font-bold text-ink leading-snug mb-5 p-0">
+                      “{content.studyHabits.prompt}”
+                    </legend>
+                    <div className="space-y-2.5">
+                      {content.studyHabits.options.map((opt) => {
+                        const selected = study === opt.id;
+                        return (
+                          <m.button
+                            key={opt.id}
+                            type="button"
+                            aria-pressed={selected}
+                            onClick={() => {
+                              setStudy(opt.id);
+                              answered();
+                            }}
+                            whileTap={{ scale: 0.98 }}
+                            transition={springUi}
+                            className={`w-full min-h-[56px] flex items-center gap-3 px-4 rounded-[14px] border text-left text-[16px] font-semibold cursor-pointer transition-colors ${
+                              selected ? 'bg-sky border-clarvo-blue text-ink' : 'bg-paper border-line text-ink hover:border-clarvo-blue/50'
+                            }`}
+                          >
+                            <span
+                              className={`w-6 h-6 rounded-full border flex items-center justify-center shrink-0 ${
+                                selected ? 'bg-clarvo-blue border-clarvo-blue text-white' : 'bg-white border-line'
+                              }`}
+                            >
+                              {selected && <Check className="w-3.5 h-3.5" strokeWidth={3} aria-hidden="true" />}
+                            </span>
                             {opt.label}
-                          </span>
-                        </button>
-                      );
-                    })}
-                  </div>
-                  <div className="flex justify-between items-center text-[12px] text-muted font-medium sm:hidden px-1">
-                    <span>Strongly disagree</span>
-                    <span>Strongly agree</span>
-                  </div>
-                </div>
-              )}
-
-              {/* ── TAB 2: REASONING SVG PATTERN PUZZLE ── */}
-              {activeTab === 'reasoning' && (
-                <div className="space-y-6 pt-4">
-                  <h3 className="text-xl sm:text-2xl font-bold font-dmsans text-ink leading-snug">
-                    Which geometric tile logically completes the rotational sequence?
-                  </h3>
-
-                  {/* SVG 2x2 Matrix Puzzle */}
-                  <div className="p-4 sm:p-6 bg-paper rounded-2xl border border-line flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-10">
-                    <div className="grid grid-cols-2 gap-3 w-44 h-44">
-                      {/* Tile 1: Triangle pointing UP (0°) */}
-                      <div className="bg-white rounded-xl border border-line flex items-center justify-center p-3 shadow-2xs">
-                        <svg width="48" height="48" viewBox="0 0 48 48">
-                          <polygon points="24,6 42,38 6,38" fill="#1258DE" />
-                        </svg>
-                      </div>
-                      {/* Tile 2: Triangle pointing RIGHT (90°) */}
-                      <div className="bg-white rounded-xl border border-line flex items-center justify-center p-3 shadow-2xs">
-                        <svg width="48" height="48" viewBox="0 0 48 48">
-                          <polygon points="42,24 10,42 10,6" fill="#1258DE" />
-                        </svg>
-                      </div>
-                      {/* Tile 3: Triangle pointing DOWN (180°) */}
-                      <div className="bg-white rounded-xl border border-line flex items-center justify-center p-3 shadow-2xs">
-                        <svg width="48" height="48" viewBox="0 0 48 48">
-                          <polygon points="24,42 6,10 42,10" fill="#1258DE" />
-                        </svg>
-                      </div>
-                      {/* Tile 4: Question Mark */}
-                      <div className="bg-sky/60 rounded-xl border-2 border-dashed border-clarvo-blue flex items-center justify-center">
-                        <span className="text-2xl font-bold text-clarvo-blue">?</span>
-                      </div>
+                          </m.button>
+                        );
+                      })}
                     </div>
-
-                    <div className="text-left text-[13px] text-muted max-w-xs space-y-1">
-                      <span className="font-bold text-ink block">Inductive Pattern Rule</span>
-                      <span>The geometric polygon is rotating clockwise by 90° with every step in the grid.</span>
-                    </div>
-                  </div>
-
-                  {/* 4 Answer Options */}
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                    {[
-                      { id: 'A', label: 'Option A (Left 270°)', isCorrect: true, points: '6,24 38,6 38,42' },
-                      { id: 'B', label: 'Option B (Up 0°)', isCorrect: false, points: '24,6 42,38 6,38' },
-                      { id: 'C', label: 'Option C (Right 90°)', isCorrect: false, points: '42,24 10,42 10,6' },
-                      { id: 'D', label: 'Option D (Down 180°)', isCorrect: false, points: '24,42 6,10 42,10' },
-                    ].map((opt) => {
-                      const isSelected = reasoningAnswer === opt.id;
-                      return (
-                        <button
-                          key={opt.id}
-                          type="button"
-                          onClick={() => setReasoningAnswer(opt.id)}
-                          className={`flex flex-col items-center justify-center p-3 rounded-2xl border transition-all cursor-pointer ${
-                            isSelected
-                              ? 'bg-clarvo-blue text-white border-clarvo-blue shadow-md'
-                              : 'bg-paper text-ink border-line hover:border-clarvo-blue/50 hover:bg-sky/40'
-                          } ${isPointerFine ? 'hover:scale-[1.02] active:scale-[0.98]' : 'active:scale-95'}`}
-                        >
-                          <svg width="36" height="36" viewBox="0 0 48 48" className="mb-2">
-                            <polygon points={opt.points} fill={isSelected ? '#ffffff' : '#1258DE'} />
-                          </svg>
-                          <span className="text-xs font-bold">{opt.id}</span>
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-              )}
-
-              {/* ── TAB 3: STUDY HABITS SCENARIO ── */}
-              {activeTab === 'study_habits' && (
-                <div className="space-y-6 pt-4">
-                  <h3 className="text-xl sm:text-2xl font-bold font-dmsans text-ink leading-snug">
-                    &ldquo;You encounter a challenging topic in Physics that you do not understand during class. What is your initial reaction?&rdquo;
-                  </h3>
-
-                  <div className="space-y-3 pt-2">
-                    {[
-                      {
-                        id: 'diagrams',
-                        label: 'Option A — Visual Systems',
-                        desc: 'Search for an animated video or visual diagram explaining the underlying system mechanics.',
-                        tag: 'Visual Modality',
-                      },
-                      {
-                        id: 'notes',
-                        label: 'Option B — Textual Summary',
-                        desc: 'Re-read the textbook chapters and write structured summary notes in your own words.',
-                        tag: 'Read/Write Modality',
-                      },
-                      {
-                        id: 'practice',
-                        label: 'Option C — Hands-on Practice',
-                        desc: 'Attempt numerical practice problems immediately to learn by working through mistakes.',
-                        tag: 'Kinesthetic Modality',
-                      },
-                    ].map((opt) => {
-                      const isSelected = studyHabitAnswer === opt.id;
-                      return (
-                        <button
-                          key={opt.id}
-                          type="button"
-                          onClick={() => setStudyHabitAnswer(opt.id)}
-                          className={`w-full flex items-start gap-4 p-4 rounded-2xl border text-left transition-all cursor-pointer ${
-                            isSelected
-                              ? 'bg-sky/60 border-clarvo-blue shadow-sm'
-                              : 'bg-paper text-ink border-line hover:border-clarvo-blue/40'
-                          } ${isPointerFine ? 'hover:translate-x-1' : ''}`}
-                        >
-                          <span
-                            className={`flex items-center justify-center w-6 h-6 rounded-full border text-xs font-bold shrink-0 mt-0.5 ${
-                              isSelected
-                                ? 'bg-clarvo-blue border-clarvo-blue text-white'
-                                : 'bg-white border-line text-muted'
-                            }`}
-                          >
-                            {isSelected ? <Check className="w-3.5 h-3.5 stroke-[3]" /> : opt.id.charAt(0).toUpperCase()}
-                          </span>
-                          <div className="space-y-0.5">
-                            <div className="flex items-center gap-2">
-                              <span className="font-bold text-[14px] text-ink">{opt.label}</span>
-                              <span className="text-[12px] font-semibold text-clarvo-blue bg-white border border-line px-2 py-0.5 rounded-md">
-                                {opt.tag}
-                              </span>
-                            </div>
-                            <p className="text-[13.5px] text-muted leading-relaxed">{opt.desc}</p>
-                          </div>
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-              )}
-            </div>
-
-            {/* Bottom Reminder */}
-            <div className="pt-4 border-t border-line text-[13px] text-muted flex items-center justify-between">
-              <span>{content.notice}</span>
-              <span className="text-clarvo-blue font-bold flex items-center gap-1">
-                30 modules in full assessment <ArrowRight className="w-3.5 h-3.5" />
-              </span>
-            </div>
+                  </fieldset>
+                )}
+              </m.div>
+            </AnimatePresence>
           </div>
 
-          {/* RIGHT: LIVE PROFILE CALIBRATION BAR */}
-          <div className="lg:col-span-4 p-6 sm:p-8 rounded-3xl bg-white border border-line shadow-sm flex flex-col justify-between space-y-6">
-            <div>
-              <div className="flex items-center gap-2 pb-3 border-b border-line">
-                <span className="w-2.5 h-2.5 rounded-full bg-clarvo-blue animate-pulse" />
-                <span className="text-[12px] font-bold text-clarvo-blue uppercase tracking-wider">
-                  Live Profile Calibration
-                </span>
-              </div>
-
-              <div className="space-y-6 pt-5">
-                <div>
-                  <span className="text-[13px] text-muted font-medium block mb-1">
-                    Mapped Dimension
-                  </span>
-                  <h4 className="text-xl font-bold font-dmsans text-ink">
-                    {liveBar.trait}
-                  </h4>
-                </div>
-
-                {/* Animated Progress Bar */}
-                <div className="space-y-2">
-                  <div className="flex justify-between items-center text-[13px]">
-                    <span className="font-semibold text-muted">Evaluation Vector</span>
-                    <span className="font-bold text-clarvo-blue font-mono">{liveBar.value}</span>
-                  </div>
-                  <div className="w-full h-3 bg-sky rounded-full overflow-hidden p-0.5 border border-line/60">
-                    <div
-                      className="h-full bg-clarvo-blue rounded-full transition-all duration-400 ease-out"
-                      style={{ width: `${liveBar.pct}%` }}
-                    />
-                  </div>
-                </div>
-
-                <div className="p-4 rounded-2xl bg-paper border border-line text-[13px] text-muted leading-relaxed">
-                  {liveBar.description}
-                </div>
-              </div>
-            </div>
-
-            <div className="p-4 rounded-2xl bg-sky/50 border border-line text-[13px] text-clarvo-blue font-semibold">
-              In the real evaluation, responses across 30 modules are synthesized to generate your full stream and career matrix.
-            </div>
-          </div>
-
+          {/* Live trait bar */}
+          <LiveBar trait={bar.trait} value={bar.value} pct={bar.pct} pulse={pulse} />
         </div>
-
       </div>
     </section>
+  );
+}
+
+function Tile({ points }: { points: string }) {
+  return (
+    <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-[14px] border border-line bg-white flex items-center justify-center">
+      <svg width="32" height="32" viewBox="0 0 48 48" aria-hidden="true">
+        <polygon points={points} fill="#1258DE" />
+      </svg>
+    </div>
+  );
+}
+
+function LiveBar({ trait, value, pct, pulse }: { trait: string; value: string | null; pct: number; pulse: number }) {
+  const [showTag, setShowTag] = useState(false);
+
+  useEffect(() => {
+    if (pulse === 0) return;
+    setShowTag(true);
+    const t = setTimeout(() => setShowTag(false), 1200);
+    return () => clearTimeout(t);
+  }, [pulse]);
+
+  return (
+    <div className="lg:col-span-4 rounded-[28px] bg-white border border-line p-5 sm:p-6 flex flex-col justify-center" aria-live="polite">
+      <div className="flex items-center justify-between gap-2 mb-2 min-h-[28px]">
+        <span className="text-[13px] font-semibold text-muted">Live profile</span>
+        <AnimatePresence>
+          {showTag && (
+            <m.span
+              key={pulse}
+              initial={{ opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -6 }}
+              transition={{ duration: 0.25, ease: EASE_OUT }}
+              className="px-2.5 py-1 rounded-full bg-sky text-[13px] font-semibold text-clarvo-blue"
+            >
+              + {PSYCHOMETRIC_CONTENT.sampleQuestions.addedLabel}
+            </m.span>
+          )}
+        </AnimatePresence>
+      </div>
+      <div className="text-[19px] font-bold text-ink mb-3">{trait}</div>
+      <div className="h-3 rounded-full bg-sky overflow-hidden">
+        <m.div
+          className="h-full rounded-full bg-clarvo-blue origin-left"
+          initial={false}
+          animate={{ scaleX: pct / 100 }}
+          transition={springData}
+        />
+      </div>
+      <div className="text-[14px] font-semibold text-clarvo-blue mt-2 min-h-[20px]">{value ?? 'Pick an answer'}</div>
+    </div>
   );
 }

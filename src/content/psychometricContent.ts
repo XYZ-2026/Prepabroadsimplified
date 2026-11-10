@@ -1,603 +1,368 @@
 /**
  * Psychometric Assessment Content & Fact Store
  * ─────────────────────────────────────────────────────────────────────────────
- * Specifications: DESIGN_PSYCHOMETRIC.md (Sections 1, 2, 4, 5, 6, 7, 8, 9, 10, 11, 12)
+ * Spec: src/app/(main)/Design_psychometric_v2.md (copy budgets in section 2).
+ * Components never hard-code copy; everything visible on /psychometric-assessment lives here.
  *
  * Rules:
- * 1. Claims Policy:
- *    - No "Zero subjective bias".
- *    - No unverified "objective", "empirical", or "verified" claims.
- *    - No unsupported norming claims (e.g. "national norms", "50,000+").
- *    - Educational guidance terminology only ("guidance, not diagnosis"). No clinical language.
- *    - Sample reports use fictional student note: "Sample reports use a fictional student."
- * 2. Owner Facts:
- *    - Facts not yet confirmed by the project owner are strictly `null`.
- *    - Elements that depend on a `null` value must render nothing.
- * 3. Phase Names:
- *    - Must strictly match the report:
- *      1. "Personality architecture"
- *      2. "Cognitive processing"
- *      3. "Learning & execution"
- *      4. "Stream & career alignment"
- *    - Never use "Academic Execution" or "Leadership & Alignment".
- * 4. Typography:
- *    - Sentence case throughout. No all-caps eyebrows.
+ * 1. Claims policy (carried over from Design_psychometric.md):
+ *    - No "objective", "empirical", "verified", norm sizes or certification claims.
+ *    - "Guidance, not diagnosis". No clinical language.
+ *    - Sample reports use a fictional student.
+ * 2. Owner facts are `null` until the owner confirms them in writing.
+ *    Anything that depends on a `null` fact renders nothing.
+ * 3. Phase names match the report exactly.
+ * 4. Copy budgets: headline ≤ 8 words, sub ≤ 20 words, card body ≤ 12 words, list item ≤ 8 words.
  */
 
 export interface PhaseContent {
   id: string;
-  stepNumber: string; // e.g. "Phase 1"
+  number: number;
   name: string;
   modules: string; // e.g. "Modules 1 to 10"
-  subtitle: string;
-  whatItMeasures: string[];
-  whatTheReportShows: string;
+  axisLabel: string; // short radar label
+  lookingAt: string; // ≤ 10 words
+  chips: [string, string, string];
+  inReport: string; // ≤ 12 words
+  howMeasured: string[]; // collapsed by default
   photo: string;
-  sampleMetric: {
-    label: string;
-    value: string;
-    note: string;
-  };
+  photoAlt: string;
 }
 
 export interface SampleReportItem {
   id: 'junior' | 'grade10' | 'senior';
   gradeBadge: string;
   gradeTitle: string;
-  subtitle: string;
   pages: string;
-  description: string;
-  highlights: string[];
+  highlights: [string, string, string];
   pdfUrl: string;
   browserUrl: string;
   coverImage: string;
-  thumbnails: string[];
   isAvailable: boolean;
 }
 
-export interface QuestionSampleTab {
-  id: 'personality' | 'reasoning' | 'study_habits';
+export interface ReportPart {
+  id: string;
   title: string;
-  subtitle: string;
-  type: string;
-  prompt: string;
-  options: Array<{
-    label: string;
-    value: number | string;
-    description?: string;
-  }>;
-  feedbackPreview: string;
+  line: string; // ≤ 8 words
+  page: number;
+  image: string;
 }
 
 export interface JourneyStep {
   step: number;
   title: string;
-  description: string;
+  line: string; // ≤ 10 words
   photo: string | null;
-  photoAlt?: string;
-  highlight?: string;
+  photoAlt: string;
+}
+
+export interface FaqItem {
+  question: string;
+  answer: string; // ≤ 40 words
 }
 
 export const PSYCHOMETRIC_CONTENT = {
-  // ── 1. KNOWN VS OWNER FACTS (Section 1) ───────────────────────────────────
+  // ── Facts ────────────────────────────────────────────────────────────────
   facts: {
-    // Known verified facts
     modulesCount: 30,
     phasesCount: 4,
     grade10FullReportPages: 56,
     grade10ExecutivePages: 15,
-    frameworksUsed: [
-      'Big Five dimensions',
-      'MBTI-style cognitive preferences',
-      'VARK sensory modalities',
-      'Holland RIASEC vocational codes',
-      'Differential cognitive aptitude battery',
-    ] as const,
-    counsellingSessionDuration: 'Flexible 45-minute Zoom sessions',
+    counsellingSessionDuration: '45-minute',
     studentsGuided: '15,000+',
 
-    // Owner facts (Null until project owner confirms in writing)
-    testDuration: null as string | null, // e.g. "{{duration}}" -> null: render nothing
-    numberOfQuestions: null as number | null, // e.g. "{{questions}}" -> null: render nothing
-    pricing: null as string | null, // e.g. "{{pricing}}" -> null: render nothing
-    parentQuestionnaireRole: null as string | null, // e.g. "{{parent_role}}" -> null: render nothing
-    reportDeliveryTime: null as string | null, // e.g. "{{delivery}}" -> null: render nothing
-    phasesGrades79: null as string | null, // e.g. "{{phases_7_9}}" -> null
-    phasesGrades1112: null as string | null, // e.g. "{{phases_11_12}}" -> null
-    pagesGrades79: null as number | null, // e.g. "{{pages_7_9}}" -> null (until built)
-    pagesGrades1112: null as number | null, // e.g. "{{pages_11_12}}" -> null (until built)
+    // Owner facts: null until confirmed. Render nothing when null.
+    testDuration: null as string | null,
+    numberOfQuestions: null as number | null,
+    pricing: null as string | null,
+    parentQuestionnaireRole: null as string | null,
+    reportDeliveryTime: null as string | null,
+    phasesGrades79: null as string | null,
+    phasesGrades1112: null as string | null,
+    pagesGrades79: null as number | null,
+    pagesGrades1112: null as number | null,
   },
 
-  // ── 2. HERO SECTION (Section 4) ───────────────────────────────────────────
+  // ── Hero ─────────────────────────────────────────────────────────────────
   hero: {
-    chip: 'Psychometric assessment, Grades 7 to 12',
-    headline: 'Know how your child thinks, learns and decides.',
-    subcopy:
-      'A 30-module online assessment that measures personality, reasoning, study habits and interests, then turns the results into a clear stream and career roadmap your family can talk through together.',
+    chip: 'Grades 7 to 12 assessment',
+    headlineLines: ['Know how your child', 'thinks, learns and decides.'] as const,
+    subcopy: 'A 30-module online assessment that turns answers into a clear stream and career plan.',
     ctas: {
-      primary: {
-        label: 'Start assessment',
-        href: '/psychometric-test',
-      },
-      secondary: {
-        label: 'View a sample report',
-        href: '#sample-reports',
-      },
-      tertiary: {
-        label: 'Book a consultation',
-        href: '/book-a-demo',
-      },
+      primary: { label: 'Start assessment', href: '/psychometric-test' },
+      secondary: { label: 'View a sample report', href: '#sample-reports' },
+      tertiary: { label: 'Book a consultation', href: '/book-a-demo' },
     },
-    threeStepLine: [
-      { step: 1, label: 'Your child answers' },
-      { step: 2, label: 'We build a profile' },
-      { step: 3, label: 'Your family gets a plan' },
-    ],
     photo: {
-      src: '/images/psychometric/psy-01-hero-family-cutout.png',
-      alt: 'Parent and student discussing academic assessment on a laptop',
-      mode: 'cutout' as const,
+      src: '/images/psychometric/psy-01-hero-family-cutout.webp',
+      alt: 'A parent and student looking at assessment results on a laptop',
     },
-    overlayCards: {
-      profileCard: {
-        label: 'Sample result',
-        traits: [
-          { name: 'Conscientiousness', score: 88 },
-          { name: 'Reasoning', score: 84 },
-          { name: 'Openness', score: 79 },
-        ],
-      },
-      sampleQuestionCard: {
-        label: 'Sample question',
-        question: 'When solving a complex math problem, I prefer to sketch a diagram first.',
-        scale: [1, 2, 3, 4, 5],
-        selectedAnswer: 4,
-      },
+    profileCard: {
+      label: 'Sample result',
+      traits: [
+        { name: 'Conscientiousness', score: 88 },
+        { name: 'Reasoning', score: 84 },
+        { name: 'Openness', score: 79 },
+      ],
     },
   },
 
-  // ── 3. WHAT IT IS / IS NOT (Section 5) ────────────────────────────────────
+  // ── Is / is not ──────────────────────────────────────────────────────────
   whatItIs: {
-    headline: 'What a psychometric assessment is — and what it is not.',
-    subcopy: 'Used to guide, not to label.',
-    isList: [
-      'A structured set of questions about how a student thinks, behaves and learns',
-      'Compared with students of the same age group',
-      'Used to guide stream choices, subject combinations and study habits',
-    ],
-    isNotList: [
-      'A school exam with pass or fail marks',
-      'An IQ test that defines an intelligence ceiling',
-      'A medical or clinical diagnosis',
+    headline: 'Not an exam. A map.',
+    rows: [
+      { not: 'A school exam', is: 'No pass or fail' },
+      { not: 'An IQ score', is: 'How they reason' },
+      { not: 'A diagnosis', is: 'Guidance, not labels' },
     ],
   },
 
-  // ── 4. THE FOUR PHASES (Section 6) ────────────────────────────────────────
+  // ── Four phases ──────────────────────────────────────────────────────────
   phases: {
-    sectionHeadline: 'Four phases. Thirty dedicated modules.',
-    sectionSubcopy:
-      'Rather than relying on one-dimensional surveys, the assessment sequences evaluation across four distinct pillars to understand both how a student thinks and how they learn.',
+    sectionHeadline: 'Four phases. One complete profile.',
     grade10Notice: 'Shown for Grade 10',
+    lookingAtLabel: 'What it looks at',
+    inReportLabel: 'In the report',
+    disclosureLabel: 'How it’s measured',
     items: [
       {
         id: 'phase-1',
-        stepNumber: 'Phase 1',
+        number: 1,
         name: 'Personality architecture',
         modules: 'Modules 1 to 10',
-        subtitle: 'Behavioral drivers and cognitive persistence',
-        whatItMeasures: [
-          'Big Five dimensions and emotional stability under academic deadlines',
-          'Self-directed drive, persistence and focus recovery',
-          'How the student naturally handles unfamiliar academic challenges',
+        axisLabel: 'Personality',
+        lookingAt: 'How your child handles pressure, effort and new challenges.',
+        chips: ['Big Five', 'Persistence', 'Focus'],
+        inReport: 'Natural study habits and how they hold up under pressure.',
+        howMeasured: [
+          'Big Five traits and stability under deadlines',
+          'Self-drive, persistence and focus recovery',
+          'Response to unfamiliar academic challenges',
         ],
-        whatTheReportShows:
-          'A trait baseline detailing natural study habits and persistence patterns under pressure.',
-        photo: '/images/psychometric/psy-02.png',
-        sampleMetric: {
-          label: 'Conscientiousness and persistence indicator',
-          value: 'Structured execution',
-          note: 'Shows high self-directed persistence and methodical study follow-through.',
-        },
+        photo: '/images/psychometric/psy-02.webp',
+        photoAlt: 'Student working through a personality questionnaire',
       },
       {
         id: 'phase-2',
-        stepNumber: 'Phase 2',
+        number: 2,
         name: 'Cognitive processing',
         modules: 'Modules 11 to 20',
-        subtitle: 'Abstract pattern recognition and fluid logic',
-        whatItMeasures: [
-          'Numerical pattern deduction and computational stamina',
-          'Spatial visualization and 3D geometric intuition',
-          'Verbal synthesis and textual argument comprehension',
+        axisLabel: 'Reasoning',
+        lookingAt: 'How your child reasons with numbers, shapes and words.',
+        chips: ['Numerical', 'Spatial', 'Verbal'],
+        inReport: 'Problem-solving strengths across maths, visual and verbal tasks.',
+        howMeasured: [
+          'Number patterns and calculation stamina',
+          'Spatial and 3D visualisation',
+          'Reading and reasoning about arguments',
         ],
-        whatTheReportShows:
-          'Problem-solving agility and logic preferences across quantitative and verbal domains.',
-        photo: '/images/psychometric/psy-03.png',
-        sampleMetric: {
-          label: 'Spatial and abstract pattern agility',
-          value: 'Visual logic preference',
-          note: 'Rapid inductive reasoning and strong visual pattern isolation.',
-        },
+        photo: '/images/psychometric/psy-03.webp',
+        photoAlt: 'Student solving a geometric tangram puzzle',
       },
       {
         id: 'phase-3',
-        stepNumber: 'Phase 3',
+        number: 3,
         name: 'Learning & execution',
         modules: 'Modules 21 to 28',
-        subtitle: 'VARK sensory modalities and revision stamina',
-        whatItMeasures: [
-          'VARK sensory modalities (visual, auditory, read/write, kinesthetic)',
-          'Distraction thresholds and deep-work recovery',
-          'Study schedule time-boxing and note-structuring habits',
+        axisLabel: 'Learning',
+        lookingAt: 'How your child learns best and stays focused.',
+        chips: ['VARK', 'Focus', 'Study planning'],
+        inReport: 'The study format and pace that help them remember most.',
+        howMeasured: [
+          'Visual, auditory, reading and hands-on preferences',
+          'Distraction limits and deep-work recovery',
+          'Scheduling and note-taking habits',
         ],
-        whatTheReportShows:
-          'The exact sensory format and pacing in which the student absorbs and retains material most reliably.',
-        photo: '/images/psychometric/psy-04.png',
-        sampleMetric: {
-          label: 'Primary learning modality (VARK)',
-          value: 'Visual-schematic preference',
-          note: 'Strongest retention achieved through system diagrams, schematics, and structured tables.',
-        },
+        photo: '/images/psychometric/psy-04.webp',
+        photoAlt: 'Student studying with diagrams and notes',
       },
       {
         id: 'phase-4',
-        stepNumber: 'Phase 4',
+        number: 4,
         name: 'Stream & career alignment',
         modules: 'Modules 29 to 30',
-        subtitle: 'Holland RIASEC vocational mapping and stream options',
-        whatItMeasures: [
-          'Holland RIASEC interest codes (Realistic, Investigative, Artistic, Social, Enterprising, Conventional)',
-          'High school stream fitment (PCM, PCB, Commerce, Humanities)',
-          'Subject combination options and future undergraduate degree directions',
+        axisLabel: 'Careers',
+        lookingAt: 'Which streams and careers fit their interests and strengths.',
+        chips: ['Holland RIASEC', 'Streams', 'Subjects'],
+        inReport: 'Stream fit across PCM, PCB, Commerce and Humanities.',
+        howMeasured: [
+          'Holland RIASEC interest codes',
+          'Fit with PCM, PCB, Commerce and Humanities',
+          'Subject combinations and degree directions',
         ],
-        whatTheReportShows:
-          'Compatibility alignment across Class 11 academic streams and target university clusters.',
-        photo: '/images/psychometric/psy-05.png',
-        sampleMetric: {
-          label: 'Secondary stream alignment',
-          value: 'Science + Computing focus',
-          note: 'Demonstrates strong synergy between computational reasoning and analytical sciences.',
-        },
+        photo: '/images/psychometric/psy-05.webp',
+        photoAlt: 'Student exploring career and stream options',
       },
     ] as PhaseContent[],
   },
 
-  // ── 5. WHAT A QUESTION LOOKS LIKE (Section 7) ─────────────────────────────
+  // ── Try a question ───────────────────────────────────────────────────────
   sampleQuestions: {
-    sectionChip: 'Interactive samples',
-    sectionHeadline: 'What a question looks like',
-    sectionSubcopy:
-      'Try three sample items. There are no trick questions or pass-fail marks. Answer honestly to see how traits map into your profile.',
-    notice: 'Sample question — for demonstration only',
-    tabs: [
-      {
-        id: 'personality',
-        title: 'Personality',
-        subtitle: 'Behavioral self-reflection',
-        type: '5-point Likert scale',
-        prompt:
-          'When preparing for a major exam, I prefer to build a detailed multi-week study schedule rather than revising spontaneously.',
-        options: [
-          { label: 'Strongly disagree', value: 1 },
-          { label: 'Disagree', value: 2 },
-          { label: 'Neutral', value: 3 },
-          { label: 'Agree', value: 4 },
-          { label: 'Strongly agree', value: 5 },
-        ],
-        feedbackPreview: 'Reflects your approach to structure, deadlines, and conscientiousness.',
-      },
-      {
-        id: 'reasoning',
-        title: 'Reasoning',
-        subtitle: 'Pattern-completion logic',
-        type: 'Pattern puzzle',
-        prompt:
-          'Look at the sequence below: which shape logically completes the pattern rotation?',
-        options: [
-          { label: 'Option A (90° clockwise)', value: 'A' },
-          { label: 'Option B (180° inversion)', value: 'B' },
-          { label: 'Option C (Horizontal mirror)', value: 'C' },
-          { label: 'Option D (Diagonal rotation)', value: 'D' },
-        ],
-        feedbackPreview: 'Maps visual-spatial inductive reasoning agility.',
-      },
-      {
-        id: 'study_habits',
-        title: 'Study habits',
-        subtitle: 'Realistic student scenario',
-        type: 'Decision scenario',
-        prompt:
-          'You encounter a challenging topic in Physics that you do not understand during class. What is your initial reaction?',
-        options: [
-          {
-            label: 'Option 1',
-            value: 'diagrams',
-            description: 'Search for an animated video or visual diagram explaining the underlying system.',
-          },
-          {
-            label: 'Option 2',
-            value: 'notes',
-            description: 'Re-read the textbook chapters and write structured summary notes.',
-          },
-          {
-            label: 'Option 3',
-            value: 'practice',
-            description: 'Attempt numerical practice problems immediately to learn by working through mistakes.',
-          },
-        ],
-        feedbackPreview: 'Reveals your primary VARK sensory learning preference.',
-      },
-    ] as QuestionSampleTab[],
+    sectionHeadline: 'Try a sample question',
+    sectionSubcopy: 'Three short examples. Each answer shapes the profile.',
+    notice: 'Sample question',
+    addedLabel: 'Added to profile',
+    personality: {
+      title: 'Personality',
+      prompt: 'Before a big exam, I make a study plan weeks ahead.',
+      scaleEnds: ['Strongly disagree', 'Strongly agree'] as const,
+      scaleLabels: ['Strongly disagree', 'Disagree', 'Neutral', 'Agree', 'Strongly agree'],
+      trait: 'Planning and structure',
+    },
+    reasoning: {
+      title: 'Reasoning',
+      prompt: 'Which tile completes the pattern?',
+      trait: 'Pattern reasoning',
+      correctLabel: 'Pattern spotted',
+      otherLabel: 'Still exploring',
+    },
+    studyHabits: {
+      title: 'Study habits',
+      prompt: 'A Physics topic makes no sense in class. What do you do first?',
+      options: [
+        { id: 'visual', label: 'Find a diagram or video', trait: 'Visual learner', pct: 88 },
+        { id: 'readwrite', label: 'Re-read and write notes', trait: 'Read and write learner', pct: 84 },
+        { id: 'kinesthetic', label: 'Try practice problems', trait: 'Hands-on learner', pct: 86 },
+      ],
+    },
   },
 
-  // ── 6. WHAT THE FAMILY RECEIVES (Section 8) ───────────────────────────────
+  // ── What you receive ─────────────────────────────────────────────────────
   whatFamilyReceives: {
-    sectionChip: 'Report explorer',
-    sectionHeadline: 'What the family receives',
-    sectionSubcopy:
-      'A structured, publication-quality report designed for constructive family conversation.',
-    placeholderNotice: 'Sample page preview',
+    sectionHeadline: 'A report your family can use',
+    coverImage: '/samples/pages/grade-10-p01.webp',
+    coverAlt: 'Cover of the Grade 10 sample report',
+    pageLabel: 'Page',
+    sampleLabel: 'Sample report, fictional student',
     items: [
-      {
-        id: 'stream-fitment',
-        title: 'Stream fitment',
-        description:
-          'Class 11 stream compatibility rankings across PCM, PCB, Commerce, and Humanities, with subject combination advice.',
-        imagePreview: '/sample-reports/cover-grade-10.png',
-      },
-      {
-        id: 'cognitive-aptitude',
-        title: 'Cognitive ceiling & aptitude',
-        description:
-          'Breakdown across numerical logic, verbal reasoning, spatial agility, and abstract deduction.',
-        imagePreview: '/sample-reports/cover-grade-10.png',
-      },
-      {
-        id: 'learning-style',
-        title: 'Learning style (VARK)',
-        description:
-          'Actionable insight into whether the student retains information best via visual diagrams, text, or hands-on practice.',
-        imagePreview: '/sample-reports/cover-grade-10.png',
-      },
-      {
-        id: 'career-clusters',
-        title: 'Career clusters',
-        description:
-          'Synthesizes Holland RIASEC codes with undergraduate degree options and high-growth professional fields.',
-        imagePreview: '/sample-reports/cover-grades-11-12.png',
-      },
-      {
-        id: 'parent-guide',
-        title: 'Parent guide',
-        description:
-          'Practical communication guidance to help parents support study habits and de-escalate academic anxiety at home.',
-        imagePreview: '/sample-reports/cover-grades-7-9.png',
-      },
-      {
-        id: 'action-plan',
-        title: '90-day plan',
-        description:
-          'Immediate, actionable milestones covering study schedules, extracurricular focus, and milestone tracking.',
-        imagePreview: '/sample-reports/cover-grade-10.png',
-      },
-    ],
+      { id: 'stream-fitment', title: 'Stream fitment', line: 'PCM, PCB, Commerce or Humanities, ranked.', page: 50, image: '/samples/pages/grade-10-p50.webp' },
+      { id: 'aptitude', title: 'Reasoning and aptitude', line: 'Numerical, verbal and spatial strengths.', page: 10, image: '/samples/pages/grade-10-p10.webp' },
+      { id: 'learning-style', title: 'Learning style', line: 'How they remember best.', page: 11, image: '/samples/pages/grade-10-p11.webp' },
+      { id: 'career-clusters', title: 'Career clusters', line: 'Careers that match their interests.', page: 41, image: '/samples/pages/grade-10-p41.webp' },
+      { id: 'parent-guide', title: 'Parent guide', line: 'Where student and parent views differ.', page: 44, image: '/samples/pages/grade-10-p44.webp' },
+      { id: 'action-plan', title: '90-day plan', line: 'Clear next steps for the coming term.', page: 45, image: '/samples/pages/grade-10-p45.webp' },
+    ] as ReportPart[],
   },
 
-  // ── 7. THE JOURNEY (Section 9) ────────────────────────────────────────────
+  // ── Journey ──────────────────────────────────────────────────────────────
   journey: {
-    sectionChip: 'The process',
-    sectionHeadline: 'The assessment journey',
-    sectionSubcopy:
-      'Five steps from initial intake to a clear long-term direction for your student.',
+    sectionHeadline: 'From first question to a clear plan',
     steps: [
-      {
-        step: 1,
-        title: 'Profile and grade intake',
-        description:
-          'The student selects their current academic grade (Grades 7 to 12), curriculum board, and subject interests.',
-        photo: null,
-        photoAlt: '',
-        highlight: 'Tailors the baseline so questions reflect the student’s academic level.',
-      },
-      {
-        step: 2,
-        title: '30-module assessment',
-        description:
-          'The student completes structured modules in an untimed format designed to capture natural study habits and reasoning patterns.',
-        photo: '/images/psychometric/psy-06.webp',
-        photoAlt: 'Student taking the 30-module online psychometric assessment on laptop',
-        highlight: 'Untimed, low-stress format capturing intuitive reasoning patterns.',
-      },
-      {
-        step: 3,
-        title: 'Analysis',
-        description:
-          'We analyse the results across cognitive and vocational frameworks to determine learning profiles and stream compatibility.',
-        photo: null,
-        photoAlt: '',
-        highlight: 'Integrates Big Five, VARK, and Holland RIASEC dimensions into a baseline.',
-      },
-      {
-        step: 4,
-        title: 'Your report',
-        description:
-          'A comprehensive family dossier is prepared with visual trait maps, stream recommendations, and study guidance.',
-        photo: '/images/psychometric/psy-07.webp',
-        photoAlt: 'Comprehensive family report dossier with visual charts and stream rankings',
-        highlight: '56-page full dossier plus a 15-page executive summary for the family.',
-      },
-      {
-        step: 5,
-        title: 'Counsellor session',
-        description:
-          'Families can optionally join a flexible 45-minute consultation to review the findings and plan high-school steps together.',
-        photo: '/images/psychometric/psy-08.webp',
-        photoAlt: 'Parent and student discussing academic recommendations with a counsellor',
-        highlight: 'Flexible 45-minute Zoom session to translate findings into next steps.',
-      },
+      { step: 1, title: 'Intake', line: 'Pick grade, board and subjects.', photo: null, photoAlt: '' },
+      { step: 2, title: 'Assessment', line: '30 untimed modules, done online.', photo: '/images/psychometric/psy-06.webp', photoAlt: 'Student taking the assessment on a laptop' },
+      { step: 3, title: 'Analysis', line: 'We analyse the results.', photo: null, photoAlt: '' },
+      { step: 4, title: 'Report', line: 'A 56-page report plus a 15-page summary.', photo: '/images/psychometric/psy-07.webp', photoAlt: 'Family report with charts and stream rankings' },
+      { step: 5, title: 'Counsellor session', line: 'Optional 45-minute Zoom call to plan next steps.', photo: '/images/psychometric/psy-08.webp', photoAlt: 'Parent and student talking with a counsellor' },
     ] as JourneyStep[],
   },
 
-  // ── 8. SAMPLE REPORTS (Section 10) ────────────────────────────────────────
+  // ── Sample reports ───────────────────────────────────────────────────────
   sampleReports: {
-    sectionChip: 'Sample reports',
-    sectionHeadline: 'Sample reports',
-    sectionSubcopy:
-      'Inspect the complete report before you begin. Choose a grade band below to review the executive dossier.',
+    sectionHeadline: 'See a sample report first',
     footerNote: 'Sample reports use a fictional student.',
+    viewLabel: 'View in browser',
+    downloadLabel: 'Download PDF',
+    comingSoonLabel: 'Coming soon',
     items: [
       {
         id: 'junior',
         gradeBadge: 'Grades 7–9',
-        gradeTitle: 'Junior Diagnostic Report',
-        subtitle: 'Foundation & learning stamina',
+        gradeTitle: 'Foundation report',
         pages: 'Executive edition',
-        description:
-          'Explores sensory learning preferences, abstract logic agility, and foundational study stamina before high-school specialization.',
-        highlights: [
-          'VARK sensory learning profile',
-          'Abstract logic and numerical pattern agility',
-          'Self-directed study stamina indicator',
-          'Curiosity vector mapping across emerging subjects',
-        ],
+        highlights: ['Learning style profile', 'Pattern and number reasoning', 'Early subject interests'],
         pdfUrl: '/sample-reports/sample-report-grades-7-9.pdf',
         browserUrl: '/sample-report?type=junior',
-        coverImage: '/sample-reports/cover-grades-7-9.png',
-        thumbnails: [],
+        coverImage: '/samples/pages/grade-7-9-p01.webp',
         isAvailable: true,
       },
       {
         id: 'grade10',
         gradeBadge: 'Grade 10',
-        gradeTitle: 'Secondary Stream Selection Report',
-        subtitle: 'PCM vs PCB vs Commerce vs Arts',
+        gradeTitle: 'Stream selection report',
         pages: '56 pages',
-        description:
-          'Our flagship 30-module evaluation validating Class 11 stream fitment, quantitative ceilings, and subject combination choices.',
-        highlights: [
-          'Stream fitment ranking (PCM, PCB, Commerce, Humanities)',
-          '30-module item-level percentile breakdown',
-          'Educational advisory notes and risk mitigation',
-          'Target university pathways and subject roadmaps',
-        ],
+        highlights: ['Stream fit, ranked', 'Subject combinations', 'Three-year roadmap'],
         pdfUrl: '/sample-reports/sample-report-grade-10.pdf',
         browserUrl: '/sample-report?type=grade10',
-        coverImage: '/sample-reports/cover-grade-10.png',
-        thumbnails: [],
+        coverImage: '/samples/pages/grade-10-p01.webp',
         isAvailable: true,
       },
       {
         id: 'senior',
         gradeBadge: 'Grades 11–12',
-        gradeTitle: 'Senior University & Career Fitment Report',
-        subtitle: 'Degree alignment & career clusters',
+        gradeTitle: 'Degree and career report',
         pages: 'Executive edition',
-        description:
-          'Synthesizes specialized aptitude, Holland RIASEC vocational codes, and premier university admissions roadmaps.',
-        highlights: [
-          'Undergraduate degree cluster alignment',
-          'Holland RIASEC occupational compatibility',
-          'Domestic vs study abroad admissions readiness',
-          'High-school milestone roadmap and activity timing',
-        ],
+        highlights: ['Degree clusters', 'Holland RIASEC career fit', 'Admissions roadmap'],
         pdfUrl: '/sample-reports/sample-report-grades-11-12.pdf',
         browserUrl: '/sample-report?type=grade12',
-        coverImage: '/sample-reports/cover-grades-11-12.png',
-        thumbnails: [],
+        coverImage: '/samples/pages/grade-11-12-p01.webp',
         isAvailable: true,
       },
     ] as SampleReportItem[],
   },
 
-  // ── 9. FAMILY TRUST & PRINCIPLES (Section 11) ─────────────────────────────
+  // ── Family trust ─────────────────────────────────────────────────────────
   familyTrust: {
-    sectionChip: 'Family trust',
-    sectionHeadline: 'Principles families can rely on',
-    sectionSubcopy:
-      'We treat every assessment with care, confidentiality, and respect for the student’s unique growth path.',
+    sectionHeadline: 'Built for families',
     photo: {
-      src: '/images/psychometric/psy-09-family-dialogue.png',
-      alt: 'Family reviewing academic report together',
-      mode: 'cover' as const,
+      src: '/images/psychometric/psy-09-family-dialogue.webp',
+      alt: 'A family reading a report together',
     },
     principles: [
-      {
-        title: 'Standardized frameworks',
-        description:
-          'Evaluations are built on established psychometric models including Big Five Personality, VARK, and Holland RIASEC.',
-      },
-      {
-        title: 'Family dialogue',
-        description:
-          'Designed as a shared conversation tool to align student aspirations with parental support.',
-      },
-      {
-        title: 'Guidance, not diagnosis',
-        description:
-          'An educational compass to support academic choices, never a clinical label or intelligence ceiling.',
-      },
-      {
-        title: 'Data privacy',
-        description:
-          'Student answers and report findings remain confidential. Data is never sold or shared with outside parties.',
-      },
+      { title: 'Proven frameworks', line: 'Big Five, VARK and Holland RIASEC.' },
+      { title: 'Family dialogue', line: 'Built for parents and students to read together.' },
+      { title: 'Guidance, not diagnosis', line: 'Supports choices. Never a label.' },
+      { title: 'Private by default', line: 'Answers stay confidential. Never sold.' },
     ],
   },
 
-  // ── 10. FAQ (Section 12) ──────────────────────────────────────────────────
+  // ── FAQ (also feeds the FAQPage JSON-LD) ─────────────────────────────────
   faq: {
-    sectionChip: 'Common questions',
-    sectionHeadline: 'Frequently asked questions',
-    sectionSubcopy:
-      'Clear answers to questions students and parents ask before starting the assessment.',
+    sectionHeadline: 'Questions parents ask',
     items: [
       {
-        question:
-          'What is the difference between a psychometric assessment and an academic or IQ test?',
+        question: 'How is this different from an exam or an IQ test?',
         answer:
-          'An academic test measures recall in school subjects, and an IQ test attempts to measure speeded logic. A psychometric assessment is different: it looks at behavioral traits, reasoning preferences, learning modalities (VARK), and vocational affinities (RIASEC) without pass or fail marks. It is designed to guide choices, not to assign labels.',
+          'Exams test what a student has learned, and IQ tests score speeded logic. This assessment looks at personality, reasoning style, learning preferences and interests. There is no pass or fail, and it guides choices rather than labelling anyone.',
       },
       {
-        question: 'How should my child prepare for the assessment?',
+        question: 'How should my child prepare?',
         answer:
-          'No preparation, revision, or coaching is required. The questions measure spontaneous, authentic reasoning and study habits. Taking the test in a quiet, rested setting is all that is needed.',
+          'No preparation is needed. The questions capture natural habits and reasoning, so studying for it does not help. A quiet room and a rested mind are enough.',
       },
       {
-        question:
-          'How does the assessment help Class 10 students choose an academic stream?',
+        question: 'How does it help a Class 10 student choose a stream?',
         answer:
-          'The assessment maps quantitative and verbal reasoning against requirements for Science (PCM/PCB), Commerce, and Humanities to help families understand where a student naturally thrives.',
+          'It compares reasoning strengths, learning style and interests against what PCM, PCB, Commerce and Humanities ask of a student, then ranks how well each stream fits.',
       },
       {
-        question: 'Can parents review the findings together with the student?',
+        question: 'Can parents go through the results with their child?',
         answer:
-          'Yes. Every report includes clear parent discussion frameworks and study guidance so families can plan next steps together constructively.',
+          'Yes. The report includes a parent guide and conversation prompts, and families can book an optional 45-minute session with a counsellor to plan next steps together.',
       },
       {
-        question: 'Is student data kept confidential?',
+        question: 'Is my child’s data kept private?',
         answer:
-          'All responses and reports are strictly confidential. CLARVO never sells student data or shares reports with third parties without family consent.',
+          'Yes. Answers and reports stay confidential to the student and family. CLARVO never sells student data or shares reports without the family’s consent.',
       },
-    ],
+    ] as FaqItem[],
   },
 
-  // ── 11. FINAL CTA (Section 12) ────────────────────────────────────────────
+  // ── Final CTA ────────────────────────────────────────────────────────────
   cta: {
-    headline: 'Know how your child thinks, learns and decides.',
-    subcopy:
-      'Join thousands of families who replaced guesswork with clarity. Start the assessment today or book a consultation with our team.',
+    headline: 'Start with understanding.',
+    subcopy: 'Join 15,000+ students who found their direction.',
     photo: {
-      src: '/images/psychometric/psy-10-cta-family-cutout.png',
-      alt: 'Happy student and parents smiling together',
-      mode: 'cutout' as const,
+      src: '/images/psychometric/psy-10-cta-family-cutout.webp',
+      alt: 'A smiling family of four',
     },
-    primaryButton: {
-      label: 'Start assessment',
-      href: '/psychometric-test',
-    },
-    secondaryButton: {
-      label: 'Book a consultation',
-      href: '/book-a-demo',
-    },
+    primaryButton: { label: 'Start assessment', href: '/psychometric-test' },
+    secondaryButton: { label: 'Book a consultation', href: '/book-a-demo' },
   },
-} as const;
+
+  // ── Sticky mobile bar ────────────────────────────────────────────────────
+  stickyBar: {
+    primary: { label: 'Start assessment', href: '/psychometric-test' },
+    secondary: { label: 'Sample', href: '#sample-reports' },
+  },
+};

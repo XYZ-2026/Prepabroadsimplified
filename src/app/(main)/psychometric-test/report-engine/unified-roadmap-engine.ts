@@ -726,6 +726,26 @@ export function resolvePathwayId(input: { id?: string; name: string } | string):
   return 'pcm_stream';
 }
 
+// Parent broad stream for each senior career cluster, used for Class 7–10 reports.
+const CLUSTER_PARENT_STREAM: Record<string, string> = {
+  software_engineering: 'pcm_stream',
+  data_science_ai: 'pcm_stream',
+  cybersecurity_networking: 'pcm_stream',
+  mechanical_engineering: 'pcm_stream',
+  aerospace_defence: 'pcm_stream',
+  robotics_automation: 'pcm_stream',
+  civil_engineering_architecture: 'pcm_stream',
+  electrical_electronics: 'pcm_stream',
+  biotechnology_genetics: 'pcb_stream',
+  pharmacy_drug_research: 'pcb_stream',
+  chartered_accountancy_audit: 'commerce_stream',
+  finance_investment_banking: 'commerce_stream',
+  economics_policy: 'humanities_stream',
+  psychology_counselling: 'humanities_stream',
+  journalism_mass_media: 'humanities_stream',
+  civil_services_governance: 'humanities_stream',
+};
+
 // ─── AUTHORITATIVE ROADMAP LOOKUP BY RANK ───────────────────────────────────
 
 export function getRoadmapByRank(
@@ -752,7 +772,13 @@ export function getRoadmapByRank(
     return createPreparationRoadmap(`Pathway Rank ${rank}`, rankLabel, 75, 'PCM', firstName);
   }
 
-  const pathwayId = resolvePathwayId(pathwayItem);
+  const resolvedId = resolvePathwayId(pathwayItem);
+  // Senior career clusters (e.g. data_science_ai) have no Class 7–10 roadmap of their own. Without this
+  // mapping every such rank fell through to PCM below, so ranks 1–3 collapsed into identical roadmaps.
+  const pathwayId =
+    variant !== 'senior' && !PATHWAY_REGISTRY[resolvedId] && CLUSTER_PARENT_STREAM[resolvedId]
+      ? CLUSTER_PARENT_STREAM[resolvedId]
+      : resolvedId;
   const baseDef = PATHWAY_REGISTRY[pathwayId] || PATHWAY_REGISTRY.pcm_stream;
   const gradeConfig = baseDef.grades[variant] || baseDef.grades.grade10;
 

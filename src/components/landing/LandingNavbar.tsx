@@ -85,7 +85,7 @@ export default function LandingNavbar() {
 
   return (
     <nav className="sticky top-0 z-50 w-full bg-[#F8FAFC]/95 backdrop-blur-xl border-b border-[#E2E8F0]">
-      <div className="w-full max-w-7xl mx-auto h-[64px] sm:h-[70px] px-3.5 sm:px-6 md:px-8 xl:px-10 flex items-center justify-between gap-3 lg:gap-4">
+      <div className="w-full max-w-7xl mx-auto h-[64px] sm:h-[70px] px-3.5 sm:px-6 md:px-8 xl:px-10 flex items-center justify-between gap-3 xl:gap-4">
         {/* LEFT - Refined CLARVO Logo */}
         <Link 
           href="/" 
@@ -105,7 +105,7 @@ export default function LandingNavbar() {
         </Link>
 
         {/* CENTER - Navigation Pill with Integrated Sample Reports */}
-        <div className="hidden lg:flex items-center justify-center shrink min-w-0">
+        <div className="hidden xl:flex flex-1 items-center justify-center min-w-0 px-2">
           <div className="flex items-center gap-0.5 xl:gap-1 bg-white/90 border border-[#E2E8F0] rounded-full px-2 py-1 shadow-xs backdrop-blur-md">
             <a
               href="#services"
@@ -287,7 +287,7 @@ export default function LandingNavbar() {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="lg:hidden w-9 h-9 rounded-xl border border-[#E2E8F0] bg-white text-[#080F1C] flex items-center justify-center hover:bg-[#F8FAFC] active:scale-95 transition-all focus:outline-none focus:ring-2 focus:ring-[#2563EB]/40 shrink-0"
+            className="xl:hidden w-9 h-9 rounded-xl border border-solid border-[#E2E8F0] bg-white text-[#080F1C] flex items-center justify-center hover:bg-[#F8FAFC] active:scale-95 transition-all focus:outline-none focus:ring-2 focus:ring-[#2563EB]/40 shrink-0"
             aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
             aria-expanded={mobileMenuOpen}
           >
@@ -304,7 +304,7 @@ export default function LandingNavbar() {
 
       {/* Accessible Mobile Menu Drawer */}
       {mobileMenuOpen && (
-        <div className="lg:hidden bg-white/98 backdrop-blur-xl border-b border-[#E2E8F0] shadow-xl px-4 py-4 space-y-3">
+        <div className="xl:hidden bg-white/98 backdrop-blur-xl border-b border-[#E2E8F0] shadow-xl px-4 py-4 space-y-3">
           <div className="space-y-1">
             <a
               href="#services"

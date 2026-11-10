@@ -108,9 +108,11 @@ export default function SupportBento() {
                 <div className="w-8 h-8 rounded-xl bg-[#E6EDFF] flex items-center justify-center text-[#1258DE]">
                   <Brain className="w-4 h-4" />
                 </div>
-                <h3 className="text-xl sm:text-2xl font-dmsans font-bold text-[#12131C] tracking-tight group-hover:text-[#1258DE] transition-colors">
-                  Psychometric diagnostics
-                </h3>
+                <Link href="/psychometric-assessment" className="hover:text-[#1258DE] transition-colors">
+                  <h3 className="text-xl sm:text-2xl font-dmsans font-bold text-[#12131C] tracking-tight group-hover:text-[#1258DE] transition-colors">
+                    Psychometric diagnostics
+                  </h3>
+                </Link>
               </div>
 
               <p className="text-[14px] sm:text-[15px] leading-relaxed text-[#5B6275] font-dmsans mb-6">
@@ -132,9 +134,12 @@ export default function SupportBento() {
               <div className="absolute inset-0 bg-gradient-to-t from-[#171822]/40 via-transparent to-transparent pointer-events-none" />
 
               <div className="absolute bottom-3 left-4 right-4 flex flex-wrap sm:flex-nowrap items-center justify-between gap-2 text-white text-xs font-dmsans font-bold pointer-events-auto">
-                <span className="bg-[#171822]/80 backdrop-blur-md px-3 py-1 rounded-full border border-white/20">
-                  Psychological evidence base
-                </span>
+                <Link
+                  href="/psychometric-assessment"
+                  className="bg-[#171822]/80 backdrop-blur-md px-3 py-1 rounded-full border border-white/20 hover:bg-[#171822] transition-colors"
+                >
+                  Explore 4 phases
+                </Link>
                 <Link
                   href="/psychometric-test"
                   className="inline-flex items-center gap-1 text-white bg-[#1258DE] px-3 py-1 rounded-full hover:bg-[#0D4ABF] transition-colors"

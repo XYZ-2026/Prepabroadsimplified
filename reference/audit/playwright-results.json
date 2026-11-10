@@ -4,7 +4,7 @@
       "C:\\Program Files\\nodejs\\node.exe",
       "C:\\Users\\Agam\\Downloads\\Prepabroadsimplified-main\\Prepabroadsimplified-main\\node_modules\\@playwright\\test\\cli.js",
       "test",
-      "tests/visual-capture.spec.ts",
+      "tests/psychometric-assessment.spec.ts",
       "--project=mobile-390x844"
     ],
     "configFile": "C:\\Users\\Agam\\Downloads\\Prepabroadsimplified-main\\Prepabroadsimplified-main\\playwright.config.ts",
@@ -18,18 +18,14 @@
     "grep": {},
     "grepInvert": null,
     "maxFailures": 0,
-    "metadata": {
-      "actualWorkers": 1
-    },
+    "metadata": {},
     "preserveOutput": "always",
     "projects": [
       {
         "outputDir": "C:/Users/Agam/Downloads/Prepabroadsimplified-main/Prepabroadsimplified-main/test-results",
         "repeatEach": 1,
         "retries": 0,
-        "metadata": {
-          "actualWorkers": 1
-        },
+        "metadata": {},
         "id": "mobile-390x844",
         "name": "mobile-390x844",
         "testDir": "C:/Users/Agam/Downloads/Prepabroadsimplified-main/Prepabroadsimplified-main/tests",
@@ -43,9 +39,7 @@
         "outputDir": "C:/Users/Agam/Downloads/Prepabroadsimplified-main/Prepabroadsimplified-main/test-results",
         "repeatEach": 1,
         "retries": 0,
-        "metadata": {
-          "actualWorkers": 1
-        },
+        "metadata": {},
         "id": "tablet-portrait-768x1024",
         "name": "tablet-portrait-768x1024",
         "testDir": "C:/Users/Agam/Downloads/Prepabroadsimplified-main/Prepabroadsimplified-main/tests",
@@ -59,9 +53,7 @@
         "outputDir": "C:/Users/Agam/Downloads/Prepabroadsimplified-main/Prepabroadsimplified-main/test-results",
         "repeatEach": 1,
         "retries": 0,
-        "metadata": {
-          "actualWorkers": 1
-        },
+        "metadata": {},
         "id": "tablet-portrait-820x1180",
         "name": "tablet-portrait-820x1180",
         "testDir": "C:/Users/Agam/Downloads/Prepabroadsimplified-main/Prepabroadsimplified-main/tests",
@@ -75,9 +67,7 @@
         "outputDir": "C:/Users/Agam/Downloads/Prepabroadsimplified-main/Prepabroadsimplified-main/test-results",
         "repeatEach": 1,
         "retries": 0,
-        "metadata": {
-          "actualWorkers": 1
-        },
+        "metadata": {},
         "id": "tablet-portrait-834x1194",
         "name": "tablet-portrait-834x1194",
         "testDir": "C:/Users/Agam/Downloads/Prepabroadsimplified-main/Prepabroadsimplified-main/tests",
@@ -91,9 +81,7 @@
         "outputDir": "C:/Users/Agam/Downloads/Prepabroadsimplified-main/Prepabroadsimplified-main/test-results",
         "repeatEach": 1,
         "retries": 0,
-        "metadata": {
-          "actualWorkers": 1
-        },
+        "metadata": {},
         "id": "tablet-landscape-1024x768",
         "name": "tablet-landscape-1024x768",
         "testDir": "C:/Users/Agam/Downloads/Prepabroadsimplified-main/Prepabroadsimplified-main/tests",
@@ -107,9 +95,7 @@
         "outputDir": "C:/Users/Agam/Downloads/Prepabroadsimplified-main/Prepabroadsimplified-main/test-results",
         "repeatEach": 1,
         "retries": 0,
-        "metadata": {
-          "actualWorkers": 1
-        },
+        "metadata": {},
         "id": "tablet-landscape-1180x820",
         "name": "tablet-landscape-1180x820",
         "testDir": "C:/Users/Agam/Downloads/Prepabroadsimplified-main/Prepabroadsimplified-main/tests",
@@ -123,9 +109,7 @@
         "outputDir": "C:/Users/Agam/Downloads/Prepabroadsimplified-main/Prepabroadsimplified-main/test-results",
         "repeatEach": 1,
         "retries": 0,
-        "metadata": {
-          "actualWorkers": 1
-        },
+        "metadata": {},
         "id": "tablet-landscape-1366x1024",
         "name": "tablet-landscape-1366x1024",
         "testDir": "C:/Users/Agam/Downloads/Prepabroadsimplified-main/Prepabroadsimplified-main/tests",
@@ -139,9 +123,7 @@
         "outputDir": "C:/Users/Agam/Downloads/Prepabroadsimplified-main/Prepabroadsimplified-main/test-results",
         "repeatEach": 1,
         "retries": 0,
-        "metadata": {
-          "actualWorkers": 1
-        },
+        "metadata": {},
         "id": "desktop-1440x900",
         "name": "desktop-1440x900",
         "testDir": "C:/Users/Agam/Downloads/Prepabroadsimplified-main/Prepabroadsimplified-main/tests",
@@ -155,9 +137,7 @@
         "outputDir": "C:/Users/Agam/Downloads/Prepabroadsimplified-main/Prepabroadsimplified-main/test-results",
         "repeatEach": 1,
         "retries": 0,
-        "metadata": {
-          "actualWorkers": 1
-        },
+        "metadata": {},
         "id": "desktop-1920x1080",
         "name": "desktop-1920x1080",
         "testDir": "C:/Users/Agam/Downloads/Prepabroadsimplified-main/Prepabroadsimplified-main/tests",
@@ -175,9 +155,7 @@
         "outputDir": "C:\\Users\\Agam\\Downloads\\Prepabroadsimplified-main\\Prepabroadsimplified-main\\test-results",
         "repeatEach": 1,
         "retries": 0,
-        "metadata": {
-          "actualWorkers": 1
-        },
+        "metadata": {},
         "name": "mobile-390x844",
         "testDir": "C:\\Users\\Agam\\Downloads\\Prepabroadsimplified-main\\Prepabroadsimplified-main\\tests",
         "snapshotDir": "C:\\Users\\Agam\\Downloads\\Prepabroadsimplified-main\\Prepabroadsimplified-main\\tests",
@@ -230,71 +208,17 @@
       "timeout": 120000
     }
   },
-  "suites": [
+  "suites": [],
+  "errors": [
     {
-      "title": "visual-capture.spec.ts",
-      "file": "visual-capture.spec.ts",
-      "column": 0,
-      "line": 0,
-      "specs": [],
-      "suites": [
-        {
-          "title": "Visual Screenshot Captures",
-          "file": "visual-capture.spec.ts",
-          "line": 4,
-          "column": 6,
-          "specs": [
-            {
-              "title": "Capture Hero and Testimonials",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 45000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "mobile-390x844",
-                  "projectName": "mobile-390x844",
-                  "results": [
-                    {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 12838,
-                      "errors": [],
-                      "stdout": [
-                        {
-                          "text": "[mobile-390x844] Element Debug: {\n  \"subOpacity\": \"1\",\n  \"subRect\": {\n    \"x\": 16,\n    \"y\": 226.921875,\n    \"width\": 358,\n    \"height\": 96,\n    \"top\": 226.921875,\n    \"right\": 374,\n    \"bottom\": 322.921875,\n    \"left\": 16\n  },\n  \"ctaOpacity\": \"1\",\n  \"photoOpacity\": \"1\",\n  \"photoRect\": {\n    \"x\": 16,\n    \"y\": 573.859375,\n    \"width\": 358,\n    \"height\": 268.5,\n    \"top\": 573.859375,\n    \"right\": 374,\n    \"bottom\": 842.359375,\n    \"left\": 16\n  },\n  \"chips\": [\n    {\n      \"text\": \"Sample reportStream fit: Science + Computing\",\n      \"opacity\": \"1\",\n      \"display\": \"block\",\n      \"rect\": {\n        \"x\": 21.359375,\n        \"y\": 575.1875,\n        \"width\": 242.0625,\n        \"height\": 38.5,\n        \"top\": 575.1875,\n        \"right\": 263.421875,\n        \"bottom\": 613.6875,\n        \"left\": 21.359375\n      }\n    },\n    {\n      \"text\": \"Sample reportStrength: Analytical reasoning\",\n      \"opacity\": \"1\",\n      \"display\": \"block\",\n      \"rect\": {\n        \"x\": 137.6875,\n        \"y\": 575.1875,\n        \"width\": 230.953125,\n        \"height\": 38.5,\n        \"top\": 575.1875,\n        \"right\": 368.640625,\n        \"bottom\": 613.6875,\n        \"left\": 137.6875\n      }\n    },\n    {\n      \"text\": \"Sample reportNext step: Talk to a counsellor\",\n      \"opacity\": \"1\",\n      \"display\": \"block\",\n      \"rect\": {\n        \"x\": 138.390625,\n        \"y\": 777.015625,\n        \"width\": 228.453125,\n        \"height\": 38.5,\n        \"top\": 777.015625,\n        \"right\": 366.84375,\n        \"bottom\": 815.515625,\n        \"left\": 138.390625\n      }\n    }\n  ]\n}\n"
-                        },
-                        {
-                          "text": "[mobile-390x844] Console Errors: ZERO (Clean Hydration)\n"
-                        }
-                      ],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-11-04T00:31:25.665Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "27825cfc1559b3c26fde-344656aaec9a89cf8750",
-              "file": "visual-capture.spec.ts",
-              "line": 5,
-              "column": 7
-            }
-          ]
-        }
-      ]
+      "message": "Error: Process from config.webServer was not able to start. Exit code: 1",
+      "stack": "Error: Process from config.webServer was not able to start. Exit code: 1"
     }
   ],
-  "errors": [],
   "stats": {
-    "startTime": "2026-11-04T00:30:41.353Z",
-    "duration": 62428.884,
-    "expected": 1,
+    "startTime": "2026-11-09T16:21:45.634Z",
+    "duration": 4205.646,
+    "expected": 0,
     "skipped": 0,
     "unexpected": 0,
     "flaky": 0

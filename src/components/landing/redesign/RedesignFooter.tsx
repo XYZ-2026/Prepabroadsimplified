@@ -51,7 +51,8 @@ export default function RedesignFooter() {
             </h4>
             <ul className="space-y-2.5 text-xs sm:text-[13px]">
               {[
-                { label: 'Psychometric Assessment', href: '/psychometric-test' },
+                { label: 'Psychometric Assessment', href: '/psychometric-assessment' },
+                { label: 'Take Assessment', href: '/psychometric-test' },
                 { label: 'AI Career Roadmap', href: '/career-roadmap' },
                 { label: 'SAT 1500+ Prep Diagnostic', href: '/iq-test' },
                 { label: 'Global University Matcher', href: '/university-finder' },

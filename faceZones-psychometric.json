@@ -1,0 +1,38 @@
+{
+  "source": "DESIGN_PSYCHOMETRIC.md Section 4",
+  "widenPercent": 3,
+  "photo": "public/images/psychometric/psy-01-hero-family-cutout.webp",
+  "dimensions": { "width": 1536, "height": 1024 },
+  "zones": [
+    {
+      "name": "Mother (parent)",
+      "original": { "xMin": 24, "xMax": 44, "yMin": 15, "yMax": 46 },
+      "widened": { "xMin": 21, "xMax": 47, "yMin": 12, "yMax": 49 }
+    },
+    {
+      "name": "Son (student)",
+      "original": { "xMin": 51, "xMax": 73, "yMin": 12, "yMax": 50 },
+      "widened": { "xMin": 48, "xMax": 76, "yMin": 9, "yMax": 53 }
+    }
+  ],
+  "forbiddenFaceZone": {
+    "xMin": 21,
+    "xMax": 76,
+    "yMin": 9,
+    "yMax": 53,
+    "description": "No overlay card may intersect this bounding region covering faces."
+  },
+  "allowedYBands": {
+    "topBand": {
+      "yMin": -8,
+      "yMax": 8,
+      "description": "Top band overlay position (Profile card with 3 trait bars)"
+    },
+    "bottomBand": {
+      "yMin": 70,
+      "yMax": 95,
+      "description": "Bottom band overlay position (Sample question card)"
+    }
+  }
+}
+

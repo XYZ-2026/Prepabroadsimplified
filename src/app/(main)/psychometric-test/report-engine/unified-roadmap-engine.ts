@@ -736,7 +736,7 @@ export function getRoadmapByRank(
   scores: EditorialScores,
   comparisonData?: AlignmentResult | null
 ): PathwayRoadmapData {
-  const pathwayItem = careerFitment[rank - 1];
+  const pathwayItem = careerFitment[rank - 1] || (careerFitment.length > 0 ? careerFitment[careerFitment.length - 1] : undefined);
   const firstName = (student.name || 'Candidate').split(' ')[0];
   const reportId = student.reportId || 'REP-DIAGNOSTIC';
 

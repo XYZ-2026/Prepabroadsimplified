@@ -25,7 +25,12 @@ export default function AppShell({ children, userRole, userName, userEmail }: Ap
     pathname.startsWith('/sample-report') ||
     (pathname === '/psychometric-test' && searchParams.has('resultId'));
 
-  const isLandingView = pathname === '/' || pathname.startsWith('/blog');
+  const isLandingView = 
+    pathname === '/' || 
+    pathname.startsWith('/blog') ||
+    pathname === '/psychometric-assessment' ||
+    pathname.startsWith('/psychometric-assessment') ||
+    pathname.startsWith('/join-counsellor-community');
 
   if (isReportView || isLandingView) {
     // Report views and standalone public landing pages render their own header/footer

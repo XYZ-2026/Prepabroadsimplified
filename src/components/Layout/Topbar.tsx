@@ -5,11 +5,13 @@ import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { CAREER_ROADMAP_ENABLED } from '@/config/feature-flags';
+import SampleReportModal from '@/components/Report/SampleReportModal';
 import styles from '@/styles/components.module.css';
 
 export default function Topbar() {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
+  const [showSampleModal, setShowSampleModal] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -45,12 +47,12 @@ export default function Topbar() {
             </svg>
           </button>
         )}
-        <Link href={isRoadmap ? "/career-roadmap" : "/"} className={styles.topbarLogo} style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <Image src="/logo-transparent.png" alt="CLARVO" width={44} height={44} className="w-[38px] h-[38px] sm:w-[42px] sm:h-[42px] object-contain shrink-0" priority />
+        <Link href={isRoadmap ? "/career-roadmap" : "/"} className={styles.topbarLogo} style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <Image src="/logo-transparent.png" alt="CLARVO" width={36} height={36} className="w-[30px] h-[30px] sm:w-[34px] sm:h-[34px] object-contain shrink-0" priority />
           <span style={{ 
             fontFamily: 'var(--font-primary)',
             fontWeight: 900, 
-            fontSize: '22px', 
+            fontSize: '19px', 
             letterSpacing: '-0.03em', 
             color: 'var(--clarvo-deep-black, #080F1C)' 
           }}>
@@ -114,13 +116,13 @@ export default function Topbar() {
           </>
         ) : (
           <>
-            <Link 
-              href="/sample-reports" 
-              className="hidden md:inline-flex text-xs font-semibold text-slate-600 hover:text-blue-600 transition-colors"
-              style={{ textDecoration: 'none' }}
+            <button 
+              type="button"
+              onClick={() => setShowSampleModal(true)} 
+              className="hidden md:inline-flex text-xs font-semibold text-slate-600 hover:text-blue-600 transition-colors cursor-pointer bg-transparent border-0 p-0"
             >
               Sample Reports
-            </Link>
+            </button>
             <Link 
               href="/book-a-demo" 
               className="inline-flex items-center justify-center px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-bold text-xs sm:text-sm transition-all shadow-xs"
@@ -130,7 +132,8 @@ export default function Topbar() {
             </Link>
           </>
         )}
-        {/* Clean mobile header: notifications bell hidden on public pages */}
+        {/* Interactive Grade Selector Modal */}
+        <SampleReportModal isOpen={showSampleModal} onClose={() => setShowSampleModal(false)} />
       </div>
     </header>
   );

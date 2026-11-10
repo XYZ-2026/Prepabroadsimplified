@@ -93,8 +93,8 @@ export const SAMPLE_SCORES: EditorialScores = {
   topValues: ['creativity', 'impact', 'independence'],
   careerFitment: [
     { name: 'Data Science & AI Specialist', score: 92 },
-    { name: 'Software Engineering & Systems Architect', score: 88 },
-    { name: 'Product Management & Strategy', score: 85 },
+    { name: 'Strategic Business Analytics, Finance & Management', score: 88 },
+    { name: 'Cognitive UX Design, Economics & Product Strategy', score: 82 },
     { name: 'UX Design & Human-Computer Interaction', score: 80 },
     { name: 'Management Consulting & Business Analytics', score: 76 },
   ],

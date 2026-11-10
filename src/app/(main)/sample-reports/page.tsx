@@ -1,408 +1,230 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import Link from 'next/link';
+import LandingNavbar from '@/components/landing/LandingNavbar';
+import RedesignFooter from '@/components/landing/redesign/RedesignFooter';
+import { ExternalLink, Download, FileText, CheckCircle2, Sparkles, BookOpen, GraduationCap, Compass, ArrowRight } from 'lucide-react';
+
+interface ReportCardProps {
+  gradeBadge: string;
+  gradeBadgeColor: string;
+  pages: string;
+  title: string;
+  subtitle: string;
+  description: string;
+  focusHighlights: string[];
+  browserUrl: string;
+  pdfUrl: string;
+  isPopular?: boolean;
+}
+
+function ReportCard({
+  gradeBadge,
+  gradeBadgeColor,
+  pages,
+  title,
+  subtitle,
+  description,
+  focusHighlights,
+  browserUrl,
+  pdfUrl,
+  isPopular,
+}: ReportCardProps) {
+  return (
+    <div className={`relative bg-white rounded-2xl sm:rounded-3xl border transition-all duration-300 flex flex-col justify-between p-6 sm:p-8 ${
+      isPopular 
+        ? 'border-[#2563EB]/40 shadow-xl ring-2 ring-[#2563EB]/10' 
+        : 'border-[#E2E8F0] shadow-sm hover:shadow-md'
+    }`}>
+      {isPopular && (
+        <div className="absolute -top-3 left-6 sm:left-8 bg-[#2563EB] text-white text-[11px] font-bold tracking-wider uppercase px-3 py-0.5 rounded-full shadow-sm flex items-center gap-1">
+          <Sparkles className="w-3 h-3" />
+          <span>Flagship Diagnostic</span>
+        </div>
+      )}
+
+      <div>
+        <div className="flex items-center justify-between gap-3 mb-4">
+          <span className={`text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider ${gradeBadgeColor}`}>
+            {gradeBadge}
+          </span>
+          <span className="text-xs font-semibold text-[#64748B]">
+            {pages}
+          </span>
+        </div>
+
+        <h2 className="text-xl sm:text-2xl font-bold font-dmsans text-[#080F1C] tracking-tight mb-1">
+          {title}
+        </h2>
+        <p className="text-sm font-semibold text-[#1258DE] mb-3">
+          {subtitle}
+        </p>
+
+        <p className="text-sm text-[#475569] leading-relaxed mb-6">
+          {description}
+        </p>
+
+        <div className="bg-[#F8FAFC] rounded-xl border border-[#E2E8F0] p-4 mb-6">
+          <div className="text-[11px] font-bold uppercase tracking-wider text-[#080F1C] mb-2.5">
+            Key Diagnostic Focus:
+          </div>
+          <ul className="space-y-1.5 text-xs sm:text-[13px] text-[#475569]">
+            {focusHighlights.map((highlight, idx) => (
+              <li key={idx} className="flex items-start gap-2">
+                <CheckCircle2 className="w-4 h-4 text-[#2563EB] shrink-0 mt-0.5" />
+                <span>{highlight}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+
+      <div className="space-y-2.5 pt-4 border-t border-slate-100">
+        <Link
+          href={browserUrl}
+          className="w-full h-11 rounded-xl bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-bold text-sm flex items-center justify-center gap-2 shadow-sm transition-all"
+        >
+          <BookOpen className="w-4 h-4" />
+          <span>View in Browser (Interactive)</span>
+          <ArrowRight className="w-4 h-4 ml-0.5" />
+        </Link>
+
+        <a
+          href={pdfUrl}
+          download
+          className="w-full h-10 rounded-xl bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 font-semibold text-xs sm:text-sm flex items-center justify-center gap-2 transition-colors"
+        >
+          <Download className="w-4 h-4 text-slate-500" />
+          <span>Download Sample PDF</span>
+        </a>
+      </div>
+    </div>
+  );
+}
 
 export default function SampleReportsHubPage() {
-  const [missingAssetNotice, setMissingAssetNotice] = useState<{
-    isOpen: boolean;
-    reportName: string;
-    previewUrl: string;
-  }>({
-    isOpen: false,
-    reportName: '',
-    previewUrl: '',
-  });
-
-  const [downloadingReport, setDownloadingReport] = useState<string | null>(null);
-
-  const handleDownload = async (reportName: string, previewUrl: string) => {
-    const isExecutive = previewUrl.includes('executive');
-    setDownloadingReport(reportName);
-    try {
-      const res = await fetch('/api/psychometric-test/pdf', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          isSample: true,
-          reportType: isExecutive ? 'executive' : 'full',
-          assessmentType: 'grade10',
-          variant: 'grade10',
-          student: {
-            name: 'Aarav Sharma (Sample)',
-            grade: 'Class 10',
-            school: 'Delhi Public School, R.K. Puram',
-            city: 'New Delhi',
-            date: 'October 11, 2026',
-            reportId: 'SAMPLE-10-DEMO',
-          },
-          scores: {
-            aptitude: { verbal: 82, numerical: 88, reasoning: 84, spatial: 79, overall: 83 },
-            personality: { openness: 76, conscientiousness: 80, extraversion: 68, agreeableness: 74, emotionalStability: 72 },
-            topRiasec: ['Investigative', 'Realistic', 'Artistic'],
-            careerFitment: [
-              { name: 'Computer Science & Software Systems', score: 95 },
-              { name: 'Data Science & AI Engineering', score: 92 },
-            ],
-          },
-        }),
-      });
-
-      if (!res.ok) {
-        throw new Error('Failed to generate PDF');
-      }
-
-      const blob = await res.blob();
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = isExecutive
-        ? 'Sample_Class10_Executive_Career_Summary.pdf'
-        : 'Sample_Class10_Full_Psychometric_Report.pdf';
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      setTimeout(() => URL.revokeObjectURL(url), 15000);
-    } catch {
-      window.location.href = previewUrl;
-    } finally {
-      setDownloadingReport(null);
-    }
-  };
-
-  const closeNotice = () => {
-    setMissingAssetNotice({ isOpen: false, reportName: '', previewUrl: '' });
-  };
-
   return (
-    <div style={{ minHeight: '85vh', background: '#F8FAFC', padding: 'clamp(28px, 5vw, 56px) clamp(12px, 4vw, 24px)' }}>
-      <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
-        
-        {/* Navigation Breadcrumb */}
-        <div style={{ marginBottom: '24px' }}>
-          <Link href="/" style={{ color: '#2563EB', fontSize: '14px', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: '6px', textDecoration: 'none' }}>
+    <div className="min-h-screen bg-[#F8FAFC] flex flex-col font-sans">
+      <LandingNavbar />
+
+      <main className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-10 sm:py-16">
+        {/* Breadcrumb Navigation */}
+        <div className="mb-6">
+          <Link
+            href="/"
+            className="text-xs sm:text-sm font-semibold text-[#2563EB] hover:underline inline-flex items-center gap-1.5"
+          >
             ← Back to CLARVO Home
           </Link>
         </div>
 
         {/* Hero Section */}
-        <div style={{ textAlign: 'center', maxWidth: '780px', margin: '0 auto 48px auto' }}>
-          <div style={{ display: 'inline-block', background: '#E8F0FF', color: '#2563EB', padding: '6px 16px', borderRadius: '999px', fontSize: '12px', fontWeight: 700, letterSpacing: '0.05em', textTransform: 'uppercase', marginBottom: '16px' }}>
-            Diagnostic Dossier Showcase
+        <div className="text-center max-w-3xl mx-auto mb-12 sm:mb-16">
+          <div className="inline-flex items-center gap-1.5 bg-[#E8F0FF] text-[#1258DE] px-3 py-1 rounded-full text-xs font-bold tracking-wide uppercase mb-4">
+            <FileText className="w-3.5 h-3.5" />
+            <span>Diagnostic Dossier Showcase</span>
           </div>
 
-          <h1 style={{ fontSize: 'clamp(24px, 6vw, 38px)', fontWeight: 800, color: '#080F1C', letterSpacing: '-0.02em', lineHeight: '1.18', margin: '0 0 16px 0' }}>
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-black font-dmsans text-[#080F1C] tracking-tight leading-tight mb-4">
             Explore CLARVO Sample Reports
           </h1>
 
-          <p style={{ fontSize: '16px', color: '#344054', lineHeight: '1.6', margin: '0 0 8px 0' }}>
-            Experience the precision of our psychometric evaluation frameworks. Review how 30 diagnostic modules uncover cognitive aptitudes, personality traits, and career alignment for students in Grades 7–12.
-          </p>
-
-          <p style={{ fontSize: '13px', color: '#667085' }}>
-            Available without login. Click below to inspect our executive summary or full clinical dossier.
+          <p className="text-base sm:text-lg text-[#475569] leading-relaxed">
+            Inspect our complete 50+ page evaluation dossiers across all grade cohorts. Every report synthesizes 30 scientific modules into actionable clarity for students, parents, and counsellors.
           </p>
         </div>
 
-        {/* Two Report Cards Grid */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 300px), 1fr))', gap: '32px', marginBottom: '56px' }}>
-          
-          {/* Card 1: Summary Sample Report */}
-          <div style={{ background: '#FFFFFF', borderRadius: '20px', border: '1px solid #E4E7EC', padding: 'clamp(20px, 4vw, 36px) clamp(16px, 3.5vw, 32px)', display: 'flex', flexDirection: 'column', justifyContent: 'between', boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.04)', position: 'relative' }}>
-            <div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '20px' }}>
-                <span style={{ background: '#E8F0FF', color: '#2563EB', padding: '4px 12px', borderRadius: '8px', fontSize: '12px', fontWeight: 700, textTransform: 'uppercase' }}>
-                  15-Page Edition
-                </span>
-                <span style={{ fontSize: '12px', color: '#667085', fontWeight: 600 }}>
-                  Aarav Sharma (Class 10)
-                </span>
-              </div>
+        {/* Three Grade Reports Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 mb-16">
+          {/* Card 1: Grades 7-9 */}
+          <ReportCard
+            gradeBadge="Grades 7–9"
+            gradeBadgeColor="bg-amber-50 text-amber-700 border border-amber-200"
+            pages="50+ Pages"
+            title="Junior Diagnostic Report"
+            subtitle="Foundation & Learning Modalities"
+            description="Evaluates cognitive stamina, VARK sensory learning preferences, and early curiosity indicators before high-school specialization."
+            focusHighlights={[
+              'VARK Sensory Learning Profile',
+              'Abstract logic & numerical intuition agility',
+              'Self-directed study stamina & focus index',
+              'Curiosity vector mapping across emerging subjects',
+            ]}
+            browserUrl="/sample-report?type=junior"
+            pdfUrl="/sample-reports/sample-report-grades-7-9.pdf"
+          />
 
-              <h2 style={{ fontSize: '24px', fontWeight: 800, color: '#080F1C', margin: '0 0 12px 0' }}>
-                Summary Sample Report
-              </h2>
+          {/* Card 2: Grade 10 (Flagship) */}
+          <ReportCard
+            gradeBadge="Grade 10"
+            gradeBadgeColor="bg-blue-50 text-blue-700 border border-blue-200"
+            pages="56 Pages"
+            title="Secondary Stream Selection"
+            subtitle="PCM vs PCB vs Commerce vs Arts"
+            description="Our flagship 30-module evaluation designed to validate Class 11 stream fitment, quantitative ceiling, and high-stakes subject combinations."
+            focusHighlights={[
+              'Stream fitment ranking (PCM / PCB / Commerce / Humanities)',
+              '30-module item-level percentile breakdown',
+              'Psychologist advisory observations & risk mitigation',
+              'Target university pathways & subject roadmaps',
+            ]}
+            browserUrl="/sample-report?type=grade10"
+            pdfUrl="/sample-reports/sample-report-grade-10.pdf"
+            isPopular
+          />
 
-              <p style={{ fontSize: '14px', color: '#344054', lineHeight: '1.6', margin: '0 0 24px 0' }}>
-                The Executive Career Summary provides a streamlined breakdown of core cognitive aptitude, top RIASEC occupational matches, personality index scores, and key recommendations.
-              </p>
-
-              <div style={{ background: '#F8FAFC', borderRadius: '12px', border: '1px solid #E4E7EC', padding: '16px', marginBottom: '28px' }}>
-                <div style={{ fontSize: '12px', fontWeight: 700, color: '#080F1C', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '10px' }}>
-                  What's Included:
-                </div>
-                <ul style={{ margin: 0, paddingLeft: '18px', fontSize: '13px', color: '#667085', lineHeight: '1.7' }}>
-                  <li>Cognitive percentile ranking & aptitude breakdown</li>
-                  <li>Top career fitments with fitment scores (%)</li>
-                  <li>Big Five personality archetypes & VARK learning style</li>
-                  <li>Family academic alignment index</li>
-                </ul>
-              </div>
-            </div>
-
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-              <Link
-                href="/sample-report?mode=executive"
-                style={{
-                  padding: '13px 20px',
-                  borderRadius: '10px',
-                  background: '#2563EB',
-                  color: '#FFFFFF',
-                  fontSize: '14px',
-                  fontWeight: 700,
-                  textAlign: 'center',
-                  textDecoration: 'none',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: '8px',
-                  boxShadow: '0 4px 12px rgba(37, 99, 235, 0.2)',
-                }}
-              >
-                <span>View Summary Report Preview</span>
-                <span>→</span>
-              </Link>
-
-              <button
-                type="button"
-                id="btn-download-summary-report"
-                onClick={() => handleDownload('Summary Sample Report', '/sample-report?mode=executive')}
-                style={{
-                  padding: '12px 20px',
-                  borderRadius: '10px',
-                  background: '#FFFFFF',
-                  color: '#344054',
-                  border: '1.5px solid #E4E7EC',
-                  fontSize: '14px',
-                  fontWeight: 600,
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: '8px',
-                  transition: 'background-color 0.2s',
-                }}
-              >
-                <span>📥</span>
-                <span>Download Summary Report</span>
-              </button>
-            </div>
-          </div>
-
-          {/* Card 2: Detailed Sample Report */}
-          <div style={{ background: '#FFFFFF', borderRadius: '20px', border: '1.5px solid #BFDBFE', padding: 'clamp(20px, 4vw, 36px) clamp(16px, 3.5vw, 32px)', display: 'flex', flexDirection: 'column', justifyContent: 'between', boxShadow: '0 10px 25px -5px rgba(37, 99, 235, 0.08)', position: 'relative' }}>
-            <div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '20px' }}>
-                <span style={{ background: '#080F1C', color: '#FFFFFF', padding: '4px 12px', borderRadius: '8px', fontSize: '12px', fontWeight: 700, textTransform: 'uppercase' }}>
-                  56-Page Full Dossier
-                </span>
-                <span style={{ fontSize: '12px', color: '#2563EB', fontWeight: 700 }}>
-                  Clinical Comprehensive
-                </span>
-              </div>
-
-              <h2 style={{ fontSize: '24px', fontWeight: 800, color: '#080F1C', margin: '0 0 12px 0' }}>
-                Detailed Sample Report
-              </h2>
-
-              <p style={{ fontSize: '14px', color: '#344054', lineHeight: '1.6', margin: '0 0 24px 0' }}>
-                The complete diagnostic dossier. Deep-dive into all 30 psychometric modules, multi-dimensional score distributions, psychologist advisory points, and academic stream recommendations.
-              </p>
-
-              <div style={{ background: '#F8FAFC', borderRadius: '12px', border: '1px solid #E4E7EC', padding: '16px', marginBottom: '28px' }}>
-                <div style={{ fontSize: '12px', fontWeight: 700, color: '#080F1C', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '10px' }}>
-                  What's Included:
-                </div>
-                <ul style={{ margin: 0, paddingLeft: '18px', fontSize: '13px', color: '#667085', lineHeight: '1.7' }}>
-                  <li>All 30 psychometric modules with item-level analysis</li>
-                  <li>Multi-tiered career progression & subject combination maps</li>
-                  <li>Psychologist Advisory observations & strengths breakdown</li>
-                  <li>Class 11 stream selection protocols & risk mitigation notes</li>
-                </ul>
-              </div>
-            </div>
-
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-              <Link
-                href="/sample-report?mode=full"
-                style={{
-                  padding: '13px 20px',
-                  borderRadius: '10px',
-                  background: '#080F1C',
-                  color: '#FFFFFF',
-                  fontSize: '14px',
-                  fontWeight: 700,
-                  textAlign: 'center',
-                  textDecoration: 'none',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: '8px',
-                  boxShadow: '0 4px 12px rgba(8, 15, 28, 0.2)',
-                }}
-              >
-                <span>View Detailed Report Preview</span>
-                <span>→</span>
-              </Link>
-
-              <button
-                type="button"
-                id="btn-download-detailed-report"
-                onClick={() => handleDownload('Detailed Sample Report', '/sample-report?mode=full')}
-                style={{
-                  padding: '12px 20px',
-                  borderRadius: '10px',
-                  background: '#FFFFFF',
-                  color: '#344054',
-                  border: '1.5px solid #E4E7EC',
-                  fontSize: '14px',
-                  fontWeight: 600,
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: '8px',
-                  transition: 'background-color 0.2s',
-                }}
-              >
-                <span>📥</span>
-                <span>Download Detailed Report</span>
-              </button>
-            </div>
-          </div>
-
+          {/* Card 3: Grades 11-12 */}
+          <ReportCard
+            gradeBadge="Grades 11–12"
+            gradeBadgeColor="bg-purple-50 text-purple-700 border border-purple-200"
+            pages="50+ Pages"
+            title="Senior Career & University"
+            subtitle="Degree Alignment & Career Clusters"
+            description="Synthesizes specialized aptitude, Holland RIASEC vocational codes, and premier university admission requirements worldwide."
+            focusHighlights={[
+              'Undergraduate degree cluster alignment',
+              'Holland RIASEC occupational compatibility',
+              'India vs Study Abroad admission readiness',
+              '4-year higher education timeline & milestone roadmap',
+            ]}
+            browserUrl="/sample-report?type=grade12"
+            pdfUrl="/sample-reports/sample-report-grades-11-12.pdf"
+          />
         </div>
 
-        {/* Demo Marketing CTA Banner */}
-        <div style={{ background: '#080F1C', borderRadius: '24px', padding: '48px 36px', color: '#FFFFFF', display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: '24px' }}>
-          <div style={{ maxWidth: '620px' }}>
-            <span style={{ color: '#93C5FD', fontSize: '12px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', display: 'block', marginBottom: '8px' }}>
-              Personalised Guidance for Grades 7–12
+        {/* Advisory Consultation Banner */}
+        <div className="bg-[#080F1C] rounded-2xl sm:rounded-3xl p-8 sm:p-12 text-white flex flex-col md:flex-row items-center justify-between gap-8 shadow-xl">
+          <div className="max-w-2xl text-center md:text-left">
+            <span className="text-xs font-bold text-[#93C5FD] uppercase tracking-wider block mb-2">
+              Individualized Academic Guidance
             </span>
-            <h2 style={{ fontSize: '26px', fontWeight: 800, margin: '0 0 10px 0', letterSpacing: '-0.01em' }}>
-              Want to see how CLARVO works for your student?
+            <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight mb-2">
+              Want a personalized assessment for your student?
             </h2>
-            <p style={{ fontSize: '14px', color: '#94A3B8', margin: 0, lineHeight: '1.6' }}>
-              Connect with our academic advisory team for an individualized consultation, platform walkthrough, and roadmap planning session.
+            <p className="text-sm sm:text-base text-slate-300 leading-relaxed">
+              Take the 30-module assessment today, or schedule a consultation with our senior counsellors for a full platform walkthrough.
             </p>
           </div>
-          <div>
+
+          <div className="flex flex-col sm:flex-row items-center gap-3 shrink-0 w-full md:w-auto">
+            <Link
+              href="/psychometric-assessment"
+              className="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-bold text-sm text-center shadow-md transition-colors"
+            >
+              Start Free Assessment →
+            </Link>
             <Link
               href="/book-a-demo"
-              style={{
-                display: 'inline-block',
-                background: '#2563EB',
-                color: '#FFFFFF',
-                padding: '14px 28px',
-                borderRadius: '10px',
-                fontSize: '15px',
-                fontWeight: 700,
-                textDecoration: 'none',
-                boxShadow: '0 4px 14px rgba(37, 99, 235, 0.4)',
-              }}
+              className="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-semibold text-sm text-center border border-white/20 transition-colors"
             >
-              Book a Demo →
+              Book Consultation
             </Link>
           </div>
         </div>
+      </main>
 
-      </div>
-
-      {/* Missing Asset Notification Modal */}
-      {missingAssetNotice.isOpen && (
-        <div
-          role="dialog"
-          aria-modal="true"
-          onClick={closeNotice}
-          style={{
-            position: 'fixed',
-            inset: 0,
-            background: 'rgba(8, 15, 28, 0.6)',
-            backdropFilter: 'blur(4px)',
-            zIndex: 9999,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            padding: '16px',
-          }}
-        >
-          <div
-            onClick={(e) => e.stopPropagation()}
-            style={{
-              background: '#FFFFFF',
-              borderRadius: '20px',
-              maxWidth: '520px',
-              width: '100%',
-              padding: '32px 28px',
-              border: '1px solid #E4E7EC',
-              boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
-              textAlign: 'left',
-            }}
-          >
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-              <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: '#FEF3C7', color: '#92400E', padding: '4px 12px', borderRadius: '999px', fontSize: '12px', fontWeight: 700 }}>
-                <span>ℹ️</span>
-                <span>Asset Notice</span>
-              </div>
-              <button
-                onClick={closeNotice}
-                style={{ background: 'transparent', border: 'none', fontSize: '18px', cursor: 'pointer', color: '#667085' }}
-              >
-                ✕
-              </button>
-            </div>
-
-            <h3 style={{ fontSize: '20px', fontWeight: 800, color: '#080F1C', margin: '0 0 10px 0' }}>
-              {missingAssetNotice.reportName}
-            </h3>
-
-            <p style={{ fontSize: '14px', color: '#344054', lineHeight: '1.6', margin: '0 0 16px 0' }}>
-              A pre-compiled static PDF file is currently unavailable in repository storage. Rather than presenting a broken file link, you can inspect the complete high-fidelity dossier in our <strong>Live Interactive Report Viewer</strong>.
-            </p>
-
-            <div style={{ background: '#F8FAFC', borderRadius: '12px', border: '1px solid #E4E7EC', padding: '14px', marginBottom: '24px' }}>
-              <p style={{ margin: 0, fontSize: '12px', color: '#667085', lineHeight: '1.5' }}>
-                💡 <strong>Tip:</strong> In the Interactive Report Viewer, you can review all visual modules and use your browser's Print dialog (<code>Ctrl+P</code> or <code>Cmd+P</code>) to export or save a high-resolution PDF dossier anytime.
-              </p>
-            </div>
-
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', justifyContent: 'flex-end' }}>
-              <button
-                type="button"
-                onClick={closeNotice}
-                style={{
-                  padding: '10px 18px',
-                  borderRadius: '8px',
-                  background: '#FFFFFF',
-                  color: '#667085',
-                  border: '1px solid #E4E7EC',
-                  fontSize: '13px',
-                  fontWeight: 600,
-                  cursor: 'pointer',
-                }}
-              >
-                Close
-              </button>
-              <Link
-                href={missingAssetNotice.previewUrl}
-                onClick={closeNotice}
-                style={{
-                  padding: '10px 18px',
-                  borderRadius: '8px',
-                  background: '#2563EB',
-                  color: '#FFFFFF',
-                  fontSize: '13px',
-                  fontWeight: 700,
-                  textDecoration: 'none',
-                }}
-              >
-                Open Interactive Report Viewer →
-              </Link>
-            </div>
-          </div>
-        </div>
-      )}
-
+      <RedesignFooter />
     </div>
   );
 }

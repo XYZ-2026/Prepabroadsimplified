@@ -98,6 +98,7 @@ export function sanitizePortfolio(input: unknown): PortfolioRecord {
     published: b.published !== false,
     fullName: str(b.fullName, 80),
     photo: photo(b.photo),
+    photoCutout: b.photoCutout === true && Boolean(photo(b.photo)),
     grade: str(b.grade, 40),
     stream: str(b.stream, 60),
     school: str(b.school, 120),

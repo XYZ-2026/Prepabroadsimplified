@@ -8,6 +8,7 @@ const DEMO_RECORD: PortfolioRecord = {
   published: true,
   fullName: 'Aarav Sharma',
   photo: '',
+  photoCutout: false,
   grade: 'Grade 11',
   stream: 'Science (PCM)',
   school: 'Greenwood International School',

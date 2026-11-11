@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import styles from '@/styles/student-dashboard.module.css';
 import componentsStyles from '@/styles/components.module.css';
 import ui from './portfolio-editor.module.css';
+import { processPortrait, PortraitRuleError } from './portraitProcessor';
 import {
   emptyPortfolioRecord,
   suggestUsername,
@@ -19,6 +20,7 @@ interface EditorState {
   published: boolean;
   fullName: string;
   photo: string;
+  photoCutout: boolean;
   grade: string;
   stream: string;
   school: string;
@@ -193,6 +195,7 @@ export default function PortfolioEditor({
   const [origin, setOrigin] = useState('');
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [uploadStep, setUploadStep] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [copied, setCopied] = useState(false);
@@ -225,28 +228,33 @@ export default function PortfolioEditor({
     e.target.value = '';
     if (!file) return;
     setError('');
-    if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type)) {
-      setError('Please upload a JPG, PNG or WebP image.');
-      return;
-    }
-    if (file.size > 5 * 1024 * 1024) {
-      setError('Photo must be 5 MB or smaller.');
-      return;
-    }
+    setSuccess('');
     setUploading(true);
     try {
+      setUploadStep('Removing background…');
+      const processed = await processPortrait(file);
+      URL.revokeObjectURL(processed.previewUrl);
+
+      setUploadStep('Uploading…');
+      const ext = processed.blob.type === 'image/webp' ? 'webp' : processed.blob.type === 'image/png' ? 'png' : 'jpg';
       const form = new FormData();
-      form.append('photo', file);
+      form.append('photo', new File([processed.blob], `portrait.${ext}`, { type: processed.blob.type }));
       const res = await fetch('/api/portfolio/photo', { method: 'POST', body: form });
       const json = await res.json();
       if (!res.ok) throw new Error(json.error || 'Upload failed');
-      set('photo', json.url);
-      setSuccess('Photo uploaded — remember to save your portfolio.');
-      setTimeout(() => setSuccess(''), 4000);
+
+      setState((prev) => ({ ...prev, photo: json.url, photoCutout: processed.cutout }));
+      setSuccess(
+        `${processed.note ? processed.note + ' ' : 'Background removed. '}Remember to save your portfolio.`,
+      );
+      setTimeout(() => setSuccess(''), 6000);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Upload failed');
+      setError(
+        err instanceof PortraitRuleError || err instanceof Error ? err.message : 'Upload failed',
+      );
     } finally {
       setUploading(false);
+      setUploadStep('');
     }
   };
 
@@ -370,26 +378,54 @@ export default function PortfolioEditor({
 
           {/* Photo */}
           <div className={ui.section}>
-            <h3 className={ui.sectionTitle}>Photo</h3>
-            <p className={ui.sectionHint}>Shown on your portfolio card. JPG, PNG or WebP, up to 5 MB.</p>
+            <h3 className={ui.sectionTitle}>Hero photo</h3>
+            <p className={ui.sectionHint}>
+              We automatically remove the background and place you under a spotlight on your portfolio.
+            </p>
             <div className={ui.photoRow}>
-              {state.photo ? (
-                 
-                <img src={state.photo} alt="Portfolio photo" className={ui.photoPreview} />
-              ) : (
-                <div className={ui.photoPreview}>{initials}</div>
-              )}
-              <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
-                <button type="button" className={ui.fileBtn} onClick={() => fileRef.current?.click()} disabled={uploading}>
-                  {uploading ? 'Uploading…' : state.photo ? 'Change photo' : 'Upload photo'}
-                </button>
-                {state.photo && (
-                  <button type="button" className={ui.removeBtn} onClick={() => set('photo', '')}>
-                    Remove
+              <div className={ui.spotPreview}>
+                {state.photo ? (
+                   
+                  <img
+                    src={state.photo}
+                    alt="Portfolio photo"
+                    className={state.photoCutout ? ui.spotCutout : ui.spotBlend}
+                  />
+                ) : (
+                  <span className={ui.spotInitials}>{initials}</span>
+                )}
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 10, alignItems: 'flex-start' }}>
+                <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'center' }}>
+                  <button type="button" className={ui.fileBtn} onClick={() => fileRef.current?.click()} disabled={uploading}>
+                    {uploading ? uploadStep || 'Processing…' : state.photo ? 'Change photo' : 'Upload photo'}
                   </button>
+                  {state.photo && !uploading && (
+                    <button type="button" className={ui.removeBtn} onClick={() => setState((prev) => ({ ...prev, photo: '', photoCutout: false }))}>
+                      Remove
+                    </button>
+                  )}
+                </div>
+                {uploading && (
+                  <span className={ui.processingNote}>
+                    The first upload downloads the background-removal model (about 30 MB), so it can take a little while.
+                  </span>
                 )}
                 <input ref={fileRef} type="file" accept="image/jpeg,image/png,image/webp" hidden onChange={handlePhoto} />
               </div>
+            </div>
+
+            <div className={ui.rules}>
+              <strong>Photo rules — for the best spotlight result</strong>
+              <ul>
+                <li><b>Just you:</b> one person only, no group photos.</li>
+                <li><b>Face the camera:</b> front-facing, whole face visible — no sunglasses, caps, masks or face filters.</li>
+                <li><b>Head &amp; shoulders:</b> chest-up framing, with some empty space above your head (don&apos;t crop the top of your head).</li>
+                <li><b>Portrait orientation:</b> taller than wide, at least 400 px on the shorter side (1000 × 1250 px or larger is ideal).</li>
+                <li><b>Plain background:</b> a plain wall or simple, uncluttered background that contrasts with your hair and clothes.</li>
+                <li><b>Good light:</b> even light on your face, no strong light behind you, sharp focus (not blurry).</li>
+                <li><b>Format:</b> JPG, PNG or WebP, up to 15 MB. Studio or black-and-white portraits work great.</li>
+              </ul>
             </div>
           </div>
 

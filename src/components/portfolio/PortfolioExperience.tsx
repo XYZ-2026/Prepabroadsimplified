@@ -93,12 +93,87 @@ function PortraitMedia({ profile }: { profile: PortfolioProfile }) {
       <img
         src={profile.photoUrl}
         alt={profile.fullName}
-        className={styles.portraitPhoto}
+        className={profile.photoCutout ? styles.portraitCutout : styles.portraitPhoto}
         onError={() => setFailed(true)}
       />
     );
   }
   return <div className={styles.portraitInitials}>{profile.initials}</div>;
+}
+
+interface SpotChip {
+  value: string;
+  label: string;
+}
+
+function heroChips(profile: PortfolioProfile): SpotChip[] {
+  const chips: SpotChip[] = [];
+  const scored = profile.academics.find((a) => a.score && /\d/.test(a.score));
+  if (scored) chips.push({ value: scored.score, label: scored.label });
+  else if (profile.grade) chips.push({ value: profile.grade, label: profile.stream || profile.school });
+  if (profile.awards[0]) chips.push({ value: profile.awards[0].title, label: profile.awards[0].subtitle });
+  return chips.slice(0, 2);
+}
+
+/**
+ * Spotlight portrait: background-removed cutout standing under a red spotlight,
+ * fading into the page. Non-cutout photos are blended onto the light instead.
+ */
+function SpotlightPortrait({
+  profile,
+  variant,
+  chips = [],
+}: {
+  profile: PortfolioProfile;
+  variant: 'hero' | 'intro';
+  chips?: SpotChip[];
+}) {
+  const reduce = useReducedMotion();
+  const [failed, setFailed] = useState(false);
+  const hasPhoto = Boolean(profile.photoUrl) && !failed;
+
+  return (
+    <div className={`${styles.spotStage} ${variant === 'intro' ? styles.spotIntro : ''}`}>
+      <div className={styles.spotBeam} />
+      <motion.div
+        className={styles.spotGlow}
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={reduce ? { opacity: 1, scale: 1 } : { opacity: [0.85, 1, 0.85], scale: [1, 1.04, 1] }}
+        transition={reduce ? { duration: 0.6 } : { duration: 5, repeat: Infinity, ease: 'easeInOut' }}
+      />
+      <div className={styles.spotHotspot} />
+      {hasPhoto ? (
+         
+        <motion.img
+          src={profile.photoUrl}
+          alt={profile.fullName}
+          className={profile.photoCutout ? styles.spotImg : styles.spotImgBlend}
+          onError={() => setFailed(true)}
+          initial={{ opacity: 0, y: 40, filter: 'brightness(0.4)' }}
+          animate={{ opacity: 1, y: 0, filter: 'brightness(1)' }}
+          transition={{ duration: 1.4, ease, delay: variant === 'intro' ? 0.9 : 0.2 }}
+        />
+      ) : (
+        <div className={styles.spotInitials}>{profile.initials}</div>
+      )}
+      {chips.map((c, i) => (
+        <motion.div
+          key={c.value + i}
+          className={`${styles.spotChip} ${i === 0 ? styles.spotChipLeft : styles.spotChipRight}`}
+          initial={{ opacity: 0, y: 20 }}
+          animate={reduce ? { opacity: 1, y: 0 } : { opacity: 1, y: [0, -8, 0] }}
+          transition={
+            reduce
+              ? { duration: 0.6, delay: 1 }
+              : { opacity: { duration: 0.6, delay: 1 + i * 0.2 }, y: { duration: 4 + i, repeat: Infinity, ease: 'easeInOut', delay: 1 } }
+          }
+        >
+          <strong>{c.value}</strong>
+          {c.label && <span>{c.label}</span>}
+        </motion.div>
+      ))}
+    </div>
+  );
 }
 
 /* ───────────────────────── Intro ───────────────────────── */
@@ -142,6 +217,7 @@ function Intro({ profile, onDone }: { profile: PortfolioProfile; onDone: () => v
           The Series
         </motion.div>
       </motion.div>
+      {profile.photoUrl && <SpotlightPortrait profile={profile} variant="intro" />}
       {subtitle && (
         <motion.div
           className={styles.introRole}
@@ -244,26 +320,7 @@ function Hero({ profile, firstSection, hasContact }: { profile: PortfolioProfile
       </motion.div>
 
       <motion.div className={styles.portraitWrap} style={reduce ? undefined : { y }}>
-        <motion.div
-          className={styles.portrait}
-          initial={{ opacity: 0, scale: 0.9, rotateY: -15 }}
-          animate={{ opacity: 1, scale: 1, rotateY: 0 }}
-          transition={{ duration: 1.2, ease }}
-          whileHover={{ rotateY: 6, rotateX: -4 }}
-          style={{ transformPerspective: 1000 }}
-        >
-          {!reduce && !profile.photoUrl && (
-            <motion.div
-              className={styles.portraitShine}
-              animate={{ rotate: 360 }}
-              transition={{ duration: 8, repeat: Infinity, ease: 'linear' }}
-            />
-          )}
-          <PortraitMedia profile={profile} />
-          <div className={styles.portraitFade} />
-          {profile.school && <div className={styles.topBadge}>{profile.school}</div>}
-          <div className={styles.portraitCaption}>{profile.fullName}</div>
-        </motion.div>
+        <SpotlightPortrait profile={profile} variant="hero" chips={heroChips(profile)} />
       </motion.div>
     </section>
   );

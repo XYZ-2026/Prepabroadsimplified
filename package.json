@@ -13,6 +13,7 @@
     "@emnapi/core": "^1.11.2",
     "@emnapi/runtime": "^1.11.2",
     "@google/generative-ai": "^0.24.1",
+    "@mediapipe/tasks-vision": "^1.2.2",
     "@opentelemetry/api": "^1.9.1",
     "firebase": "^12.15.0",
     "firebase-admin": "^14.1.0",

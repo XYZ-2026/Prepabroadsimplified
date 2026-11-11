@@ -17,6 +17,8 @@ export interface PortfolioRecord {
   published: boolean;
   fullName: string;
   photo: string;
+  /** true when `photo` is a background-removed cutout (rendered with the spotlight). */
+  photoCutout: boolean;
   grade: string;
   stream: string;
   school: string;
@@ -40,6 +42,7 @@ export interface PortfolioProfile {
   fullName: string;
   initials: string;
   photoUrl: string;
+  photoCutout: boolean;
   grade: string;
   stream: string;
   school: string;
@@ -97,6 +100,7 @@ export function emptyPortfolioRecord(): PortfolioRecord {
     published: true,
     fullName: '',
     photo: '',
+    photoCutout: false,
     grade: '',
     stream: '',
     school: '',
@@ -142,6 +146,7 @@ export function recordToProfile(record: PortfolioRecord): PortfolioProfile {
     fullName,
     initials,
     photoUrl: safeHref(record.photo),
+    photoCutout: Boolean(record.photo) && record.photoCutout,
     grade: record.grade,
     stream: record.stream,
     school: record.school,

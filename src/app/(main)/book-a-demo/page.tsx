@@ -207,6 +207,14 @@ export default function BookADemoPage() {
     window.scrollTo({ top: 120, behavior: 'smooth' });
   };
 
+  // Which button brought the visitor here (e.g. ?from=psychometric-assessment:hero). Stored with the
+  // enquiry so the admin can see which placement drives bookings. Falls back to this page's path.
+  const resolveSourcePage = () => {
+    if (typeof window === 'undefined') return '/book-a-demo';
+    const from = new URLSearchParams(window.location.search).get('from');
+    return from && /^[a-z0-9:_\-/]{1,60}$/i.test(from) ? from : window.location.pathname;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitError(null);
@@ -224,7 +232,7 @@ export default function BookADemoPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ...formData,
-          sourcePage: typeof window !== 'undefined' ? window.location.pathname : '/book-a-demo',
+          sourcePage: resolveSourcePage(),
         }),
       });
 

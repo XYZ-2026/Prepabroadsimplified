@@ -155,22 +155,28 @@ The mobile layout (under 768) is specified first, then the changes for wider scr
 
 On desktop with a fine pointer, layered parallax applies on scroll: the photo moves up 24px and the card moves up 12px across the hero's height.
 
-### 5.2 Is / is not
+### 5.2 Why guesswork fails (replaces "Is / is not"; from the boss's reference image)
 
-**Goal:** remove the wrong mental models in five seconds.
+**Goal:** show why a family needs this, in problem → solution → proof order.
 
-- Headline: "Not an exam. A map." (4 words). No sub.
-- Three rows. Each pairs a struck-through wrong idea with the right one:
+- Headline: "A career decision deserves more than guesswork." ("guesswork." is blue with a hand-drawn underline). Sub: "Understand strengths, interests and aptitude before choosing a stream or career."
+- **Before card** ("Without a clear plan"): the worried family (father, son, mother) under four thought bubbles built in HTML: Comparison with others, Neighbours' advice, Friends' choices, Marks & scores, with a "?" above the son.
+- **Arrow** (down on phones, right from 1024).
+- **After card** ("With a clear plan"): the counsellor and the relaxed family under a "Personalised career roadmap" card: a path through Strengths, Stream, Degree and Career, ending at a flag.
+- One booking button and its note, then four benefits: Know your child's strengths, Discover real interests, Choose the right stream and options, Get a clear, actionable career plan.
+- **Mobile first:** cards stack (max 560px wide); from 1024 they sit side by side. The scene image defines each card's height and sits flush on the bottom edge; bubbles and the roadmap float above it.
+- **Motion (plays once per card, on entering view):** before: bubbles pop in left to right, then the "?" wobbles once. After: the roadmap card drops in, the path draws, milestones fill in order, the flag pops last. Heading underline draws once.
+- **Art:** `sec2-before-family.webp` and `sec2-after-counsellor.webp`, produced from the originals in `reference/psychometric-illustrations/` by `scripts/prepare-psychometric-illustrations.py` (crop, speck removal, edge softening, bottom extension). The character sheet there is the master for any further illustrations. All text, bubbles, roadmap and icons stay live HTML/SVG, never baked into images.
 
-| Struck through | Becomes |
-|---|---|
-| A school exam | No pass or fail |
-| An IQ score | How they reason |
-| A diagnosis | Guidance, not labels |
+### Call-to-action rule (business decision)
 
-- Layout: one row per line on mobile. From 768, the rows sit in a 3-column strip.
+The assessment is paid and unlocked by a counsellor, so **this page has one primary action: Book a counselling call.** There is no "Start assessment" button anywhere on the page.
 
-**Signature motion:** when a row enters, an SVG line draws across the wrong idea (`pathLength` 0 → 1, 0.4s). The wrong idea then fades to `muted` at 50%, and the right idea slides in from `x: 12`. Stagger the rows 0.12s. With reduced motion, show the lines already drawn.
+- Every booking button comes from `PSYCHOMETRIC_CONTENT.bookCall` and the shared `BookCallButton`; hrefs are built with `bookCallHref(placement)`.
+- Placements: hero, why-guesswork (section 2), sample-reports, final-cta, and the sticky mobile bar. Each links to `/book-a-demo?from=psychometric-assessment:<placement>`; the booking form stores that tag as the enquiry's `sourcePage`, which the admin enquiries screen already shows and exports.
+- Under the main buttons: "Flexible 45-minute Zoom sessions" (a fact already on the site; no price claims).
+- "View a sample report" stays as the secondary hero action.
+- The shared site nav's "Start Free" button goes to account registration and is outside this rule.
 
 ### 5.3 Four phases (main moment)
 

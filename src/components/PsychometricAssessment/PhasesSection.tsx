@@ -236,9 +236,9 @@ function PhaseDeck() {
           {/* Rail */}
           <div className="col-span-4 flex flex-col justify-between py-2">
             <ol className="relative list-none p-0 m-0 space-y-1" aria-label="Assessment phases">
-              <span className="absolute left-[11px] top-4 bottom-4 w-[2px] bg-white/15 rounded-full" aria-hidden="true" />
+              <span className="absolute left-[13px] top-4 bottom-4 w-[2px] bg-white/15 rounded-full" aria-hidden="true" />
               <m.span
-                className="absolute left-[11px] top-4 w-[2px] bg-clarvo-blue rounded-full origin-top"
+                className="absolute left-[13px] top-4 w-[2px] bg-clarvo-blue rounded-full origin-top"
                 style={{ height: 'calc(100% - 32px)' }}
                 initial={false}
                 animate={{ scaleY: active / (phases.length - 1) }}
@@ -256,7 +256,7 @@ function PhaseDeck() {
                       className="relative w-full flex items-start gap-4 text-left bg-transparent border-0 p-0 py-2.5 cursor-pointer group"
                     >
                       <span
-                        className={`relative z-10 mt-1 w-6 h-6 rounded-full border-2 flex items-center justify-center text-[12px] font-bold transition-colors duration-300 ${
+                        className={`relative z-10 mt-1 w-7 h-7 rounded-full border-2 flex items-center justify-center text-[13px] font-bold transition-colors duration-300 ${
                           i <= active ? 'bg-clarvo-blue border-clarvo-blue text-white' : 'bg-midnight border-white/30 text-white/60'
                         }`}
                       >

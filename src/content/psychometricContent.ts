@@ -62,7 +62,24 @@ export interface FaqItem {
   answer: string; // ≤ 40 words
 }
 
+/**
+ * Business rule: the assessment is paid and unlocked by a counsellor, so the page has ONE primary
+ * action: book a counselling call. Every call-to-action reads from `bookCall`; there is no
+ * "Start assessment" button on this page. The `from` tag records which placement drove the booking
+ * (stored as the enquiry's sourcePage and shown in the admin enquiries screen).
+ */
+export function bookCallHref(placement: string): string {
+  return `/book-a-demo?from=psychometric-assessment:${placement}`;
+}
+
 export const PSYCHOMETRIC_CONTENT = {
+  // ── The one primary action ───────────────────────────────────────────────
+  bookCall: {
+    label: 'Book a counselling call',
+    note: 'Flexible 45-minute Zoom sessions',
+    sampleTeaser: 'Want this for your child?',
+  },
+
   // ── Facts ────────────────────────────────────────────────────────────────
   facts: {
     modulesCount: 30,
@@ -90,9 +107,7 @@ export const PSYCHOMETRIC_CONTENT = {
     headlineLines: ['Know how your child', 'thinks, learns and decides.'] as const,
     subcopy: 'A 30-module online assessment that turns answers into a clear stream and career plan.',
     ctas: {
-      primary: { label: 'Start assessment', href: '/psychometric-test' },
       secondary: { label: 'View a sample report', href: '#sample-reports' },
-      tertiary: { label: 'Book a consultation', href: '/book-a-demo' },
     },
     photo: {
       src: '/images/psychometric/psy-01-hero-family-cutout.webp',
@@ -108,14 +123,38 @@ export const PSYCHOMETRIC_CONTENT = {
     },
   },
 
-  // ── Is / is not ──────────────────────────────────────────────────────────
-  whatItIs: {
-    headline: 'Not an exam. A map.',
-    rows: [
-      { not: 'A school exam', is: 'No pass or fail' },
-      { not: 'An IQ score', is: 'How they reason' },
-      { not: 'A diagnosis', is: 'Guidance, not labels' },
-    ],
+  // ── Why guesswork fails (section 2, boss reference) ───────────────────────
+  // Problem → solution → proof: what families rely on today, what a roadmap gives instead.
+  whyGuesswork: {
+    headline: ['A career decision deserves', 'more than', 'guesswork.'] as const,
+    subcopy: 'Understand strengths, interests and aptitude before choosing a stream or career.',
+    beforeLabel: 'Without a clear plan',
+    afterLabel: 'With a clear plan',
+    // Order matters: the layout staggers them left to right above the family.
+    bubbles: [
+      { id: 'compare', label: 'Comparison with others', icon: 'Trophy' },
+      { id: 'neighbours', label: 'Neighbours’ advice', icon: 'Users' },
+      { id: 'friends', label: 'Friends’ choices', icon: 'MessagesSquare' },
+      { id: 'marks', label: 'Marks & scores', icon: 'FileText' },
+    ] as Array<{ id: string; label: string; icon: string }>,
+    before: {
+      src: '/images/psychometric/sec2-before-family.webp',
+      alt: 'A father, son and mother looking worried and unsure about the student’s next step',
+    },
+    after: {
+      src: '/images/psychometric/sec2-after-counsellor.webp',
+      alt: 'A counsellor explaining a career roadmap to a father, mother and son who now look relaxed',
+    },
+    roadmap: {
+      title: 'Personalised career roadmap',
+      steps: ['Strengths', 'Stream', 'Degree', 'Career'] as const,
+    },
+    benefits: [
+      { icon: 'Brain', title: 'Know your child’s strengths' },
+      { icon: 'Target', title: 'Discover real interests' },
+      { icon: 'Layers', title: 'Choose the right stream and options' },
+      { icon: 'Route', title: 'Get a clear, actionable career plan' },
+    ] as Array<{ icon: string; title: string }>,
   },
 
   // ── Four phases ──────────────────────────────────────────────────────────
@@ -356,13 +395,10 @@ export const PSYCHOMETRIC_CONTENT = {
       src: '/images/psychometric/psy-10-cta-family-cutout.webp',
       alt: 'A smiling family of four',
     },
-    primaryButton: { label: 'Start assessment', href: '/psychometric-test' },
-    secondaryButton: { label: 'Book a consultation', href: '/book-a-demo' },
   },
 
   // ── Sticky mobile bar ────────────────────────────────────────────────────
   stickyBar: {
-    primary: { label: 'Start assessment', href: '/psychometric-test' },
     secondary: { label: 'Sample', href: '#sample-reports' },
   },
 };

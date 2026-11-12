@@ -1,12 +1,12 @@
 'use client';
 
 import React, { useRef } from 'react';
-import Link from 'next/link';
 import Image from 'next/image';
 import { m, useScroll, useTransform, useReducedMotion } from 'motion/react';
-import { ArrowRight, FileText } from 'lucide-react';
+import { FileText } from 'lucide-react';
 import { PSYCHOMETRIC_CONTENT } from '@/content/psychometricContent';
 import { usePointerFine } from '@/hooks/usePointerFine';
+import BookCallButton, { BookCallNote } from './BookCallButton';
 import CountUp from './motion/CountUp';
 import { springData, springUi } from './motion/tokens';
 
@@ -72,8 +72,11 @@ export default function HeroSection() {
             </p>
 
             {/* Desktop CTAs (mobile CTAs sit under the photo) */}
-            <div className="hidden lg:flex flex-wrap items-center gap-3 psy-fade" style={{ animationDelay: '0.3s' }}>
-              <HeroCtas />
+            <div className="hidden lg:block psy-fade" style={{ animationDelay: '0.3s' }}>
+              <div className="flex flex-wrap items-center gap-3">
+                <HeroCtas />
+              </div>
+              <BookCallNote className="mt-3" />
             </div>
 
             <ul className="hidden lg:flex flex-wrap gap-2 list-none p-0 m-0 psy-fade" style={{ animationDelay: '0.4s' }}>
@@ -117,6 +120,7 @@ export default function HeroSection() {
             <div className="flex flex-col sm:flex-row gap-3">
               <HeroCtas />
             </div>
+            <BookCallNote className="!mt-3" />
             <ul className="flex flex-wrap gap-2 list-none p-0 m-0">
               {factPills.map((f) => (
                 <FactPill key={f} label={f} />
@@ -132,16 +136,7 @@ export default function HeroSection() {
 function HeroCtas() {
   return (
     <>
-      <m.div whileTap={{ scale: 0.97 }} transition={springUi} className="w-full sm:w-auto">
-        <Link
-          href={hero.ctas.primary.href}
-          data-hero-cta=""
-          className="w-full sm:w-auto inline-flex items-center justify-center gap-2 h-[52px] px-7 rounded-full text-[16px] font-bold text-white bg-clarvo-blue hover:bg-[#0F47B8] shadow-clarvo-elevated transition-colors no-underline"
-        >
-          {hero.ctas.primary.label}
-          <ArrowRight className="w-4 h-4" aria-hidden="true" />
-        </Link>
-      </m.div>
+      <BookCallButton placement="hero" heroMarker className="w-full sm:w-auto" />
       <m.div whileTap={{ scale: 0.97 }} transition={springUi} className="w-full sm:w-auto">
         <a
           href={hero.ctas.secondary.href}

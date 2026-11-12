@@ -4,8 +4,8 @@ import React, { useRef, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { AnimatePresence, m, useMotionValue, useReducedMotion, useSpring } from 'motion/react';
-import { BookOpen, Download } from 'lucide-react';
-import { PSYCHOMETRIC_CONTENT } from '@/content/psychometricContent';
+import { ArrowRight, BookOpen, Download } from 'lucide-react';
+import { PSYCHOMETRIC_CONTENT, bookCallHref } from '@/content/psychometricContent';
 import { usePointerFine } from '@/hooks/usePointerFine';
 import Reveal from './motion/Reveal';
 import { EASE_FLIP, EASE_OUT, springUi } from './motion/tokens';
@@ -124,6 +124,18 @@ export default function SampleReportGallery() {
                 )}
               </m.div>
             </AnimatePresence>
+
+            {/* Peak interest: they have just seen a real report. Offer the next step. */}
+            <div className="mt-7 pt-6 border-t border-line flex flex-col sm:flex-row sm:items-center gap-x-4 gap-y-1">
+              <span className="text-[16px] font-semibold text-ink">{PSYCHOMETRIC_CONTENT.bookCall.sampleTeaser}</span>
+              <Link
+                href={bookCallHref('sample-reports')}
+                className="inline-flex items-center gap-1.5 min-h-[44px] text-[16px] font-bold text-clarvo-blue hover:underline no-underline"
+              >
+                {PSYCHOMETRIC_CONTENT.bookCall.label}
+                <ArrowRight className="w-4 h-4" aria-hidden={true} />
+              </Link>
+            </div>
           </div>
         </div>
 

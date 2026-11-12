@@ -5,7 +5,7 @@ import LandingFooter from '@/components/landing/LandingFooter';
 import SmoothScrollProvider from '@/components/providers/SmoothScrollProvider';
 import MotionProvider from '@/components/PsychometricAssessment/motion/MotionProvider';
 import HeroSection from '@/components/PsychometricAssessment/HeroSection';
-import WhatItIsSection from '@/components/PsychometricAssessment/WhatItIsSection';
+import WhyGuessworkSection from '@/components/PsychometricAssessment/WhyGuessworkSection';
 import PhasesSection from '@/components/PsychometricAssessment/PhasesSection';
 import QuestionDemoSection from '@/components/PsychometricAssessment/QuestionDemoSection';
 import ReportExplorerSection from '@/components/PsychometricAssessment/ReportExplorerSection';
@@ -98,7 +98,7 @@ export default function PsychometricAssessmentPage() {
 
           <main className="psy-main flex-1 w-full">
             <HeroSection />
-            <WhatItIsSection />
+            <WhyGuessworkSection />
             <PhasesSection />
             <QuestionDemoSection />
             <ReportExplorerSection />

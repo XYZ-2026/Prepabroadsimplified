@@ -4,8 +4,9 @@ import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { m, useMotionValue, useReducedMotion, useSpring } from 'motion/react';
-import { ArrowRight } from 'lucide-react';
-import { PSYCHOMETRIC_CONTENT } from '@/content/psychometricContent';
+import { CalendarDays } from 'lucide-react';
+import { PSYCHOMETRIC_CONTENT, bookCallHref } from '@/content/psychometricContent';
+import { BookCallNote } from './BookCallButton';
 import { usePointerFine } from '@/hooks/usePointerFine';
 import Reveal from './motion/Reveal';
 import { EASE_OUT, VIEWPORT } from './motion/tokens';
@@ -28,14 +29,9 @@ export default function FinalCTA() {
             <Reveal as="p" index={1} className="text-[17px] sm:text-[19px] text-white/85 mt-3 mb-8">
               {cta.subcopy}
             </Reveal>
-            <Reveal index={2} className="flex flex-col sm:flex-row gap-3">
-              <MagneticLink href={cta.primaryButton.href} label={cta.primaryButton.label} />
-              <Link
-                href={cta.secondaryButton.href}
-                className="inline-flex items-center justify-center gap-2 h-[52px] px-7 rounded-full whitespace-nowrap text-[16px] font-bold text-white border border-white/40 hover:bg-white/10 transition-colors no-underline"
-              >
-                {cta.secondaryButton.label}
-              </Link>
+            <Reveal index={2} className="flex flex-col items-start gap-3">
+              <MagneticLink href={bookCallHref('final-cta')} label={PSYCHOMETRIC_CONTENT.bookCall.label} />
+              <BookCallNote tone="light" />
             </Reveal>
           </div>
 
@@ -86,10 +82,10 @@ function MagneticLink({ href, label }: { href: string; label: string }) {
           y.set(0);
         }}
         data-final-cta=""
-        className="w-full inline-flex items-center justify-center gap-2 h-[52px] px-7 rounded-full whitespace-nowrap text-[16px] font-bold text-clarvo-blue bg-white hover:bg-sky transition-colors no-underline"
+        className="w-full inline-flex items-center justify-center gap-2.5 h-[52px] px-7 rounded-full whitespace-nowrap text-[16px] font-bold text-clarvo-blue bg-white hover:bg-sky transition-colors no-underline"
       >
+        <CalendarDays className="w-[18px] h-[18px]" aria-hidden="true" />
         {label}
-        <ArrowRight className="w-4 h-4" aria-hidden="true" />
       </Link>
     </m.span>
   );

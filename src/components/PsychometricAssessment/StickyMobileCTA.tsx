@@ -3,8 +3,8 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { AnimatePresence, m } from 'motion/react';
-import { ArrowRight } from 'lucide-react';
-import { PSYCHOMETRIC_CONTENT } from '@/content/psychometricContent';
+import { CalendarDays } from 'lucide-react';
+import { PSYCHOMETRIC_CONTENT, bookCallHref } from '@/content/psychometricContent';
 import { springUi } from './motion/tokens';
 
 const bar = PSYCHOMETRIC_CONTENT.stickyBar;
@@ -63,11 +63,11 @@ export default function StickyMobileCTA() {
         >
           <div className="max-w-xl mx-auto flex items-center gap-3">
             <Link
-              href={bar.primary.href}
+              href={bookCallHref('sticky-bar')}
               className="flex-1 inline-flex items-center justify-center gap-2 h-12 rounded-full text-[16px] font-bold text-white bg-clarvo-blue no-underline"
             >
-              {bar.primary.label}
-              <ArrowRight className="w-4 h-4" aria-hidden="true" />
+              <CalendarDays className="w-[18px] h-[18px]" aria-hidden={true} />
+              {PSYCHOMETRIC_CONTENT.bookCall.label}
             </Link>
             <a href={bar.secondary.href} className="h-12 px-4 inline-flex items-center text-[16px] font-bold text-clarvo-blue no-underline">
               {bar.secondary.label}

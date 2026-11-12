@@ -15,7 +15,7 @@
   font-weight: 800;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: #fb7185;
+  color: #93C5FD;
   width: 100%;
 }
 
@@ -113,7 +113,7 @@
 
 .textarea:focus {
   outline: none;
-  border-color: var(--color-red-primary, #690b1b);
+  border-color: var(--clarvo-blue-primary, #2563EB);
 }
 
 .item {

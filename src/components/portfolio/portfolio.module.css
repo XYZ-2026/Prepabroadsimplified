@@ -1232,3 +1232,149 @@
     right: 0;
   }
 }
+
+/* ── Certifications ── */
+.certGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.certCard {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 170px;
+  padding: 20px;
+  border-radius: 16px;
+  background: linear-gradient(160deg, #15151c, var(--panel));
+  border: 1px solid var(--line);
+  color: var(--text);
+  text-decoration: none;
+  overflow: hidden;
+}
+
+.certIcon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  background: rgba(45, 212, 191, 0.12);
+  color: #5eead4;
+  margin-bottom: 6px;
+}
+
+.certCard .certTitle {
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.35;
+  margin: 0;
+}
+
+.certCard .certIssuer {
+  font-size: 11px;
+  letter-spacing: 0.12em;
+}
+
+.certNo {
+  position: absolute;
+  right: 14px;
+  top: 8px;
+  font-family: var(--display);
+  font-size: 40px;
+  color: rgba(255, 255, 255, 0.06);
+}
+
+.certCta {
+  background: linear-gradient(150deg, rgba(244, 63, 94, 0.2), rgba(159, 18, 57, 0.08) 60%, var(--panel));
+  border: 1px dashed rgba(244, 63, 94, 0.45);
+  cursor: pointer;
+}
+
+.certCta .certIcon {
+  background: rgba(244, 63, 94, 0.15);
+  color: #fb7185;
+}
+
+.certCtaText {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.certCtaLink {
+  margin-top: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #fb7185;
+}
+
+/* ── Resume preview ── */
+.resumeWrap {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: clamp(24px, 5vw, 56px);
+  align-items: center;
+}
+
+/* A4 page (210 × 297 mm ≈ 794 × 1123 px) scaled down to a small preview */
+.resumePaper {
+  --scale: 0.42;
+  display: block;
+  width: calc(794px * var(--scale));
+  height: calc(1123px * var(--scale));
+  border-radius: 10px;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(255, 255, 255, 0.08);
+  transform: rotate(-1.5deg);
+  transition: transform 0.35s ease;
+}
+
+.resumePaper:hover {
+  transform: rotate(0deg) translateY(-6px);
+}
+
+.resumeFrame {
+  width: 794px;
+  height: 1123px;
+  border: 0;
+  transform: scale(var(--scale));
+  transform-origin: top left;
+  pointer-events: none;
+  background: #fff;
+}
+
+.resumeCopy {
+  max-width: 460px;
+}
+
+.resumeLead {
+  color: #c3c3cc !important;
+  font-size: 16px;
+  line-height: 1.65;
+  margin-bottom: 22px !important;
+}
+
+.resumeNote {
+  margin-top: 12px !important;
+  font-size: 12px;
+  color: var(--muted) !important;
+  letter-spacing: 0.04em;
+}
+
+@media (max-width: 760px) {
+  .resumeWrap {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    text-align: center;
+  }
+  .resumePaper {
+    --scale: 0.38;
+  }
+}

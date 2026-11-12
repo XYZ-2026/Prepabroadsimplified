@@ -2,21 +2,27 @@
 
 import React, { useEffect, useState } from 'react';
 import { AnimatePresence, motion, useReducedMotion, useScroll, useTransform } from 'framer-motion';
-import { ArrowRight, ArrowDown, Mail, RotateCcw } from 'lucide-react';
+import { ArrowRight, ArrowDown, Mail, RotateCcw, Award, Download, Sparkles } from 'lucide-react';
 import styles from './portfolio.module.css';
 import type { PortfolioProfile } from './portfolioTypes';
+import { renderResumeHtml } from './resumeHtml';
 
-type SectionId = 'story' | 'achievements' | 'skills' | 'projects' | 'about' | 'journey';
+/** Where the "Explore more certifications" card leads (the courses catalogue). */
+const COURSES_URL = process.env.NEXT_PUBLIC_COURSES_URL || '/book-a-demo';
 
-const ALL_SECTIONS: SectionId[] = ['story', 'achievements', 'skills', 'projects', 'about', 'journey'];
+type SectionId = 'story' | 'achievements' | 'certifications' | 'skills' | 'projects' | 'about' | 'journey' | 'resume';
+
+const ALL_SECTIONS: SectionId[] = ['story', 'achievements', 'certifications', 'skills', 'projects', 'about', 'journey', 'resume'];
 
 const SECTION_META: Record<SectionId, { label: string; hue: string }> = {
   story: { label: 'My Story', hue: 'linear-gradient(135deg,#3b1b6e,#120a24)' },
   achievements: { label: 'Achievements', hue: 'linear-gradient(135deg,#7a4a06,#1f1405)' },
+  certifications: { label: 'Certifications', hue: 'linear-gradient(135deg,#0f766e,#04201d)' },
   skills: { label: 'Skills', hue: 'linear-gradient(135deg,#0c4a6e,#06141f)' },
   projects: { label: 'Projects', hue: 'linear-gradient(135deg,#7c1d3a,#22070f)' },
   about: { label: 'About Me', hue: 'linear-gradient(135deg,#3b1f7a,#120a24)' },
   journey: { label: 'My Journey', hue: 'linear-gradient(135deg,#065f46,#04140f)' },
+  resume: { label: 'Resume', hue: 'linear-gradient(135deg,#334155,#0b1120)' },
 };
 
 const SKILL_COLORS = ['#f43f5e', '#38bdf8', '#f59e0b', '#34d399', '#a78bfa', '#fb923c', '#f472b6', '#22d3ee'];
@@ -38,7 +44,9 @@ function visibleSections(p: PortfolioProfile): SectionId[] {
       case 'story':
         return p.academics.length > 0 || p.activities.length > 0;
       case 'achievements':
-        return p.awards.length > 0 || p.certifications.length > 0;
+        return p.awards.length > 0;
+      case 'certifications':
+        return p.certifications.length > 0;
       case 'skills':
         return p.skills.length > 0;
       case 'projects':
@@ -47,6 +55,8 @@ function visibleSections(p: PortfolioProfile): SectionId[] {
         return Boolean(p.bio || p.school || p.dream || p.location || p.photoUrl);
       case 'journey':
         return p.seasons.length > 0;
+      case 'resume':
+        return true;
     }
   });
 }
@@ -422,26 +432,6 @@ function Achievements({ profile, ep }: { profile: PortfolioProfile; ep: string }
           ))}
         </div>
       )}
-      {profile.certifications.length > 0 && (
-        <>
-          <div className={styles.label} style={{ marginTop: profile.awards.length ? 40 : 0 }}>Courses & certificates</div>
-          <div className={styles.certRail}>
-            {profile.certifications.map((c, i) => (
-              <motion.div
-                key={i}
-                className={styles.cert}
-                initial={{ opacity: 0, x: 40 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.06, duration: 0.5, ease }}
-              >
-                {c.issuer && <div className={styles.certIssuer}>{c.issuer}</div>}
-                <div className={styles.certTitle}>{c.title}</div>
-              </motion.div>
-            ))}
-          </div>
-        </>
-      )}
     </section>
   );
 }
@@ -626,6 +616,93 @@ function Journey({ profile, ep }: { profile: PortfolioProfile; ep: string }) {
   );
 }
 
+function Certifications({ profile, ep }: { profile: PortfolioProfile; ep: string }) {
+  const external = /^https?:\/\//i.test(COURSES_URL);
+  return (
+    <section className={styles.section} id="certifications">
+      <SectionHead kicker={ep} title="Certifications" note="Courses and credentials I have earned along the way." />
+      <div className={styles.certGrid}>
+        {profile.certifications.map((c, i) => (
+          <motion.div
+            key={i}
+            className={styles.certCard}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: i * 0.06, duration: 0.6, ease }}
+            whileHover={{ y: -6 }}
+          >
+            <div className={styles.certIcon}>
+              <Award size={20} />
+            </div>
+            <div className={styles.certTitle}>{c.title}</div>
+            {c.issuer && <div className={styles.certIssuer}>{c.issuer}</div>}
+            <span className={styles.certNo}>{pad(i + 1)}</span>
+          </motion.div>
+        ))}
+        <motion.a
+          href={COURSES_URL}
+          target={external ? '_blank' : undefined}
+          rel={external ? 'noopener noreferrer' : undefined}
+          className={`${styles.certCard} ${styles.certCta}`}
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: profile.certifications.length * 0.06, duration: 0.6, ease }}
+          whileHover={{ y: -6 }}
+        >
+          <div className={styles.certIcon}>
+            <Sparkles size={20} />
+          </div>
+          <div className={styles.certTitle}>Explore more certifications</div>
+          <div className={styles.certCtaText}>
+            Browse CLARVO courses and earn certificates that make your profile stand out.
+          </div>
+          <span className={styles.certCtaLink}>
+            View courses <ArrowRight size={14} />
+          </span>
+        </motion.a>
+      </div>
+    </section>
+  );
+}
+
+function Resume({ profile, ep }: { profile: PortfolioProfile; ep: string }) {
+  const html = React.useMemo(() => renderResumeHtml(profile, 'preview'), [profile]);
+  const href = `/api/portfolio/resume/${encodeURIComponent(profile.username)}`;
+  return (
+    <section className={styles.section} id="resume">
+      <SectionHead kicker={ep} title="My Resume" note="Every episode of my story, on one professional page." />
+      <div className={styles.resumeWrap}>
+        <Reveal>
+          <a href={href} className={styles.resumePaper} aria-label={`Download ${profile.fullName}'s resume (PDF)`}>
+            <iframe
+              title={`${profile.fullName} — resume preview`}
+              srcDoc={html}
+              sandbox=""
+              loading="lazy"
+              tabIndex={-1}
+              className={styles.resumeFrame}
+            />
+          </a>
+        </Reveal>
+        <Reveal delay={0.15}>
+          <div className={styles.resumeCopy}>
+            <p className={styles.resumeLead}>
+              A clean, recruiter-ready resume built automatically from this portfolio — education, achievements,
+              projects, activities, certifications and skills.
+            </p>
+            <a className={styles.btnPrimary} href={href}>
+              <Download size={16} /> Download resume (PDF)
+            </a>
+            <p className={styles.resumeNote}>A4 · PDF · always up to date with this portfolio</p>
+          </div>
+        </Reveal>
+      </div>
+    </section>
+  );
+}
+
 function Finale({ profile, onReplay }: { profile: PortfolioProfile; onReplay: () => void }) {
   const subtitle = [profile.grade, profile.school].filter(Boolean).join(' · ');
   return (
@@ -702,10 +779,12 @@ export default function PortfolioExperience({ profile }: { profile: PortfolioPro
   const render: Record<SectionId, React.ReactNode> = {
     story: <Story key="story" profile={profile} ep={ep('story')} />,
     achievements: <Achievements key="achievements" profile={profile} ep={ep('achievements')} />,
+    certifications: <Certifications key="certifications" profile={profile} ep={ep('certifications')} />,
     skills: <Skills key="skills" profile={profile} ep={ep('skills')} />,
     projects: <Projects key="projects" profile={profile} ep={ep('projects')} />,
     about: <About key="about" profile={profile} ep={ep('about')} />,
     journey: <Journey key="journey" profile={profile} ep={ep('journey')} />,
+    resume: <Resume key="resume" profile={profile} ep={ep('resume')} />,
   };
 
   return (

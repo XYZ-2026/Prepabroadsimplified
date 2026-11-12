@@ -381,6 +381,12 @@ export default function Sidebar({ userRole, userName, userEmail }: SidebarProps)
                 <Link href="/dashboard/student/assessments" onClick={handleLinkClick} className={`${styles.navSubLink} ${isActive('/dashboard/student/assessments') ? styles.navSubLinkActive : ''}`}>
                   My Assessments
                 </Link>
+                <Link href="/dashboard/student/sops" onClick={handleLinkClick} className={`${styles.navSubLink} ${pathname.startsWith('/dashboard/student/sops') ? styles.navSubLinkActive : ''}`}>
+                  SOP Library
+                </Link>
+                <Link href="/dashboard/student/admitted-students" onClick={handleLinkClick} className={`${styles.navSubLink} ${pathname.startsWith('/dashboard/student/admitted-students') ? styles.navSubLinkActive : ''}`}>
+                  Admitted Students
+                </Link>
                 <Link href="/career-library" onClick={handleLinkClick} className={`${styles.navSubLink} ${pathname === '/career-library' || pathname === '/dashboard/career-library' ? styles.navSubLinkActive : ''}`}>
                   Career Library
                 </Link>

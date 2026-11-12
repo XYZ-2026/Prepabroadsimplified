@@ -5,13 +5,14 @@ import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { CAREER_ROADMAP_ENABLED } from '@/config/feature-flags';
-import SampleReportModal from '@/components/Report/SampleReportModal';
+import UserAvatarMenu from '@/components/Layout/UserAvatarMenu';
+import { useSessionUser } from '@/components/providers/SessionProvider';
 import styles from '@/styles/components.module.css';
 
 export default function Topbar() {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
-  const [showSampleModal, setShowSampleModal] = useState(false);
+  const sessionUser = useSessionUser();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -88,7 +89,7 @@ export default function Topbar() {
 
       {/* Right Actions: On Home Page show Sign In & Sign Up; On other pages show Sample Reports & Book a Demo without redundant auth buttons */}
       <div className={styles.topbarRight} style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-        {pathname === '/' ? (
+        {pathname === '/' && !sessionUser ? (
           <>
             <Link 
               href="/auth?tab=login" 
@@ -116,13 +117,6 @@ export default function Topbar() {
           </>
         ) : (
           <>
-            <button 
-              type="button"
-              onClick={() => setShowSampleModal(true)} 
-              className="hidden md:inline-flex text-xs font-semibold text-slate-600 hover:text-blue-600 transition-colors cursor-pointer bg-transparent border-0 p-0"
-            >
-              Sample Reports
-            </button>
             <Link 
               href="/book-a-demo" 
               className="inline-flex items-center justify-center px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-bold text-xs sm:text-sm transition-all shadow-xs"
@@ -130,10 +124,19 @@ export default function Topbar() {
             >
               Book a Demo
             </Link>
+            {sessionUser ? (
+              <UserAvatarMenu />
+            ) : (
+              <Link
+                href="/auth?tab=login"
+                className="text-xs font-semibold text-slate-700 hover:text-blue-600 transition-colors px-3 py-1.5 rounded-lg border border-slate-200 hover:border-blue-300"
+                style={{ textDecoration: 'none' }}
+              >
+                Sign In
+              </Link>
+            )}
           </>
         )}
-        {/* Interactive Grade Selector Modal */}
-        <SampleReportModal isOpen={showSampleModal} onClose={() => setShowSampleModal(false)} />
       </div>
     </header>
   );

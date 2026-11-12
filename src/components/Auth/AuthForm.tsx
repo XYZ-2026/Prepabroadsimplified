@@ -415,7 +415,7 @@ export default function AuthForm({ defaultTab }: AuthFormProps = {}) {
       }
 
       const loginResult = await response.json().catch(() => ({}));
-      const destination = loginResult.redirectUrl || (cleanEmail === 'admin@as.com' ? '/dashboard/admin/users' : '/dashboard/student/profile');
+      const destination = loginResult.redirectUrl || '/dashboard/student/profile';
       window.location.href = destination;
     } catch (err: any) {
       console.error('[Login] Error:', err);
@@ -530,8 +530,8 @@ export default function AuthForm({ defaultTab }: AuthFormProps = {}) {
     if (isSubmittingRef.current || loading) return;
     setError('');
 
-    if (regPassword.length < 6) {
-      setError('Password must be at least 6 characters long');
+    if (regPassword.length < 8) {
+      setError('Password must be at least 8 characters long');
       return;
     }
 

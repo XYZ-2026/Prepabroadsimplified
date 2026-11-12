@@ -28,9 +28,9 @@ export async function POST(request: Request) {
     let userToolAccess: any = null;
 
     // Check claims directly for admin/counsellor accounts
-    if (claims.email === 'admin@as.com' || claims.admin === true || claims.role === 'admin') {
+    if (claims.admin === true || claims.role === 'admin') {
       userRole = 'admin';
-    } else if (claims.email?.startsWith('counsellor') || claims.email?.includes('counsellor') || claims.role === 'counsellor') {
+    } else if (claims.email?.startsWith('counsellor') || claims.role === 'counsellor') {
       userRole = 'counsellor';
     }
 

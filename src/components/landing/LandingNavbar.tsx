@@ -6,10 +6,14 @@ import Image from 'next/image';
 import { useRouter, usePathname } from 'next/navigation';
 import { ChevronDown, ExternalLink, Download, FileText, ArrowRight } from 'lucide-react';
 import SampleReportModal from '@/components/Report/SampleReportModal';
+import UserAvatarMenu from '@/components/Layout/UserAvatarMenu';
+import { useSessionUser, dashboardHomeFor } from '@/components/providers/SessionProvider';
+import { clientLogout } from '@/lib/client-logout';
 
 export default function LandingNavbar() {
   const router = useRouter();
   const pathname = usePathname();
+  const sessionUser = useSessionUser();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileReportsExpanded, setMobileReportsExpanded] = useState(false);
   const [showSampleModal, setShowSampleModal] = useState(false);
@@ -264,25 +268,39 @@ export default function LandingNavbar() {
 
         {/* RIGHT - Sign In & Start Free CTA (Clean & Uncluttered) */}
         <div className="flex items-center justify-end gap-2.5 sm:gap-3.5 shrink-0">
-          {/* Sign In Link */}
-          <Link
-            href="/auth?tab=login"
-            className="hidden sm:inline-flex text-[13.5px] md:text-[14px] font-semibold text-[#475569] hover:text-[#2563EB] transition-colors whitespace-nowrap px-2.5 py-1.5"
-          >
-            Sign in
-          </Link>
+          {sessionUser ? (
+            <>
+              <Link
+                href={dashboardHomeFor(sessionUser.role)}
+                className="hidden sm:inline-flex text-[13.5px] md:text-[14px] font-semibold text-[#475569] hover:text-[#2563EB] transition-colors whitespace-nowrap px-2.5 py-1.5"
+              >
+                Dashboard
+              </Link>
+              <UserAvatarMenu />
+            </>
+          ) : (
+            <>
+              {/* Sign In Link */}
+              <Link
+                href="/auth?tab=login"
+                className="hidden sm:inline-flex text-[13.5px] md:text-[14px] font-semibold text-[#475569] hover:text-[#2563EB] transition-colors whitespace-nowrap px-2.5 py-1.5"
+              >
+                Sign in
+              </Link>
 
-          {/* Start Free CTA */}
-          <Link
-            href="/auth?tab=register"
-            className="hidden sm:inline-flex group relative h-[38px] md:h-[40px] px-4 sm:px-5 rounded-full overflow-hidden bg-[#2563EB] text-white text-[13px] md:text-[13.5px] font-bold shadow-[0_4px_14px_rgba(37,99,235,0.22)] hover:bg-[#1D4ED8] hover:scale-[1.02] transition-all items-center justify-center whitespace-nowrap shrink-0"
-          >
-            <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-1000" />
-            <span className="relative flex items-center gap-1.5 whitespace-nowrap">
-              Start Free
-              <span className="transition-transform group-hover:translate-x-1">→</span>
-            </span>
-          </Link>
+              {/* Start Free CTA */}
+              <Link
+                href="/auth?tab=register"
+                className="hidden sm:inline-flex group relative h-[38px] md:h-[40px] px-4 sm:px-5 rounded-full overflow-hidden bg-[#2563EB] text-white text-[13px] md:text-[13.5px] font-bold shadow-[0_4px_14px_rgba(37,99,235,0.22)] hover:bg-[#1D4ED8] hover:scale-[1.02] transition-all items-center justify-center whitespace-nowrap shrink-0"
+              >
+                <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-1000" />
+                <span className="relative flex items-center gap-1.5 whitespace-nowrap">
+                  Start Free
+                  <span className="transition-transform group-hover:translate-x-1">→</span>
+                </span>
+              </Link>
+            </>
+          )}
 
           {/* Mobile Menu Button */}
           <button
@@ -430,22 +448,41 @@ export default function LandingNavbar() {
           </div>
 
           <div className="pt-3 border-t border-slate-100 flex flex-col gap-2">
-            <div className="grid grid-cols-2 gap-2">
-              <Link
-                href="/auth?tab=login"
-                onClick={() => setMobileMenuOpen(false)}
-                className="w-full h-10 rounded-xl border border-slate-200 text-slate-700 font-semibold text-sm flex items-center justify-center hover:bg-slate-50 transition-colors"
-              >
-                Sign In
-              </Link>
-              <Link
-                href="/auth?tab=register"
-                onClick={() => setMobileMenuOpen(false)}
-                className="w-full h-10 rounded-xl bg-[#2563EB] text-white font-bold text-sm flex items-center justify-center hover:bg-[#1D4ED8] transition-colors shadow-xs"
-              >
-                Start Free →
-              </Link>
-            </div>
+            {sessionUser ? (
+              <div className="grid grid-cols-2 gap-2">
+                <Link
+                  href={dashboardHomeFor(sessionUser.role)}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="w-full h-11 rounded-xl bg-[#2563EB] text-white font-bold text-sm flex items-center justify-center hover:bg-[#1D4ED8] transition-colors shadow-xs"
+                >
+                  Go to Dashboard
+                </Link>
+                <button
+                  type="button"
+                  onClick={() => clientLogout('/')}
+                  className="w-full h-11 rounded-xl border border-slate-200 text-slate-700 font-semibold text-sm flex items-center justify-center hover:bg-slate-50 transition-colors"
+                >
+                  Sign out
+                </button>
+              </div>
+            ) : (
+              <div className="grid grid-cols-2 gap-2">
+                <Link
+                  href="/auth?tab=login"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="w-full h-11 rounded-xl border border-slate-200 text-slate-700 font-semibold text-sm flex items-center justify-center hover:bg-slate-50 transition-colors"
+                >
+                  Sign In
+                </Link>
+                <Link
+                  href="/auth?tab=register"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="w-full h-11 rounded-xl bg-[#2563EB] text-white font-bold text-sm flex items-center justify-center hover:bg-[#1D4ED8] transition-colors shadow-xs"
+                >
+                  Start Free →
+                </Link>
+              </div>
+            )}
           </div>
         </div>
       )}

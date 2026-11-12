@@ -7,7 +7,7 @@ export async function GET() {
   try {
     const claims = await verifySessionCookie();
     // Allow admin or staff to download complete master dataset
-    if (!claims || (claims.role !== 'admin' && claims.role !== 'counsellor' && claims.role !== 'superadmin')) {
+    if (!claims || (claims.role !== 'admin' && claims.role !== 'counsellor')) {
       return NextResponse.json({ error: 'Unauthorized: Admin access required.' }, { status: 403 });
     }
 

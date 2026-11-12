@@ -46,7 +46,7 @@ interface Props {
 export default function StudentProfileView({
   student,
   showEditButton = false,
-  editUrl = '/dashboard/student/update-profile',
+  editUrl = '/dashboard/student/profile/edit',
   hideHeaderTitle = false,
 }: Props) {
   const name = student.name || 'Unknown';

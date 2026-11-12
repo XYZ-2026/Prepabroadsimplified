@@ -143,12 +143,12 @@ export async function autoAllotAllUnassignedStudents(adminDb: any): Promise<numb
       const email = (data.email || '').toLowerCase();
       const role = data.role;
 
-      if (email === 'admin@as.com' || role === 'admin') {
+      if (role === 'admin') {
         // Skip admin
         return;
       }
 
-      if (role === 'counsellor' || email.includes('counsellor')) {
+      if (role === 'counsellor') {
         counsellors.push({
           id: doc.id,
           name: data.name || 'Counsellor',

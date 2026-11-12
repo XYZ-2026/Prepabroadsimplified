@@ -30,7 +30,12 @@ export default function AppShell({ children, userRole, userName, userEmail }: Ap
     pathname.startsWith('/blog') ||
     pathname === '/psychometric-assessment' ||
     pathname.startsWith('/psychometric-assessment') ||
-    pathname.startsWith('/join-counsellor-community');
+    pathname.startsWith('/join-counsellor-community') ||
+    // Public website pages render the website navbar/footer via the (site) route group
+    pathname.startsWith('/about-us') ||
+    pathname.startsWith('/book-a-demo') ||
+    pathname.startsWith('/demo-confirmation') ||
+    pathname.startsWith('/sample-reports');
 
   if (isReportView || isLandingView) {
     // Report views and standalone public landing pages render their own header/footer

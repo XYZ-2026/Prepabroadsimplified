@@ -424,6 +424,24 @@ export default function EnquiriesManagementClient({ initialEnquiries }: Props) {
                         <div className="text-[10px] font-mono text-slate-400 mt-0.5 truncate max-w-[90px]">
                           {item.id}
                         </div>
+                        {item.notifyStatus && (
+                          <div
+                            title="Automatic email to the support team"
+                            className={`mt-1 inline-block text-[10px] font-bold px-1.5 py-0.5 rounded ${
+                              item.notifyStatus === 'sent'
+                                ? 'bg-emerald-50 text-emerald-700'
+                                : item.notifyStatus === 'failed'
+                                ? 'bg-rose-50 text-rose-700'
+                                : 'bg-slate-100 text-slate-500'
+                            }`}
+                          >
+                            {item.notifyStatus === 'sent'
+                              ? '✉ Support emailed'
+                              : item.notifyStatus === 'failed'
+                              ? '✉ Email failed'
+                              : '✉ Email skipped'}
+                          </div>
+                        )}
                       </td>
 
                       {/* Parent / Student */}

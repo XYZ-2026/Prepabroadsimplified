@@ -1,11 +1,23 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { adminAuth, adminDb } from '@/lib/firebase-admin';
-import { SESSION_COOKIE_NAME } from '@/lib/auth';
+import { SESSION_COOKIE_NAME, createSessionCookie, verifyFirebaseIdToken } from '@/lib/auth';
+import { SESSION_TTL_SECONDS } from '@/lib/session-token';
 import { hashPassword } from '@/lib/password-utils';
 import { normalizeGrade } from '@/lib/psychometric-access-policy';
+import { rateLimit, clientIp } from '@/lib/rate-limit';
+
+const RESERVED_EMAILS = new Set(['admin@as.com', 'counsellor@as.com']);
 
 export async function POST(request: NextRequest) {
   try {
+    const ipLimit = rateLimit(`register:ip:${clientIp(request)}`, 10, 60 * 60 * 1000);
+    if (!ipLimit.ok) {
+      return NextResponse.json(
+        { error: 'Too many sign-up attempts. Please try again later.' },
+        { status: 429, headers: { 'Retry-After': String(ipLimit.retryAfterSec) } }
+      );
+    }
+
     const body = await request.json();
     const {
       uid: providedUid,
@@ -26,16 +38,21 @@ export async function POST(request: NextRequest) {
     } = body;
 
     // Validation
-    const cleanEmail = email?.trim()?.toLowerCase();
-    if (!cleanEmail || !cleanEmail.includes('@')) {
+    const cleanEmail = typeof email === 'string' ? email.trim().toLowerCase() : '';
+    if (!cleanEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(cleanEmail)) {
       return NextResponse.json({ error: 'Please provide a valid email address.' }, { status: 400 });
     }
 
-    if (!password || password.length < 6) {
-      return NextResponse.json({ error: 'Password must be at least 6 characters long.' }, { status: 400 });
+    const adminEmail = (process.env.ADMIN_EMAIL || '').trim().toLowerCase();
+    if (RESERVED_EMAILS.has(cleanEmail) || (adminEmail && cleanEmail === adminEmail)) {
+      return NextResponse.json({ error: 'This email address cannot be used to register.' }, { status: 400 });
     }
 
-    const cleanName = name?.trim();
+    if (typeof password !== 'string' || password.length < 8) {
+      return NextResponse.json({ error: 'Password must be at least 8 characters long.' }, { status: 400 });
+    }
+
+    const cleanName = typeof name === 'string' ? name.trim().slice(0, 100) : '';
     if (!cleanName) {
       return NextResponse.json({ error: 'Please enter your full name.' }, { status: 400 });
     }
@@ -43,38 +60,44 @@ export async function POST(request: NextRequest) {
     // Role safety: strictly student or counsellor (never public admin escalation)
     const effectiveRole: 'student' | 'counsellor' = role === 'counsellor' ? 'counsellor' : 'student';
 
-    // Check if user with this email already exists in Firestore
-    try {
-      const existingUserSnap = await adminDb
-        .collection('users')
-        .where('email', '==', cleanEmail)
-        .limit(1)
-        .get();
+    // A client-supplied uid is honoured ONLY when it matches a verified Firebase ID token for this email.
+    let verifiedUid: string | null = null;
+    if (idToken && providedUid) {
+      try {
+        const decoded = await verifyFirebaseIdToken(idToken);
+        if (decoded.uid === providedUid && (decoded.email || '').toLowerCase() === cleanEmail) {
+          verifiedUid = decoded.uid;
+        }
+      } catch {
+        // fall through: treated as an unverified registration with a server-generated uid
+      }
+    }
 
-      if (!existingUserSnap.empty && !providedUid) {
-        return NextResponse.json(
-          { error: 'This email address is already registered. Please sign in instead.' },
-          { status: 400 }
-        );
+    // Duplicate check — always enforced
+    try {
+      const existingUserSnap = await adminDb.collection('users').where('email', '==', cleanEmail).limit(1).get();
+      if (!existingUserSnap.empty) {
+        const existing = existingUserSnap.docs[0];
+        const isOwnPartialRecord = verifiedUid && existing.id === verifiedUid && !existing.data().passwordHash;
+        if (!isOwnPartialRecord) {
+          return NextResponse.json(
+            { error: 'This email address is already registered. Please sign in instead.' },
+            { status: 400 }
+          );
+        }
       }
     } catch (checkErr: any) {
       console.warn('[Register] Firestore duplicate check note:', checkErr?.message);
     }
 
-    // Use provided client UID (from Firebase Client Auth) or generate unique UID
-    const uid = providedUid || `user_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
+    const uid = verifiedUid || `user_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
 
-    // Attempt to register in Firebase Auth if not already created client-side
-    if (!providedUid) {
+    // Create the Firebase Auth user server-side when the client did not
+    if (!verifiedUid) {
       try {
-        await adminAuth.createUser({
-          uid,
-          email: cleanEmail,
-          password,
-          displayName: cleanName,
-        });
+        await adminAuth.createUser({ uid, email: cleanEmail, password, displayName: cleanName });
       } catch (authErr: any) {
-        console.warn('[Register] Admin Auth createUser fallback note:', authErr?.message);
+        console.warn('[Register] Admin Auth createUser note:', authErr?.message);
       }
     }
 
@@ -82,27 +105,27 @@ export async function POST(request: NextRequest) {
     const normalizedGrade = effectiveRole === 'student' && grade ? normalizeGrade(grade) : null;
     const isSenior = normalizedGrade === '11' || normalizedGrade === '12';
 
-    // Hash password securely for server-side authentication fallback
-    const passwordHash = hashPassword(password);
+    const str = (v: unknown, max: number) => (typeof v === 'string' ? v.trim().slice(0, max) : '');
+    const strList = (v: unknown) =>
+      Array.isArray(v) ? v.filter((x) => typeof x === 'string').slice(0, 30).map((x: string) => x.slice(0, 80)) : [];
 
-    // Build comprehensive profile document
     const userProfilePayload: Record<string, any> = {
       uid,
       name: cleanName,
       email: cleanEmail,
-      mobile: mobile?.trim() || '',
+      mobile: str(mobile, 20),
       role: effectiveRole,
-      state: state || '',
-      city: city?.trim() || '',
-      currentSchool: school?.trim() || '',
-      schoolName: school?.trim() || '',
-      board: board || 'CBSE',
-      stream: isSenior ? (stream || '') : '',
-      goals: Array.isArray(goals) ? goals : [],
-      declaredInterests: Array.isArray(declaredInterests) ? declaredInterests : [],
+      state: str(state, 60),
+      city: str(city, 60),
+      currentSchool: str(school, 120),
+      schoolName: str(school, 120),
+      board: str(board, 60) || 'CBSE',
+      stream: isSenior ? str(stream, 60) : '',
+      goals: strList(goals),
+      declaredInterests: strList(declaredInterests),
       onboarding: {
-        goals: Array.isArray(goals) ? goals : [],
-        declaredInterests: Array.isArray(declaredInterests) ? declaredInterests : [],
+        goals: strList(goals),
+        declaredInterests: strList(declaredInterests),
         registeredAt: new Date().toISOString(),
       },
       toolAccess: {
@@ -111,7 +134,7 @@ export async function POST(request: NextRequest) {
         universityPredictor: true,
       },
       accessRequests: ['psychometricTest'], // Automatically route access permission request to admin
-      passwordHash,
+      passwordHash: hashPassword(password),
       createdAt: new Date(),
       updatedAt: new Date(),
     };
@@ -122,46 +145,10 @@ export async function POST(request: NextRequest) {
       userProfilePayload.studentType = isSenior ? 'Class 11/12' : `Grade ${normalizedGrade}`;
     }
 
-    // Save profile to Firestore safely (adminDb with merge)
     try {
       await adminDb.collection('users').doc(uid).set(userProfilePayload, { merge: true });
     } catch (dbErr: any) {
       console.warn('[Register] Firestore adminDb profile write notice:', dbErr?.message);
-    }
-
-    // Create authenticated session token
-    let sessionCookie: string;
-    if (idToken) {
-      try {
-        const { createSessionCookie } = await import('@/lib/auth');
-        sessionCookie = await createSessionCookie(idToken);
-      } catch {
-        sessionCookie = idToken;
-      }
-    } else {
-      try {
-        sessionCookie = await adminAuth.createCustomToken(uid, {
-          email: cleanEmail,
-          role: effectiveRole,
-          name: cleanName,
-        });
-      } catch (tokenErr: any) {
-        console.warn('[Register] createCustomToken error, fallback token payload:', tokenErr?.message);
-        // Fallback base64-encoded JWT session token
-        const header = Buffer.from(JSON.stringify({ alg: 'none', typ: 'JWT' })).toString('base64');
-        const payload = Buffer.from(
-          JSON.stringify({
-            uid,
-            sub: uid,
-            email: cleanEmail,
-            role: effectiveRole,
-            name: cleanName,
-            iat: Math.floor(Date.now() / 1000),
-            exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 5,
-          })
-        ).toString('base64');
-        sessionCookie = `${header}.${payload}.unsigned`;
-      }
     }
 
     // Auto-allot unassigned students via SJF algorithm
@@ -170,39 +157,32 @@ export async function POST(request: NextRequest) {
       autoAllotAllUnassignedStudents(adminDb).catch(() => {});
     } catch {}
 
-    // Prepare response
     const redirectUrl = effectiveRole === 'counsellor' ? '/dashboard/counsellor' : '/dashboard/student/profile';
     const response = NextResponse.json(
       {
         success: true,
         uid,
-        user: {
-          uid,
-          name: cleanName,
-          email: cleanEmail,
-          role: effectiveRole,
-          grade: normalizedGrade,
-        },
+        user: { uid, name: cleanName, email: cleanEmail, role: effectiveRole, grade: normalizedGrade },
         redirectUrl,
       },
       { status: 201 }
     );
 
-    // Set HTTP-only session cookie
-    response.cookies.set(SESSION_COOKIE_NAME, sessionCookie, {
-      maxAge: 60 * 60 * 24 * 5, // 5 days
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      path: '/',
-      sameSite: 'lax',
-    });
+    response.cookies.set(
+      SESSION_COOKIE_NAME,
+      createSessionCookie({ uid, email: cleanEmail, name: cleanName, role: effectiveRole }),
+      {
+        maxAge: SESSION_TTL_SECONDS,
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        path: '/',
+        sameSite: 'lax',
+      }
+    );
 
     return response;
   } catch (error: any) {
     console.error('[Register] Error completing registration:', error);
-    return NextResponse.json(
-      { error: 'Failed to complete registration.', details: error?.message || String(error) },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Failed to complete registration.' }, { status: 500 });
   }
 }

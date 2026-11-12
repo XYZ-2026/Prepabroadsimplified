@@ -100,6 +100,7 @@ export default function BookADemoPage() {
     preferredTimeFrame: 'Weekday Evenings (4pm - 7pm)',
     notes: '',
     consent: true,
+    companyWebsite: '', // honeypot — must stay empty
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -118,12 +119,14 @@ export default function BookADemoPage() {
           const json = await res.json();
           if (json.success && json.user) {
             const u = json.user;
+            const isStudent = u.role === 'student';
             setFormData(prev => ({
               ...prev,
-              parentName: prev.parentName || u.name || '',
-              email: prev.email || u.email || '',
-              phone: prev.phone || u.mobile || '',
-              studentName: prev.studentName || u.studentName || (u.role === 'student' ? u.name : ''),
+              // For students, the account name is the student's — the parent details come from the guardian block
+              parentName: prev.parentName || u.parentName || (isStudent ? '' : u.name) || '',
+              email: prev.email || u.parentEmail || u.email || '',
+              phone: prev.phone || u.parentPhone || u.mobile || '',
+              studentName: prev.studentName || u.studentName || (isStudent ? u.name : ''),
               grade: prev.grade || (u.grade ? `Grade ${u.grade}` : ''),
               schoolName: prev.schoolName || u.schoolName || u.currentSchool || '',
               board: prev.board || u.board || 'CBSE',
@@ -404,6 +407,21 @@ export default function BookADemoPage() {
                       <p className="text-xs sm:text-sm text-[#475467] mt-1">
                         Please provide contact information so our senior guidance counselor can connect with you.
                       </p>
+                    </div>
+
+                    {/* Honeypot (hidden from people, visible to bots) */}
+                    <div aria-hidden="true" style={{ position: 'absolute', left: '-9999px', width: 1, height: 1, overflow: 'hidden' }}>
+                      <label>
+                        Company website
+                        <input
+                          type="text"
+                          name="companyWebsite"
+                          tabIndex={-1}
+                          autoComplete="off"
+                          value={formData.companyWebsite}
+                          onChange={(e) => setFormData({ ...formData, companyWebsite: e.target.value })}
+                        />
+                      </label>
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">

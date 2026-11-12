@@ -49,7 +49,7 @@ export default async function UniversityFinderPage() {
     );
   }
 
-  const firstName = profile?.name ? profile.name.split(' ')[0] : (claims.email === 'admin@as.com' ? 'admin' : 'Student');
+  const firstName = profile?.name ? profile.name.split(' ')[0] : (claims.role === 'admin' ? 'admin' : 'Student');
 
   return (
     <>

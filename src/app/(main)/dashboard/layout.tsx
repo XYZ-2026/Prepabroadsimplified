@@ -24,9 +24,9 @@ export default async function DashboardLayout({
 
   // Role resolution: admin > counsellor > student
   let role: 'admin' | 'counsellor' | 'student' = 'student';
-  if (claims.email === 'admin@as.com' || claims.admin === true || claims.role === 'admin') {
+  if (claims.admin === true || claims.role === 'admin') {
     role = 'admin';
-  } else if (claims.email === 'counsellor@as.com' || claims.role === 'counsellor') {
+  } else if (claims.role === 'counsellor') {
     role = 'counsellor';
   }
 

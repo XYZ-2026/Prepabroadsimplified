@@ -28,6 +28,10 @@ export interface ProfileData {
   targetCountries: string;
   degreeLevel: string;
   fieldOfInterest: string;
+  parentName?: string;
+  parentRelation?: string;
+  parentPhone?: string;
+  parentEmail?: string;
 }
 
 const BOARD_OPTIONS = ['CBSE', 'ICSE', 'State Board', 'IB', 'Cambridge', 'Other'];
@@ -404,6 +408,42 @@ export default function UpdateProfileForm({ initialData }: { initialData: Profil
                 onChange={handleChange}
                 placeholder="e.g. Computer Science, Business Administration"
               />
+            </div>
+          </div>
+
+          {/* Parent / Guardian */}
+          <div style={{ marginTop: '32px', marginBottom: '24px', paddingBottom: '12px', borderBottom: '1px solid #e5e7eb' }}>
+            <h3 style={{ fontSize: '18px', fontWeight: 'bold', color: '#111827' }}>Parent / Guardian</h3>
+            <p style={{ fontSize: '13px', color: '#6b7280', margin: '4px 0 0 0' }}>
+              Used to pre-fill consultation requests and the parent assessment invitation.
+            </p>
+          </div>
+
+          <div className={styles.formRow}>
+            <div className={styles.formGroup}>
+              <label htmlFor="parentName">Parent / Guardian Name</label>
+              <input type="text" id="parentName" name="parentName" maxLength={100} value={formData.parentName || ''} onChange={handleChange} placeholder="e.g. Rajiv Sharma" />
+            </div>
+            <div className={styles.formGroup}>
+              <label htmlFor="parentRelation">Relationship</label>
+              <select id="parentRelation" name="parentRelation" value={formData.parentRelation || ''} onChange={handleChange}>
+                <option value="">Select</option>
+                <option value="Mother">Mother</option>
+                <option value="Father">Father</option>
+                <option value="Guardian">Guardian</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+          </div>
+
+          <div className={styles.formRow}>
+            <div className={styles.formGroup}>
+              <label htmlFor="parentPhone">Phone / WhatsApp</label>
+              <input type="tel" id="parentPhone" name="parentPhone" maxLength={20} value={formData.parentPhone || ''} onChange={handleChange} placeholder="+91 98765 43210" />
+            </div>
+            <div className={styles.formGroup}>
+              <label htmlFor="parentEmail">Email</label>
+              <input type="email" id="parentEmail" name="parentEmail" maxLength={120} value={formData.parentEmail || ''} onChange={handleChange} placeholder="parent@example.com" />
             </div>
           </div>
 

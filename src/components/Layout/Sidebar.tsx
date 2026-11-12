@@ -1,10 +1,32 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname, useSearchParams } from 'next/navigation';
+import { User, FileText, Trophy, PenLine, Bookmark, BookOpen, Brain, Search, Users, Settings } from 'lucide-react';
 import styles from '@/styles/components.module.css';
+import { clientLogout } from '@/lib/client-logout';
+import {
+  STUDENT_DASHBOARD_ITEMS,
+  TOOL_ITEMS,
+  RESOURCE_ITEMS,
+  isNavActive,
+  type NavItem,
+} from '@/config/student-nav';
+
+const NAV_ICONS: Record<NavItem['icon'], React.ComponentType<{ size?: number }>> = {
+  user: User,
+  file: FileText,
+  trophy: Trophy,
+  pen: PenLine,
+  bookmark: Bookmark,
+  book: BookOpen,
+  brain: Brain,
+  search: Search,
+  users: Users,
+  settings: Settings,
+};
 
 interface SidebarProps {
   userRole: 'admin' | 'counsellor' | 'student' | null;
@@ -46,6 +68,10 @@ export default function Sidebar({ userRole, userName, userEmail }: SidebarProps)
         }
       })
       .catch(() => {});
+  }, [pathname]);
+
+  useEffect(() => {
+    if (pathname.startsWith('/dashboard/student')) setOpenAccordion('student_dash');
   }, [pathname]);
 
   const isActive = (href: string) => {
@@ -108,17 +134,7 @@ export default function Sidebar({ userRole, userName, userEmail }: SidebarProps)
     };
   }, []);
 
-  const handleLogout = async () => {
-    try {
-      const { auth } = await import('@/lib/firebase');
-      const { signOut } = await import('firebase/auth');
-      await signOut(auth).catch(() => {});
-      await fetch('/api/auth/logout', { method: 'POST' });
-      window.location.href = '/auth';
-    } catch {
-      window.location.href = '/auth';
-    }
-  };
+  const handleLogout = () => clientLogout('/');
 
   if (pathname === '/iq-test/test') {
     return null;
@@ -246,16 +262,6 @@ export default function Sidebar({ userRole, userName, userEmail }: SidebarProps)
                 <span className={styles.navLinkText}>University Predictor</span>
               </Link>
             </div>
-            <div style={{ marginTop: '6px' }}>
-              <Link 
-                href="/book-a-demo" 
-                onClick={handleLinkClick} 
-                className={`${styles.sidebarActionBtn}`} 
-                style={{ background: '#2563EB', color: '#ffffff', border: 'none', borderRadius: '10px', justifyContent: 'center' }}
-              >
-                <span style={{ fontWeight: 700, fontSize: '13px' }}>Book a Demo</span>
-              </Link>
-            </div>
           </nav>
 
           {/* Section: ACCOUNT */}
@@ -372,24 +378,21 @@ export default function Sidebar({ userRole, userName, userEmail }: SidebarProps)
                 </svg>
               </button>
               <div className={styles.navSubLinks}>
-                <Link href="/dashboard/student/profile" onClick={handleLinkClick} className={`${styles.navSubLink} ${isActive('/dashboard/student/profile') ? styles.navSubLinkActive : ''}`}>
-                  My Profile
-                </Link>
-                <Link href="/dashboard/student/update-profile" onClick={handleLinkClick} className={`${styles.navSubLink} ${isActive('/dashboard/student/update-profile') ? styles.navSubLinkActive : ''}`}>
-                  Update Profile
-                </Link>
-                <Link href="/dashboard/student/assessments" onClick={handleLinkClick} className={`${styles.navSubLink} ${isActive('/dashboard/student/assessments') ? styles.navSubLinkActive : ''}`}>
-                  My Assessments
-                </Link>
-                <Link href="/dashboard/student/sops" onClick={handleLinkClick} className={`${styles.navSubLink} ${pathname.startsWith('/dashboard/student/sops') ? styles.navSubLinkActive : ''}`}>
-                  SOP Library
-                </Link>
-                <Link href="/dashboard/student/admitted-students" onClick={handleLinkClick} className={`${styles.navSubLink} ${pathname.startsWith('/dashboard/student/admitted-students') ? styles.navSubLinkActive : ''}`}>
-                  Admitted Students
-                </Link>
-                <Link href="/career-library" onClick={handleLinkClick} className={`${styles.navSubLink} ${pathname === '/career-library' || pathname === '/dashboard/career-library' ? styles.navSubLinkActive : ''}`}>
-                  Career Library
-                </Link>
+                {STUDENT_DASHBOARD_ITEMS.map((item) => {
+                  const Icon = NAV_ICONS[item.icon];
+                  return (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      onClick={handleLinkClick}
+                      className={`${styles.navSubLink} ${isNavActive(item, pathname) ? styles.navSubLinkActive : ''}`}
+                      style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
+                    >
+                      <Icon size={15} />
+                      <span>{item.label}</span>
+                    </Link>
+                  );
+                })}
               </div>
             </div>
           )}
@@ -413,77 +416,11 @@ export default function Sidebar({ userRole, userName, userEmail }: SidebarProps)
             </div>
           )}
 
-          {/* Quick Action - Book a Demo */}
-          <Link 
-            href="/book-a-demo" 
-            onClick={handleLinkClick} 
-            className={`${styles.sidebarActionBtn}`} 
-            style={{ background: '#2563EB', color: '#ffffff', border: 'none', margin: '0 16px 12px 16px', borderRadius: '12px', justifyContent: 'center' }}
-          >
-            <span style={{ fontWeight: 700, fontSize: '14px' }}>Book a Demo</span>
-          </Link>
-
           <div className={styles.sidebarScrollable}>
-            {/* Navigation */}
-            <nav className={styles.sidebarNavSection}>
-              <p className={styles.navLabel}>Navigation</p>
-              <div className={styles.navItem}>
-                <Link href={userRole ? '/dashboard' : '/'} onClick={handleLinkClick} className={`${styles.navLink} ${isActive(userRole ? '/dashboard' : '/') ? styles.navLinkActive : ''}`}>
-                  <span className={styles.navLinkIcon}>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /><polyline points="9 22 9 12 15 12 15 22" /></svg>
-                  </span>
-                  <span className={styles.navLinkText}>Home</span>
-                </Link>
-              </div>
-              <div className={styles.navItem}>
-                <Link href="/about-us" onClick={handleLinkClick} className={`${styles.navLink} ${isActive('/about-us') ? styles.navLinkActive : ''}`}>
-                  <span className={styles.navLinkIcon}>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
-                  </span>
-                  <span className={styles.navLinkText}>About Us</span>
-                </Link>
-              </div>
-              <div className={styles.navItem}>
-                <Link href="/sample-reports" onClick={handleLinkClick} className={`${styles.navLink} ${isActive('/sample-reports') ? styles.navLinkActive : ''}`}>
-                  <span className={styles.navLinkIcon}>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-                  </span>
-                  <span className={styles.navLinkText}>Sample Reports</span>
-                </Link>
-              </div>
-            </nav>
-
             {/* Career & Planning Tools */}
             <nav className={styles.sidebarNavSection}>
               <p className={styles.navLabel}>Career & Planning Tools</p>
               {/* Career Roadmap Studio — DISABLED (feature flag: CAREER_ROADMAP_ENABLED=false) */}
-
-              <div className={styles.navItem}>
-                <Link href="/career-library" onClick={handleLinkClick} className={`${styles.navLink} ${pathname === '/career-library' || pathname === '/dashboard/career-library' ? styles.navLinkActive : ''}`}>
-                  <span className={styles.navLinkIcon}>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
-                  </span>
-                  <span className={styles.navLinkText}>Career Library</span>
-                </Link>
-              </div>
-
-              <div className={styles.navItem}>
-                <Link href="/university-finder" onClick={handleLinkClick} className={`${styles.navLink} ${isActive('/university-finder') ? styles.navLinkActive : ''}`}>
-                  <span className={styles.navLinkIcon}>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                  </span>
-                  <span className={styles.navLinkText}>University Predictor</span>
-                </Link>
-              </div>
-
-              <div className={styles.navItem}>
-                <Link href="/iq-test" onClick={handleLinkClick} className={`${styles.navLink} ${isActive('/iq-test') ? styles.navLinkActive : ''}`}>
-                  <span className={styles.navLinkIcon}>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 1.98-3A2.5 2.5 0 0 1 9.5 2Z"/><path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-1.98-3A2.5 2.5 0 0 0 14.5 2Z"/></svg>
-                  </span>
-                  <span className={styles.navLinkText}>IQ Test</span>
-                </Link>
-              </div>
 
               <div className={`${styles.navItem} ${openAccordion === 'psychometric' ? styles.navItemOpen : ''}`}>
                 <button 
@@ -575,7 +512,37 @@ export default function Sidebar({ userRole, userName, userEmail }: SidebarProps)
                   )}
                 </div>
               </div>
+
+              {TOOL_ITEMS.map((item) => {
+                const Icon = NAV_ICONS[item.icon];
+                return (
+                  <div key={item.href} className={styles.navItem}>
+                    <Link href={item.href} onClick={handleLinkClick} className={`${styles.navLink} ${isNavActive(item, pathname) ? styles.navLinkActive : ''}`}>
+                      <span className={styles.navLinkIcon}><Icon size={20} /></span>
+                      <span className={styles.navLinkText}>{item.label}</span>
+                    </Link>
+                  </div>
+                );
+              })}
             </nav>
+
+            {/* Resources (students) */}
+            {userRole === 'student' && (
+              <nav className={styles.sidebarNavSection}>
+                <p className={styles.navLabel}>Resources</p>
+                {RESOURCE_ITEMS.map((item) => {
+                  const Icon = NAV_ICONS[item.icon];
+                  return (
+                    <div key={item.href} className={styles.navItem}>
+                      <Link href={item.href} onClick={handleLinkClick} className={`${styles.navLink} ${isNavActive(item, pathname) ? styles.navLinkActive : ''}`}>
+                        <span className={styles.navLinkIcon}><Icon size={20} /></span>
+                        <span className={styles.navLinkText}>{item.label}</span>
+                      </Link>
+                    </div>
+                  );
+                })}
+              </nav>
+            )}
           </div>
         </>
       )}

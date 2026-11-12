@@ -23,6 +23,8 @@ export interface EnquiryRecord {
   createdAt: string;
   updatedAt: string;
   sourcePage?: string;
+  /** Result of the automatic email to the support team */
+  notifyStatus?: 'sent' | 'failed' | 'skipped';
 }
 
 const LOCAL_STORAGE_FILE = path.join(process.cwd(), 'src', 'data', 'enquiries.json');
@@ -146,6 +148,7 @@ export async function getAllEnquiries(options?: {
           createdAt: d.createdAt || new Date().toISOString(),
           updatedAt: d.updatedAt || d.createdAt || new Date().toISOString(),
           sourcePage: d.sourcePage || '/book-a-demo',
+          notifyStatus: d.notifyStatus || undefined,
         });
       });
     }
@@ -199,7 +202,7 @@ export async function getAllEnquiries(options?: {
  */
 export async function updateEnquiry(
   id: string,
-  updates: Partial<Pick<EnquiryRecord, 'status' | 'adminNotes'>>
+  updates: Partial<Pick<EnquiryRecord, 'status' | 'adminNotes' | 'notifyStatus'>>
 ): Promise<EnquiryRecord | null> {
   const now = new Date().toISOString();
 

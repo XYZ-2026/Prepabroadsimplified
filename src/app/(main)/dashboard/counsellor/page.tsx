@@ -13,7 +13,7 @@ export default async function CounsellorHomePage() {
 
   // Ensure counsellor document exists in Firestore for actual counsellors (never mutate admin accounts)
   try {
-    if (claims.email !== 'admin@as.com' && !claims.admin && claims.role !== 'admin') {
+    if (!claims.admin && claims.role !== 'admin') {
       const userRef = adminDb.collection('users').doc(counsellorId);
       const userDoc = await userRef.get();
       if (!userDoc.exists) {

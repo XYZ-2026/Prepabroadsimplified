@@ -29,7 +29,7 @@ export default async function AssessmentsPage() {
       userRole = uData?.role || 'student';
     }
 
-    if (claims.email === 'admin@as.com' || claims.admin === true || claims.role === 'admin') {
+    if (claims.admin === true || claims.role === 'admin') {
       userRole = 'admin';
     }
 

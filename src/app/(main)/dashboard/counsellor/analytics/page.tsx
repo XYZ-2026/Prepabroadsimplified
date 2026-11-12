@@ -16,7 +16,7 @@ export default async function CounsellorAnalyticsPage() {
     const userDoc = await adminDb.collection('users').doc(counsellorId).get();
     userRole = userDoc.data()?.role || 'student';
   } catch {}
-  if (claims.email !== 'counsellor@as.com' && userRole !== 'counsellor') {
+  if (claims.role !== 'counsellor' && claims.role !== 'admin' && userRole !== 'counsellor') {
     redirect('/');
   }
 

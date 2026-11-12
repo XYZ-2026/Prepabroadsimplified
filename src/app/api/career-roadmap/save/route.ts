@@ -168,7 +168,7 @@ export async function GET(request: NextRequest) {
       const data = doc.data()!;
       // Access control: owner OR counsellor OR admin
       const isOwner = data.userId === claims.uid;
-      const isStaff = claims.role === 'admin' || claims.role === 'counsellor' || claims.email?.includes('counsellor');
+      const isStaff = claims.role === 'admin' || claims.role === 'counsellor';
       if (!isOwner && !isStaff) {
         return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
       }
@@ -179,7 +179,7 @@ export async function GET(request: NextRequest) {
     // 2. Listing roadmaps
     let targetUserId = claims.uid;
     if (studentIdParam) {
-      const isStaff = claims.role === 'admin' || claims.role === 'counsellor' || claims.email?.includes('counsellor');
+      const isStaff = claims.role === 'admin' || claims.role === 'counsellor';
       if (!isStaff) {
         return NextResponse.json({ error: 'Forbidden: only staff can inspect other students' }, { status: 403 });
       }

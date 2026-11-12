@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useMemo, useTransition } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import styles from '@/styles/career-library.module.css';
+import { Bookmark } from 'lucide-react';
 import { getClusterIcon } from './CareerIcons';
 import type {
   CareerProfile,
@@ -78,6 +79,96 @@ export default function CareerLibraryExplorer({
       isMounted = false;
     };
   }, []);
+
+  // Bookmarks (saved careers)
+  const [savedIds, setSavedIds] = useState<Set<string>>(new Set());
+  const [isSignedIn, setIsSignedIn] = useState<boolean | null>(null);
+  const [bookmarkMsg, setBookmarkMsg] = useState('');
+
+  useEffect(() => {
+    let isMounted = true;
+    fetch('/api/student/saved-careers')
+      .then(async (res) => {
+        if (res.status === 401) {
+          if (isMounted) setIsSignedIn(false);
+          return;
+        }
+        const data = await res.json();
+        if (!isMounted) return;
+        setIsSignedIn(true);
+        setSavedIds(new Set((data.savedCareers || []).map((c: { id: string }) => c.id)));
+      })
+      .catch(() => {
+        // bookmarks are optional — the library works without them
+      });
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!bookmarkMsg) return;
+    const t = setTimeout(() => setBookmarkMsg(''), 3500);
+    return () => clearTimeout(t);
+  }, [bookmarkMsg]);
+
+  const toggleSaved = async (careerId: string, careerName: string) => {
+    if (isSignedIn === false) {
+      router.push('/auth?tab=login');
+      return;
+    }
+    const wasSaved = savedIds.has(careerId);
+    // optimistic update
+    setSavedIds((prev) => {
+      const next = new Set(prev);
+      if (wasSaved) next.delete(careerId);
+      else next.add(careerId);
+      return next;
+    });
+    try {
+      const res = await fetch('/api/student/saved-careers', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ careerId, saved: !wasSaved }),
+      });
+      if (res.status === 401) {
+        setIsSignedIn(false);
+        throw new Error('Please sign in to save careers.');
+      }
+      const json = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(json.error || 'Could not update your saved careers.');
+      setBookmarkMsg(wasSaved ? `Removed “${careerName}” from saved careers` : `Saved “${careerName}”`);
+    } catch (err) {
+      // roll back
+      setSavedIds((prev) => {
+        const next = new Set(prev);
+        if (wasSaved) next.add(careerId);
+        else next.delete(careerId);
+        return next;
+      });
+      setBookmarkMsg(err instanceof Error ? err.message : 'Could not update your saved careers.');
+    }
+  };
+
+  const renderBookmark = (careerId: string, careerName: string, className: string) => {
+    const isSaved = savedIds.has(careerId);
+    return (
+      <button
+        type="button"
+        className={className}
+        aria-pressed={isSaved}
+        aria-label={isSaved ? `Remove ${careerName} from saved careers` : `Save ${careerName}`}
+        title={isSaved ? 'Saved — click to remove' : 'Save this career'}
+        onClick={(e) => {
+          e.stopPropagation();
+          toggleSaved(careerId, careerName);
+        }}
+        onKeyDown={(e) => e.stopPropagation()}
+      >
+        <Bookmark size={20} fill={isSaved ? 'currentColor' : 'none'} />
+      </button>
+    );
+  };
 
   // Filtered Profiles
   const filteredProfiles = useMemo(() => {
@@ -206,7 +297,10 @@ export default function CareerLibraryExplorer({
               )}
             </div>
 
-            <h1 className={styles.detailHeaderTitle}>{activeProfile.name}</h1>
+            <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 12 }}>
+              <h1 className={styles.detailHeaderTitle} style={{ margin: 0 }}>{activeProfile.name}</h1>
+              {renderBookmark(activeProfile.id, activeProfile.name, styles.bookmarkBtn)}
+            </div>
             <p className={styles.detailHeaderDesc}>{activeProfile.desc}</p>
 
             {/* Entrance Exam Required (If available, render; if not, skip) */}
@@ -703,7 +797,8 @@ export default function CareerLibraryExplorer({
                       }
                     }}
                   >
-                    <div className={styles.branchCardHeader}>
+                    {renderBookmark(profile.id, profile.name, styles.cardBookmark)}
+                    <div className={styles.branchCardHeader} style={{ paddingRight: 44 }}>
                       <span className={styles.branchClusterBadge}>
                         {getClusterIcon(profile.cluster, 14)}
                         {clusterInfo.name}
@@ -740,6 +835,9 @@ export default function CareerLibraryExplorer({
             </div>
           )}
         </div>
+      )}
+      {bookmarkMsg && (
+        <div className={styles.bookmarkToast} role="status" aria-live="polite">{bookmarkMsg}</div>
       )}
     </div>
   );

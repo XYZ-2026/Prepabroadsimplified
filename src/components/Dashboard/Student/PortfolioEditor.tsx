@@ -37,6 +37,19 @@ interface EditorState {
   links: { email: string; linkedin: string; github: string; website: string; cv: string };
 }
 
+export type PortfolioSection =
+  | 'basics'
+  | 'photo'
+  | 'about'
+  | 'academics'
+  | 'activities'
+  | 'projects'
+  | 'awards'
+  | 'certifications'
+  | 'skills'
+  | 'journey'
+  | 'links';
+
 export interface PortfolioDefaults {
   fullName: string;
   grade: string;
@@ -171,16 +184,26 @@ export default function PortfolioEditor({
   initialRecord,
   defaults,
   loadFailed,
+  sections,
+  title = 'My Portfolio',
+  startHidden = false,
 }: {
   initialRecord: PortfolioRecord | null;
   defaults: PortfolioDefaults;
   loadFailed: boolean;
+  /** Which groups to render. Omit to render everything. The FULL record is always saved, so hidden groups are never wiped. */
+  sections?: PortfolioSection[];
+  title?: string;
+  /** New records are created unpublished (used when the student has not chosen to go public yet). */
+  startHidden?: boolean;
 }) {
+  const show = (key: PortfolioSection) => !sections || sections.includes(key);
   const [state, setState] = useState<EditorState>(() => {
     if (initialRecord) return toEditor(initialRecord);
     const base = emptyPortfolioRecord();
     return toEditor({
       ...base,
+      published: startHidden ? false : base.published,
       username: suggestUsername(defaults.fullName),
       fullName: defaults.fullName,
       grade: defaults.grade,
@@ -314,7 +337,7 @@ export default function PortfolioEditor({
   return (
     <div className={styles.card} id="portfolio">
       <div className={styles.cardHeader}>
-        <h2 className={styles.cardTitle}>My Portfolio</h2>
+        <h2 className={styles.cardTitle}>{title}</h2>
       </div>
       <div className={styles.cardBody}>
         {portfolioUrl ? (
@@ -347,6 +370,8 @@ export default function PortfolioEditor({
         {success && <div className={ui.alertSuccess}>{success}</div>}
 
         <form onSubmit={handleSave}>
+          {show('basics') && (
+          <>
           {/* Basics */}
           <div className={styles.formRow}>
             <div className={styles.formGroup}>
@@ -376,6 +401,11 @@ export default function PortfolioEditor({
             </label>
           </div>
 
+          </>
+          )}
+
+          {show('photo') && (
+          <>
           {/* Photo */}
           <div className={ui.section}>
             <h3 className={ui.sectionTitle}>Hero photo</h3>
@@ -429,6 +459,11 @@ export default function PortfolioEditor({
             </div>
           </div>
 
+          </>
+          )}
+
+          {show('about') && (
+          <>
           {/* About */}
           <div className={ui.section}>
             <h3 className={ui.sectionTitle}>About you</h3>
@@ -472,8 +507,11 @@ export default function PortfolioEditor({
             </div>
           </div>
 
+          </>
+          )}
+
           {/* Repeatable lists */}
-          {(Object.keys(LISTS) as (keyof typeof LISTS)[]).map((listKey) => {
+          {(Object.keys(LISTS) as (keyof typeof LISTS)[]).filter((k) => show(k)).map((listKey) => {
             const cfg = LISTS[listKey];
             const rows = state[listKey];
             return (
@@ -519,6 +557,8 @@ export default function PortfolioEditor({
             );
           })}
 
+          {show('links') && (
+          <>
           {/* Links */}
           <div className={ui.section}>
             <h3 className={ui.sectionTitle}>Contact & links</h3>
@@ -550,6 +590,9 @@ export default function PortfolioEditor({
               </div>
             </div>
           </div>
+
+          </>
+          )}
 
           <div className={ui.saveBar}>
             <button

@@ -15,7 +15,7 @@ export async function GET(request: Request) {
       });
     }
 
-    const isAdmin = claims.email === 'admin@as.com' || claims.admin === true || claims.role === 'admin';
+    const isAdmin = claims.admin === true || claims.role === 'admin';
 
     const { searchParams } = new URL(request.url);
     const requestedType = searchParams.get('type'); // e.g. 'junior', 'grade10', 'senior'

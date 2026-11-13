@@ -15,9 +15,13 @@ import {
   UserRound,
   ClipboardCheck,
   Activity,
+  Clapperboard,
 } from 'lucide-react';
 import s from '@/styles/admitted-students.module.css';
 import type { AdmittedDetail, AdmittedSummary } from '@/lib/wix-library';
+import { admittedPortfolioPath, toItems } from '@/lib/admitted-portfolio';
+
+export { toItems };
 
 /* ───────────── helpers ───────────── */
 
@@ -46,17 +50,6 @@ export function initialsOf(name: string, max = 2) {
 }
 
 const pct = (v: number | null, max: number) => (v ? Math.max(4, Math.min(100, (v / max) * 100)) : 0);
-
-/** Splits "1. A\n2. B" / "A; B; C" style text into list items. */
-export function toItems(text: string): string[] {
-  if (!text) return [];
-  let parts = text
-    .split(/\n+/)
-    .map((l) => l.trim())
-    .filter(Boolean);
-  if (parts.length === 1 && parts[0].includes(';')) parts = parts[0].split(';').map((p) => p.trim()).filter(Boolean);
-  return parts.map((p) => p.replace(/^(\d+[.)]|[-•*])\s*/, ''));
-}
 
 /** "Title: detail" → bold title. */
 function Item({ text, plain }: { text: string; plain?: boolean }) {
@@ -87,53 +80,62 @@ function Metric({ label, value, max }: { label: string; value: number | null; ma
 export function AdmittedCard({ student, href }: { student: AdmittedSummary; href: string }) {
   const t = themeFor(student.collegeType);
   return (
-    <Link href={href} className={s.card}>
-      <div className={s.banner} style={{ borderTopColor: t.accent }}>
-        <div className={s.bannerTop}>
-          <span className={s.collegeMark} style={{ color: t.accent }}>
-            {initialsOf(student.college, 3)}
-          </span>
-          <div className={s.collegeText}>
-            <div className={s.college}>{student.college}</div>
-            {student.location && <div className={s.collegeMeta}>{student.location}</div>}
-          </div>
-        </div>
-        <div className={s.bannerTags}>
-          {student.collegeType && (
-            <span className={s.typePill} style={{ background: t.pillBg, color: t.pillFg }}>
-              {student.collegeType}
+    <article className={s.card}>
+      <Link href={href} className={s.cardMain}>
+        <div className={s.banner} style={{ borderTopColor: t.accent }}>
+          <div className={s.bannerTop}>
+            <span className={s.collegeMark} style={{ color: t.accent }}>
+              {initialsOf(student.college, 3)}
             </span>
-          )}
-          {student.decision && (
-            <span className={s.decision}>
-              <BadgeCheck size={12} /> {student.decision}
-            </span>
-          )}
-        </div>
-      </div>
-      <div className={s.body}>
-        <div className={s.person}>
-          <div className={s.avatar}>{initialsOf(student.name)}</div>
-          <div>
-            <h2 className={s.name}>{student.name}</h2>
-            <div className={s.sub}>
-              {[student.major, student.classYear && `Class of ${student.classYear}`].filter(Boolean).join(' · ')}
+            <div className={s.collegeText}>
+              <div className={s.college}>{student.college}</div>
+              {student.location && <div className={s.collegeMeta}>{student.location}</div>}
             </div>
           </div>
+          <div className={s.bannerTags}>
+            {student.collegeType && (
+              <span className={s.typePill} style={{ background: t.pillBg, color: t.pillFg }}>
+                {student.collegeType}
+              </span>
+            )}
+            {student.decision && (
+              <span className={s.decision}>
+                <BadgeCheck size={12} /> {student.decision}
+              </span>
+            )}
+          </div>
         </div>
-        <div className={s.metrics}>
-          <Metric label="GPA" value={student.gpa} max={4} />
-          <Metric label="SAT" value={student.sat} max={1600} />
-          <Metric label="ACT" value={student.act} max={36} />
+        <div className={s.body}>
+          <div className={s.person}>
+            <div className={s.avatar}>{initialsOf(student.name)}</div>
+            <div>
+              <h2 className={s.name}>{student.name}</h2>
+              <div className={s.sub}>
+                {[student.major, student.classYear && `Class of ${student.classYear}`].filter(Boolean).join(' · ')}
+              </div>
+            </div>
+          </div>
+          <div className={s.metrics}>
+            <Metric label="GPA" value={student.gpa} max={4} />
+            <Metric label="SAT" value={student.sat} max={1600} />
+            <Metric label="ACT" value={student.act} max={36} />
+          </div>
+          {student.applicationType && (
+            <div>
+              <span className={s.tag}>{student.applicationType}</span>
+            </div>
+          )}
         </div>
-        <div className={s.footer}>
-          <span className={s.tag}>{student.applicationType || 'Application'}</span>
-          <span className={s.view}>
-            View profile <ArrowRight size={14} />
-          </span>
-        </div>
+      </Link>
+      <div className={s.cardActions}>
+        <Link href={href} className={s.actionGhost}>
+          View profile <ArrowRight size={14} />
+        </Link>
+        <Link href={admittedPortfolioPath(student.id)} className={s.actionPrimary}>
+          <Clapperboard size={14} /> View portfolio
+        </Link>
       </div>
-    </Link>
+    </article>
   );
 }
 
@@ -278,6 +280,9 @@ export function AdmittedProfile({ student: st }: { student: AdmittedDetail }) {
               {st.major && <span className={s.chip}>Major: {st.major}</span>}
               {st.classYear && <span className={s.chip}>Class of {st.classYear}</span>}
             </div>
+            <Link href={admittedPortfolioPath(st.id)} className={`${s.actionPrimary} ${s.profilePortfolioBtn}`}>
+              <Clapperboard size={15} /> View portfolio
+            </Link>
           </div>
         </div>
         <div className={s.scoreRow}>

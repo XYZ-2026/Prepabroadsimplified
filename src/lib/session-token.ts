@@ -30,10 +30,15 @@ function getSecret(): string {
   if (process.env.NODE_ENV === 'production') {
     throw new Error('SESSION_SECRET must be set to a random string of at least 32 characters.');
   }
-  // Development only: random per-process secret (sessions reset when the server restarts).
+  // Development only. The proxy and the route handlers are bundled separately, so a random
+  // per-module secret would make the proxy reject cookies minted by /api/auth/login (login loop).
+  // Derive a stable secret from local, non-public config instead so every bundle agrees.
   if (!devFallbackSecret) {
-    devFallbackSecret = crypto.randomBytes(32).toString('hex');
-    console.warn('[Session] SESSION_SECRET missing or too short — using a temporary development secret.');
+    devFallbackSecret = crypto
+      .createHash('sha256')
+      .update(`clarvo-dev-session::${process.cwd()}::${process.env.FIREBASE_ADMIN_PRIVATE_KEY || ''}`)
+      .digest('hex');
+    console.warn('[Session] SESSION_SECRET missing or too short — using a derived development secret. Set SESSION_SECRET in .env.local.');
   }
   return devFallbackSecret;
 }

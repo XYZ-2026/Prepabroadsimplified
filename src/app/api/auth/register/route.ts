@@ -1,10 +1,11 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse, after } from 'next/server';
 import { adminAuth, adminDb } from '@/lib/firebase-admin';
 import { SESSION_COOKIE_NAME, createSessionCookie, verifyFirebaseIdToken } from '@/lib/auth';
 import { SESSION_TTL_SECONDS } from '@/lib/session-token';
 import { hashPassword } from '@/lib/password-utils';
 import { normalizeGrade } from '@/lib/psychometric-access-policy';
 import { rateLimit, clientIp } from '@/lib/rate-limit';
+import { sendWelcomeEmailOnce } from '@/lib/welcome-email';
 
 const RESERVED_EMAILS = new Set(['admin@as.com', 'counsellor@as.com']);
 
@@ -150,6 +151,9 @@ export async function POST(request: NextRequest) {
     } catch (dbErr: any) {
       console.warn('[Register] Firestore adminDb profile write notice:', dbErr?.message);
     }
+
+    // One-time welcome email (runs after the response so sign-up stays fast; deduplicated per user)
+    after(() => sendWelcomeEmailOnce({ uid, email: cleanEmail, name: cleanName, role: effectiveRole }));
 
     // Auto-allot unassigned students via SJF algorithm
     try {

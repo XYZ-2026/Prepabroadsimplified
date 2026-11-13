@@ -1,7 +1,11 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse, after } from 'next/server';
 import { createSessionCookie, verifyFirebaseIdToken, SESSION_COOKIE_NAME } from '@/lib/auth';
 import { SESSION_TTL_SECONDS, safeEqual, type SessionRole } from '@/lib/session-token';
 import { rateLimit, clientIp } from '@/lib/rate-limit';
+import { sendWelcomeEmailOnce } from '@/lib/welcome-email';
+
+// A Firebase account younger than this is treated as just created (first Google sign-in).
+const NEW_ACCOUNT_WINDOW_MS = 15 * 60 * 1000;
 
 const DEMO_COUNSELLOR_EMAIL = 'counsellor@as.com';
 
@@ -64,9 +68,10 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ error: 'Your sign-in could not be verified. Please try again.' }, { status: 401 });
       }
 
-      const { adminDb } = await import('@/lib/firebase-admin');
+      const { adminDb, adminAuth } = await import('@/lib/firebase-admin');
       let role: SessionRole = 'student';
       let name = (decoded.name as string) || '';
+      let isNewAccount = false;
       try {
         const ref = adminDb.collection('users').doc(decoded.uid);
         const snap = await ref.get();
@@ -74,7 +79,14 @@ export async function POST(request: NextRequest) {
           const data = snap.data() || {};
           role = normaliseRole(data.role);
           name = data.name || name;
+          // Profile may have been written moments ago by the client; only a freshly created
+          // Firebase account counts as a sign-up (existing users signing in never qualify).
+          if (!data.welcomeEmail || data.welcomeEmail.status === 'failed') {
+            const created = await adminAuth.getUser(decoded.uid).then((u) => Date.parse(u.metadata.creationTime)).catch(() => NaN);
+            isNewAccount = Number.isFinite(created) && Date.now() - created < NEW_ACCOUNT_WINDOW_MS;
+          }
         } else {
+          isNewAccount = true;
           // First Google sign-in: create the profile server-side (clients can no longer write user documents)
           await ref.set({
             uid: decoded.uid,
@@ -100,6 +112,10 @@ export async function POST(request: NextRequest) {
       }
 
       session = { uid: decoded.uid, email: (decoded.email || '').toLowerCase(), name, role };
+      if (isNewAccount && role !== 'admin') {
+        const welcome = { uid: session.uid, email: session.email, name, role: role === 'counsellor' ? 'counsellor' as const : 'student' as const };
+        after(() => sendWelcomeEmailOnce(welcome));
+      }
     } else if (cleanEmail && typeof password === 'string' && password) {
       // Server-side password verification against the stored hash
       const { adminDb } = await import('@/lib/firebase-admin');

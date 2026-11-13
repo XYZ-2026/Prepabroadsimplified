@@ -69,7 +69,7 @@ export const RESERVED_USERNAMES = new Set([
   'university-finder', 'api', 'auth', 'join-community', 'join-counsellor-community',
   'parent-assessment', 'signup', 'admin', 'demo', 'login', 'logout', 'register', 'settings',
   'robots', 'sitemap', 'manifest', 'favicon', 'static', 'public', 'www', 'help', 'support',
-  'portfolio', 'portfolios', 'courses', 'course', 'resume', 'student', 'students', 'counsellor', 'contact', 'home', 'clarvo',
+  'portfolio', 'portfolios', 'admitted', 'courses', 'course', 'resume', 'student', 'students', 'counsellor', 'contact', 'home', 'clarvo',
   'null', 'undefined', '_next',
 ]);
 

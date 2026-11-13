@@ -5,6 +5,9 @@ import { getPublishedPortfolioByUsername } from '@/lib/portfolio-service';
 import { buildDemoProfile, DEMO_USERNAME } from '@/components/portfolio/mockProfile';
 import { recordToProfile, USERNAME_PATTERN, type PortfolioProfile } from '@/components/portfolio/portfolioTypes';
 import { renderResumeHtml, resumeCtaHtml, getSiteUrl } from '@/components/portfolio/resumeHtml';
+import { verifySessionCookie } from '@/lib/auth';
+import { getAdmitted } from '@/lib/wix-library';
+import { admittedToPortfolio, ADMITTED_USERNAME_PREFIX } from '@/lib/admitted-portfolio';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 60;
@@ -17,6 +20,14 @@ let queue: Promise<unknown> = Promise.resolve();
 
 async function loadProfile(username: string): Promise<PortfolioProfile | null> {
   if (username === DEMO_USERNAME) return buildDemoProfile();
+  if (username.startsWith(ADMITTED_USERNAME_PREFIX)) {
+    // Admitted-student portfolios live behind sign-in, like the admitted-students library.
+    if (!(await verifySessionCookie())) return null;
+    const id = username.slice(ADMITTED_USERNAME_PREFIX.length);
+    if (!/^[a-z0-9-]{6,64}$/.test(id)) return null;
+    const student = await getAdmitted(id).catch(() => null);
+    return student ? admittedToPortfolio(student) : null;
+  }
   if (!USERNAME_PATTERN.test(username)) return null;
   const record = await getPublishedPortfolioByUsername(username);
   return record ? recordToProfile(record) : null;

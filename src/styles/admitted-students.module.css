@@ -120,7 +120,7 @@
 /* ── Cards ── */
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr));
   gap: 18px;
 }
 
@@ -140,6 +140,80 @@
   transform: translateY(-3px);
   border-color: #C7D7FE;
   box-shadow: 0 14px 32px rgba(15, 23, 42, 0.08);
+}
+
+/* Card = clickable main area + an action row (two links can't nest inside one anchor) */
+.cardMain {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  text-decoration: none;
+  color: inherit;
+}
+
+.cardActions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  padding: 12px 18px 16px;
+  border-top: 1px solid #EEF2F7;
+}
+
+.actionGhost,
+.actionPrimary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 40px;
+  padding: 9px 12px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.actionGhost {
+  color: var(--clarvo-blue-primary, #2563EB);
+  background: #fff;
+  border: 1px solid #D0DCF5;
+}
+
+.actionGhost:hover {
+  background: #F0F5FF;
+  border-color: #B4C8F5;
+}
+
+.actionPrimary {
+  color: #fff;
+  background: var(--clarvo-blue-primary, #2563EB);
+  border: 1px solid transparent;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.22);
+}
+
+.actionPrimary:hover {
+  background: #1D4ED8;
+  box-shadow: 0 6px 16px rgba(37, 99, 235, 0.3);
+}
+
+.actionGhost:focus-visible,
+.actionPrimary:focus-visible,
+.cardMain:focus-visible {
+  outline: 2px solid var(--clarvo-blue-primary, #2563EB);
+  outline-offset: 2px;
+}
+
+.profilePortfolioBtn {
+  margin-top: 14px;
+  padding: 10px 18px;
+}
+
+@media (max-width: 360px) {
+  .cardActions {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* light header strip; the 3px top border carries the college-type accent */

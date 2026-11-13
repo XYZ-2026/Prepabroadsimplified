@@ -6,6 +6,7 @@
 import {
   emptyPortfolioRecord,
   usernameError,
+  USERNAME_PATTERN,
   type PortfolioRecord,
 } from '@/components/portfolio/portfolioTypes';
 
@@ -183,6 +184,43 @@ export async function getPublishedPortfolioByUsername(username: string): Promise
     console.error('[Portfolio] Public lookup failed:', err);
     return null;
   }
+}
+
+/**
+ * Usernames of every published portfolio, for the sitemap. Hidden portfolios are never listed.
+ * Returns [] when Wix is not configured or unreachable, so the sitemap still builds.
+ */
+export async function listPublishedPortfolios(): Promise<{ username: string; updatedAt?: string }[]> {
+  if (!process.env.WIX_API_KEY || !process.env.WIX_SITE_ID) return [];
+  const out: { username: string; updatedAt?: string }[] = [];
+  const LIMIT = 1000;
+  try {
+    for (let offset = 0; offset < 20_000; offset += LIMIT) {
+      const res = await fetch(`${WIX_DATA}/items/query`, {
+        method: 'POST',
+        headers: wixHeaders(),
+        next: { revalidate: 3600 },
+        body: JSON.stringify({
+          dataCollectionId: PORTFOLIO_COLLECTION_ID,
+          // Same rule as sanitizePortfolio: published unless explicitly false.
+          query: { filter: { published: { $ne: false } }, paging: { limit: LIMIT, offset } },
+        }),
+      });
+      if (!res.ok) throw new Error(`Wix query failed (HTTP ${res.status})`);
+      const items: { data?: Record<string, unknown> }[] = (await res.json())?.dataItems || [];
+      for (const item of items) {
+        const data = item.data || {};
+        const record = rowToRecord(data);
+        if (record.published && USERNAME_PATTERN.test(record.username)) {
+          out.push({ username: record.username, updatedAt: typeof data.updatedAt === 'string' ? data.updatedAt : undefined });
+        }
+      }
+      if (items.length < LIMIT) break;
+    }
+  } catch (err) {
+    console.error('[Portfolio] Sitemap listing failed:', err);
+  }
+  return out;
 }
 
 export class PortfolioValidationError extends Error {}

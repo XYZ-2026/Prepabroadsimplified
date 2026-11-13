@@ -237,7 +237,7 @@ export default function SettingsClient({ name, email, signInMethod, initialPrefe
                 ? 'Checking your portfolio…'
                 : portfolio
                 ? portfolio.published
-                  ? `Anyone with your link can view it: /${portfolio.username}`
+                  ? `Anyone with your link can view it, and it can appear in Google search: /${portfolio.username}`
                   : 'Your portfolio is hidden from the public.'
                 : 'You have not created a portfolio yet.'}
             </div>

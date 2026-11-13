@@ -6,6 +6,7 @@ import { getAdmitted } from '@/lib/wix-library';
 import lib from '@/styles/student-library.module.css';
 import { AdmittedProfile } from '@/components/Dashboard/Library/AdmittedViews';
 import LockedProfile from '@/components/Auth/LockedProfile';
+import PortfolioCTA from '@/components/Auth/PortfolioCTA';
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
   const { id } = await params;
@@ -36,7 +37,10 @@ export default async function PublicAdmittedProfilePage({ params }: { params: Pr
         ← Back to Admitted Students
       </Link>
       {signedIn ? (
-        <AdmittedProfile student={student} />
+        <>
+          <AdmittedProfile student={student} />
+          <PortfolioCTA signedIn variant="band" />
+        </>
       ) : (
         <LockedProfile
           redirectTo={self}

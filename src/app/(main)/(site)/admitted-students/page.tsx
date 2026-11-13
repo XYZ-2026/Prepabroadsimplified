@@ -1,3 +1,4 @@
+import React from 'react';
 import type { Metadata } from 'next';
 import { verifySessionCookie } from '@/lib/auth';
 import { listAdmitted, COLLEGE_TYPES, DECISIONS, LIBRARY_PAGE_SIZE, type AdmittedSummary } from '@/lib/wix-library';
@@ -6,6 +7,10 @@ import s from '@/styles/admitted-students.module.css';
 import { SearchForm, FilterChips, Pagination, parsePage, first } from '@/components/Dashboard/Library/LibraryControls';
 import { AdmittedCard, AdmittedHero } from '@/components/Dashboard/Library/AdmittedViews';
 import AuthGate from '@/components/Auth/AuthGate';
+import PortfolioCTA from '@/components/Auth/PortfolioCTA';
+
+/** Grid slot (0-based) where the "build your own portfolio" card appears. */
+const CTA_SLOT = 5;
 
 export const metadata: Metadata = {
   title: 'Admitted Students — Real Profiles of Students Admitted to Top Universities | CLARVO',
@@ -88,14 +93,19 @@ export default async function PublicAdmittedStudentsPage({
             subtitle="Scores, activities, awards and the essays this student wrote are available with a free CLARVO account."
           >
             <div className={s.grid}>
-              {items.map((st) => (
-                <AdmittedCard key={st.id} student={st} href={`${BASE}/${encodeURIComponent(st.id)}`} gated />
+              {items.map((st, i) => (
+                <React.Fragment key={st.id}>
+                  {i === Math.min(CTA_SLOT, items.length - 1) && <PortfolioCTA signedIn={signedIn} variant="card" />}
+                  <AdmittedCard student={st} href={`${BASE}/${encodeURIComponent(st.id)}`} gated />
+                </React.Fragment>
               ))}
             </div>
           </AuthGate>
           <Pagination base={BASE} current={current} page={page} totalPages={totalPages} />
         </>
       )}
+
+      <PortfolioCTA signedIn={signedIn} variant="band" />
     </div>
   );
 }

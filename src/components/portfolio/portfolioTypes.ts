@@ -59,6 +59,12 @@ export interface PortfolioProfile {
   links: { label: string; href: string }[];
 }
 
+/** Where a student builds their own portfolio: the "Public Portfolio" card on the edit-profile page. */
+export const PORTFOLIO_BUILDER_URL = '/dashboard/student/profile/edit#portfolio';
+
+/** Public sample portfolio (rendered from mock data, works without Wix). */
+export const SAMPLE_PORTFOLIO_URL = '/demo';
+
 export const USERNAME_PATTERN = /^[a-z0-9][a-z0-9_-]{2,29}$/;
 
 /** Top-level routes (and common words) that can never be used as a portfolio username. */
@@ -70,6 +76,7 @@ export const RESERVED_USERNAMES = new Set([
   'parent-assessment', 'signup', 'admin', 'demo', 'login', 'logout', 'register', 'settings',
   'robots', 'sitemap', 'manifest', 'favicon', 'static', 'public', 'www', 'help', 'support',
   'portfolio', 'portfolios', 'admitted', 'courses', 'course', 'resume', 'student', 'students', 'counsellor', 'contact', 'home', 'clarvo',
+  'research', 'admitted-students',
   'null', 'undefined', '_next',
 ]);
 

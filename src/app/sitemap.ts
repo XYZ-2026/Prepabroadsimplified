@@ -1,4 +1,8 @@
 import type { MetadataRoute } from 'next';
+import { listPublishedPortfolios } from '@/lib/portfolio-service';
+
+// Rebuilt hourly so newly published student portfolios get picked up.
+export const revalidate = 3600;
 
 function getValidSiteUrl(urlInput?: string): string {
   const fallback = 'https://clarvo.in';
@@ -18,8 +22,16 @@ function getValidSiteUrl(urlInput?: string): string {
   }
 }
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = getValidSiteUrl(process.env.NEXT_PUBLIC_APP_URL);
+
+  // Published student portfolios only (hidden ones are never listed).
+  const portfolios: MetadataRoute.Sitemap = (await listPublishedPortfolios()).map((p) => ({
+    url: `${baseUrl}/${p.username}`,
+    lastModified: p.updatedAt ? new Date(p.updatedAt) : new Date(),
+    changeFrequency: 'weekly',
+    priority: 0.5,
+  }));
 
   return [
     {
@@ -76,5 +88,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'monthly',
       priority: 0.5,
     },
+    ...portfolios,
   ];
 }

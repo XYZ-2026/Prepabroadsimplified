@@ -12,6 +12,8 @@ interface SignInModalProps {
   redirectTo: string;
   title?: string;
   subtitle?: string;
+  /** Which tab opens first. Lead-gen CTAs open on Register. */
+  defaultTab?: 'login' | 'register';
 }
 
 /**
@@ -25,6 +27,7 @@ export default function SignInModal({
   redirectTo,
   title = 'Sign in to continue',
   subtitle = 'Create a free account or sign in to unlock full admitted-student profiles.',
+  defaultTab = 'login',
 }: SignInModalProps) {
   const dialogRef = useRef<HTMLDivElement>(null);
   // The portal can only render in the browser; wait for mount so server and client HTML match
@@ -143,7 +146,7 @@ export default function SignInModal({
         </div>
 
         <Suspense fallback={<div style={{ padding: 40, textAlign: 'center', color: '#667085', background: '#fff', borderRadius: 18 }}>Loading…</div>}>
-          <AuthForm defaultTab="login" redirectTo={redirectTo} />
+          <AuthForm defaultTab={defaultTab} redirectTo={redirectTo} />
         </Suspense>
       </div>
     </div>,

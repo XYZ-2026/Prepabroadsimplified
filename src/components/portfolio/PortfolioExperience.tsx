@@ -4,14 +4,14 @@ import React, { useEffect, useState } from 'react';
 import { AnimatePresence, motion, useReducedMotion, useScroll, useTransform } from 'framer-motion';
 import { ArrowRight, ArrowDown, Mail, RotateCcw, Award, Download, Sparkles, Trophy } from 'lucide-react';
 import styles from './portfolio.module.css';
-import type { PortfolioProfile } from './portfolioTypes';
+import { PORTFOLIO_BUILDER_URL, type PortfolioProfile } from './portfolioTypes';
 import { renderResumeHtml } from './resumeHtml';
 
 /** Where the "Explore more certifications" card leads (the courses catalogue). */
 const COURSES_URL = process.env.NEXT_PUBLIC_COURSES_URL || '/book-a-demo';
 
 /** Header call to action: signed-in students land in the portfolio editor, everyone else signs in first. */
-const BUILD_PORTFOLIO_URL = '/dashboard/student/profile/edit';
+const BUILD_PORTFOLIO_URL = PORTFOLIO_BUILDER_URL;
 
 type SectionId = 'story' | 'achievements' | 'certifications' | 'skills' | 'projects' | 'about' | 'journey' | 'resume';
 

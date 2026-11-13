@@ -400,6 +400,9 @@ export default function PortfolioEditor({
               Show my portfolio publicly
             </label>
           </div>
+          <p className={ui.sectionHint} style={{ marginTop: -4 }}>
+            A published portfolio can appear in Google search results for your name. Turn this off at any time to hide it.
+          </p>
 
           </>
           )}

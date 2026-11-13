@@ -35,7 +35,10 @@ export default function AppShell({ children, userRole, userName, userEmail }: Ap
     pathname.startsWith('/about-us') ||
     pathname.startsWith('/book-a-demo') ||
     pathname.startsWith('/demo-confirmation') ||
-    pathname.startsWith('/sample-reports');
+    pathname.startsWith('/sample-reports') ||
+    pathname === '/research' ||
+    pathname.startsWith('/admitted-students') ||
+    pathname.startsWith('/research/');
 
   if (isReportView || isLandingView) {
     // Report views and standalone public landing pages render their own header/footer

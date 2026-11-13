@@ -81,7 +81,7 @@ export default function RedesignFooter() {
                 { label: 'Grades 9–10 Stream Choice', href: '/discover' },
                 { label: 'Grades 11–12 Admissions', href: '/discover' },
                 { label: '1-to-1 Private Tutoring', href: '/book-a-demo' },
-                { label: 'High School Research', href: '/discover' },
+                { label: 'High School Research', href: '/research' },
               ].map((item) => (
                 <li key={item.label}>
                   <Link

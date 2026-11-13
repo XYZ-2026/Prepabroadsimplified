@@ -1,14 +1,17 @@
 import type { Metadata } from 'next';
 import { cache } from 'react';
 import Link from 'next/link';
-import { notFound, redirect } from 'next/navigation';
+import { notFound } from 'next/navigation';
 import PortfolioExperience from '@/components/portfolio/PortfolioExperience';
+import AuthGate from '@/components/Auth/AuthGate';
 import { verifySessionCookie } from '@/lib/auth';
 import { getAdmitted } from '@/lib/wix-library';
 import { admittedToPortfolio } from '@/lib/admitted-portfolio';
 
 // Portfolio generated automatically for every admitted-student profile, rendered with the
-// same cinematic experience as student portfolios. Signed-in users only, like the library itself.
+// same cinematic experience as student portfolios. Anyone can view it; any action that leaves
+// the page (project links, resume/CV, contact, the full profile) asks signed-out visitors to
+// sign in through a popup and then returns them here.
 export const dynamic = 'force-dynamic';
 
 const loadStudent = cache(async (id: string) => getAdmitted(decodeURIComponent(id)).catch(() => null));
@@ -23,17 +26,22 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
 }
 
 export default async function AdmittedPortfolioPage({ params }: { params: Promise<{ id: string }> }) {
-  if (!(await verifySessionCookie())) redirect('/auth');
+  const signedIn = Boolean(await verifySessionCookie());
 
   const { id } = await params;
   const student = await loadStudent(id);
   if (!student) notFound();
 
   return (
-    <>
+    <AuthGate
+      signedIn={signedIn}
+      mode="actions"
+      title="Sign in to continue"
+      subtitle={`Create a free CLARVO account or sign in to open ${student.name.split(' ')[0]}'s links, resume and full profile.`}
+    >
       <PortfolioExperience profile={admittedToPortfolio(student)} />
       <Link
-        href={`/dashboard/student/admitted-students/${encodeURIComponent(student.id)}`}
+        href={`/admitted-students/${encodeURIComponent(student.id)}`}
         style={{
           position: 'fixed',
           right: 16,
@@ -57,6 +65,6 @@ export default async function AdmittedPortfolioPage({ params }: { params: Promis
       >
         ← Full admission profile
       </Link>
-    </>
+    </AuthGate>
   );
 }

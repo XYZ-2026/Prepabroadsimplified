@@ -119,7 +119,7 @@ const JOURNEY_STAGES: JourneyStage[] = [
     ],
     metricLabel: 'Admissions Differentiation',
     metricValue: 'Top 2%',
-    link: '/discover',
+    link: '/research',
     actionText: 'View research tracks',
     icon: <Award className="w-4 h-4" />,
   },

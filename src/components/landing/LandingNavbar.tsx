@@ -114,7 +114,7 @@ export default function LandingNavbar() {
             <a
               href="#services"
               onClick={(e) => handleScrollTo(e, 'services')}
-              className="px-2 xl:px-3 h-[32px] xl:h-[34px] rounded-full flex items-center justify-center text-[12px] xl:text-[13px] font-medium text-[#475569] hover:bg-[#2563EB] hover:text-white transition-all duration-200 cursor-pointer whitespace-nowrap"
+              className="px-2 xl:px-2.5 h-[32px] xl:h-[34px] rounded-full flex items-center justify-center text-[12px] xl:text-[13px] font-medium text-[#475569] hover:bg-[#2563EB] hover:text-white transition-all duration-200 cursor-pointer whitespace-nowrap"
             >
               Services
             </a>
@@ -122,20 +122,31 @@ export default function LandingNavbar() {
             <a
               href="#programs"
               onClick={(e) => handleScrollTo(e, 'programs')}
-              className="px-2 xl:px-3 h-[32px] xl:h-[34px] rounded-full flex items-center justify-center text-[12px] xl:text-[13px] font-medium text-[#475569] hover:bg-[#2563EB] hover:text-white transition-all duration-200 cursor-pointer whitespace-nowrap"
+              className="px-2 xl:px-2.5 h-[32px] xl:h-[34px] rounded-full flex items-center justify-center text-[12px] xl:text-[13px] font-medium text-[#475569] hover:bg-[#2563EB] hover:text-white transition-all duration-200 cursor-pointer whitespace-nowrap"
             >
               Programs
             </a>
 
             <Link
               href="/psychometric-assessment"
-              className={`px-2 xl:px-3 h-[32px] xl:h-[34px] rounded-full flex items-center justify-center text-[12px] xl:text-[13px] transition-all duration-200 cursor-pointer whitespace-nowrap ${
+              className={`px-2 xl:px-2.5 h-[32px] xl:h-[34px] rounded-full flex items-center justify-center text-[12px] xl:text-[13px] transition-all duration-200 cursor-pointer whitespace-nowrap ${
                 isActive('/psychometric-assessment')
                   ? "bg-[#2563EB] text-white font-bold shadow-xs"
                   : "font-medium text-[#475569] hover:bg-[#2563EB] hover:text-white"
               }`}
             >
               Assessments
+            </Link>
+
+            <Link
+              href="/research"
+              className={`px-2 xl:px-2.5 h-[32px] xl:h-[34px] rounded-full flex items-center justify-center text-[12px] xl:text-[13px] transition-all duration-200 cursor-pointer whitespace-nowrap ${
+                isActive('/research')
+                  ? "bg-[#2563EB] text-white font-bold shadow-xs"
+                  : "font-medium text-[#475569] hover:bg-[#2563EB] hover:text-white"
+              }`}
+            >
+              Research
             </Link>
 
             {/* INTEGRATED SAMPLE REPORTS DROPDOWN */}
@@ -147,7 +158,7 @@ export default function LandingNavbar() {
             >
               <Link
                 href="/sample-reports"
-                className={`px-2.5 xl:px-3.5 h-[32px] xl:h-[34px] rounded-full flex items-center gap-1.5 text-[12px] xl:text-[13px] transition-all duration-200 cursor-pointer whitespace-nowrap ${
+                className={`px-2.5 xl:px-3 h-[32px] xl:h-[34px] rounded-full flex items-center gap-1.5 text-[12px] xl:text-[13px] transition-all duration-200 cursor-pointer whitespace-nowrap ${
                   isActive('/sample-reports') || isActive('/sample-report')
                     ? "bg-[#2563EB] text-white font-bold shadow-xs"
                     : "font-medium text-[#475569] hover:bg-[#2563EB] hover:text-white"
@@ -226,25 +237,21 @@ export default function LandingNavbar() {
               )}
             </div>
 
-            <a
-              href="#journey"
-              onClick={(e) => handleScrollTo(e, 'journey')}
-              className="px-2 xl:px-3 h-[32px] xl:h-[34px] rounded-full flex items-center justify-center text-[12px] xl:text-[13px] font-medium text-[#475569] hover:bg-[#2563EB] hover:text-white transition-all duration-200 cursor-pointer whitespace-nowrap"
-            >
-              The Journey
-            </a>
 
-            <a
-              href="#testimonials"
-              onClick={(e) => handleScrollTo(e, 'testimonials')}
-              className="px-2 xl:px-3 h-[32px] xl:h-[34px] rounded-full flex items-center justify-center text-[12px] xl:text-[13px] font-medium text-[#475569] hover:bg-[#2563EB] hover:text-white transition-all duration-200 cursor-pointer whitespace-nowrap"
+            <Link
+              href="/admitted-students"
+              className={`px-2 xl:px-2.5 h-[32px] xl:h-[34px] rounded-full flex items-center justify-center text-[12px] xl:text-[13px] transition-all duration-200 cursor-pointer whitespace-nowrap ${
+                isActive('/admitted-students')
+                  ? "bg-[#2563EB] text-white font-bold shadow-xs"
+                  : "font-medium text-[#475569] hover:bg-[#2563EB] hover:text-white"
+              }`}
             >
-              Student Stories
-            </a>
+              Admitted Students
+            </Link>
 
             <Link
               href="/about-us"
-              className={`px-2 xl:px-3 h-[32px] xl:h-[34px] rounded-full flex items-center justify-center text-[12px] xl:text-[13px] transition-all duration-200 cursor-pointer whitespace-nowrap ${
+              className={`px-2 xl:px-2.5 h-[32px] xl:h-[34px] rounded-full flex items-center justify-center text-[12px] xl:text-[13px] transition-all duration-200 cursor-pointer whitespace-nowrap ${
                 isActive('/about-us')
                   ? "bg-[#2563EB] text-white font-bold shadow-xs"
                   : "font-medium text-[#475569] hover:bg-[#2563EB] hover:text-white"
@@ -255,7 +262,7 @@ export default function LandingNavbar() {
 
             <Link
               href="/blog"
-              className={`px-2 xl:px-3 h-[32px] xl:h-[34px] rounded-full flex items-center justify-center text-[12px] xl:text-[13px] transition-all duration-200 cursor-pointer whitespace-nowrap ${
+              className={`px-2 xl:px-2.5 h-[32px] xl:h-[34px] rounded-full flex items-center justify-center text-[12px] xl:text-[13px] transition-all duration-200 cursor-pointer whitespace-nowrap ${
                 isActive('/blog')
                   ? "bg-[#2563EB] text-white font-bold shadow-xs"
                   : "font-medium text-[#475569] hover:bg-[#2563EB] hover:text-white"
@@ -355,6 +362,19 @@ export default function LandingNavbar() {
               <span className={isActive('/psychometric-assessment') ? "text-white" : "text-[#94A3B8]"}>→</span>
             </Link>
 
+            <Link
+              href="/research"
+              onClick={() => setMobileMenuOpen(false)}
+              className={`flex items-center justify-between px-3.5 py-2 rounded-xl text-[14.5px] transition-colors ${
+                isActive('/research')
+                  ? "bg-[#2563EB] text-white font-bold"
+                  : "font-semibold text-[#334155] hover:bg-[#F1F5F9]"
+              }`}
+            >
+              <span>Research</span>
+              <span className={isActive('/research') ? "text-white" : "text-[#94A3B8]"}>→</span>
+            </Link>
+
             {/* Mobile Sample Reports Accordion */}
             <div className="rounded-xl border border-slate-100 overflow-hidden">
               <button
@@ -410,23 +430,19 @@ export default function LandingNavbar() {
               )}
             </div>
 
-            <a
-              href="#journey"
-              onClick={(e) => handleScrollTo(e, 'journey')}
-              className="flex items-center justify-between px-3.5 py-2 rounded-xl text-[14.5px] font-semibold text-[#334155] hover:bg-[#F1F5F9] transition-colors"
-            >
-              <span>The Journey</span>
-              <span className="text-[#94A3B8] text-sm">→</span>
-            </a>
 
-            <a
-              href="#testimonials"
-              onClick={(e) => handleScrollTo(e, 'testimonials')}
-              className="flex items-center justify-between px-3.5 py-2 rounded-xl text-[14.5px] font-semibold text-[#334155] hover:bg-[#F1F5F9] transition-colors"
+            <Link
+              href="/admitted-students"
+              onClick={() => setMobileMenuOpen(false)}
+              className={`flex items-center justify-between px-3.5 py-2 rounded-xl text-[14.5px] transition-colors ${
+                isActive('/admitted-students')
+                  ? "bg-[#2563EB] text-white font-bold"
+                  : "font-semibold text-[#334155] hover:bg-[#F1F5F9]"
+              }`}
             >
-              <span>Student Stories</span>
-              <span className="text-[#94A3B8] text-sm">→</span>
-            </a>
+              <span>Admitted Students</span>
+              <span className={isActive('/admitted-students') ? "text-white" : "text-[#94A3B8]"}>→</span>
+            </Link>
 
             <Link
               href="/about-us"

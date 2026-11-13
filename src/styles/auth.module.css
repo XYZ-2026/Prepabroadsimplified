@@ -261,251 +261,145 @@
 }
 
 
-/* ── Right Side: Bento Box Architecture ── */
-.bentoContainer {
-  width: 100%;
-  animation: fadeIn 0.4s ease forwards;
-}
-
-.bentoGrid {
-  display: grid;
-  grid-template-columns: repeat(12, 1fr);
-  gap: 0.85rem;
-  align-items: stretch;
-}
-
-/* Base Bento Card */
-.bentoCard {
-  background: var(--bg-card);
-  border: 1px solid var(--border-color);
-  border-radius: 16px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
-  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
-  overflow: hidden;
-}
-
-.bentoCard:hover {
-  transform: translateY(-2px);
-  border-color: rgba(37, 99, 235, 0.25);
-  box-shadow: 0 8px 22px rgba(37, 99, 235, 0.08);
-}
-
-/* 1. Hero Bento Card (Span 7) */
-.bentoHeroCard {
-  grid-column: span 7;
-  padding: 1.25rem 1.4rem;
-  background: linear-gradient(135deg, #FFFFFF 0%, #EFF6FF 100%);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 0.4rem;
-}
-
-.infoBadge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 0.68rem;
-  font-weight: 700;
-  letter-spacing: 0.6px;
-  color: var(--accent);
-  background: var(--accent-light);
-  padding: 3px 10px;
-  border-radius: 16px;
-  width: fit-content;
-}
-
-.infoBadgeDot {
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background-color: var(--accent);
-  display: inline-block;
-  animation: pulse 2s infinite;
-}
-
-.infoTitle {
-  font-family: var(--font-heading);
-  font-size: 1.45rem;
-  font-weight: 800;
-  line-height: 1.25;
-  color: var(--text-heading);
-  letter-spacing: -0.02em;
-}
-
-.infoTitleHighlight {
-  color: var(--accent);
+/* ── Right Side: Counselling photo panel ── */
+.photoPanel {
   position: relative;
-  display: inline-block;
-}
-
-.infoSubtitle {
-  font-size: 0.82rem;
-  color: var(--text-body);
-  line-height: 1.4;
-}
-
-/* 2. Square Image Bento Frame (Span 5, 1:1 Square Ratio) */
-.bentoSquareImageCard {
-  grid-column: span 5;
-  aspect-ratio: 1 / 1;
-  max-height: 190px;
-  padding: 0.5rem;
-  background: #FFFFFF;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.bentoSquareImg {
   width: 100%;
-  height: 100%;
-  object-fit: contain;
+  margin: 0;
+  aspect-ratio: 4 / 5;
+  max-height: calc(100vh - 60px - 3.5rem);
+  min-height: 520px;
+  border-radius: 24px;
+  overflow: hidden;
+  background: #0B1E44;
+  box-shadow: 0 24px 50px rgba(8, 15, 28, 0.14);
+  animation: fadeIn 0.5s ease both;
+}
+
+.photoPanelImg {
+  object-fit: cover;
+  object-position: center 22%;
+}
+
+/* Scrim: keeps the caption readable over any photo */
+.photoPanel::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  /* Kept low and short so the session itself stays the hero; only the caption area is darkened. */
+  background: linear-gradient(to top, rgba(7, 20, 48, 0.9) 0%, rgba(7, 20, 48, 0.62) 22%, rgba(7, 20, 48, 0.18) 38%, rgba(7, 20, 48, 0) 48%);
+  pointer-events: none;
+}
+
+.photoPanelNote {
+  position: absolute;
+  top: 1.25rem;
+  left: 1.25rem;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.6rem 0.9rem;
   border-radius: 12px;
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 8px 24px rgba(8, 15, 28, 0.16);
+  font-size: 0.78rem;
+  line-height: 1.3;
+  color: #475467;
+  animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.25s both;
+}
+
+.photoPanelNote strong {
   display: block;
-}
-
-/* 3. Stat Bento Cards (3 cards, each spans 4 columns) */
-.bentoStatCard {
-  grid-column: span 4;
-  padding: 0.75rem 0.8rem;
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-}
-
-.infoStatTopRow {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.infoStatIcon {
-  font-size: 1.15rem;
-}
-
-.infoStatValue {
-  font-family: var(--font-heading);
-  font-size: 1.25rem;
-  font-weight: 800;
-  line-height: 1;
-}
-
-.infoStatLabel {
-  font-size: 0.68rem;
-  font-weight: 600;
-  color: var(--text-muted);
-  line-height: 1.1;
-  white-space: nowrap;
-}
-
-/* 4. Feature Bento Cards (3 cards, each spans 4 columns) */
-.bentoFeatureCard {
-  grid-column: span 4;
-  padding: 0.85rem 0.9rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.infoFeatureIconBox {
-  width: 34px;
-  height: 34px;
-  border-radius: 8px;
-  background: var(--accent-light);
-  color: var(--accent);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.infoFeatureContent {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 0.2rem;
-}
-
-.infoFeatureHeader {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.4rem;
-}
-
-.infoFeatureTitle {
-  font-family: var(--font-heading);
-  font-size: 0.85rem;
+  font-size: 0.82rem;
   font-weight: 700;
-  color: var(--text-heading);
+  color: #080F1C;
 }
 
-.infoFeatureBadge {
-  font-size: 0.62rem;
-  font-weight: 700;
-  color: #1D4ED8;
-  background: #EFF6FF;
-  border: 1px solid #BFDBFE;
-  padding: 2px 7px;
-  border-radius: 8px;
-  white-space: nowrap;
+.photoPanelNoteDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #16A34A;
+  flex-shrink: 0;
 }
 
-.infoFeatureDesc {
-  font-size: 0.75rem;
-  color: var(--text-body);
-  line-height: 1.35;
+.photoPanelCaption {
+  position: absolute;
+  inset: auto 0 0 0;
+  z-index: 2;
+  padding: 1.75rem 2rem 1.75rem;
+  color: #FFFFFF;
 }
 
-/* 5. Destinations Bento Card (Spans 12 columns) */
-.bentoDestinationsCard {
-  grid-column: span 12;
-  padding: 0.65rem 1rem;
-  background: rgba(255, 255, 255, 0.85);
-  border-style: dashed;
-  display: flex;
-  align-items: center;
-  gap: 0.85rem;
-}
-
-.infoDestinationsTitle {
-  font-size: 0.65rem;
-  font-weight: 800;
-  letter-spacing: 0.6px;
-  color: var(--text-muted);
-  white-space: nowrap;
-}
-
-.infoDestinationsGrid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.45rem;
-}
-
-.infoDestinationChip {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  background: var(--bg-card);
-  border: 1px solid var(--border-color);
-  padding: 3px 10px;
-  border-radius: 16px;
-  font-size: 0.76rem;
+.photoPanelLabel {
+  display: block;
+  font-size: 0.8rem;
   font-weight: 600;
-  color: var(--text-heading);
-  transition: all 0.15s ease;
+  color: #BFD4FF;
+  margin-bottom: 0.5rem;
 }
 
-.infoDestinationChip:hover {
-  border-color: #2563EB;
-  background: #EFF6FF;
-  color: #1D4ED8;
+.photoPanelTitle {
+  font-family: var(--font-heading);
+  font-size: clamp(1.5rem, 2.2vw, 2rem);
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: #FFFFFF;
+  margin: 0;
+  max-width: 18ch;
+  text-wrap: balance;
 }
 
-.infoFlag {
+.photoPanelText {
   font-size: 0.95rem;
-  display: inline-flex;
-  align-items: center;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.82);
+  margin: 0.6rem 0 0;
+  max-width: 44ch;
+}
+
+.photoPanelStats {
+  display: flex;
+  margin: 1.35rem 0 0;
+  padding-top: 1.1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.photoPanelStat {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 2px;
+  padding: 0 1.5rem;
+  border-left: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.photoPanelStat:first-child {
+  padding-left: 0;
+  border-left: 0;
+}
+
+.photoPanelStat dd {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: 1.3rem;
+  font-weight: 800;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+  color: #FFFFFF;
+}
+
+.photoPanelStat dt {
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .photoPanel,
+  .photoPanelNote {
+    animation: none;
+  }
 }
 
 /* Keyframes */
@@ -558,23 +452,33 @@
     gap: 2.25rem;
   }
 
-  .bentoHeroCard {
-    grid-column: span 12;
+  /* Photo becomes a short banner above the form */
+  .authLayoutGrid > section:last-child {
+    order: -1;
   }
 
-  .bentoSquareImageCard {
-    grid-column: span 12;
+  .photoPanel {
     aspect-ratio: auto;
-    height: 180px;
-    max-height: 200px;
+    min-height: 0;
+    max-height: none;
+    height: 220px;
+    border-radius: 18px;
   }
 
-  .bentoStatCard {
-    grid-column: span 4;
+  .photoPanelNote,
+  .photoPanelText,
+  .photoPanelStats,
+  .photoPanelLabel {
+    display: none;
   }
 
-  .bentoFeatureCard {
-    grid-column: span 12;
+  .photoPanelCaption {
+    padding: 1.1rem 1.25rem;
+  }
+
+  .photoPanelTitle {
+    font-size: 1.3rem;
+    max-width: 20ch;
   }
 }
 
@@ -615,53 +519,13 @@
     padding: 0.7rem 0.85rem;
   }
 
-  .bentoGrid {
-    gap: 0.65rem;
+  .photoPanel {
+    height: 180px;
+    border-radius: 14px;
   }
 
-  .bentoHeroCard {
-    padding: 1rem 1.15rem;
-  }
-
-  .infoTitle {
-    font-size: 1.3rem;
-  }
-
-  .bentoSquareImageCard {
-    height: 160px;
-  }
-
-  .bentoStatCard {
-    grid-column: span 12;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0.75rem 1rem;
-  }
-
-  .infoStatLabel {
-    font-size: 0.75rem;
-  }
-
-  .bentoFeatureCard {
-    grid-column: span 12;
-    padding: 0.75rem 0.85rem;
-  }
-
-  .bentoDestinationsCard {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.5rem;
-    padding: 0.75rem 1rem;
-  }
-
-  .infoDestinationsGrid {
-    gap: 0.35rem;
-  }
-
-  .infoDestinationChip {
-    padding: 3px 8px;
-    font-size: 0.75rem;
+  .photoPanelTitle {
+    font-size: 1.15rem;
   }
 }
 

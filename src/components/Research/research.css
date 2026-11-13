@@ -1,0 +1,74 @@
+/* /research: university logo marquee. */
+
+.rsr-lane {
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
+  mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
+}
+
+.rsr-track {
+  display: flex;
+  gap: 16px;
+  width: max-content;
+  list-style: none;
+  margin: 0;
+  padding: 4px 0;
+  animation: rsr-scroll 70s linear infinite;
+}
+.rsr-track--reverse {
+  animation-direction: reverse;
+  animation-duration: 80s;
+}
+/* Hovering either lane pauses both, so a logo can be read. */
+.rsr-marquee:hover .rsr-track {
+  animation-play-state: paused;
+}
+
+@keyframes rsr-scroll {
+  /* -50% minus half the gap: the list is duplicated, so this lands exactly on the copy. */
+  to { transform: translateX(calc(-50% - 8px)); }
+}
+
+.rsr-logo {
+  filter: grayscale(1);
+  opacity: 0.72;
+  transition: filter 0.3s ease, opacity 0.3s ease, transform 0.3s ease;
+}
+.rsr-tile {
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+.rsr-tile:hover {
+  border-color: var(--clarvo-blue, #1258de);
+  box-shadow: 0 12px 30px -16px rgba(18, 88, 222, 0.35);
+}
+.rsr-tile:hover .rsr-logo {
+  filter: none;
+  opacity: 1;
+  transform: scale(1.05);
+}
+
+/* Reduced motion: no movement, one wrapped grid, duplicates hidden. */
+@media (prefers-reduced-motion: reduce) {
+  .rsr-lane {
+    -webkit-mask-image: none;
+    mask-image: none;
+    padding: 0 16px;
+  }
+  .rsr-track {
+    animation: none;
+    width: auto;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .rsr-track > [aria-hidden='true'] {
+    display: none;
+  }
+}
+
+/* Touch screens have no hover: show logos in colour. */
+@media (hover: none) {
+  .rsr-logo {
+    filter: none;
+    opacity: 1;
+  }
+}

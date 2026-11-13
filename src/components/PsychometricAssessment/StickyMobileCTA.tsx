@@ -7,14 +7,26 @@ import { CalendarDays } from 'lucide-react';
 import { PSYCHOMETRIC_CONTENT, bookCallHref } from '@/content/psychometricContent';
 import { springUi } from './motion/tokens';
 
-const bar = PSYCHOMETRIC_CONTENT.stickyBar;
+interface StickyMobileCTAProps {
+  href?: string;
+  label?: string;
+  secondary?: { label: string; href: string };
+  /** id of the final CTA section; the bar hides once it is reached. */
+  finalId?: string;
+}
 
 /**
  * Sticky mobile CTA (spec 5.11). Shows on touch or narrow screens once the
  * hero CTAs leave the viewport; hides once the final CTA is reached.
  * Visibility comes from IntersectionObserver, never from scroll offsets.
+ * Defaults are the psychometric page's; other pages pass their own.
  */
-export default function StickyMobileCTA() {
+export default function StickyMobileCTA({
+  href = bookCallHref('sticky-bar'),
+  label = PSYCHOMETRIC_CONTENT.bookCall.label,
+  secondary = PSYCHOMETRIC_CONTENT.stickyBar.secondary,
+  finalId = 'start',
+}: StickyMobileCTAProps) {
   const [eligible, setEligible] = useState(false);
   const [heroOut, setHeroOut] = useState(false);
   const [finalIn, setFinalIn] = useState(false);
@@ -31,7 +43,7 @@ export default function StickyMobileCTA() {
     if (!eligible) return;
     // The hero renders a desktop and a mobile copy of its CTAs; watch the visible one.
     const heroCta = Array.from(document.querySelectorAll<HTMLElement>('[data-hero-cta]')).find((el) => el.offsetParent !== null);
-    const finalCta = document.getElementById('start');
+    const finalCta = document.getElementById(finalId);
     const observers: IntersectionObserver[] = [];
     if (heroCta) {
       const o = new IntersectionObserver(([e]) => setHeroOut(!e.isIntersecting && e.boundingClientRect.top < 0));
@@ -45,7 +57,7 @@ export default function StickyMobileCTA() {
       observers.push(o);
     }
     return () => observers.forEach((o) => o.disconnect());
-  }, [eligible]);
+  }, [eligible, finalId]);
 
   const visible = eligible && heroOut && !finalIn;
 
@@ -63,14 +75,14 @@ export default function StickyMobileCTA() {
         >
           <div className="max-w-xl mx-auto flex items-center gap-3">
             <Link
-              href={bookCallHref('sticky-bar')}
+              href={href}
               className="flex-1 inline-flex items-center justify-center gap-2 h-12 rounded-full text-[16px] font-bold text-white bg-clarvo-blue no-underline"
             >
               <CalendarDays className="w-[18px] h-[18px]" aria-hidden={true} />
-              {PSYCHOMETRIC_CONTENT.bookCall.label}
+              {label}
             </Link>
-            <a href={bar.secondary.href} className="h-12 px-4 inline-flex items-center text-[16px] font-bold text-clarvo-blue no-underline">
-              {bar.secondary.label}
+            <a href={secondary.href} className="h-12 px-4 inline-flex items-center text-[16px] font-bold text-clarvo-blue no-underline">
+              {secondary.label}
             </a>
           </div>
         </m.div>

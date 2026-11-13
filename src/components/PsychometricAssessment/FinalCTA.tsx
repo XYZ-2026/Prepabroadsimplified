@@ -2,12 +2,10 @@
 
 import React from 'react';
 import Image from 'next/image';
-import Link from 'next/link';
-import { m, useMotionValue, useReducedMotion, useSpring } from 'motion/react';
-import { CalendarDays } from 'lucide-react';
+import { m } from 'motion/react';
 import { PSYCHOMETRIC_CONTENT, bookCallHref } from '@/content/psychometricContent';
 import { BookCallNote } from './BookCallButton';
-import { usePointerFine } from '@/hooks/usePointerFine';
+import MagneticLink from './MagneticLink';
 import Reveal from './motion/Reveal';
 import { EASE_OUT, VIEWPORT } from './motion/tokens';
 
@@ -54,39 +52,5 @@ export default function FinalCTA() {
         </div>
       </div>
     </section>
-  );
-}
-
-function MagneticLink({ href, label }: { href: string; label: string }) {
-  const isFine = usePointerFine();
-  const reduced = useReducedMotion();
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-  const sx = useSpring(x, { stiffness: 400, damping: 30 });
-  const sy = useSpring(y, { stiffness: 400, damping: 30 });
-
-  const onMove = (e: React.PointerEvent<HTMLAnchorElement>) => {
-    if (!isFine || reduced) return;
-    const r = e.currentTarget.getBoundingClientRect();
-    x.set(((e.clientX - r.left) / r.width - 0.5) * 12);
-    y.set(((e.clientY - r.top) / r.height - 0.5) * 12);
-  };
-
-  return (
-    <m.span style={{ x: sx, y: sy }} className="inline-flex">
-      <Link
-        href={href}
-        onPointerMove={onMove}
-        onPointerLeave={() => {
-          x.set(0);
-          y.set(0);
-        }}
-        data-final-cta=""
-        className="w-full inline-flex items-center justify-center gap-2.5 h-[52px] px-7 rounded-full whitespace-nowrap text-[16px] font-bold text-clarvo-blue bg-white hover:bg-sky transition-colors no-underline"
-      >
-        <CalendarDays className="w-[18px] h-[18px]" aria-hidden="true" />
-        {label}
-      </Link>
-    </m.span>
   );
 }

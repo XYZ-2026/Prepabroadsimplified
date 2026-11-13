@@ -77,11 +77,13 @@ function Metric({ label, value, max }: { label: string; value: number | null; ma
   );
 }
 
-export function AdmittedCard({ student, href }: { student: AdmittedSummary; href: string }) {
+export function AdmittedCard({ student, href, gated = false }: { student: AdmittedSummary; href: string; gated?: boolean }) {
   const t = themeFor(student.collegeType);
+  // `data-auth-gate` lets a surrounding <AuthGate mode="marked"> turn profile clicks into a sign-in popup.
+  const gate = gated ? { 'data-auth-gate': '' } : {};
   return (
     <article className={s.card}>
-      <Link href={href} className={s.cardMain}>
+      <Link href={href} className={s.cardMain} {...gate}>
         <div className={s.banner} style={{ borderTopColor: t.accent }}>
           <div className={s.bannerTop}>
             <span className={s.collegeMark} style={{ color: t.accent }}>
@@ -128,7 +130,7 @@ export function AdmittedCard({ student, href }: { student: AdmittedSummary; href
         </div>
       </Link>
       <div className={s.cardActions}>
-        <Link href={href} className={s.actionGhost}>
+        <Link href={href} className={s.actionGhost} {...gate}>
           View profile <ArrowRight size={14} />
         </Link>
         <Link href={admittedPortfolioPath(student.id)} className={s.actionPrimary}>

@@ -63,9 +63,21 @@ const STATE_OPTIONS = [
 
 interface AuthFormProps {
   defaultTab?: Tab;
+  /**
+   * Where to send the user after a successful sign-in or registration. When set it wins over the
+   * server's dashboard redirect and skips the post-registration welcome screen, so a sign-in
+   * popup can return people to the page they were on. Must be a same-site path.
+   */
+  redirectTo?: string;
 }
 
-export default function AuthForm({ defaultTab }: AuthFormProps = {}) {
+/** Accept only same-site paths ("/x"), never "//host" or absolute URLs. */
+function safeRedirect(path?: string): string | null {
+  return path && path.startsWith('/') && !path.startsWith('//') ? path : null;
+}
+
+export default function AuthForm({ defaultTab, redirectTo }: AuthFormProps = {}) {
+  const returnTo = safeRedirect(redirectTo);
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -238,7 +250,7 @@ export default function AuthForm({ defaultTab }: AuthFormProps = {}) {
 
       // Check if existing user with complete profile
       if (!isNewUser && (existingProfileData?.grade || existingProfileData?.academicGrade)) {
-        window.location.href = loginResult.redirectUrl || '/dashboard/student/profile';
+        window.location.href = returnTo || loginResult.redirectUrl || '/dashboard/student/profile';
         return;
       }
 
@@ -364,6 +376,11 @@ export default function AuthForm({ defaultTab }: AuthFormProps = {}) {
         throw new Error(serverData.error || serverData.details || 'Failed to complete profile onboarding');
       }
 
+      if (returnTo) {
+        window.location.href = returnTo;
+        return;
+      }
+
       // 3. Resolve eligible assessment for Welcome screen
       if (regRole === 'student' && normalizedGrade) {
         const access = getStudentPsychometricAccess(normalizedGrade);
@@ -415,7 +432,7 @@ export default function AuthForm({ defaultTab }: AuthFormProps = {}) {
       }
 
       const loginResult = await response.json().catch(() => ({}));
-      const destination = loginResult.redirectUrl || '/dashboard/student/profile';
+      const destination = returnTo || loginResult.redirectUrl || '/dashboard/student/profile';
       window.location.href = destination;
     } catch (err: any) {
       console.error('[Login] Error:', err);
@@ -633,6 +650,11 @@ export default function AuthForm({ defaultTab }: AuthFormProps = {}) {
       const serverData = await serverResponse.json().catch(() => ({}));
       if (!serverResponse.ok) {
         throw new Error(serverData.error || serverData.details || 'Failed to complete registration on server');
+      }
+
+      if (returnTo) {
+        window.location.href = returnTo;
+        return;
       }
 
       // Resolve eligible assessment for Welcome screen

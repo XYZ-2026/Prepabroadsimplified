@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { SITE_URL } from "@/lib/site-url";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { fetchWixBlogBySlug, fetchRelatedWixBlogs } from "@/lib/wixCms";
@@ -19,7 +20,7 @@ import {
 export const revalidate = 300;
 export const dynamicParams = true;
 
-const BASE_URL = process.env.NEXT_PUBLIC_APP_URL || "https://clarvo.in";
+const BASE_URL = SITE_URL;
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -47,7 +48,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     : [];
 
   return {
-    title: `${title} | CLARVO`,
+    // Root layout template appends " | CLARVO"; prefer the shorter SEO title for the SERP.
+    title: post.seo_title || title,
     description,
     keywords,
     alternates: {
@@ -64,7 +66,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       tags: keywords,
       images: [
         {
-          url: `${BASE_URL}/logo-transparent.png`,
+          url: `${BASE_URL}/og-image.png`,
           width: 1200,
           height: 630,
           alt: title,
@@ -75,6 +77,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       card: "summary_large_image",
       title,
       description,
+      images: [`${BASE_URL}/og-image.png`],
     },
     robots: {
       index: true,
@@ -111,7 +114,10 @@ export default async function BlogPostPage({ params }: Props) {
   }
 
   const related = await fetchRelatedWixBlogs(slug, 3);
-  const sanitizedContent = sanitizeHtml(post.html_content || "");
+  // The page renders its own <h1>; demote any H1 inside the CMS body so each post has exactly one.
+  const sanitizedContent = sanitizeHtml(post.html_content || "")
+    .replace(/<h1(\s[^>]*)?>/gi, "<h2$1>")
+    .replace(/<\/h1>/gi, "</h2>");
 
   const keywords = post.keywords
     ? post.keywords

@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { cache } from 'react';
 import Link from 'next/link';
-import { notFound } from 'next/navigation';
+import { notFound, permanentRedirect } from 'next/navigation';
 import PortfolioExperience from '@/components/portfolio/PortfolioExperience';
 import AuthGate from '@/components/Auth/AuthGate';
 import { verifySessionCookie } from '@/lib/auth';
@@ -31,6 +31,7 @@ export default async function AdmittedPortfolioPage({ params }: { params: Promis
   const { id } = await params;
   const student = await loadStudent(id);
   if (!student) notFound();
+  if (decodeURIComponent(id) !== student.username) permanentRedirect(`/admitted/${encodeURIComponent(student.username)}`);
 
   return (
     <AuthGate
@@ -41,7 +42,7 @@ export default async function AdmittedPortfolioPage({ params }: { params: Promis
     >
       <PortfolioExperience profile={admittedToPortfolio(student)} />
       <Link
-        href={`/admitted-students/${encodeURIComponent(student.id)}`}
+        href={`/admitted-students/${encodeURIComponent(student.username)}`}
         style={{
           position: 'fixed',
           right: 16,

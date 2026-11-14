@@ -14,7 +14,7 @@ import type {
 import type { AdmittedDetail } from './wix-library';
 
 export const ADMITTED_USERNAME_PREFIX = 'admitted-';
-export const admittedPortfolioPath = (id: string) => `/admitted/${encodeURIComponent(id)}`;
+export const admittedPortfolioPath = (username: string) => `/admitted/${encodeURIComponent(username)}`;
 
 /** Splits "1. A\n2. B" / "A; B; C" style text into list items. */
 export function toItems(text: string): string[] {
@@ -231,7 +231,7 @@ export function admittedToPortfolio(st: AdmittedDetail): PortfolioProfile {
   if (st.sourceUrl) links.push({ label: 'Original profile', href: st.sourceUrl });
 
   return {
-    username: `${ADMITTED_USERNAME_PREFIX}${st.id}`,
+    username: `${ADMITTED_USERNAME_PREFIX}${st.username}`,
     firstName,
     fullName,
     initials: initials(fullName),

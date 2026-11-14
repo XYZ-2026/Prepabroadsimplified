@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react';
+import React from 'react';
 import { getUserProfile } from '@/lib/auth';
 import AppShell from '@/components/Layout/AppShell';
 import { SessionProvider } from '@/components/providers/SessionProvider';
@@ -16,15 +16,19 @@ export default async function MainLayout({ children }: { children: React.ReactNo
 
   return (
     <SessionProvider user={sessionUser}>
-      <Suspense fallback={<div className="main-content">{children}</div>}>
-        <AppShell
-          userRole={userRole}
-          userName={userName}
-          userEmail={userEmail}
-        >
-          {children}
-        </AppShell>
-      </Suspense>
+      {/*
+        No Suspense wrapper here: a fallback that renders {children} made every page
+        appear twice in the HTML (duplicate H1s / JSON-LD, double payload). This layout
+        reads cookies via getUserProfile(), so the route is dynamically rendered and
+        AppShell's useSearchParams() resolves on the server without a boundary.
+      */}
+      <AppShell
+        userRole={userRole}
+        userName={userName}
+        userEmail={userEmail}
+      >
+        {children}
+      </AppShell>
     </SessionProvider>
   );
 }

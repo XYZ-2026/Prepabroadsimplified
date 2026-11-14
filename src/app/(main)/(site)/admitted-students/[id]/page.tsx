@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { notFound } from 'next/navigation';
+import { notFound, permanentRedirect } from 'next/navigation';
 import { verifySessionCookie } from '@/lib/auth';
 import { getAdmitted } from '@/lib/wix-library';
 import lib from '@/styles/student-library.module.css';
@@ -12,7 +12,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   const { id } = await params;
   const st = await getAdmitted(decodeURIComponent(id)).catch(() => null);
   return {
-    title: st ? `${st.name} — Admitted to ${st.college} | CLARVO` : 'Admitted Student | CLARVO',
+    title: st ? `${st.name} — Admitted to ${st.college}` : 'Admitted Student',
     // Individual student records stay out of search engines.
     robots: { index: false, follow: false },
   };
@@ -29,7 +29,9 @@ export default async function PublicAdmittedProfilePage({ params }: { params: Pr
   const student = await getAdmitted(decodeURIComponent(id)).catch(() => null);
   if (!student) notFound();
 
-  const self = `/admitted-students/${encodeURIComponent(student.id)}`;
+  const self = `/admitted-students/${encodeURIComponent(student.username)}`;
+  // Old links used the record id; send them to the username URL.
+  if (decodeURIComponent(id) !== student.username) permanentRedirect(self);
 
   return (
     <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
@@ -47,7 +49,7 @@ export default async function PublicAdmittedProfilePage({ params }: { params: Pr
           name={student.name}
           college={student.college}
           major={student.major}
-          portfolioHref={`/admitted/${encodeURIComponent(student.id)}`}
+          portfolioHref={`/admitted/${encodeURIComponent(student.username)}`}
         />
       )}
     </div>

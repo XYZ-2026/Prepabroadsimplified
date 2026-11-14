@@ -19,6 +19,9 @@ export const metadata: Metadata = {
   alternates: {
     canonical: '/psychometric-test',
   },
+  // Login-gated tool: search engines only see the sign-in wall. Public landing pages
+  // (/psychometric-assessment, /research, home) are the ranking targets.
+  robots: { index: false, follow: true },
   openGraph: {
     title: 'Psychometric Assessment & Career Personality Evaluation | CLARVO',
     description:

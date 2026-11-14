@@ -19,17 +19,18 @@ import { PSYCHOMETRIC_CONTENT } from '@/content/psychometricContent';
 import '@/components/PsychometricAssessment/psychometric.css';
 
 export const metadata: Metadata = {
-  title: 'CLARVO Psychometric Assessment — Grades 7–12 Diagnostic & Stream Selection',
+  title: 'Psychometric Test for Students — Career & Stream Assessment',
   description:
-    'A 30-module psychometric evaluation across personality architecture, cognitive processing, learning modalities, and stream alignment. Clear direction for families, students, and counsellors before high-stakes academic decisions.',
+    'Psychometric test for Class 7–12 students: aptitude, interests, personality and learning style mapped to stream selection after Class 10, careers and university choices.',
   keywords: [
+    'psychometric test for students',
     'psychometric assessment',
-    'stream selection class 10',
-    'PCM vs PCB vs Commerce',
-    'Holland RIASEC assessment',
-    'learning modalities VARK',
-    'high school career guidance',
-    'CLARVO psychometric test',
+    'career assessment test',
+    'aptitude test for class 10',
+    'stream selection after 10th',
+    'career counselling test',
+    'profile assessment for study abroad',
+    'RIASEC test',
   ],
   alternates: {
     canonical: '/psychometric-assessment',

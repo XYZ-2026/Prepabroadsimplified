@@ -22,9 +22,16 @@ import {
 import HeroVisualMockup from '@/components/Home/HeroVisualMockup';
 
 export const metadata: Metadata = {
-  title: 'Discover CLARVO — 30-Module Student Development & Psychometric Framework',
+  title: 'Stream Selection & Profile Building Roadmap for Grades 7–12',
   description:
-    'Explore CLARVO’s diagnostic assessments, cognitive profiling, stream selection engines, and university matching for students in Grades 7–12.',
+    'Plan stream selection after Class 10, profile building and university admissions in India and abroad with CLARVO’s assessments and grade-by-grade roadmap.',
+  keywords: [
+    'stream selection after 10th',
+    'profile building for college admissions',
+    'career roadmap for students',
+    'admission planning class 11 12',
+    'study abroad planning',
+  ],
   alternates: {
     canonical: '/discover',
   },

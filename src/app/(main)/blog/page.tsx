@@ -1,5 +1,6 @@
 import React from "react";
 import type { Metadata } from "next";
+import { SITE_URL } from "@/lib/site-url";
 import { fetchAllWixBlogs } from "@/lib/wixCms";
 import BlogListClient from "./BlogListClient";
 import LandingNavbar from "@/components/landing/LandingNavbar";
@@ -8,12 +9,12 @@ import { Sparkles, BookOpen, BookmarkCheck, ArrowRight } from "lucide-react";
 
 export const revalidate = 300;
 
-const BASE_URL = process.env.NEXT_PUBLIC_APP_URL || "https://clarvo.in";
+const BASE_URL = SITE_URL;
 
 export const metadata: Metadata = {
   title: "The CLARVO Journal — Research & Academic Insights",
   description:
-    "Explore peer-reviewed scientific methodologies, high school research roadmaps, stream selection guides, and university admission strategies.",
+    "Guides on research for high school students, profile building, study abroad and university admissions — from the CLARVO counselling team.",
   keywords: [
     "student research blog",
     "academic guidance",
@@ -33,6 +34,7 @@ export const metadata: Metadata = {
     url: `${BASE_URL}/blog`,
     siteName: "CLARVO — Student Development Platform",
     type: "website",
+    images: [{ url: `${BASE_URL}/og-image.png`, width: 1200, height: 630, alt: "The CLARVO Journal" }],
   },
   twitter: {
     card: "summary_large_image",

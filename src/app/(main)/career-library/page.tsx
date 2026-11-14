@@ -10,9 +10,10 @@ import {
 import type { CareerRoadmap } from '@/lib/career-library/types';
 
 export const metadata: Metadata = {
-  title: 'Career Library | CLARVO',
+  title: 'Career Library — Explore Careers, Courses & Pathways',
   description:
-    'Explore comprehensive career specializations, 4-year academic roadmaps, required tools, project ideas, salary projections, and industry future trends across Engineering, Commerce, Arts, Law, and Healthcare.',
+    'Explore careers across Engineering, Commerce, Arts, Law and Healthcare: 4-year academic roadmaps, skills, project ideas, salary outlook and future trends.',
+  alternates: { canonical: '/career-library' },
   keywords: [
     'career library',
     'career explorer',

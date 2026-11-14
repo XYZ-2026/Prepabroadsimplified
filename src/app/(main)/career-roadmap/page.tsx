@@ -9,6 +9,8 @@ export const metadata: Metadata = {
   },
   description: 'Explore career pathways, academic programmes, entrance exams, colleges, and career outcomes. Map your journey from 10th standard to your dream career with CLARVO.',
   keywords: ['career roadmap', 'career planning', 'academic pathways', 'entrance exams', 'degree programmes', 'career guidance'],
+  // Gated tool (requires login) — not a landing page.
+  robots: { index: false, follow: true },
 };
 
 export default function CareerRoadmapPage() {

@@ -25,9 +25,15 @@ import {
 import { COMPANY_CONFIG } from '@/config/company';
 
 export const metadata: Metadata = {
-  title: `About ${COMPANY_CONFIG.brandName} | ${COMPANY_CONFIG.legalName}`,
+  title: 'About Us — Study Abroad & Admissions Counsellors, Mumbai & Kolkata',
   description:
-    `${COMPANY_CONFIG.brandName} exists to help students and families navigate important education decisions with greater clarity, structured guidance, and thoughtful planning.`,
+    'CLARVO is a study abroad and admissions counselling company in Mumbai and Kolkata helping Grades 7–12 students with assessments, profile building and university applications.',
+  keywords: [
+    'study abroad consultants Mumbai',
+    'admission counsellors Kolkata',
+    'education counselling India',
+    'career counselling for students',
+  ],
   alternates: {
     canonical: '/about-us',
   },

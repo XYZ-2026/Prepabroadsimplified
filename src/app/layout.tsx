@@ -1,24 +1,8 @@
 import type { Metadata } from 'next';
 import Script from 'next/script';
 import './globals.css';
+import { getValidSiteUrl } from '@/lib/site-url';
 
-function getValidSiteUrl(urlInput?: string): string {
-  const fallback = 'https://clarvo.in';
-  if (!urlInput) return fallback;
-  let raw = urlInput.trim();
-  if (!raw.startsWith('http://') && !raw.startsWith('https://')) {
-    raw = `https://${raw}`;
-  }
-  try {
-    const parsed = new URL(raw);
-    if (parsed.hostname === 'localhost' || parsed.hostname === '127.0.0.1') {
-      return fallback;
-    }
-    return parsed.origin;
-  } catch {
-    return fallback;
-  }
-}
 
 const siteUrl = getValidSiteUrl(process.env.NEXT_PUBLIC_APP_URL);
 
@@ -29,8 +13,14 @@ export const metadata: Metadata = {
     template: '%s | CLARVO',
   },
   description:
-    'CLARVO is a premium student development platform for Grades 7–12, offering psychometric assessments, personalised career guidance, SAT preparation, one-to-one tutoring, and research/profile building.',
+    'Study abroad and Indian university admissions counselling for Grades 7–12: psychometric assessments, profile building, research and summer programs, and SAT prep.',
   keywords: [
+    'study abroad counselling',
+    'indian university admissions',
+    'admissions 2027',
+    'profile building',
+    'summer programs for high school students',
+    'research programs for high school students',
     'CLARVO',
     'clarvo',
     'student development platform',
@@ -94,11 +84,7 @@ export const metadata: Metadata = {
       { url: '/favicon.ico' },
       { url: '/favicon.png', type: 'image/png' },
     ],
-    apple: [
-      { url: '/apple-touch-icon.png' },
-    ],
   },
-  manifest: '/site.webmanifest',
 };
 
 export default function RootLayout({
@@ -114,7 +100,7 @@ export default function RootLayout({
         '@id': `${siteUrl}/#organization`,
         name: 'CLARVO',
         url: `${siteUrl}/`,
-        logo: `${siteUrl}/logo-square-cropped.avif`,
+        logo: `${siteUrl}/logo-square-cropped.png`,
         description:
           'A premium student development platform for Grades 7–12, offering psychometric assessments, personalised career guidance, SAT preparation, one-to-one tutoring, and research/profile building.',
         address: {
@@ -123,6 +109,31 @@ export default function RootLayout({
           addressRegion: 'Maharashtra',
           addressCountry: 'IN',
         },
+        email: 'support@clarvo.in',
+        telephone: '+91-8828016354',
+        contactPoint: {
+          '@type': 'ContactPoint',
+          contactType: 'admissions counselling',
+          telephone: '+91-8828016354',
+          email: 'support@clarvo.in',
+          areaServed: 'IN',
+          availableLanguage: ['en'],
+        },
+        parentOrganization: {
+          '@type': 'Organization',
+          name: 'CLARVO EDUCATION PRIVATE LIMITED',
+        },
+        knowsAbout: [
+          'Study abroad counselling',
+          'Indian university admissions',
+          'College admissions 2027',
+          'Psychometric assessment',
+          'Stream selection after Class 10',
+          'Profile building',
+          'High school research programs',
+          'Summer programs for high school students',
+          'SAT preparation',
+        ],
         sameAs: [],
       },
       {

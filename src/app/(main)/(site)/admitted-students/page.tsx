@@ -13,9 +13,16 @@ import PortfolioCTA from '@/components/Auth/PortfolioCTA';
 const CTA_SLOT = 5;
 
 export const metadata: Metadata = {
-  title: 'Admitted Students — Real Profiles of Students Admitted to Top Universities | CLARVO',
+  title: 'Admitted Students — Real Profiles from Top Universities',
   description:
-    'Browse real profiles of students admitted to Ivy League, private and public universities: scores, majors, activities and the essays that got them in.',
+    'Real profiles of students admitted to Ivy League and top universities: scores, majors, activities, research and essays that got them in.',
+  keywords: [
+    'admitted student profiles',
+    'ivy league admits from india',
+    'study abroad success stories',
+    'college admissions profile examples',
+    'profile building examples',
+  ],
   alternates: { canonical: '/admitted-students' },
 };
 
@@ -96,7 +103,7 @@ export default async function PublicAdmittedStudentsPage({
               {items.map((st, i) => (
                 <React.Fragment key={st.id}>
                   {i === Math.min(CTA_SLOT, items.length - 1) && <PortfolioCTA signedIn={signedIn} variant="card" />}
-                  <AdmittedCard student={st} href={`${BASE}/${encodeURIComponent(st.id)}`} gated />
+                  <AdmittedCard student={st} href={`${BASE}/${encodeURIComponent(st.username)}`} gated />
                 </React.Fragment>
               ))}
             </div>

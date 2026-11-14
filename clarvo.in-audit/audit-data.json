@@ -1,0 +1,277 @@
+{
+  "summary": {
+    "health_score": 51,
+    "business_type": "Education services / EdTech (hybrid)",
+    "top_findings": [
+      "Blog canonicals/og/schema point to http://localhost:3008",
+      "Every (main) page rendered twice in HTML (Suspense fallback renders children)",
+      "/og-image.png returns 404",
+      "Sitemap omits blog posts and key pages; includes /auth",
+      "www.clarvo.in serves duplicate 200"
+    ],
+    "quick_wins": [
+      "Use getValidSiteUrl in blog routes + fix prod NEXT_PUBLIC_APP_URL",
+      "Add public/og-image.png",
+      "Replace Suspense fallback in (main)/layout.tsx",
+      "Complete sitemap.ts",
+      "nginx www->apex 301"
+    ]
+  },
+  "categories": [
+    {
+      "name": "Technical SEO",
+      "score": 45,
+      "what_works": [
+        "HTTPS 301",
+        "Clean robots.txt",
+        "Valid sitemap XML",
+        "Student detail pages noindexed"
+      ],
+      "findings": [
+        {
+          "title": "Localhost canonicals on blog",
+          "severity": "Critical",
+          "description": "11 blog URLs canonical to http://localhost:3008 (blog/page.tsx:11, blog/[slug]/page.tsx:22)",
+          "recommendation": "Use getValidSiteUrl(); set NEXT_PUBLIC_APP_URL=https://clarvo.in"
+        },
+        {
+          "title": "Page rendered twice",
+          "severity": "Critical",
+          "description": "(main)/layout.tsx Suspense fallback renders {children}",
+          "recommendation": "Use skeleton/null fallback"
+        },
+        {
+          "title": "No www canonicalisation",
+          "severity": "High",
+          "description": "www.clarvo.in returns 200",
+          "recommendation": "nginx 301 to apex"
+        },
+        {
+          "title": "Sitemap coverage gaps",
+          "severity": "High",
+          "description": "12 URLs; blog posts and 8 static pages missing; /auth included",
+          "recommendation": "Generate full sitemap"
+        },
+        {
+          "title": "All pages dynamic, no-store",
+          "severity": "High",
+          "description": "getUserProfile() in layout; TTFB 1.1-2.6s, cold /blog 10.7s",
+          "recommendation": "Move session read client-side; static/ISR"
+        },
+        {
+          "title": "Utility pages indexable",
+          "severity": "Medium",
+          "description": "/auth, /career-roadmap, /submit-review",
+          "recommendation": "noindex"
+        },
+        {
+          "title": "No security headers",
+          "severity": "Medium",
+          "description": "No HSTS/CSP/XCTO/XFO",
+          "recommendation": "Add headers"
+        }
+      ]
+    },
+    {
+      "name": "Content Quality",
+      "score": 55,
+      "what_works": [
+        "Long-form research blog with Person author",
+        "Specific FAQ"
+      ],
+      "findings": [
+        {
+          "title": "Thin SSR on tool pages",
+          "severity": "High",
+          "description": "/iq-test, /psychometric-test, /university-finder ~35 words, no H1",
+          "recommendation": "SSR intro + FAQ"
+        },
+        {
+          "title": "E-E-A-T gaps",
+          "severity": "High",
+          "description": "No counsellor credentials, empty sameAs",
+          "recommendation": "Bios, citations, reviews"
+        },
+        {
+          "title": "Thin portfolio pages indexed",
+          "severity": "Medium",
+          "description": "~20 words",
+          "recommendation": "Enrich or noindex"
+        }
+      ]
+    },
+    {
+      "name": "On-Page SEO",
+      "score": 50,
+      "what_works": [
+        "Titles present on all HTML pages"
+      ],
+      "findings": [
+        {
+          "title": "Duplicate meta descriptions",
+          "severity": "High",
+          "description": "53/85 pages share root description",
+          "recommendation": "Unique per route"
+        },
+        {
+          "title": "Brand duplicated in titles",
+          "severity": "High",
+          "description": "'... | CLARVO | CLARVO'",
+          "recommendation": "Remove brand from page titles"
+        },
+        {
+          "title": "Missing/duplicate H1",
+          "severity": "High",
+          "description": "Tool pages none; most pages 2; blog 4",
+          "recommendation": "SSR H1; fix layout"
+        }
+      ]
+    },
+    {
+      "name": "Schema / Structured Data",
+      "score": 55,
+      "what_works": [
+        "Org, WebSite, BlogPosting, ProfilePage present"
+      ],
+      "findings": [
+        {
+          "title": "Conflicting Organization @id",
+          "severity": "High",
+          "description": "EducationalOrganization vs Organization same @id",
+          "recommendation": "Single org node"
+        },
+        {
+          "title": "Empty sameAs, AVIF logo",
+          "severity": "Medium",
+          "description": "",
+          "recommendation": "Add profiles, PNG logo"
+        },
+        {
+          "title": "FAQPage present",
+          "severity": "Info",
+          "description": "FAQ rich results retired May 2026",
+          "recommendation": "No action"
+        }
+      ]
+    },
+    {
+      "name": "Performance (CWV)",
+      "score": 40,
+      "what_works": [],
+      "findings": [
+        {
+          "title": "Uncacheable SSR / slow TTFB",
+          "severity": "High",
+          "description": "1.1-2.6s TTFB",
+          "recommendation": "Static/ISR"
+        },
+        {
+          "title": "1.1MB preloaded school-logo PNGs",
+          "severity": "High",
+          "description": "Link preload header",
+          "recommendation": "Remove priority, WebP, lazy"
+        },
+        {
+          "title": "Doubled HTML weight",
+          "severity": "High",
+          "description": "/blog 570KB gz",
+          "recommendation": "Fix layout, paginate"
+        }
+      ]
+    },
+    {
+      "name": "AI Search Readiness",
+      "score": 55,
+      "what_works": [
+        "AI crawlers allowed",
+        "Answer-first FAQ"
+      ],
+      "findings": [
+        {
+          "title": "Commercial pages invisible to non-JS crawlers",
+          "severity": "High",
+          "description": "Tool pages client-rendered",
+          "recommendation": "SSR content"
+        },
+        {
+          "title": "No llms.txt",
+          "severity": "Low",
+          "description": "404",
+          "recommendation": "Optional add"
+        }
+      ]
+    },
+    {
+      "name": "Images",
+      "score": 60,
+      "what_works": [
+        "100% alt coverage"
+      ],
+      "findings": [
+        {
+          "title": "Broken default og:image",
+          "severity": "High",
+          "description": "/og-image.png 404",
+          "recommendation": "Add file"
+        },
+        {
+          "title": "Heavy PNGs, little lazy-loading",
+          "severity": "Medium",
+          "description": "1/80 lazy; w=3840 srcset",
+          "recommendation": "WebP, sizes, lazy"
+        }
+      ]
+    }
+  ],
+  "action_plan": {
+    "phases": [
+      {
+        "name": "Phase 1: Critical Fixes",
+        "timeframe": "Week 1",
+        "items": [
+          "Fix blog BASE_URL + env",
+          "Fix Suspense double render",
+          "Add og-image.png",
+          "www->apex 301"
+        ]
+      },
+      {
+        "name": "Phase 2: High-Impact Improvements",
+        "timeframe": "Weeks 2-3",
+        "items": [
+          "Complete sitemap",
+          "Noindex utility pages",
+          "Unique metadata, title template",
+          "SSR tool page content",
+          "Make marketing pages cacheable",
+          "Optimise logo carousel"
+        ]
+      },
+      {
+        "name": "Phase 3: Content & Authority",
+        "timeframe": "Month 2",
+        "items": [
+          "Unify Org schema + Service/Breadcrumb",
+          "Commercial content cluster",
+          "E-E-A-T: bios, reviews, GBP",
+          "Portfolio pages",
+          "Compress PDFs, llms.txt"
+        ]
+      },
+      {
+        "name": "Phase 4: Monitoring & Iteration",
+        "timeframe": "Ongoing",
+        "items": [
+          "GSC verification + sitemap",
+          "Drift baseline",
+          "Lighthouse/visual once runtime ready"
+        ]
+      }
+    ]
+  },
+  "artifacts": {
+    "findings_dir": "FULL-AUDIT-REPORT.md",
+    "screenshots_dir": null,
+    "crawl": "crawl-data.json"
+  }
+}

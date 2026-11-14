@@ -75,7 +75,7 @@ export default async function AdmittedStudentsPage({
           </p>
           <div className={s.grid}>
             {items.map((st) => (
-              <AdmittedCard key={st.id} student={st} href={`${BASE}/${st.id}`} />
+              <AdmittedCard key={st.id} student={st} href={`${BASE}/${encodeURIComponent(st.username)}`} />
             ))}
           </div>
           <Pagination base={BASE} current={current} page={page} totalPages={totalPages} />

@@ -7,14 +7,15 @@ import AuthInfographics from '@/components/Auth/AuthInfographics';
 import styles from '@/styles/auth.module.css';
 
 export const metadata: Metadata = {
-  title: 'Student & Counsellor Login / Sign Up | CLARVO',
+  title: { absolute: 'Student & Counsellor Login / Sign Up | CLARVO' },
   description:
     'Sign in or register for CLARVO to access personalized career guidance, cognitive assessments, and profile tools.',
   alternates: {
     canonical: '/auth',
   },
+  // Login/sign-up has no search value; keep it out of the index but let link equity flow.
   robots: {
-    index: true,
+    index: false,
     follow: true,
   },
 };

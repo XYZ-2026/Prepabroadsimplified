@@ -1,0 +1,4778 @@
+{
+ "/": {
+  "status": 200,
+  "final": "https://clarvo.in/",
+  "time": 1.09,
+  "cache": "private, no-cache, no-store, max-age=0, must-revalidate",
+  "xrobots": null,
+  "title": [
+   "CLARVO — Clarity for Their Future | Student Development Platform | CLARVO"
+  ],
+  "desc": [
+   "Empowering students in Grades 7–12 with psychometric assessments, personalized career roadmaps, elite SAT preparation, 1-to-1 tutoring, and university profile building."
+  ],
+  "robots": [
+   "index, follow"
+  ],
+  "canonical": [
+   "https://clarvo.in"
+  ],
+  "h1": [
+   "Find the paththat fits yourchild.",
+   "Find the paththat fits yourchild."
+  ],
+  "h2n": 18,
+  "words": 3938,
+  "ld": [
+   "EducationalOrganization",
+   "PostalAddress",
+   "WebSite",
+   "SearchAction",
+   "EntryPoint",
+   "Organization",
+   "Organization",
+   "WebSite",
+   "FAQPage",
+   "Question",
+   "Answer",
+   "Question",
+   "Answer",
+   "Question",
+   "Answer",
+   "Question",
+   "Answer",
+   "Organization",
+   "Organization",
+   "WebSite",
+   "FAQPage",
+   "Question",
+   "Answer",
+   "Question",
+   "Answer",
+   "Question",
+   "Answer",
+   "Question",
+   "Answer"
+  ],
+  "og_image": [],
+  "imgs": 80,
+  "noalt": 0,
+  "emptyalt": 0,
+  "links": [
+   "/",
+   "/about-us",
+   "/admitted-students",
+   "/auth",
+   "/blog",
+   "/book-a-demo",
+   "/career-library",
+   "/career-roadmap",
+   "/discover",
+   "/iq-test",
+   "/privacy",
+   "/psychometric-assessment",
+   "/psychometric-test",
+   "/research",
+   "/sample-reports",
+   "/terms",
+   "/university-finder",
+   "mailto:support@clarvo.in",
+   "tel:+918828016354"
+  ],
+  "size": 370567,
+  "inlinks": 52,
+  "in_sitemap": true
+ },
+ "/university-finder": {
+  "status": 200,
+  "final": "https://clarvo.in/university-finder",
+  "time": 0.66,
+  "cache": "private, no-cache, no-store, max-age=0, must-revalidate",
+  "xrobots": null,
+  "title": [
+   "AI University Finder & Predictor | Find Target Universities Abroad | CLARVO"
+  ],
+  "desc": [
+   "Match your GPA, GRE/GMAT, IELTS/TOEFL scores, budget, and major with top universities across USA, UK, Germany, Canada, and Australia."
+  ],
+  "robots": [
+   "index, follow"
+  ],
+  "canonical": [
+   "https://clarvo.in/university-finder"
+  ],
+  "h1": [],
+  "h2n": 1,
+  "words": 74,
+  "ld": [
+   "EducationalOrganization",
+   "PostalAddress",
+   "WebSite",
+   "SearchAction",
+   "EntryPoint"
+  ],
+  "og_image": [],
+  "imgs": 2,
+  "noalt": 0,
+  "emptyalt": 0,
+  "links": [
+   "/",
+   "/auth",
+   "/book-a-demo",
+   "/career-library",
+   "/iq-test",
+   "/psychometric-test",
+   "/university-finder"
+  ],
+  "size": 30438,
+  "inlinks": 50,
+  "in_sitemap": true
+ },
+ "/iq-test": {
+  "status": 200,
+  "final": "https://clarvo.in/iq-test",
+  "time": 0.71,
+  "cache": "private, no-cache, no-store, max-age=0, must-revalidate",
+  "xrobots": null,
+  "title": [
+   "Online IQ / Cognitive Assessment | CLARVO | CLARVO"
+  ],
+  "desc": [
+   "Take a visual-first 45-question cognitive assessment measuring reasoning, pattern recognition, numerical, spatial and abstract thinking."
+  ],
+  "robots": [
+   "index, follow"
+  ],
+  "canonical": [
+   "https://clarvo.in/iq-test"
+  ],
+  "h1": [],
+  "h2n": 1,
+  "words": 71,
+  "ld": [
+   "EducationalOrganization",
+   "PostalAddress",
+   "WebSite",
+   "SearchAction",
+   "EntryPoint"
+  ],
+  "og_image": [],
+  "imgs": 2,
+  "noalt": 0,
+  "emptyalt": 0,
+  "links": [
+   "/",
+   "/auth",
+   "/book-a-demo",
+   "/career-library",
+   "/iq-test",
+   "/psychometric-test",
+   "/university-finder"
+  ],
+  "size": 30818,
+  "inlinks": 50,
+  "in_sitemap": true
+ },
+ "/psychometric-test": {
+  "status": 200,
+  "final": "https://clarvo.in/psychometric-test",
+  "time": 0.64,
+  "cache": "private, no-cache, no-store, max-age=0, must-revalidate",
+  "xrobots": null,
+  "title": [
+   "Psychometric Assessment & Career Personality Evaluation | CLARVO"
+  ],
+  "desc": [
+   "Comprehensive psychometric profiling for study abroad students. Evaluate learning style, global adaptability, analytical mindset, and career alignment."
+  ],
+  "robots": [
+   "index, follow"
+  ],
+  "canonical": [
+   "https://clarvo.in/psychometric-test"
+  ],
+  "h1": [],
+  "h2n": 1,
+  "words": 70,
+  "ld": [
+   "EducationalOrganization",
+   "PostalAddress",
+   "WebSite",
+   "SearchAction",
+   "EntryPoint"
+  ],
+  "og_image": [],
+  "imgs": 2,
+  "noalt": 0,
+  "emptyalt": 0,
+  "links": [
+   "/",
+   "/auth",
+   "/book-a-demo",
+   "/career-library",
+   "/iq-test",
+   "/psychometric-test",
+   "/university-finder"
+  ],
+  "size": 31283,
+  "inlinks": 52,
+  "in_sitemap": true
+ },
+ "/psychometric-test/sample-report": {
+  "status": 200,
+  "final": "https://clarvo.in/sample-report",
+  "time": 1.93,
+  "cache": "private, no-cache, no-store, max-age=0, must-revalidate",
+  "xrobots": null,
+  "title": [
+   "CLARVO — Clarity for Their Future | Student Development Platform"
+  ],
+  "desc": [
+   "CLARVO is a premium student development platform for Grades 7–12, offering psychometric assessments, personalised career guidance, SAT preparation, one-to-one tutoring, and research/profile building."
+  ],
+  "robots": [
+   "index, follow"
+  ],
+  "canonical": [
+   "https://clarvo.in"
+  ],
+  "h1": [],
+  "h2n": 0,
+  "words": 183,
+  "ld": [
+   "EducationalOrganization",
+   "PostalAddress",
+   "WebSite",
+   "SearchAction",
+   "EntryPoint"
+  ],
+  "og_image": [
+   "https://clarvo.in/og-image.png"
+  ],
+  "imgs": 1,
+  "noalt": 0,
+  "emptyalt": 0,
+  "links": [
+   "/psychometric-test",
+   "/submit-review"
+  ],
+  "size": 808302,
+  "inlinks": 0,
+  "in_sitemap": true
+ },
+ "/research": {
+  "status": 200,
+  "final": "https://clarvo.in/research",
+  "time": 1.99,
+  "cache": "private, no-cache, no-store, max-age=0, must-revalidate",
+  "xrobots": null,
+  "title": [
+   "High School Research Mentorship — Write & Submit a Research Paper | CLARVO | CLARVO"
+  ],
+  "desc": [
+   "Mentor-led research programs for Classes 9–12. Write an original or review research paper in 8 or 16 weeks with weekly feedback and support submitting to journals and competitions."
+  ],
+  "robots": [
+   "index, follow"
+  ],
+  "canonical": [
+   "https://clarvo.in/research"
+  ],
+  "h1": [
+   "Write a real research paper.Submit it in 16 weeks.",
+   "Write a real research paper.Submit it in 16 weeks."
+  ],
+  "h2n": 14,
+  "words": 2507,
+  "ld": [
+   "EducationalOrganization",
+   "PostalAddress",
+   "WebSite",
+   "SearchAction",
+   "EntryPoint",
+   "Service",
+   "Organization",
+   "OfferCatalog",
+   "Offer",
+   "Service",
+   "Offer",
+   "Service",
+   "Offer",
+   "Service",
+   "FAQPage",
+   "Question",
+   "Answer",
+   "Question",
+   "Answer",
+   "Question",
+   "Answer",
+   "Question",
+   "Answer",
+   "Question",
+   "Answer",
+   "Question",
+   "Answer",
+   "Question",
+   "Answer",
+   "Question",
+   "Answer",
+   "Question",
+   "Answer",
+   "Question",
+   "Answer",
+   "Service",
+   "Organization",
+   "OfferCatalog",
+   "Offer",
+   "Service",
+   "Offer",
+   "Service",
+   "Offer",
+   "Service",
+   "FAQPage",
+   "Question",
+   "Answer",
+   "Question",
+   "Answer",
+   "Question",
+   "Answer",
+   "Question",
+   "Answer",
+   "Question",
+   "Answer",
+   "Question",
+   "Answer",
+   "Question",
+   "Answer",
+   "Question",
+   "Answer",
+   "Question",
+   "Answer",
+   "Question",
+   "Answer"
+  ],
+  "og_image": [
+   "https://clarvo.in/images/research/hero-mentor.webp"
+  ],
+  "imgs": 208,
+  "noalt": 0,
+  "emptyalt": 0,
+  "links": [
+   "/",
+   "/about-us",
+   "/admitted-students",
+   "/auth",
+   "/blog",
+   "/book-a-demo",
+   "/career-roadmap",
+   "/discover",
+   "/iq-test",
+   "/privacy",
+   "/psychometric-assessment",
+   "/psychometric-test",
+   "/research",
+   "/sample-reports",
+   "/terms",
+   "/university-finder",
+   "mailto:support@clarvo.in",
+   "tel:+918828016354"
+  ],
+  "size": 367780,
+  "inlinks": 42,
+  "in_sitemap": true
+ },
+ "/admitted-students": {
+  "status": 200,
+  "final": "https://clarvo.in/admitted-students",
+  "time": 5.99,
+  "cache": "private, no-cache, no-store, max-age=0, must-revalidate",
+  "xrobots": null,
+  "title": [
+   "Admitted Students — Real Profiles of Students Admitted to Top Universities | CLARVO | CLARVO"
+  ],
+  "desc": [
+   "Browse real profiles of students admitted to Ivy League, private and public universities: scores, majors, activities and the essays that got them in."
+  ],
+  "robots": [
+   "index, follow"
+  ],
+  "canonical": [
+   "https://clarvo.in/admitted-students"
+  ],
+  "h1": [
+   "Admitted Students",
+   "Admitted Students"
+  ],
+  "h2n": 52,
+  "words": 2131,
+  "ld": [
+   "EducationalOrganization",
+   "PostalAddress",
+   "WebSite",
+   "SearchAction",
+   "EntryPoint"
+  ],
+  "og_image": [
+   "https://clarvo.in/og-image.png"
+  ],
+  "imgs": 4,
+  "noalt": 0,
+  "emptyalt": 0,
+  "links": [
+   "/",
+   "/about-us",
+   "/admitted-students",
+   "/admitted-students/0387d1fd-bfe2-4335-aee0-98f6cab8eaea",
+   "/admitted-students/0508167b-9923-4fa1-88de-66b95dd78b53",
+   "/admitted-students/09baba3f-d13f-419d-b955-6c1bb1503683",
+   "/admitted-students/1e2ff253-fda6-45cc-a8f1-8558f953b8d5",
+   "/admitted-students/20b41460-781c-4e2b-950a-1b46190e3dac",
+   "/admitted-students/34ef8556-055e-472e-8a15-a2803f938112",
+   "/admitted-students/3722f017-545b-4511-8654-f7e9be5b0c25",
+   "/admitted-students/39f88da9-ac17-4664-8e92-eb2fc76038e8",
+   "/admitted-students/5061e65e-d732-4e01-847d-3a67b06ef288",
+   "/admitted-students/590c7dfa-b59d-40b1-adba-d406123f2992",
+   "/admitted-students/707b4fbd-75b5-4250-ab60-3ddd83451926",
+   "/admitted-students/7311de7a-f71e-4f32-a3fa-dcc49212f794",
+   "/admitted-students/7542736f-2f1f-416c-819d-13573e723379",
+   "/admitted-students/77c29057-9f8c-41f2-8f95-a213aa0a060f",
+   "/admitted-students/84385734-abbf-4818-a8bc-d998a2eb97d6",
+   "/admitted-students/90ba3cb2-8777-4705-9130-5c115014cde8",
+   "/admitted-students/9345a186-f19b-4ec5-add8-a2a1c7ea2cf0",
+   "/admitted-students/a999df59-b466-4729-8771-a91a2a85ff99",
+   "/admitted-students/aee91853-89bb-4bb8-91a8-aeb8af51cc77",
+   "/admitted-students/b683f50a-44e8-4066-84c0-5e7b77e0d27d",
+   "/admitted-students/b75a8f09-54d3-47ca-a7c3-a337591a2815",
+   "/admitted-students/c3440deb-c5c4-4c79-8ef3-f05436c26a3d",
+   "/admitted-students/d863dffe-942f-4b56-9dc0-e0cc8b9d025a",
+   "/admitted-students/f9807c97-43e5-478f-9e85-fd9c78ca6483",
+   "/admitted/0387d1fd-bfe2-4335-aee0-98f6cab8eaea",
+   "/admitted/0508167b-9923-4fa1-88de-66b95dd78b53",
+   "/admitted/09baba3f-d13f-419d-b955-6c1bb1503683",
+   "/admitted/1e2ff253-fda6-45cc-a8f1-8558f953b8d5",
+   "/admitted/20b41460-781c-4e2b-950a-1b46190e3dac",
+   "/admitted/34ef8556-055e-472e-8a15-a2803f938112",
+   "/admitted/3722f017-545b-4511-8654-f7e9be5b0c25",
+   "/admitted/39f88da9-ac17-4664-8e92-eb2fc76038e8",
+   "/admitted/5061e65e-d732-4e01-847d-3a67b06ef288",
+   "/admitted/590c7dfa-b59d-40b1-adba-d406123f2992",
+   "/admitted/707b4fbd-75b5-4250-ab60-3ddd83451926",
+   "/admitted/7311de7a-f71e-4f32-a3fa-dcc49212f794",
+   "/admitted/7542736f-2f1f-416c-819d-13573e723379",
+   "/admitted/77c29057-9f8c-41f2-8f95-a213aa0a060f",
+   "/admitted/84385734-abbf-4818-a8bc-d998a2eb97d6",
+   "/admitted/90ba3cb2-8777-4705-9130-5c115014cde8",
+   "/admitted/9345a186-f19b-4ec5-add8-a2a1c7ea2cf0",
+   "/admitted/a999df59-b466-4729-8771-a91a2a85ff99",
+   "/admitted/aee91853-89bb-4bb8-91a8-aeb8af51cc77",
+   "/admitted/b683f50a-44e8-4066-84c0-5e7b77e0d27d",
+   "/admitted/b75a8f09-54d3-47ca-a7c3-a337591a2815",
+   "/admitted/c3440deb-c5c4-4c79-8ef3-f05436c26a3d",
+   "/admitted/d863dffe-942f-4b56-9dc0-e0cc8b9d025a",
+   "/admitted/f9807c97-43e5-478f-9e85-fd9c78ca6483",
+   "/auth",
+   "/blog",
+   "/book-a-demo",
+   "/career-roadmap",
+   "/demo",
+   "/discover",
+   "/iq-test",
+   "/privacy",
+   "/psychometric-assessment",
+   "/psychometric-test",
+   "/research",
+   "/sample-reports",
+   "/terms",
+   "/university-finder",
+   "mailto:support@clarvo.in",
+   "tel:+918828016354"
+  ],
+  "size": 376223,
+  "inlinks": 42,
+  "in_sitemap": true
+ },
+ "/blog": {
+  "status": 200,
+  "final": "https://clarvo.in/blog",
+  "time": 10.72,
+  "cache": "private, no-cache, no-store, max-age=0, must-revalidate",
+  "xrobots": null,
+  "title": [
+   "The CLARVO Journal — Research & Academic Insights | CLARVO"
+  ],
+  "desc": [
+   "Explore peer-reviewed scientific methodologies, high school research roadmaps, stream selection guides, and university admission strategies."
+  ],
+  "robots": [
+   "index, follow"
+  ],
+  "canonical": [
+   "http://localhost:3008/blog"
+  ],
+  "h1": [
+   "Knowledge for the Ambitious Scholar",
+   "Knowledge for the Ambitious Scholar"
+  ],
+  "h2n": 20,
+  "words": 1492,
+  "ld": [
+   "EducationalOrganization",
+   "PostalAddress",
+   "WebSite",
+   "SearchAction",
+   "EntryPoint",
+   "Blog",
+   "Organization",
+   "ImageObject",
+   "BlogPosting",
+   "Person",
+   "BlogPosting",
+   "Person",
+   "BlogPosting",
+   "Person",
+   "BlogPosting",
+   "Person",
+   "BlogPosting",
+   "Person",
+   "BlogPosting",
+   "Person",
+   "BlogPosting",
+   "Person",
+   "BlogPosting",
+   "Person",
+   "BlogPosting",
+   "Person",
+   "BlogPosting",
+   "Person",
+   "Blog",
+   "Organization",
+   "ImageObject",
+   "BlogPosting",
+   "Person",
+   "BlogPosting",
+   "Person",
+   "BlogPosting",
+   "Person",
+   "BlogPosting",
+   "Person",
+   "BlogPosting",
+   "Person",
+   "BlogPosting",
+   "Person",
+   "BlogPosting",
+   "Person",
+   "BlogPosting",
+   "Person",
+   "BlogPosting",
+   "Person",
+   "BlogPosting",
+   "Person"
+  ],
+  "og_image": [],
+  "imgs": 4,
+  "noalt": 0,
+  "emptyalt": 0,
+  "links": [
+   "/",
+   "/about-us",
+   "/admitted-students",
+   "/auth",
+   "/blog",
+   "/blog/ai-tools-for-academic-research",
+   "/blog/best-websites-to-find-research-papers",
+   "/blog/building-a-research-network",
+   "/blog/common-research-ethics-every-student-should-know",
+   "/blog/how-to-build-a-research-portfolio",
+   "/blog/how-to-conduct-a-literature-review",
+   "/blog/how-to-present-research-at-conferences",
+   "/blog/how-to-read-scientific-papers-efficiently",
+   "/blog/quantitative-vs-qualitative-research",
+   "/blog/understanding-research-methodology",
+   "/book-a-demo",
+   "/career-roadmap",
+   "/discover",
+   "/iq-test",
+   "/privacy",
+   "/psychometric-assessment",
+   "/psychometric-test",
+   "/research",
+   "/sample-reports",
+   "/terms",
+   "/university-finder",
+   "mailto:support@clarvo.in",
+   "tel:+918828016354"
+  ],
+  "size": 1904129,
+  "inlinks": 42,
+  "in_sitemap": true
+ },
+ "/auth": {
+  "status": 200,
+  "final": "https://clarvo.in/auth",
+  "time": 0.41,
+  "cache": "s-maxage=31536000",
+  "xrobots": null,
+  "title": [
+   "Student & Counsellor Login / Sign Up | CLARVO | CLARVO"
+  ],
+  "desc": [
+   "Sign in or register for CLARVO to access personalized career guidance, cognitive assessments, and profile tools."
+  ],
+  "robots": [
+   "index, follow"
+  ],
+  "canonical": [
+   "https://clarvo.in/auth"
+  ],
+  "h1": [],
+  "h2n": 1,
+  "words": 60,
+  "ld": [
+   "EducationalOrganization",
+   "PostalAddress",
+   "WebSite",
+   "SearchAction",
+   "EntryPoint"
+  ],
+  "og_image": [
+   "https://clarvo.in/og-image.png"
+  ],
+  "imgs": 2,
+  "noalt": 0,
+  "emptyalt": 0,
+  "links": [
+   "/"
+  ],
+  "size": 24182,
+  "inlinks": 50,
+  "in_sitemap": true
+ },
+ "/rohan-dani": {
+  "status": 200,
+  "final": "https://clarvo.in/rohan-dani",
+  "time": 1.45,
+  "cache": "private, no-cache, no-store, max-age=0, must-revalidate",
+  "xrobots": null,
+  "title": [
+   "Rohan Dani — Student Portfolio | CLARVO"
+  ],
+  "desc": [
+   "Rohan Dani's student portfolio: Grade 8 · ICSE · Goldcrest high · Navi mumbai. Activities, projects, awards and resume."
+  ],
+  "robots": [
+   "index, follow"
+  ],
+  "canonical": [
+   "https://clarvo.in/rohan-dani"
+  ],
+  "h1": [
+   "ROHAN"
+  ],
+  "h2n": 0,
+  "words": 21,
+  "ld": [
+   "EducationalOrganization",
+   "PostalAddress",
+   "WebSite",
+   "SearchAction",
+   "EntryPoint",
+   "ProfilePage",
+   "Person",
+   "EducationalOrganization",
+   "Place"
+  ],
+  "og_image": [
+   "https://static.wixstatic.com/media/73210a_6329027dcaf642b6acb7449ba88a9d4b~mv2.webp"
+  ],
+  "imgs": 1,
+  "noalt": 0,
+  "emptyalt": 0,
+  "links": [],
+  "size": 19891,
+  "inlinks": 0,
+  "in_sitemap": true
+ },
+ "/samkit-shah": {
+  "status": 200,
+  "final": "https://clarvo.in/samkit-shah",
+  "time": 1.98,
+  "cache": "private, no-cache, no-store, max-age=0, must-revalidate",
+  "xrobots": null,
+  "title": [
+   "Samkit Shah — Student Portfolio | CLARVO"
+  ],
+  "desc": [
+   "Samkit Shah's student portfolio: Grade 10 · CBSE · DPS · Mumbai. Activities, projects, awards and resume."
+  ],
+  "robots": [
+   "index, follow"
+  ],
+  "canonical": [
+   "https://clarvo.in/samkit-shah"
+  ],
+  "h1": [
+   "SAMKIT"
+  ],
+  "h2n": 0,
+  "words": 21,
+  "ld": [
+   "EducationalOrganization",
+   "PostalAddress",
+   "WebSite",
+   "SearchAction",
+   "EntryPoint",
+   "ProfilePage",
+   "Person",
+   "EducationalOrganization",
+   "Place"
+  ],
+  "og_image": [],
+  "imgs": 0,
+  "noalt": 0,
+  "emptyalt": 0,
+  "links": [],
+  "size": 18105,
+  "inlinks": 0,
+  "in_sitemap": true
+ },
+ "/alex-burgman": {
+  "status": 200,
+  "final": "https://clarvo.in/alex-burgman",
+  "time": 1.89,
+  "cache": "private, no-cache, no-store, max-age=0, must-revalidate",
+  "xrobots": null,
+  "title": [
+   "Alex Burgman — Student Portfolio | CLARVO"
+  ],
+  "desc": [
+   "Alex Burgman's student portfolio: Grade 10 · CBSE · acc · zbc. Aspiring sdaskjd. Activities, projects, awards and resume."
+  ],
+  "robots": [
+   "index, follow"
+  ],
+  "canonical": [
+   "https://clarvo.in/alex-burgman"
+  ],
+  "h1": [
+   "ALEX"
+  ],
+  "h2n": 0,
+  "words": 19,
+  "ld": [
+   "EducationalOrganization",
+   "PostalAddress",
+   "WebSite",
+   "SearchAction",
+   "EntryPoint",
+   "ProfilePage",
+   "Person",
+   "EducationalOrganization",
+   "Place"
+  ],
+  "og_image": [
+   "https://static.wixstatic.com/media/73210a_c3303c275410408ea53ed3531a3c83e4~mv2.webp"
+  ],
+  "imgs": 1,
+  "noalt": 0,
+  "emptyalt": 0,
+  "links": [],
+  "size": 21359,
+  "inlinks": 0,
+  "in_sitemap": true
+ },
+ "/about-us": {
+  "status": 200,
+  "final": "https://clarvo.in/about-us",
+  "time": 1.87,
+  "cache": "private, no-cache, no-store, max-age=0, must-revalidate",
+  "xrobots": null,
+  "title": [
+   "About CLARVO | CLARVO EDUCATION PRIVATE LIMITED | CLARVO"
+  ],
+  "desc": [
+   "CLARVO exists to help students and families navigate important education decisions with greater clarity, structured guidance, and thoughtful planning."
+  ],
+  "robots": [
+   "index, follow"
+  ],
+  "canonical": [
+   "https://clarvo.in/about-us"
+  ],
+  "h1": [
+   "Making Education Decisions Simpler.",
+   "Making Education Decisions Simpler."
+  ],
+  "h2n": 18,
+  "words": 1779,
+  "ld": [
+   "EducationalOrganization",
+   "PostalAddress",
+   "WebSite",
+   "SearchAction",
+   "EntryPoint"
+  ],
+  "og_image": [],
+  "imgs": 4,
+  "noalt": 0,
+  "emptyalt": 0,
+  "links": [
+   "/",
+   "/about-us",
+   "/admitted-students",
+   "/auth",
+   "/blog",
+   "/book-a-demo",
+   "/career-roadmap",
+   "/discover",
+   "/iq-test",
+   "/privacy",
+   "/psychometric-assessment",
+   "/psychometric-test",
+   "/research",
+   "/sample-reports",
+   "/terms",
+   "/university-finder",
+   "mailto:support@clarvo.in",
+   "tel:+918828016354"
+  ],
+  "size": 147729,
+  "inlinks": 42,
+  "in_sitemap": false
+ },
+ "/book-a-demo": {
+  "status": 200,
+  "final": "https://clarvo.in/book-a-demo",
+  "time": 1.54,
+  "cache": "private, no-cache, no-store, max-age=0, must-revalidate",
+  "xrobots": null,
+  "title": [
+   "CLARVO — Clarity for Their Future | Student Development Platform"
+  ],
+  "desc": [
+   "CLARVO is a premium student development platform for Grades 7–12, offering psychometric assessments, personalised career guidance, SAT preparation, one-to-one tutoring, and research/profile building."
+  ],
+  "robots": [
+   "index, follow"
+  ],
+  "canonical": [
+   "https://clarvo.in"
+  ],
+  "h1": [
+   "Request an Educational Consultation",
+   "Request an Educational Consultation"
+  ],
+  "h2n": 2,
+  "words": 482,
+  "ld": [
+   "EducationalOrganization",
+   "PostalAddress",
+   "WebSite",
+   "SearchAction",
+   "EntryPoint"
+  ],
+  "og_image": [
+   "https://clarvo.in/og-image.png"
+  ],
+  "imgs": 4,
+  "noalt": 0,
+  "emptyalt": 0,
+  "links": [
+   "/",
+   "/about-us",
+   "/admitted-students",
+   "/auth",
+   "/blog",
+   "/book-a-demo",
+   "/career-roadmap",
+   "/discover",
+   "/iq-test",
+   "/privacy",
+   "/psychometric-assessment",
+   "/psychometric-test",
+   "/research",
+   "/sample-reports",
+   "/terms",
+   "/university-finder",
+   "mailto:support@clarvo.in",
+   "tel:+918828016354"
+  ],
+  "size": 62480,
+  "inlinks": 50,
+  "in_sitemap": false
+ },
+ "/career-library": {
+  "status": 200,
+  "final": "https://clarvo.in/career-library",
+  "time": 5.46,
+  "cache": "private, no-cache, no-store, max-age=0, must-revalidate",
+  "xrobots": null,
+  "title": [
+   "Career Library | CLARVO | CLARVO"
+  ],
+  "desc": [
+   "Explore comprehensive career specializations, 4-year academic roadmaps, required tools, project ideas, salary projections, and industry future trends across Engineering, Commerce, Arts, Law, and Healthcare."
+  ],
+  "robots": [
+   "index, follow"
+  ],
+  "canonical": [
+   "https://clarvo.in"
+  ],
+  "h1": [
+   "Career Library"
+  ],
+  "h2n": 182,
+  "words": 5226,
+  "ld": [
+   "EducationalOrganization",
+   "PostalAddress",
+   "WebSite",
+   "SearchAction",
+   "EntryPoint"
+  ],
+  "og_image": [],
+  "imgs": 2,
+  "noalt": 0,
+  "emptyalt": 0,
+  "links": [
+   "/",
+   "/auth",
+   "/book-a-demo",
+   "/career-library",
+   "/iq-test",
+   "/psychometric-test",
+   "/university-finder"
+  ],
+  "size": 3035400,
+  "inlinks": 9,
+  "in_sitemap": false
+ },
+ "/career-roadmap": {
+  "status": 200,
+  "final": "https://clarvo.in/auth",
+  "time": 1.33,
+  "cache": "s-maxage=31536000",
+  "xrobots": null,
+  "title": [
+   "Student & Counsellor Login / Sign Up | CLARVO | CLARVO"
+  ],
+  "desc": [
+   "Sign in or register for CLARVO to access personalized career guidance, cognitive assessments, and profile tools."
+  ],
+  "robots": [
+   "index, follow"
+  ],
+  "canonical": [
+   "https://clarvo.in/auth"
+  ],
+  "h1": [],
+  "h2n": 1,
+  "words": 60,
+  "ld": [
+   "EducationalOrganization",
+   "PostalAddress",
+   "WebSite",
+   "SearchAction",
+   "EntryPoint"
+  ],
+  "og_image": [
+   "https://clarvo.in/og-image.png"
+  ],
+  "imgs": 2,
+  "noalt": 0,
+  "emptyalt": 0,
+  "links": [
+   "/"
+  ],
+  "size": 24182,
+  "inlinks": 42,
+  "in_sitemap": false
+ },
+ "/discover": {
+  "status": 200,
+  "final": "https://clarvo.in/discover",
+  "time": 0.91,
+  "cache": "private, no-cache, no-store, max-age=0, must-revalidate",
+  "xrobots": null,
+  "title": [
+   "Discover CLARVO — 30-Module Student Development & Psychometric Framework | CLARVO"
+  ],
+  "desc": [
+   "Explore CLARVO’s diagnostic assessments, cognitive profiling, stream selection engines, and university matching for students in Grades 7–12."
+  ],
+  "robots": [
+   "index, follow"
+  ],
+  "canonical": [
+   "https://clarvo.in/discover"
+  ],
+  "h1": [
+   "CLARITY FOR THEIR FUTURE STARTS HERE.",
+   "CLARITY FOR THEIR FUTURE STARTS HERE."
+  ],
+  "h2n": 8,
+  "words": 2045,
+  "ld": [
+   "EducationalOrganization",
+   "PostalAddress",
+   "WebSite",
+   "SearchAction",
+   "EntryPoint"
+  ],
+  "og_image": [],
+  "imgs": 2,
+  "noalt": 0,
+  "emptyalt": 0,
+  "links": [
+   "/",
+   "/auth",
+   "/book-a-demo",
+   "/career-library",
+   "/iq-test",
+   "/psychometric-test",
+   "/sample-reports",
+   "/university-finder",
+   "https://research.abroadsimplified.com/",
+   "https://satsuite.collegeboard.org/digital",
+   "https://www.commonapp.org",
+   "https://www.daad.de",
+   "https://www.gov.uk/student-visa"
+  ],
+  "size": 183005,
+  "inlinks": 42,
+  "in_sitemap": false
+ },
+ "/privacy": {
+  "status": 200,
+  "final": "https://clarvo.in/privacy",
+  "time": 0.8,
+  "cache": "private, no-cache, no-store, max-age=0, must-revalidate",
+  "xrobots": null,
+  "title": [
+   "Privacy Policy | CLARVO | CLARVO"
+  ],
+  "desc": [
+   "Learn how CLARVO and CLARVO EDUCATION PRIVATE LIMITED protect your privacy and personal assessment data."
+  ],
+  "robots": [
+   "index, follow"
+  ],
+  "canonical": [
+   "https://clarvo.in/privacy"
+  ],
+  "h1": [
+   "Privacy Policy"
+  ],
+  "h2n": 4,
+  "words": 259,
+  "ld": [
+   "EducationalOrganization",
+   "PostalAddress",
+   "WebSite",
+   "SearchAction",
+   "EntryPoint"
+  ],
+  "og_image": [
+   "https://clarvo.in/og-image.png"
+  ],
+  "imgs": 2,
+  "noalt": 0,
+  "emptyalt": 0,
+  "links": [
+   "/",
+   "/auth",
+   "/book-a-demo",
+   "/career-library",
+   "/iq-test",
+   "/psychometric-test",
+   "/university-finder",
+   "mailto:support@clarvo.in",
+   "tel:+918828016354"
+  ],
+  "size": 35248,
+  "inlinks": 42,
+  "in_sitemap": false
+ },
+ "/psychometric-assessment": {
+  "status": 200,
+  "final": "https://clarvo.in/psychometric-assessment",
+  "time": 1.47,
+  "cache": "private, no-cache, no-store, max-age=0, must-revalidate",
+  "xrobots": null,
+  "title": [
+   "CLARVO Psychometric Assessment — Grades 7–12 Diagnostic & Stream Selection | CLARVO"
+  ],
+  "desc": [
+   "A 30-module psychometric evaluation across personality architecture, cognitive processing, learning modalities, and stream alignment. Clear direction for families, students, and counsellors before high-stakes academic decisions."
+  ],
+  "robots": [
+   "index, follow"
+  ],
+  "canonical": [
+   "https://clarvo.in/psychometric-assessment"
+  ],
+  "h1": [
+   "Know how your childthinks, learns and decides.",
+   "Know how your childthinks, learns and decides."
+  ],
+  "h2n": 18,
+  "words": 1800,
+  "ld": [
+   "EducationalOrganization",
+   "PostalAddress",
+   "WebSite",
+   "SearchAction",
+   "EntryPoint",
+   "EducationalApplication",
+   "Organization",
+   "FAQPage",
+   "Question",
+   "Answer",
+   "Question",
+   "Answer",
+   "Question",
+   "Answer",
+   "Question",
+   "Answer",
+   "Question",
+   "Answer",
+   "EducationalApplication",
+   "Organization",
+   "FAQPage",
+   "Question",
+   "Answer",
+   "Question",
+   "Answer",
+   "Question",
+   "Answer",
+   "Question",
+   "Answer",
+   "Question",
+   "Answer"
+  ],
+  "og_image": [],
+  "imgs": 40,
+  "noalt": 0,
+  "emptyalt": 0,
+  "links": [
+   "/",
+   "/about-us",
+   "/admitted-students",
+   "/auth",
+   "/blog",
+   "/book-a-demo",
+   "/career-roadmap",
+   "/discover",
+   "/iq-test",
+   "/privacy",
+   "/psychometric-assessment",
+   "/psychometric-test",
+   "/research",
+   "/sample-report",
+   "/sample-reports",
+   "/sample-reports/sample-report-grade-10.pdf",
+   "/terms",
+   "/university-finder",
+   "mailto:support@clarvo.in",
+   "tel:+918828016354"
+  ],
+  "size": 247990,
+  "inlinks": 42,
+  "in_sitemap": false
+ },
+ "/sample-reports": {
+  "status": 200,
+  "final": "https://clarvo.in/sample-reports",
+  "time": 0.88,
+  "cache": "private, no-cache, no-store, max-age=0, must-revalidate",
+  "xrobots": null,
+  "title": [
+   "CLARVO — Clarity for Their Future | Student Development Platform"
+  ],
+  "desc": [
+   "CLARVO is a premium student development platform for Grades 7–12, offering psychometric assessments, personalised career guidance, SAT preparation, one-to-one tutoring, and research/profile building."
+  ],
+  "robots": [
+   "index, follow"
+  ],
+  "canonical": [
+   "https://clarvo.in"
+  ],
+  "h1": [
+   "Explore CLARVO Sample Reports",
+   "Explore CLARVO Sample Reports"
+  ],
+  "h2n": 8,
+  "words": 780,
+  "ld": [
+   "EducationalOrganization",
+   "PostalAddress",
+   "WebSite",
+   "SearchAction",
+   "EntryPoint"
+  ],
+  "og_image": [
+   "https://clarvo.in/og-image.png"
+  ],
+  "imgs": 4,
+  "noalt": 0,
+  "emptyalt": 0,
+  "links": [
+   "/",
+   "/about-us",
+   "/admitted-students",
+   "/auth",
+   "/blog",
+   "/book-a-demo",
+   "/career-roadmap",
+   "/discover",
+   "/iq-test",
+   "/privacy",
+   "/psychometric-assessment",
+   "/psychometric-test",
+   "/research",
+   "/sample-report",
+   "/sample-reports",
+   "/sample-reports/sample-report-grade-10.pdf",
+   "/sample-reports/sample-report-grades-11-12.pdf",
+   "/sample-reports/sample-report-grades-7-9.pdf",
+   "/terms",
+   "/university-finder",
+   "mailto:support@clarvo.in",
+   "tel:+918828016354"
+  ],
+  "size": 74839,
+  "inlinks": 43,
+  "in_sitemap": false
+ },
+ "/terms": {
+  "status": 200,
+  "final": "https://clarvo.in/terms",
+  "time": 0.64,
+  "cache": "private, no-cache, no-store, max-age=0, must-revalidate",
+  "xrobots": null,
+  "title": [
+   "Terms & Conditions | CLARVO | CLARVO"
+  ],
+  "desc": [
+   "Read the Terms and Conditions for using the CLARVO student development platform operated by CLARVO EDUCATION PRIVATE LIMITED."
+  ],
+  "robots": [
+   "index, follow"
+  ],
+  "canonical": [
+   "https://clarvo.in/terms"
+  ],
+  "h1": [
+   "Terms & Conditions"
+  ],
+  "h2n": 5,
+  "words": 322,
+  "ld": [
+   "EducationalOrganization",
+   "PostalAddress",
+   "WebSite",
+   "SearchAction",
+   "EntryPoint"
+  ],
+  "og_image": [
+   "https://clarvo.in/og-image.png"
+  ],
+  "imgs": 2,
+  "noalt": 0,
+  "emptyalt": 0,
+  "links": [
+   "/",
+   "/auth",
+   "/book-a-demo",
+   "/career-library",
+   "/iq-test",
+   "/psychometric-test",
+   "/university-finder",
+   "mailto:support@clarvo.in",
+   "tel:+918828016354"
+  ],
+  "size": 36877,
+  "inlinks": 42,
+  "in_sitemap": false
+ },
+ "/submit-review": {
+  "status": 200,
+  "final": "https://clarvo.in/submit-review",
+  "time": 0.65,
+  "cache": "private, no-cache, no-store, max-age=0, must-revalidate",
+  "xrobots": null,
+  "title": [
+   "CLARVO — Clarity for Their Future | Student Development Platform"
+  ],
+  "desc": [
+   "CLARVO is a premium student development platform for Grades 7–12, offering psychometric assessments, personalised career guidance, SAT preparation, one-to-one tutoring, and research/profile building."
+  ],
+  "robots": [
+   "index, follow"
+  ],
+  "canonical": [
+   "https://clarvo.in"
+  ],
+  "h1": [
+   "Share Your Experience with CLARVO"
+  ],
+  "h2n": 0,
+  "words": 277,
+  "ld": [
+   "EducationalOrganization",
+   "PostalAddress",
+   "WebSite",
+   "SearchAction",
+   "EntryPoint"
+  ],
+  "og_image": [
+   "https://clarvo.in/og-image.png"
+  ],
+  "imgs": 2,
+  "noalt": 0,
+  "emptyalt": 0,
+  "links": [
+   "/",
+   "/auth",
+   "/book-a-demo",
+   "/career-library",
+   "/iq-test",
+   "/psychometric-test",
+   "/university-finder"
+  ],
+  "size": 44098,
+  "inlinks": 2,
+  "in_sitemap": false
+ },
+ "/admitted-students/0387d1fd-bfe2-4335-aee0-98f6cab8eaea": {
+  "status": 200,
+  "final": "https://clarvo.in/admitted-students/0387d1fd-bfe2-4335-aee0-98f6cab8eaea",
+  "time": 0.58,
+  "cache": "private, no-cache, no-store, max-age=0, must-revalidate",
+  "xrobots": null,
+  "title": [
+   "Isabella King — Admitted to Brown University | CLARVO | CLARVO"
+  ],
+  "desc": [
+   "CLARVO is a premium student development platform for Grades 7–12, offering psychometric assessments, personalised career guidance, SAT preparation, one-to-one tutoring, and research/profile building."
+  ],
+  "robots": [
+   "noindex, nofollow"
+  ],
+  "canonical": [
+   "https://clarvo.in"
+  ],
+  "h1": [
+   "Isabella King",
+   "Isabella King"
+  ],
+  "h2n": 0,
+  "words": 343,
+  "ld": [
+   "EducationalOrganization",
+   "PostalAddress",
+   "WebSite",
+   "SearchAction",
+   "EntryPoint"
+  ],
+  "og_image": [
+   "https://clarvo.in/og-image.png"
+  ],
+  "imgs": 4,
+  "noalt": 0,
+  "emptyalt": 0,
+  "links": [
+   "/",
+   "/about-us",
+   "/admitted-students",
+   "/admitted/0387d1fd-bfe2-4335-aee0-98f6cab8eaea",
+   "/auth",
+   "/blog",
+   "/book-a-demo",
+   "/career-roadmap",
+   "/discover",
+   "/iq-test",
+   "/privacy",
+   "/psychometric-assessment",
+   "/psychometric-test",
+   "/research",
+   "/sample-reports",
+   "/terms",
+   "/university-finder",
+   "mailto:support@clarvo.in",
+   "tel:+918828016354"
+  ],
+  "size": 54521,
+  "inlinks": 2,
+  "in_sitemap": false
+ },
+ "/admitted-students/0508167b-9923-4fa1-88de-66b95dd78b53": {
+  "status": 200,
+  "final": "https://clarvo.in/admitted-students/0508167b-9923-4fa1-88de-66b95dd78b53",
+  "time": 0.7,
+  "cache": "private, no-cache, no-store, max-age=0, must-revalidate",
+  "xrobots": null,
+  "title": [
+   "Nathan Anderson — Admitted to Brown University | CLARVO | CLARVO"
+  ],
+  "desc": [
+   "CLARVO is a premium student development platform for Grades 7–12, offering psychometric assessments, personalised career guidance, SAT preparation, one-to-one tutoring, and research/profile building."
+  ],
+  "robots": [
+   "noindex, nofollow"
+  ],
+  "canonical": [
+   "https://clarvo.in"
+  ],
+  "h1": [
+   "Nathan Anderson",
+   "Nathan Anderson"
+  ],
+  "h2n": 0,
+  "words": 345,
+  "ld": [
+   "EducationalOrganization",
+   "PostalAddress",
+   "WebSite",
+   "SearchAction",
+   "EntryPoint"
+  ],
+  "og_image": [
+   "https://clarvo.in/og-image.png"
+  ],
+  "imgs": 4,
+  "noalt": 0,
+  "emptyalt": 0,
+  "links": [
+   "/",
+   "/about-us",
+   "/admitted-students",
+   "/admitted/0508167b-9923-4fa1-88de-66b95dd78b53",
+   "/auth",
+   "/blog",
+   "/book-a-demo",
+   "/career-roadmap",
+   "/discover",
+   "/iq-test",
+   "/privacy",
+   "/psychometric-assessment",
+   "/psychometric-test",
+   "/research",
+   "/sample-reports",
+   "/terms",
+   "/university-finder",
+   "mailto:support@clarvo.in",
+   "tel:+918828016354"
+  ],
+  "size": 54541,
+  "inlinks": 2,
+  "in_sitemap": false
+ },
+ "/admitted-students/09baba3f-d13f-419d-b955-6c1bb1503683": {
+  "status": 200,
+  "final": "https://clarvo.in/admitted-students/09baba3f-d13f-419d-b955-6c1bb1503683",
+  "time": 0.77,
+  "cache": "private, no-cache, no-store, max-age=0, must-revalidate",
+  "xrobots": null,
+  "title": [
+   "Liam Davis — Admitted to Carnegie Mellon University | CLARVO | CLARVO"
+  ],
+  "desc": [
+   "CLARVO is a premium student development platform for Grades 7–12, offering psychometric assessments, personalised career guidance, SAT preparation, one-to-one tutoring, and research/profile building."
+  ],
+  "robots": [
+   "noindex, nofollow"
+  ],
+  "canonical": [
+   "https://clarvo.in"
+  ],
+  "h1": [
+   "Liam Davis",
+   "Liam Davis"
+  ],
+  "h2n": 0,
+  "words": 346,
+  "ld": [
+   "EducationalOrganization",
+   "PostalAddress",
+   "WebSite",
+   "SearchAction",
+   "EntryPoint"
+  ],
+  "og_image": [
+   "https://clarvo.in/og-image.png"
+  ],
+  "imgs": 4,
+  "noalt": 0,
+  "emptyalt": 0,
+  "links": [
+   "/",
+   "/about-us",
+   "/admitted-students",
+   "/admitted/09baba3f-d13f-419d-b955-6c1bb1503683",
+   "/auth",
+   "/blog",
+   "/book-a-demo",
+   "/career-roadmap",
+   "/discover",
+   "/iq-test",
+   "/privacy",
+   "/psychometric-assessment",
+   "/psychometric-test",
+   "/research",
+   "/sample-reports",
+   "/terms",
+   "/university-finder",
+   "mailto:support@clarvo.in",
+   "tel:+918828016354"
+  ],
+  "size": 54570,
+  "inlinks": 2,
+  "in_sitemap": false
+ },
+ "/admitted-students/1e2ff253-fda6-45cc-a8f1-8558f953b8d5": {
+  "status": 200,
+  "final": "https://clarvo.in/admitted-students/1e2ff253-fda6-45cc-a8f1-8558f953b8d5",
+  "time": 0.45,
+  "cache": "private, no-cache, no-store, max-age=0, must-revalidate",
+  "xrobots": null,
+  "title": [
+   "Nkechi Huang — Admitted to Brown University | CLARVO | CLARVO"
+  ],
+  "desc": [
+   "CLARVO is a premium student development platform for Grades 7–12, offering psychometric assessments, personalised career guidance, SAT preparation, one-to-one tutoring, and research/profile building."
+  ],
+  "robots": [
+   "noindex, nofollow"
+  ],
+  "canonical": [
+   "https://clarvo.in"
+  ],
+  "h1": [
+   "Nkechi Huang",
+   "Nkechi Huang"
+  ],
+  "h2n": 0,
+  "words": 343,
+  "ld": [
+   "EducationalOrganization",
+   "PostalAddress",
+   "WebSite",
+   "SearchAction",
+   "EntryPoint"
+  ],
+  "og_image": [
+   "https://clarvo.in/og-image.png"
+  ],
+  "imgs": 4,
+  "noalt": 0,
+  "emptyalt": 0,
+  "links": [
+   "/",
+   "/about-us",
+   "/admitted-students",
+   "/admitted/1e2ff253-fda6-45cc-a8f1-8558f953b8d5",
+   "/auth",
+   "/blog",
+   "/book-a-demo",
+   "/career-roadmap",
+   "/discover",
+   "/iq-test",
+   "/privacy",
+   "/psychometric-assessment",
+   "/psychometric-test",
+   "/research",
+   "/sample-reports",
+   "/terms",
+   "/university-finder",
+   "mailto:support@clarvo.in",
+   "tel:+918828016354"
+  ],
+  "size": 54517,
+  "inlinks": 2,
+  "in_sitemap": false
+ },
+ "/admitted-students/20b41460-781c-4e2b-950a-1b46190e3dac": {
+  "status": 200,
+  "final": "https://clarvo.in/admitted-students/20b41460-781c-4e2b-950a-1b46190e3dac",
+  "time": 0.46,
+  "cache": "private, no-cache, no-store, max-age=0, must-revalidate",
+  "xrobots": null,
+  "title": [
+   "Sophia Gonzalez — Admitted to Brown University | CLARVO | CLARVO"
+  ],
+  "desc": [
+   "CLARVO is a premium student development platform for Grades 7–12, offering psychometric assessments, personalised career guidance, SAT preparation, one-to-one tutoring, and research/profile building."
+  ],
+  "robots": [
+   "noindex, nofollow"
+  ],
+  "canonical": [
+   "https://clarvo.in"
+  ],
+  "h1": [
+   "Sophia Gonzalez",
+   "Sophia Gonzalez"
+  ],
+  "h2n": 0,
+  "words": 345,
+  "ld": [
+   "EducationalOrganization",
+   "PostalAddress",
+   "WebSite",
+   "SearchAction",
+   "EntryPoint"
+  ],
+  "og_image": [
+   "https://clarvo.in/og-image.png"
+  ],
+  "imgs": 4,
+  "noalt": 0,
+  "emptyalt": 0,
+  "links": [
+   "/",
+   "/about-us",
+   "/admitted-students",
+   "/admitted/20b41460-781c-4e2b-950a-1b46190e3dac",
+   "/auth",
+   "/blog",
+   "/book-a-demo",
+   "/career-roadmap",
+   "/discover",
+   "/iq-test",
+   "/privacy",
+   "/psychometric-assessment",
+   "/psychometric-test",
+   "/research",
+   "/sample-reports",
+   "/terms",
+   "/university-finder",
+   "mailto:support@clarvo.in",
+   "tel:+918828016354"
+  ],
+  "size": 54541,
+  "inlinks": 2,
+  "in_sitemap": false
+ },
+ "/admitted-students/34ef8556-055e-472e-8a15-a2803f938112": {
+  "status": 200,
+  "final": "https://clarvo.in/admitted-students/34ef8556-055e-472e-8a15-a2803f938112",
+  "time": 0.45,
+  "cache": "private, no-cache, no-store, max-age=0, must-revalidate",
+  "xrobots": null,
+  "title": [
+   "Brandon Pham — Admitted to Caltech | CLARVO | CLARVO"
+  ],
+  "desc": [
+   "CLARVO is a premium student development platform for Grades 7–12, offering psychometric assessments, personalised career guidance, SAT preparation, one-to-one tutoring, and research/profile building."
+  ],
+  "robots": [
+   "noindex, nofollow"
+  ],
+  "canonical": [
+   "https://clarvo.in"
+  ],
+  "h1": [
+   "Brandon Pham",
+   "Brandon Pham"
+  ],
+  "h2n": 0,
+  "words": 340,
+  "ld": [
+   "EducationalOrganization",
+   "PostalAddress",
+   "WebSite",
+   "SearchAction",
+   "EntryPoint"
+  ],
+  "og_image": [
+   "https://clarvo.in/og-image.png"
+  ],
+  "imgs": 4,
+  "noalt": 0,
+  "emptyalt": 0,
+  "links": [
+   "/",
+   "/about-us",
+   "/admitted-students",
+   "/admitted/34ef8556-055e-472e-8a15-a2803f938112",
+   "/auth",
+   "/blog",
+   "/book-a-demo",
+   "/career-roadmap",
+   "/discover",
+   "/iq-test",
+   "/privacy",
+   "/psychometric-assessment",
+   "/psychometric-test",
+   "/research",
+   "/sample-reports",
+   "/terms",
+   "/university-finder",
+   "mailto:support@clarvo.in",
+   "tel:+918828016354"
+  ],
+  "size": 54488,
+  "inlinks": 2,
+  "in_sitemap": false
+ },
+ "/admitted-students/3722f017-545b-4511-8654-f7e9be5b0c25": {
+  "status": 200,
+  "final": "https://clarvo.in/admitted-students/3722f017-545b-4511-8654-f7e9be5b0c25",
+  "time": 0.52,
+  "cache": "private, no-cache, no-store, max-age=0, must-revalidate",
+  "xrobots": null,
+  "title": [
+   "Brooke Diallo — Admitted to Boston College | CLARVO | CLARVO"
+  ],
+  "desc": [
+   "CLARVO is a premium student development platform for Grades 7–12, offering psychometric assessments, personalised career guidance, SAT preparation, one-to-one tutoring, and research/profile building."
+  ],
+  "robots": [
+   "noindex, nofollow"
+  ],
+  "canonical": [
+   "https://clarvo.in"
+  ],
+  "h1": [
+   "Brooke Diallo",
+   "Brooke Diallo"
+  ],
+  "h2n": 0,
+  "words": 343,
+  "ld": [
+   "EducationalOrganization",
+   "PostalAddress",
+   "WebSite",
+   "SearchAction",
+   "EntryPoint"
+  ],
+  "og_image": [
+   "https://clarvo.in/og-image.png"
+  ],
+  "imgs": 4,
+  "noalt": 0,
+  "emptyalt": 0,
+  "links": [
+   "/",
+   "/about-us",
+   "/admitted-students",
+   "/admitted/3722f017-545b-4511-8654-f7e9be5b0c25",
+   "/auth",
+   "/blog",
+   "/book-a-demo",
+   "/career-roadmap",
+   "/discover",
+   "/iq-test",
+   "/privacy",
+   "/psychometric-assessment",
+   "/psychometric-test",
+   "/research",
+   "/sample-reports",
+   "/terms",
+   "/university-finder",
+   "mailto:support@clarvo.in",
+   "tel:+918828016354"
+  ],
+  "size": 54533,
+  "inlinks": 2,
+  "in_sitemap": false
+ },
+ "/admitted-students/39f88da9-ac17-4664-8e92-eb2fc76038e8": {
+  "status": 200,
+  "final": "https://clarvo.in/admitted-students/39f88da9-ac17-4664-8e92-eb2fc76038e8",
+  "time": 0.52,
+  "cache": "private, no-cache, no-store, max-age=0, must-revalidate",
+  "xrobots": null,
+  "title": [
+   "Cole Parker — Admitted to Carnegie Mellon University | CLARVO | CLARVO"
+  ],
+  "desc": [
+   "CLARVO is a premium student development platform for Grades 7–12, offering psychometric assessments, personalised career guidance, SAT preparation, one-to-one tutoring, and research/profile building."
+  ],
+  "robots": [
+   "noindex, nofollow"
+  ],
+  "canonical": [
+   "https://clarvo.in"
+  ],
+  "h1": [
+   "Cole Parker",
+   "Cole Parker"
+  ],
+  "h2n": 0,
+  "words": 344,
+  "ld": [
+   "EducationalOrganization",
+   "PostalAddress",
+   "WebSite",
+   "SearchAction",
+   "EntryPoint"
+  ],
+  "og_image": [
+   "https://clarvo.in/og-image.png"
+  ],
+  "imgs": 4,
+  "noalt": 0,
+  "emptyalt": 0,
+  "links": [
+   "/",
+   "/about-us",
+   "/admitted-students",
+   "/admitted/39f88da9-ac17-4664-8e92-eb2fc76038e8",
+   "/auth",
+   "/blog",
+   "/book-a-demo",
+   "/career-roadmap",
+   "/discover",
+   "/iq-test",
+   "/privacy",
+   "/psychometric-assessment",
+   "/psychometric-test",
+   "/research",
+   "/sample-reports",
+   "/terms",
+   "/university-finder",
+   "mailto:support@clarvo.in",
+   "tel:+918828016354"
+  ],
+  "size": 54545,
+  "inlinks": 2,
+  "in_sitemap": false
+ },
+ "/admitted-students/5061e65e-d732-4e01-847d-3a67b06ef288": {
+  "status": 200,
+  "final": "https://clarvo.in/admitted-students/5061e65e-d732-4e01-847d-3a67b06ef288",
+  "time": 0.39,
+  "cache": "private, no-cache, no-store, max-age=0, must-revalidate",
+  "xrobots": null,
+  "title": [
+   "Adaeze Roberts — Admitted to Brown University | CLARVO | CLARVO"
+  ],
+  "desc": [
+   "CLARVO is a premium student development platform for Grades 7–12, offering psychometric assessments, personalised career guidance, SAT preparation, one-to-one tutoring, and research/profile building."
+  ],
+  "robots": [
+   "noindex, nofollow"
+  ],
+  "canonical": [
+   "https://clarvo.in"
+  ],
+  "h1": [
+   "Adaeze Roberts",
+   "Adaeze Roberts"
+  ],
+  "h2n": 0,
+  "words": 341,
+  "ld": [
+   "EducationalOrganization",
+   "PostalAddress",
+   "WebSite",
+   "SearchAction",
+   "EntryPoint"
+  ],
+  "og_image": [
+   "https://clarvo.in/og-image.png"
+  ],
+  "imgs": 4,
+  "noalt": 0,
+  "emptyalt": 0,
+  "links": [
+   "/",
+   "/about-us",
+   "/admitted-students",
+   "/admitted/5061e65e-d732-4e01-847d-3a67b06ef288",
+   "/auth",
+   "/blog",
+   "/book-a-demo",
+   "/career-roadmap",
+   "/discover",
+   "/iq-test",
+   "/privacy",
+   "/psychometric-assessment",
+   "/psychometric-test",
+   "/research",
+   "/sample-reports",
+   "/terms",
+   "/university-finder",
+   "mailto:support@clarvo.in",
+   "tel:+918828016354"
+  ],
+  "size": 54512,
+  "inlinks": 2,
+  "in_sitemap": false
+ },
+ "/admitted-students/590c7dfa-b59d-40b1-adba-d406123f2992": {
+  "status": 200,
+  "final": "https://clarvo.in/admitted-students/590c7dfa-b59d-40b1-adba-d406123f2992",
+  "time": 0.42,
+  "cache": "private, no-cache, no-store, max-age=0, must-revalidate",
+  "xrobots": null,
+  "title": [
+   "Tyler Li — Admitted to Caltech | CLARVO | CLARVO"
+  ],
+  "desc": [
+   "CLARVO is a premium student development platform for Grades 7–12, offering psychometric assessments, personalised career guidance, SAT preparation, one-to-one tutoring, and research/profile building."
+  ],
+  "robots": [
+   "noindex, nofollow"
+  ],
+  "canonical": [
+   "https://clarvo.in"
+  ],
+  "h1": [
+   "Tyler Li",
+   "Tyler Li"
+  ],
+  "h2n": 0,
+  "words": 340,
+  "ld": [
+   "EducationalOrganization",
+   "PostalAddress",
+   "WebSite",
+   "SearchAction",
+   "EntryPoint"
+  ],
+  "og_image": [
+   "https://clarvo.in/og-image.png"
+  ],
+  "imgs": 4,
+  "noalt": 0,
+  "emptyalt": 0,
+  "links": [
+   "/",
+   "/about-us",
+   "/admitted-students",
+   "/admitted/590c7dfa-b59d-40b1-adba-d406123f2992",
+   "/auth",
+   "/blog",
+   "/book-a-demo",
+   "/career-roadmap",
+   "/discover",
+   "/iq-test",
+   "/privacy",
+   "/psychometric-assessment",
+   "/psychometric-test",
+   "/research",
+   "/sample-reports",
+   "/terms",
+   "/university-finder",
+   "mailto:support@clarvo.in",
+   "tel:+918828016354"
+  ],
+  "size": 54457,
+  "inlinks": 2,
+  "in_sitemap": false
+ },
+ "/admitted-students/707b4fbd-75b5-4250-ab60-3ddd83451926": {
+  "status": 200,
+  "final": "https://clarvo.in/admitted-students/707b4fbd-75b5-4250-ab60-3ddd83451926",
+  "time": 0.45,
+  "cache": "private, no-cache, no-store, max-age=0, must-revalidate",
+  "xrobots": null,
+  "title": [
+   "Omar Wang — Admitted to Boston University | CLARVO | CLARVO"
+  ],
+  "desc": [
+   "CLARVO is a premium student development platform for Grades 7–12, offering psychometric assessments, personalised career guidance, SAT preparation, one-to-one tutoring, and research/profile building."
+  ],
+  "robots": [
+   "noindex, nofollow"
+  ],
+  "canonical": [
+   "https://clarvo.in"
+  ],
+  "h1": [
+   "Omar Wang",
+   "Omar Wang"
+  ],
+  "h2n": 0,
+  "words": 343,
+  "ld": [
+   "EducationalOrganization",
+   "PostalAddress",
+   "WebSite",
+   "SearchAction",
+   "EntryPoint"
+  ],
+  "og_image": [
+   "https://clarvo.in/og-image.png"
+  ],
+  "imgs": 4,
+  "noalt": 0,
+  "emptyalt": 0,
+  "links": [
+   "/",
+   "/about-us",
+   "/admitted-students",
+   "/admitted/707b4fbd-75b5-4250-ab60-3ddd83451926",
+   "/auth",
+   "/blog",
+   "/book-a-demo",
+   "/career-roadmap",
+   "/discover",
+   "/iq-test",
+   "/privacy",
+   "/psychometric-assessment",
+   "/psychometric-test",
+   "/research",
+   "/sample-reports",
+   "/terms",
+   "/university-finder",
+   "mailto:support@clarvo.in",
+   "tel:+918828016354"
+  ],
+  "size": 54499,
+  "inlinks": 2,
+  "in_sitemap": false
+ },
+ "/admitted-students/7311de7a-f71e-4f32-a3fa-dcc49212f794": {
+  "status": 200,
+  "final": "https://clarvo.in/admitted-students/7311de7a-f71e-4f32-a3fa-dcc49212f794",
+  "time": 0.46,
+  "cache": "private, no-cache, no-store, max-age=0, must-revalidate",
+  "xrobots": null,
+  "title": [
+   "Pranav Rossi — Admitted to Boston College | CLARVO | CLARVO"
+  ],
+  "desc": [
+   "CLARVO is a premium student development platform for Grades 7–12, offering psychometric assessments, personalised career guidance, SAT preparation, one-to-one tutoring, and research/profile building."
+  ],
+  "robots": [
+   "noindex, nofollow"
+  ],
+  "canonical": [
+   "https://clarvo.in"
+  ],
+  "h1": [
+   "Pranav Rossi",
+   "Pranav Rossi"
+  ],
+  "h2n": 0,
+  "words": 341,
+  "ld": [
+   "EducationalOrganization",
+   "PostalAddress",
+   "WebSite",
+   "SearchAction",
+   "EntryPoint"
+  ],
+  "og_image": [
+   "https://clarvo.in/og-image.png"
+  ],
+  "imgs": 4,
+  "noalt": 0,
+  "emptyalt": 0,
+  "links": [
+   "/",
+   "/about-us",
+   "/admitted-students",
+   "/admitted/7311de7a-f71e-4f32-a3fa-dcc49212f794",
+   "/auth",
+   "/blog",
+   "/book-a-demo",
+   "/career-roadmap",
+   "/discover",
+   "/iq-test",
+   "/privacy",
+   "/psychometric-assessment",
+   "/psychometric-test",
+   "/research",
+   "/sample-reports",
+   "/terms",
+   "/university-finder",
+   "mailto:support@clarvo.in",
+   "tel:+918828016354"
+  ],
+  "size": 54492,
+  "inlinks": 2,
+  "in_sitemap": false
+ },
+ "/admitted-students/7542736f-2f1f-416c-819d-13573e723379": {
+  "status": 200,
+  "final": "https://clarvo.in/admitted-students/7542736f-2f1f-416c-819d-13573e723379",
+  "time": 0.48,
+  "cache": "private, no-cache, no-store, max-age=0, must-revalidate",
+  "xrobots": null,
+  "title": [
+   "Diego Gupta — Admitted to Brown University | CLARVO | CLARVO"
+  ],
+  "desc": [
+   "CLARVO is a premium student development platform for Grades 7–12, offering psychometric assessments, personalised career guidance, SAT preparation, one-to-one tutoring, and research/profile building."
+  ],
+  "robots": [
+   "noindex, nofollow"
+  ],
+  "canonical": [
+   "https://clarvo.in"
+  ],
+  "h1": [
+   "Diego Gupta",
+   "Diego Gupta"
+  ],
+  "h2n": 0,
+  "words": 349,
+  "ld": [
+   "EducationalOrganization",
+   "PostalAddress",
+   "WebSite",
+   "SearchAction",
+   "EntryPoint"
+  ],
+  "og_image": [
+   "https://clarvo.in/og-image.png"
+  ],
+  "imgs": 4,
+  "noalt": 0,
+  "emptyalt": 0,
+  "links": [
+   "/",
+   "/about-us",
+   "/admitted-students",
+   "/admitted/7542736f-2f1f-416c-819d-13573e723379",
+   "/auth",
+   "/blog",
+   "/book-a-demo",
+   "/career-roadmap",
+   "/discover",
+   "/iq-test",
+   "/privacy",
+   "/psychometric-assessment",
+   "/psychometric-test",
+   "/research",
+   "/sample-reports",
+   "/terms",
+   "/university-finder",
+   "mailto:support@clarvo.in",
+   "tel:+918828016354"
+  ],
+  "size": 54550,
+  "inlinks": 2,
+  "in_sitemap": false
+ },
+ "/admitted-students/77c29057-9f8c-41f2-8f95-a213aa0a060f": {
+  "status": 200,
+  "final": "https://clarvo.in/admitted-students/77c29057-9f8c-41f2-8f95-a213aa0a060f",
+  "time": 0.74,
+  "cache": "private, no-cache, no-store, max-age=0, must-revalidate",
+  "xrobots": null,
+  "title": [
+   "Scarlett Diallo — Admitted to Boston University | CLARVO | CLARVO"
+  ],
+  "desc": [
+   "CLARVO is a premium student development platform for Grades 7–12, offering psychometric assessments, personalised career guidance, SAT preparation, one-to-one tutoring, and research/profile building."
+  ],
+  "robots": [
+   "noindex, nofollow"
+  ],
+  "canonical": [
+   "https://clarvo.in"
+  ],
+  "h1": [
+   "Scarlett Diallo",
+   "Scarlett Diallo"
+  ],
+  "h2n": 0,
+  "words": 343,
+  "ld": [
+   "EducationalOrganization",
+   "PostalAddress",
+   "WebSite",
+   "SearchAction",
+   "EntryPoint"
+  ],
+  "og_image": [
+   "https://clarvo.in/og-image.png"
+  ],
+  "imgs": 4,
+  "noalt": 0,
+  "emptyalt": 0,
+  "links": [
+   "/",
+   "/about-us",
+   "/admitted-students",
+   "/admitted/77c29057-9f8c-41f2-8f95-a213aa0a060f",
+   "/auth",
+   "/blog",
+   "/book-a-demo",
+   "/career-roadmap",
+   "/discover",
+   "/iq-test",
+   "/privacy",
+   "/psychometric-assessment",
+   "/psychometric-test",
+   "/research",
+   "/sample-reports",
+   "/terms",
+   "/university-finder",
+   "mailto:support@clarvo.in",
+   "tel:+918828016354"
+  ],
+  "size": 54554,
+  "inlinks": 2,
+  "in_sitemap": false
+ },
+ "/admitted-students/84385734-abbf-4818-a8bc-d998a2eb97d6": {
+  "status": 200,
+  "final": "https://clarvo.in/admitted-students/84385734-abbf-4818-a8bc-d998a2eb97d6",
+  "time": 0.4,
+  "cache": "private, no-cache, no-store, max-age=0, must-revalidate",
+  "xrobots": null,
+  "title": [
+   "Meera Santos — Admitted to Brown University | CLARVO | CLARVO"
+  ],
+  "desc": [
+   "CLARVO is a premium student development platform for Grades 7–12, offering psychometric assessments, personalised career guidance, SAT preparation, one-to-one tutoring, and research/profile building."
+  ],
+  "robots": [
+   "noindex, nofollow"
+  ],
+  "canonical": [
+   "https://clarvo.in"
+  ],
+  "h1": [
+   "Meera Santos",
+   "Meera Santos"
+  ],
+  "h2n": 0,
+  "words": 343,
+  "ld": [
+   "EducationalOrganization",
+   "PostalAddress",
+   "WebSite",
+   "SearchAction",
+   "EntryPoint"
+  ],
+  "og_image": [
+   "https://clarvo.in/og-image.png"
+  ],
+  "imgs": 4,
+  "noalt": 0,
+  "emptyalt": 0,
+  "links": [
+   "/",
+   "/about-us",
+   "/admitted-students",
+   "/admitted/84385734-abbf-4818-a8bc-d998a2eb97d6",
+   "/auth",
+   "/blog",
+   "/book-a-demo",
+   "/career-roadmap",
+   "/discover",
+   "/iq-test",
+   "/privacy",
+   "/psychometric-assessment",
+   "/psychometric-test",
+   "/research",
+   "/sample-reports",
+   "/terms",
+   "/university-finder",
+   "mailto:support@clarvo.in",
+   "tel:+918828016354"
+  ],
+  "size": 54537,
+  "inlinks": 2,
+  "in_sitemap": false
+ },
+ "/admitted-students/90ba3cb2-8777-4705-9130-5c115014cde8": {
+  "status": 200,
+  "final": "https://clarvo.in/admitted-students/90ba3cb2-8777-4705-9130-5c115014cde8",
+  "time": 0.7,
+  "cache": "private, no-cache, no-store, max-age=0, must-revalidate",
+  "xrobots": null,
+  "title": [
+   "Jasmine Thomas — Admitted to Boston University | CLARVO | CLARVO"
+  ],
+  "desc": [
+   "CLARVO is a premium student development platform for Grades 7–12, offering psychometric assessments, personalised career guidance, SAT preparation, one-to-one tutoring, and research/profile building."
+  ],
+  "robots": [
+   "noindex, nofollow"
+  ],
+  "canonical": [
+   "https://clarvo.in"
+  ],
+  "h1": [
+   "Jasmine Thomas",
+   "Jasmine Thomas"
+  ],
+  "h2n": 0,
+  "words": 341,
+  "ld": [
+   "EducationalOrganization",
+   "PostalAddress",
+   "WebSite",
+   "SearchAction",
+   "EntryPoint"
+  ],
+  "og_image": [
+   "https://clarvo.in/og-image.png"
+  ],
+  "imgs": 4,
+  "noalt": 0,
+  "emptyalt": 0,
+  "links": [
+   "/",
+   "/about-us",
+   "/admitted-students",
+   "/admitted/90ba3cb2-8777-4705-9130-5c115014cde8",
+   "/auth",
+   "/blog",
+   "/book-a-demo",
+   "/career-roadmap",
+   "/discover",
+   "/iq-test",
+   "/privacy",
+   "/psychometric-assessment",
+   "/psychometric-test",
+   "/research",
+   "/sample-reports",
+   "/terms",
+   "/university-finder",
+   "mailto:support@clarvo.in",
+   "tel:+918828016354"
+  ],
+  "size": 54521,
+  "inlinks": 2,
+  "in_sitemap": false
+ },
+ "/admitted-students/9345a186-f19b-4ec5-add8-a2a1c7ea2cf0": {
+  "status": 200,
+  "final": "https://clarvo.in/admitted-students/9345a186-f19b-4ec5-add8-a2a1c7ea2cf0",
+  "time": 0.58,
+  "cache": "private, no-cache, no-store, max-age=0, must-revalidate",
+  "xrobots": null,
+  "title": [
+   "Marcus Murphy — Admitted to Boston College | CLARVO | CLARVO"
+  ],
+  "desc": [
+   "CLARVO is a premium student development platform for Grades 7–12, offering psychometric assessments, personalised career guidance, SAT preparation, one-to-one tutoring, and research/profile building."
+  ],
+  "robots": [
+   "noindex, nofollow"
+  ],
+  "canonical": [
+   "https://clarvo.in"
+  ],
+  "h1": [
+   "Marcus Murphy",
+   "Marcus Murphy"
+  ],
+  "h2n": 0,
+  "words": 343,
+  "ld": [
+   "EducationalOrganization",
+   "PostalAddress",
+   "WebSite",
+   "SearchAction",
+   "EntryPoint"
+  ],
+  "og_image": [
+   "https://clarvo.in/og-image.png"
+  ],
+  "imgs": 4,
+  "noalt": 0,
+  "emptyalt": 0,
+  "links": [
+   "/",
+   "/about-us",
+   "/admitted-students",
+   "/admitted/9345a186-f19b-4ec5-add8-a2a1c7ea2cf0",
+   "/auth",
+   "/blog",
+   "/book-a-demo",
+   "/career-roadmap",
+   "/discover",
+   "/iq-test",
+   "/privacy",
+   "/psychometric-assessment",
+   "/psychometric-test",
+   "/research",
+   "/sample-reports",
+   "/terms",
+   "/university-finder",
+   "mailto:support@clarvo.in",
+   "tel:+918828016354"
+  ],
+  "size": 54536,
+  "inlinks": 2,
+  "in_sitemap": false
+ },
+ "/admitted-students/a999df59-b466-4729-8771-a91a2a85ff99": {
+  "status": 200,
+  "final": "https://clarvo.in/admitted-students/a999df59-b466-4729-8771-a91a2a85ff99",
+  "time": 0.7,
+  "cache": "private, no-cache, no-store, max-age=0, must-revalidate",
+  "xrobots": null,
+  "title": [
+   "Fatima Cohen — Admitted to Caltech | CLARVO | CLARVO"
+  ],
+  "desc": [
+   "CLARVO is a premium student development platform for Grades 7–12, offering psychometric assessments, personalised career guidance, SAT preparation, one-to-one tutoring, and research/profile building."
+  ],
+  "robots": [
+   "noindex, nofollow"
+  ],
+  "canonical": [
+   "https://clarvo.in"
+  ],
+  "h1": [
+   "Fatima Cohen",
+   "Fatima Cohen"
+  ],
+  "h2n": 0,
+  "words": 340,
+  "ld": [
+   "EducationalOrganization",
+   "PostalAddress",
+   "WebSite",
+   "SearchAction",
+   "EntryPoint"
+  ],
+  "og_image": [
+   "https://clarvo.in/og-image.png"
+  ],
+  "imgs": 4,
+  "noalt": 0,
+  "emptyalt": 0,
+  "links": [
+   "/",
+   "/about-us",
+   "/admitted-students",
+   "/admitted/a999df59-b466-4729-8771-a91a2a85ff99",
+   "/auth",
+   "/blog",
+   "/book-a-demo",
+   "/career-roadmap",
+   "/discover",
+   "/iq-test",
+   "/privacy",
+   "/psychometric-assessment",
+   "/psychometric-test",
+   "/research",
+   "/sample-reports",
+   "/terms",
+   "/university-finder",
+   "mailto:support@clarvo.in",
+   "tel:+918828016354"
+  ],
+  "size": 54481,
+  "inlinks": 2,
+  "in_sitemap": false
+ },
+ "/admitted-students/aee91853-89bb-4bb8-91a8-aeb8af51cc77": {
+  "status": 200,
+  "final": "https://clarvo.in/admitted-students/aee91853-89bb-4bb8-91a8-aeb8af51cc77",
+  "time": 0.42,
+  "cache": "private, no-cache, no-store, max-age=0, must-revalidate",
+  "xrobots": null,
+  "title": [
+   "Ishita Green — Admitted to Brown University | CLARVO | CLARVO"
+  ],
+  "desc": [
+   "CLARVO is a premium student development platform for Grades 7–12, offering psychometric assessments, personalised career guidance, SAT preparation, one-to-one tutoring, and research/profile building."
+  ],
+  "robots": [
+   "noindex, nofollow"
+  ],
+  "canonical": [
+   "https://clarvo.in"
+  ],
+  "h1": [
+   "Ishita Green",
+   "Ishita Green"
+  ],
+  "h2n": 0,
+  "words": 349,
+  "ld": [
+   "EducationalOrganization",
+   "PostalAddress",
+   "WebSite",
+   "SearchAction",
+   "EntryPoint"
+  ],
+  "og_image": [
+   "https://clarvo.in/og-image.png"
+  ],
+  "imgs": 4,
+  "noalt": 0,
+  "emptyalt": 0,
+  "links": [
+   "/",
+   "/about-us",
+   "/admitted-students",
+   "/admitted/aee91853-89bb-4bb8-91a8-aeb8af51cc77",
+   "/auth",
+   "/blog",
+   "/book-a-demo",
+   "/career-roadmap",
+   "/discover",
+   "/iq-test",
+   "/privacy",
+   "/psychometric-assessment",
+   "/psychometric-test",
+   "/research",
+   "/sample-reports",
+   "/terms",
+   "/university-finder",
+   "mailto:support@clarvo.in",
+   "tel:+918828016354"
+  ],
+  "size": 54559,
+  "inlinks": 2,
+  "in_sitemap": false
+ },
+ "/admitted-students/b683f50a-44e8-4066-84c0-5e7b77e0d27d": {
+  "status": 200,
+  "final": "https://clarvo.in/admitted-students/b683f50a-44e8-4066-84c0-5e7b77e0d27d",
+  "time": 0.48,
+  "cache": "private, no-cache, no-store, max-age=0, must-revalidate",
+  "xrobots": null,
+  "title": [
+   "Isabella Blackwell — Admitted to Caltech | CLARVO | CLARVO"
+  ],
+  "desc": [
+   "CLARVO is a premium student development platform for Grades 7–12, offering psychometric assessments, personalised career guidance, SAT preparation, one-to-one tutoring, and research/profile building."
+  ],
+  "robots": [
+   "noindex, nofollow"
+  ],
+  "canonical": [
+   "https://clarvo.in"
+  ],
+  "h1": [
+   "Isabella Blackwell",
+   "Isabella Blackwell"
+  ],
+  "h2n": 0,
+  "words": 340,
+  "ld": [
+   "EducationalOrganization",
+   "PostalAddress",
+   "WebSite",
+   "SearchAction",
+   "EntryPoint"
+  ],
+  "og_image": [
+   "https://clarvo.in/og-image.png"
+  ],
+  "imgs": 4,
+  "noalt": 0,
+  "emptyalt": 0,
+  "links": [
+   "/",
+   "/about-us",
+   "/admitted-students",
+   "/admitted/b683f50a-44e8-4066-84c0-5e7b77e0d27d",
+   "/auth",
+   "/blog",
+   "/book-a-demo",
+   "/career-roadmap",
+   "/discover",
+   "/iq-test",
+   "/privacy",
+   "/psychometric-assessment",
+   "/psychometric-test",
+   "/research",
+   "/sample-reports",
+   "/terms",
+   "/university-finder",
+   "mailto:support@clarvo.in",
+   "tel:+918828016354"
+  ],
+  "size": 54522,
+  "inlinks": 2,
+  "in_sitemap": false
+ },
+ "/admitted-students/b75a8f09-54d3-47ca-a7c3-a337591a2815": {
+  "status": 200,
+  "final": "https://clarvo.in/admitted-students/b75a8f09-54d3-47ca-a7c3-a337591a2815",
+  "time": 0.51,
+  "cache": "private, no-cache, no-store, max-age=0, must-revalidate",
+  "xrobots": null,
+  "title": [
+   "Leah Rossi — Admitted to Brown University | CLARVO | CLARVO"
+  ],
+  "desc": [
+   "CLARVO is a premium student development platform for Grades 7–12, offering psychometric assessments, personalised career guidance, SAT preparation, one-to-one tutoring, and research/profile building."
+  ],
+  "robots": [
+   "noindex, nofollow"
+  ],
+  "canonical": [
+   "https://clarvo.in"
+  ],
+  "h1": [
+   "Leah Rossi",
+   "Leah Rossi"
+  ],
+  "h2n": 0,
+  "words": 341,
+  "ld": [
+   "EducationalOrganization",
+   "PostalAddress",
+   "WebSite",
+   "SearchAction",
+   "EntryPoint"
+  ],
+  "og_image": [
+   "https://clarvo.in/og-image.png"
+  ],
+  "imgs": 4,
+  "noalt": 0,
+  "emptyalt": 0,
+  "links": [
+   "/",
+   "/about-us",
+   "/admitted-students",
+   "/admitted/b75a8f09-54d3-47ca-a7c3-a337591a2815",
+   "/auth",
+   "/blog",
+   "/book-a-demo",
+   "/career-roadmap",
+   "/discover",
+   "/iq-test",
+   "/privacy",
+   "/psychometric-assessment",
+   "/psychometric-test",
+   "/research",
+   "/sample-reports",
+   "/terms",
+   "/university-finder",
+   "mailto:support@clarvo.in",
+   "tel:+918828016354"
+  ],
+  "size": 54487,
+  "inlinks": 2,
+  "in_sitemap": false
+ },
+ "/admitted-students/c3440deb-c5c4-4c79-8ef3-f05436c26a3d": {
+  "status": 200,
+  "final": "https://clarvo.in/admitted-students/c3440deb-c5c4-4c79-8ef3-f05436c26a3d",
+  "time": 0.51,
+  "cache": "private, no-cache, no-store, max-age=0, must-revalidate",
+  "xrobots": null,
+  "title": [
+   "Christopher Whitfield — Admitted to Boston University | CLARVO | CLARVO"
+  ],
+  "desc": [
+   "CLARVO is a premium student development platform for Grades 7–12, offering psychometric assessments, personalised career guidance, SAT preparation, one-to-one tutoring, and research/profile building."
+  ],
+  "robots": [
+   "noindex, nofollow"
+  ],
+  "canonical": [
+   "https://clarvo.in"
+  ],
+  "h1": [
+   "Christopher Whitfield",
+   "Christopher Whitfield"
+  ],
+  "h2n": 0,
+  "words": 341,
+  "ld": [
+   "EducationalOrganization",
+   "PostalAddress",
+   "WebSite",
+   "SearchAction",
+   "EntryPoint"
+  ],
+  "og_image": [
+   "https://clarvo.in/og-image.png"
+  ],
+  "imgs": 4,
+  "noalt": 0,
+  "emptyalt": 0,
+  "links": [
+   "/",
+   "/about-us",
+   "/admitted-students",
+   "/admitted/c3440deb-c5c4-4c79-8ef3-f05436c26a3d",
+   "/auth",
+   "/blog",
+   "/book-a-demo",
+   "/career-roadmap",
+   "/discover",
+   "/iq-test",
+   "/privacy",
+   "/psychometric-assessment",
+   "/psychometric-test",
+   "/research",
+   "/sample-reports",
+   "/terms",
+   "/university-finder",
+   "mailto:support@clarvo.in",
+   "tel:+918828016354"
+  ],
+  "size": 54566,
+  "inlinks": 2,
+  "in_sitemap": false
+ },
+ "/admitted-students/d863dffe-942f-4b56-9dc0-e0cc8b9d025a": {
+  "status": 200,
+  "final": "https://clarvo.in/admitted-students/d863dffe-942f-4b56-9dc0-e0cc8b9d025a",
+  "time": 0.57,
+  "cache": "private, no-cache, no-store, max-age=0, must-revalidate",
+  "xrobots": null,
+  "title": [
+   "Abigail Ibrahim — Admitted to Brown University | CLARVO | CLARVO"
+  ],
+  "desc": [
+   "CLARVO is a premium student development platform for Grades 7–12, offering psychometric assessments, personalised career guidance, SAT preparation, one-to-one tutoring, and research/profile building."
+  ],
+  "robots": [
+   "noindex, nofollow"
+  ],
+  "canonical": [
+   "https://clarvo.in"
+  ],
+  "h1": [
+   "Abigail Ibrahim",
+   "Abigail Ibrahim"
+  ],
+  "h2n": 0,
+  "words": 341,
+  "ld": [
+   "EducationalOrganization",
+   "PostalAddress",
+   "WebSite",
+   "SearchAction",
+   "EntryPoint"
+  ],
+  "og_image": [
+   "https://clarvo.in/og-image.png"
+  ],
+  "imgs": 4,
+  "noalt": 0,
+  "emptyalt": 0,
+  "links": [
+   "/",
+   "/about-us",
+   "/admitted-students",
+   "/admitted/d863dffe-942f-4b56-9dc0-e0cc8b9d025a",
+   "/auth",
+   "/blog",
+   "/book-a-demo",
+   "/career-roadmap",
+   "/discover",
+   "/iq-test",
+   "/privacy",
+   "/psychometric-assessment",
+   "/psychometric-test",
+   "/research",
+   "/sample-reports",
+   "/terms",
+   "/university-finder",
+   "mailto:support@clarvo.in",
+   "tel:+918828016354"
+  ],
+  "size": 54527,
+  "inlinks": 2,
+  "in_sitemap": false
+ },
+ "/admitted-students/f9807c97-43e5-478f-9e85-fd9c78ca6483": {
+  "status": 200,
+  "final": "https://clarvo.in/admitted-students/f9807c97-43e5-478f-9e85-fd9c78ca6483",
+  "time": 0.44,
+  "cache": "private, no-cache, no-store, max-age=0, must-revalidate",
+  "xrobots": null,
+  "title": [
+   "Madison Kim — Admitted to Boston College | CLARVO | CLARVO"
+  ],
+  "desc": [
+   "CLARVO is a premium student development platform for Grades 7–12, offering psychometric assessments, personalised career guidance, SAT preparation, one-to-one tutoring, and research/profile building."
+  ],
+  "robots": [
+   "noindex, nofollow"
+  ],
+  "canonical": [
+   "https://clarvo.in"
+  ],
+  "h1": [
+   "Madison Kim",
+   "Madison Kim"
+  ],
+  "h2n": 0,
+  "words": 341,
+  "ld": [
+   "EducationalOrganization",
+   "PostalAddress",
+   "WebSite",
+   "SearchAction",
+   "EntryPoint"
+  ],
+  "og_image": [
+   "https://clarvo.in/og-image.png"
+  ],
+  "imgs": 4,
+  "noalt": 0,
+  "emptyalt": 0,
+  "links": [
+   "/",
+   "/about-us",
+   "/admitted-students",
+   "/admitted/f9807c97-43e5-478f-9e85-fd9c78ca6483",
+   "/auth",
+   "/blog",
+   "/book-a-demo",
+   "/career-roadmap",
+   "/discover",
+   "/iq-test",
+   "/privacy",
+   "/psychometric-assessment",
+   "/psychometric-test",
+   "/research",
+   "/sample-reports",
+   "/terms",
+   "/university-finder",
+   "mailto:support@clarvo.in",
+   "tel:+918828016354"
+  ],
+  "size": 54491,
+  "inlinks": 2,
+  "in_sitemap": false
+ },
+ "/admitted/0387d1fd-bfe2-4335-aee0-98f6cab8eaea": {
+  "status": 200,
+  "final": "https://clarvo.in/admitted/0387d1fd-bfe2-4335-aee0-98f6cab8eaea",
+  "time": 0.42,
+  "cache": "private, no-cache, no-store, max-age=0, must-revalidate",
+  "xrobots": null,
+  "title": [
+   "Isabella King — Admitted to Brown University | CLARVO"
+  ],
+  "desc": [
+   "CLARVO is a premium student development platform for Grades 7–12, offering psychometric assessments, personalised career guidance, SAT preparation, one-to-one tutoring, and research/profile building."
+  ],
+  "robots": [
+   "noindex, nofollow"
+  ],
+  "canonical": [
+   "https://clarvo.in"
+  ],
+  "h1": [
+   "ISABELLA"
+  ],
+  "h2n": 0,
+  "words": 31,
+  "ld": [
+   "EducationalOrganization",
+   "PostalAddress",
+   "WebSite",
+   "SearchAction",
+   "EntryPoint"
+  ],
+  "og_image": [
+   "https://clarvo.in/og-image.png"
+  ],
+  "imgs": 0,
+  "noalt": 0,
+  "emptyalt": 0,
+  "links": [
+   "/admitted-students/0387d1fd-bfe2-4335-aee0-98f6cab8eaea"
+  ],
+  "size": 26481,
+  "inlinks": 2,
+  "in_sitemap": false
+ },
+ "/admitted/0508167b-9923-4fa1-88de-66b95dd78b53": {
+  "status": 200,
+  "final": "https://clarvo.in/admitted/0508167b-9923-4fa1-88de-66b95dd78b53",
+  "time": 0.42,
+  "cache": "private, no-cache, no-store, max-age=0, must-revalidate",
+  "xrobots": null,
+  "title": [
+   "Nathan Anderson — Admitted to Brown University | CLARVO"
+  ],
+  "desc": [
+   "CLARVO is a premium student development platform for Grades 7–12, offering psychometric assessments, personalised career guidance, SAT preparation, one-to-one tutoring, and research/profile building."
+  ],
+  "robots": [
+   "noindex, nofollow"
+  ],
+  "canonical": [
+   "https://clarvo.in"
+  ],
+  "h1": [
+   "NATHAN"
+  ],
+  "h2n": 0,
+  "words": 29,
+  "ld": [
+   "EducationalOrganization",
+   "PostalAddress",
+   "WebSite",
+   "SearchAction",
+   "EntryPoint"
+  ],
+  "og_image": [
+   "https://clarvo.in/og-image.png"
+  ],
+  "imgs": 0,
+  "noalt": 0,
+  "emptyalt": 0,
+  "links": [
+   "/admitted-students/0508167b-9923-4fa1-88de-66b95dd78b53"
+  ],
+  "size": 26268,
+  "inlinks": 2,
+  "in_sitemap": false
+ },
+ "/admitted/09baba3f-d13f-419d-b955-6c1bb1503683": {
+  "status": 200,
+  "final": "https://clarvo.in/admitted/09baba3f-d13f-419d-b955-6c1bb1503683",
+  "time": 0.41,
+  "cache": "private, no-cache, no-store, max-age=0, must-revalidate",
+  "xrobots": null,
+  "title": [
+   "Liam Davis — Admitted to Carnegie Mellon University | CLARVO"
+  ],
+  "desc": [
+   "CLARVO is a premium student development platform for Grades 7–12, offering psychometric assessments, personalised career guidance, SAT preparation, one-to-one tutoring, and research/profile building."
+  ],
+  "robots": [
+   "noindex, nofollow"
+  ],
+  "canonical": [
+   "https://clarvo.in"
+  ],
+  "h1": [
+   "LIAM"
+  ],
+  "h2n": 0,
+  "words": 29,
+  "ld": [
+   "EducationalOrganization",
+   "PostalAddress",
+   "WebSite",
+   "SearchAction",
+   "EntryPoint"
+  ],
+  "og_image": [
+   "https://clarvo.in/og-image.png"
+  ],
+  "imgs": 0,
+  "noalt": 0,
+  "emptyalt": 0,
+  "links": [
+   "/admitted-students/09baba3f-d13f-419d-b955-6c1bb1503683"
+  ],
+  "size": 25821,
+  "inlinks": 2,
+  "in_sitemap": false
+ },
+ "/admitted/1e2ff253-fda6-45cc-a8f1-8558f953b8d5": {
+  "status": 200,
+  "final": "https://clarvo.in/admitted/1e2ff253-fda6-45cc-a8f1-8558f953b8d5",
+  "time": 0.43,
+  "cache": "private, no-cache, no-store, max-age=0, must-revalidate",
+  "xrobots": null,
+  "title": [
+   "Nkechi Huang — Admitted to Brown University | CLARVO"
+  ],
+  "desc": [
+   "CLARVO is a premium student development platform for Grades 7–12, offering psychometric assessments, personalised career guidance, SAT preparation, one-to-one tutoring, and research/profile building."
+  ],
+  "robots": [
+   "noindex, nofollow"
+  ],
+  "canonical": [
+   "https://clarvo.in"
+  ],
+  "h1": [
+   "NKECHI"
+  ],
+  "h2n": 0,
+  "words": 29,
+  "ld": [
+   "EducationalOrganization",
+   "PostalAddress",
+   "WebSite",
+   "SearchAction",
+   "EntryPoint"
+  ],
+  "og_image": [
+   "https://clarvo.in/og-image.png"
+  ],
+  "imgs": 0,
+  "noalt": 0,
+  "emptyalt": 0,
+  "links": [
+   "/admitted-students/1e2ff253-fda6-45cc-a8f1-8558f953b8d5"
+  ],
+  "size": 27058,
+  "inlinks": 2,
+  "in_sitemap": false
+ },
+ "/admitted/20b41460-781c-4e2b-950a-1b46190e3dac": {
+  "status": 200,
+  "final": "https://clarvo.in/admitted/20b41460-781c-4e2b-950a-1b46190e3dac",
+  "time": 0.37,
+  "cache": "private, no-cache, no-store, max-age=0, must-revalidate",
+  "xrobots": null,
+  "title": [
+   "Sophia Gonzalez — Admitted to Brown University | CLARVO"
+  ],
+  "desc": [
+   "CLARVO is a premium student development platform for Grades 7–12, offering psychometric assessments, personalised career guidance, SAT preparation, one-to-one tutoring, and research/profile building."
+  ],
+  "robots": [
+   "noindex, nofollow"
+  ],
+  "canonical": [
+   "https://clarvo.in"
+  ],
+  "h1": [
+   "SOPHIA"
+  ],
+  "h2n": 0,
+  "words": 29,
+  "ld": [
+   "EducationalOrganization",
+   "PostalAddress",
+   "WebSite",
+   "SearchAction",
+   "EntryPoint"
+  ],
+  "og_image": [
+   "https://clarvo.in/og-image.png"
+  ],
+  "imgs": 0,
+  "noalt": 0,
+  "emptyalt": 0,
+  "links": [
+   "/admitted-students/20b41460-781c-4e2b-950a-1b46190e3dac"
+  ],
+  "size": 26110,
+  "inlinks": 2,
+  "in_sitemap": false
+ },
+ "/admitted/34ef8556-055e-472e-8a15-a2803f938112": {
+  "status": 200,
+  "final": "https://clarvo.in/admitted/34ef8556-055e-472e-8a15-a2803f938112",
+  "time": 0.34,
+  "cache": "private, no-cache, no-store, max-age=0, must-revalidate",
+  "xrobots": null,
+  "title": [
+   "Brandon Pham — Admitted to Caltech | CLARVO"
+  ],
+  "desc": [
+   "CLARVO is a premium student development platform for Grades 7–12, offering psychometric assessments, personalised career guidance, SAT preparation, one-to-one tutoring, and research/profile building."
+  ],
+  "robots": [
+   "noindex, nofollow"
+  ],
+  "canonical": [
+   "https://clarvo.in"
+  ],
+  "h1": [
+   "BRANDON"
+  ],
+  "h2n": 0,
+  "words": 28,
+  "ld": [
+   "EducationalOrganization",
+   "PostalAddress",
+   "WebSite",
+   "SearchAction",
+   "EntryPoint"
+  ],
+  "og_image": [
+   "https://clarvo.in/og-image.png"
+  ],
+  "imgs": 0,
+  "noalt": 0,
+  "emptyalt": 0,
+  "links": [
+   "/admitted-students/34ef8556-055e-472e-8a15-a2803f938112"
+  ],
+  "size": 25843,
+  "inlinks": 2,
+  "in_sitemap": false
+ },
+ "/admitted/3722f017-545b-4511-8654-f7e9be5b0c25": {
+  "status": 200,
+  "final": "https://clarvo.in/admitted/3722f017-545b-4511-8654-f7e9be5b0c25",
+  "time": 0.36,
+  "cache": "private, no-cache, no-store, max-age=0, must-revalidate",
+  "xrobots": null,
+  "title": [
+   "Brooke Diallo — Admitted to Boston College | CLARVO"
+  ],
+  "desc": [
+   "CLARVO is a premium student development platform for Grades 7–12, offering psychometric assessments, personalised career guidance, SAT preparation, one-to-one tutoring, and research/profile building."
+  ],
+  "robots": [
+   "noindex, nofollow"
+  ],
+  "canonical": [
+   "https://clarvo.in"
+  ],
+  "h1": [
+   "BROOKE"
+  ],
+  "h2n": 0,
+  "words": 29,
+  "ld": [
+   "EducationalOrganization",
+   "PostalAddress",
+   "WebSite",
+   "SearchAction",
+   "EntryPoint"
+  ],
+  "og_image": [
+   "https://clarvo.in/og-image.png"
+  ],
+  "imgs": 0,
+  "noalt": 0,
+  "emptyalt": 0,
+  "links": [
+   "/admitted-students/3722f017-545b-4511-8654-f7e9be5b0c25"
+  ],
+  "size": 26601,
+  "inlinks": 2,
+  "in_sitemap": false
+ },
+ "/admitted/39f88da9-ac17-4664-8e92-eb2fc76038e8": {
+  "status": 200,
+  "final": "https://clarvo.in/admitted/39f88da9-ac17-4664-8e92-eb2fc76038e8",
+  "time": 0.35,
+  "cache": "private, no-cache, no-store, max-age=0, must-revalidate",
+  "xrobots": null,
+  "title": [
+   "Cole Parker — Admitted to Carnegie Mellon University | CLARVO"
+  ],
+  "desc": [
+   "CLARVO is a premium student development platform for Grades 7–12, offering psychometric assessments, personalised career guidance, SAT preparation, one-to-one tutoring, and research/profile building."
+  ],
+  "robots": [
+   "noindex, nofollow"
+  ],
+  "canonical": [
+   "https://clarvo.in"
+  ],
+  "h1": [
+   "COLE"
+  ],
+  "h2n": 0,
+  "words": 29,
+  "ld": [
+   "EducationalOrganization",
+   "PostalAddress",
+   "WebSite",
+   "SearchAction",
+   "EntryPoint"
+  ],
+  "og_image": [
+   "https://clarvo.in/og-image.png"
+  ],
+  "imgs": 0,
+  "noalt": 0,
+  "emptyalt": 0,
+  "links": [
+   "/admitted-students/39f88da9-ac17-4664-8e92-eb2fc76038e8"
+  ],
+  "size": 25932,
+  "inlinks": 2,
+  "in_sitemap": false
+ },
+ "/admitted/5061e65e-d732-4e01-847d-3a67b06ef288": {
+  "status": 200,
+  "final": "https://clarvo.in/admitted/5061e65e-d732-4e01-847d-3a67b06ef288",
+  "time": 0.35,
+  "cache": "private, no-cache, no-store, max-age=0, must-revalidate",
+  "xrobots": null,
+  "title": [
+   "Adaeze Roberts — Admitted to Brown University | CLARVO"
+  ],
+  "desc": [
+   "CLARVO is a premium student development platform for Grades 7–12, offering psychometric assessments, personalised career guidance, SAT preparation, one-to-one tutoring, and research/profile building."
+  ],
+  "robots": [
+   "noindex, nofollow"
+  ],
+  "canonical": [
+   "https://clarvo.in"
+  ],
+  "h1": [
+   "ADAEZE"
+  ],
+  "h2n": 0,
+  "words": 29,
+  "ld": [
+   "EducationalOrganization",
+   "PostalAddress",
+   "WebSite",
+   "SearchAction",
+   "EntryPoint"
+  ],
+  "og_image": [
+   "https://clarvo.in/og-image.png"
+  ],
+  "imgs": 0,
+  "noalt": 0,
+  "emptyalt": 0,
+  "links": [
+   "/admitted-students/5061e65e-d732-4e01-847d-3a67b06ef288"
+  ],
+  "size": 26297,
+  "inlinks": 2,
+  "in_sitemap": false
+ },
+ "/admitted/590c7dfa-b59d-40b1-adba-d406123f2992": {
+  "status": 200,
+  "final": "https://clarvo.in/admitted/590c7dfa-b59d-40b1-adba-d406123f2992",
+  "time": 0.47,
+  "cache": "private, no-cache, no-store, max-age=0, must-revalidate",
+  "xrobots": null,
+  "title": [
+   "Tyler Li — Admitted to Caltech | CLARVO"
+  ],
+  "desc": [
+   "CLARVO is a premium student development platform for Grades 7–12, offering psychometric assessments, personalised career guidance, SAT preparation, one-to-one tutoring, and research/profile building."
+  ],
+  "robots": [
+   "noindex, nofollow"
+  ],
+  "canonical": [
+   "https://clarvo.in"
+  ],
+  "h1": [
+   "TYLER"
+  ],
+  "h2n": 0,
+  "words": 26,
+  "ld": [
+   "EducationalOrganization",
+   "PostalAddress",
+   "WebSite",
+   "SearchAction",
+   "EntryPoint"
+  ],
+  "og_image": [
+   "https://clarvo.in/og-image.png"
+  ],
+  "imgs": 0,
+  "noalt": 0,
+  "emptyalt": 0,
+  "links": [
+   "/admitted-students/590c7dfa-b59d-40b1-adba-d406123f2992"
+  ],
+  "size": 26333,
+  "inlinks": 2,
+  "in_sitemap": false
+ },
+ "/admitted/707b4fbd-75b5-4250-ab60-3ddd83451926": {
+  "status": 200,
+  "final": "https://clarvo.in/admitted/707b4fbd-75b5-4250-ab60-3ddd83451926",
+  "time": 0.47,
+  "cache": "private, no-cache, no-store, max-age=0, must-revalidate",
+  "xrobots": null,
+  "title": [
+   "Omar Wang — Admitted to Boston University | CLARVO"
+  ],
+  "desc": [
+   "CLARVO is a premium student development platform for Grades 7–12, offering psychometric assessments, personalised career guidance, SAT preparation, one-to-one tutoring, and research/profile building."
+  ],
+  "robots": [
+   "noindex, nofollow"
+  ],
+  "canonical": [
+   "https://clarvo.in"
+  ],
+  "h1": [
+   "OMAR"
+  ],
+  "h2n": 0,
+  "words": 27,
+  "ld": [
+   "EducationalOrganization",
+   "PostalAddress",
+   "WebSite",
+   "SearchAction",
+   "EntryPoint"
+  ],
+  "og_image": [
+   "https://clarvo.in/og-image.png"
+  ],
+  "imgs": 0,
+  "noalt": 0,
+  "emptyalt": 0,
+  "links": [
+   "/admitted-students/707b4fbd-75b5-4250-ab60-3ddd83451926"
+  ],
+  "size": 25245,
+  "inlinks": 2,
+  "in_sitemap": false
+ },
+ "/admitted/7311de7a-f71e-4f32-a3fa-dcc49212f794": {
+  "status": 200,
+  "final": "https://clarvo.in/admitted/7311de7a-f71e-4f32-a3fa-dcc49212f794",
+  "time": 0.48,
+  "cache": "private, no-cache, no-store, max-age=0, must-revalidate",
+  "xrobots": null,
+  "title": [
+   "Pranav Rossi — Admitted to Boston College | CLARVO"
+  ],
+  "desc": [
+   "CLARVO is a premium student development platform for Grades 7–12, offering psychometric assessments, personalised career guidance, SAT preparation, one-to-one tutoring, and research/profile building."
+  ],
+  "robots": [
+   "noindex, nofollow"
+  ],
+  "canonical": [
+   "https://clarvo.in"
+  ],
+  "h1": [
+   "PRANAV"
+  ],
+  "h2n": 0,
+  "words": 29,
+  "ld": [
+   "EducationalOrganization",
+   "PostalAddress",
+   "WebSite",
+   "SearchAction",
+   "EntryPoint"
+  ],
+  "og_image": [
+   "https://clarvo.in/og-image.png"
+  ],
+  "imgs": 0,
+  "noalt": 0,
+  "emptyalt": 0,
+  "links": [
+   "/admitted-students/7311de7a-f71e-4f32-a3fa-dcc49212f794"
+  ],
+  "size": 26212,
+  "inlinks": 2,
+  "in_sitemap": false
+ },
+ "/admitted/7542736f-2f1f-416c-819d-13573e723379": {
+  "status": 200,
+  "final": "https://clarvo.in/admitted/7542736f-2f1f-416c-819d-13573e723379",
+  "time": 0.74,
+  "cache": "private, no-cache, no-store, max-age=0, must-revalidate",
+  "xrobots": null,
+  "title": [
+   "Diego Gupta — Admitted to Brown University | CLARVO"
+  ],
+  "desc": [
+   "CLARVO is a premium student development platform for Grades 7–12, offering psychometric assessments, personalised career guidance, SAT preparation, one-to-one tutoring, and research/profile building."
+  ],
+  "robots": [
+   "noindex, nofollow"
+  ],
+  "canonical": [
+   "https://clarvo.in"
+  ],
+  "h1": [
+   "DIEGO"
+  ],
+  "h2n": 0,
+  "words": 28,
+  "ld": [
+   "EducationalOrganization",
+   "PostalAddress",
+   "WebSite",
+   "SearchAction",
+   "EntryPoint"
+  ],
+  "og_image": [
+   "https://clarvo.in/og-image.png"
+  ],
+  "imgs": 0,
+  "noalt": 0,
+  "emptyalt": 0,
+  "links": [
+   "/admitted-students/7542736f-2f1f-416c-819d-13573e723379"
+  ],
+  "size": 26371,
+  "inlinks": 2,
+  "in_sitemap": false
+ },
+ "/admitted/77c29057-9f8c-41f2-8f95-a213aa0a060f": {
+  "status": 200,
+  "final": "https://clarvo.in/admitted/77c29057-9f8c-41f2-8f95-a213aa0a060f",
+  "time": 0.7,
+  "cache": "private, no-cache, no-store, max-age=0, must-revalidate",
+  "xrobots": null,
+  "title": [
+   "Scarlett Diallo — Admitted to Boston University | CLARVO"
+  ],
+  "desc": [
+   "CLARVO is a premium student development platform for Grades 7–12, offering psychometric assessments, personalised career guidance, SAT preparation, one-to-one tutoring, and research/profile building."
+  ],
+  "robots": [
+   "noindex, nofollow"
+  ],
+  "canonical": [
+   "https://clarvo.in"
+  ],
+  "h1": [
+   "SCARLETT"
+  ],
+  "h2n": 0,
+  "words": 31,
+  "ld": [
+   "EducationalOrganization",
+   "PostalAddress",
+   "WebSite",
+   "SearchAction",
+   "EntryPoint"
+  ],
+  "og_image": [
+   "https://clarvo.in/og-image.png"
+  ],
+  "imgs": 0,
+  "noalt": 0,
+  "emptyalt": 0,
+  "links": [
+   "/admitted-students/77c29057-9f8c-41f2-8f95-a213aa0a060f"
+  ],
+  "size": 26210,
+  "inlinks": 2,
+  "in_sitemap": false
+ },
+ "/admitted/84385734-abbf-4818-a8bc-d998a2eb97d6": {
+  "status": 200,
+  "final": "https://clarvo.in/admitted/84385734-abbf-4818-a8bc-d998a2eb97d6",
+  "time": 1.11,
+  "cache": "private, no-cache, no-store, max-age=0, must-revalidate",
+  "xrobots": null,
+  "title": [
+   "Meera Santos — Admitted to Brown University | CLARVO"
+  ],
+  "desc": [
+   "CLARVO is a premium student development platform for Grades 7–12, offering psychometric assessments, personalised career guidance, SAT preparation, one-to-one tutoring, and research/profile building."
+  ],
+  "robots": [
+   "noindex, nofollow"
+  ],
+  "canonical": [
+   "https://clarvo.in"
+  ],
+  "h1": [
+   "MEERA"
+  ],
+  "h2n": 0,
+  "words": 28,
+  "ld": [
+   "EducationalOrganization",
+   "PostalAddress",
+   "WebSite",
+   "SearchAction",
+   "EntryPoint"
+  ],
+  "og_image": [
+   "https://clarvo.in/og-image.png"
+  ],
+  "imgs": 0,
+  "noalt": 0,
+  "emptyalt": 0,
+  "links": [
+   "/admitted-students/84385734-abbf-4818-a8bc-d998a2eb97d6"
+  ],
+  "size": 26151,
+  "inlinks": 2,
+  "in_sitemap": false
+ },
+ "/admitted/90ba3cb2-8777-4705-9130-5c115014cde8": {
+  "status": 200,
+  "final": "https://clarvo.in/admitted/90ba3cb2-8777-4705-9130-5c115014cde8",
+  "time": 1.14,
+  "cache": "private, no-cache, no-store, max-age=0, must-revalidate",
+  "xrobots": null,
+  "title": [
+   "Jasmine Thomas — Admitted to Boston University | CLARVO"
+  ],
+  "desc": [
+   "CLARVO is a premium student development platform for Grades 7–12, offering psychometric assessments, personalised career guidance, SAT preparation, one-to-one tutoring, and research/profile building."
+  ],
+  "robots": [
+   "noindex, nofollow"
+  ],
+  "canonical": [
+   "https://clarvo.in"
+  ],
+  "h1": [
+   "JASMINE"
+  ],
+  "h2n": 0,
+  "words": 30,
+  "ld": [
+   "EducationalOrganization",
+   "PostalAddress",
+   "WebSite",
+   "SearchAction",
+   "EntryPoint"
+  ],
+  "og_image": [
+   "https://clarvo.in/og-image.png"
+  ],
+  "imgs": 0,
+  "noalt": 0,
+  "emptyalt": 0,
+  "links": [
+   "/admitted-students/90ba3cb2-8777-4705-9130-5c115014cde8"
+  ],
+  "size": 25998,
+  "inlinks": 2,
+  "in_sitemap": false
+ },
+ "/admitted/9345a186-f19b-4ec5-add8-a2a1c7ea2cf0": {
+  "status": 200,
+  "final": "https://clarvo.in/admitted/9345a186-f19b-4ec5-add8-a2a1c7ea2cf0",
+  "time": 1.09,
+  "cache": "private, no-cache, no-store, max-age=0, must-revalidate",
+  "xrobots": null,
+  "title": [
+   "Marcus Murphy — Admitted to Boston College | CLARVO"
+  ],
+  "desc": [
+   "CLARVO is a premium student development platform for Grades 7–12, offering psychometric assessments, personalised career guidance, SAT preparation, one-to-one tutoring, and research/profile building."
+  ],
+  "robots": [
+   "noindex, nofollow"
+  ],
+  "canonical": [
+   "https://clarvo.in"
+  ],
+  "h1": [
+   "MARCUS"
+  ],
+  "h2n": 0,
+  "words": 29,
+  "ld": [
+   "EducationalOrganization",
+   "PostalAddress",
+   "WebSite",
+   "SearchAction",
+   "EntryPoint"
+  ],
+  "og_image": [
+   "https://clarvo.in/og-image.png"
+  ],
+  "imgs": 0,
+  "noalt": 0,
+  "emptyalt": 0,
+  "links": [
+   "/admitted-students/9345a186-f19b-4ec5-add8-a2a1c7ea2cf0"
+  ],
+  "size": 26208,
+  "inlinks": 2,
+  "in_sitemap": false
+ },
+ "/admitted/a999df59-b466-4729-8771-a91a2a85ff99": {
+  "status": 200,
+  "final": "https://clarvo.in/admitted/a999df59-b466-4729-8771-a91a2a85ff99",
+  "time": 1.04,
+  "cache": "private, no-cache, no-store, max-age=0, must-revalidate",
+  "xrobots": null,
+  "title": [
+   "Fatima Cohen — Admitted to Caltech | CLARVO"
+  ],
+  "desc": [
+   "CLARVO is a premium student development platform for Grades 7–12, offering psychometric assessments, personalised career guidance, SAT preparation, one-to-one tutoring, and research/profile building."
+  ],
+  "robots": [
+   "noindex, nofollow"
+  ],
+  "canonical": [
+   "https://clarvo.in"
+  ],
+  "h1": [
+   "FATIMA"
+  ],
+  "h2n": 0,
+  "words": 27,
+  "ld": [
+   "EducationalOrganization",
+   "PostalAddress",
+   "WebSite",
+   "SearchAction",
+   "EntryPoint"
+  ],
+  "og_image": [
+   "https://clarvo.in/og-image.png"
+  ],
+  "imgs": 0,
+  "noalt": 0,
+  "emptyalt": 0,
+  "links": [
+   "/admitted-students/a999df59-b466-4729-8771-a91a2a85ff99"
+  ],
+  "size": 26224,
+  "inlinks": 2,
+  "in_sitemap": false
+ },
+ "/admitted/aee91853-89bb-4bb8-91a8-aeb8af51cc77": {
+  "status": 200,
+  "final": "https://clarvo.in/admitted/aee91853-89bb-4bb8-91a8-aeb8af51cc77",
+  "time": 1.12,
+  "cache": "private, no-cache, no-store, max-age=0, must-revalidate",
+  "xrobots": null,
+  "title": [
+   "Ishita Green — Admitted to Brown University | CLARVO"
+  ],
+  "desc": [
+   "CLARVO is a premium student development platform for Grades 7–12, offering psychometric assessments, personalised career guidance, SAT preparation, one-to-one tutoring, and research/profile building."
+  ],
+  "robots": [
+   "noindex, nofollow"
+  ],
+  "canonical": [
+   "https://clarvo.in"
+  ],
+  "h1": [
+   "ISHITA"
+  ],
+  "h2n": 0,
+  "words": 29,
+  "ld": [
+   "EducationalOrganization",
+   "PostalAddress",
+   "WebSite",
+   "SearchAction",
+   "EntryPoint"
+  ],
+  "og_image": [
+   "https://clarvo.in/og-image.png"
+  ],
+  "imgs": 0,
+  "noalt": 0,
+  "emptyalt": 0,
+  "links": [
+   "/admitted-students/aee91853-89bb-4bb8-91a8-aeb8af51cc77"
+  ],
+  "size": 26383,
+  "inlinks": 2,
+  "in_sitemap": false
+ },
+ "/admitted/b683f50a-44e8-4066-84c0-5e7b77e0d27d": {
+  "status": 200,
+  "final": "https://clarvo.in/admitted/b683f50a-44e8-4066-84c0-5e7b77e0d27d",
+  "time": 0.46,
+  "cache": "private, no-cache, no-store, max-age=0, must-revalidate",
+  "xrobots": null,
+  "title": [
+   "Isabella Blackwell — Admitted to Caltech | CLARVO"
+  ],
+  "desc": [
+   "CLARVO is a premium student development platform for Grades 7–12, offering psychometric assessments, personalised career guidance, SAT preparation, one-to-one tutoring, and research/profile building."
+  ],
+  "robots": [
+   "noindex, nofollow"
+  ],
+  "canonical": [
+   "https://clarvo.in"
+  ],
+  "h1": [
+   "ISABELLA"
+  ],
+  "h2n": 0,
+  "words": 29,
+  "ld": [
+   "EducationalOrganization",
+   "PostalAddress",
+   "WebSite",
+   "SearchAction",
+   "EntryPoint"
+  ],
+  "og_image": [
+   "https://clarvo.in/og-image.png"
+  ],
+  "imgs": 0,
+  "noalt": 0,
+  "emptyalt": 0,
+  "links": [
+   "/admitted-students/b683f50a-44e8-4066-84c0-5e7b77e0d27d"
+  ],
+  "size": 26532,
+  "inlinks": 2,
+  "in_sitemap": false
+ },
+ "/admitted/b75a8f09-54d3-47ca-a7c3-a337591a2815": {
+  "status": 200,
+  "final": "https://clarvo.in/admitted/b75a8f09-54d3-47ca-a7c3-a337591a2815",
+  "time": 0.38,
+  "cache": "private, no-cache, no-store, max-age=0, must-revalidate",
+  "xrobots": null,
+  "title": [
+   "Leah Rossi — Admitted to Brown University | CLARVO"
+  ],
+  "desc": [
+   "CLARVO is a premium student development platform for Grades 7–12, offering psychometric assessments, personalised career guidance, SAT preparation, one-to-one tutoring, and research/profile building."
+  ],
+  "robots": [
+   "noindex, nofollow"
+  ],
+  "canonical": [
+   "https://clarvo.in"
+  ],
+  "h1": [
+   "LEAH"
+  ],
+  "h2n": 0,
+  "words": 27,
+  "ld": [
+   "EducationalOrganization",
+   "PostalAddress",
+   "WebSite",
+   "SearchAction",
+   "EntryPoint"
+  ],
+  "og_image": [
+   "https://clarvo.in/og-image.png"
+  ],
+  "imgs": 0,
+  "noalt": 0,
+  "emptyalt": 0,
+  "links": [
+   "/admitted-students/b75a8f09-54d3-47ca-a7c3-a337591a2815"
+  ],
+  "size": 26324,
+  "inlinks": 2,
+  "in_sitemap": false
+ },
+ "/admitted/c3440deb-c5c4-4c79-8ef3-f05436c26a3d": {
+  "status": 200,
+  "final": "https://clarvo.in/admitted/c3440deb-c5c4-4c79-8ef3-f05436c26a3d",
+  "time": 0.5,
+  "cache": "private, no-cache, no-store, max-age=0, must-revalidate",
+  "xrobots": null,
+  "title": [
+   "Christopher Whitfield — Admitted to Boston University | CLARVO"
+  ],
+  "desc": [
+   "CLARVO is a premium student development platform for Grades 7–12, offering psychometric assessments, personalised career guidance, SAT preparation, one-to-one tutoring, and research/profile building."
+  ],
+  "robots": [
+   "noindex, nofollow"
+  ],
+  "canonical": [
+   "https://clarvo.in"
+  ],
+  "h1": [
+   "CHRISTOPHER"
+  ],
+  "h2n": 0,
+  "words": 34,
+  "ld": [
+   "EducationalOrganization",
+   "PostalAddress",
+   "WebSite",
+   "SearchAction",
+   "EntryPoint"
+  ],
+  "og_image": [
+   "https://clarvo.in/og-image.png"
+  ],
+  "imgs": 0,
+  "noalt": 0,
+  "emptyalt": 0,
+  "links": [
+   "/admitted-students/c3440deb-c5c4-4c79-8ef3-f05436c26a3d"
+  ],
+  "size": 27093,
+  "inlinks": 2,
+  "in_sitemap": false
+ },
+ "/admitted/d863dffe-942f-4b56-9dc0-e0cc8b9d025a": {
+  "status": 200,
+  "final": "https://clarvo.in/admitted/d863dffe-942f-4b56-9dc0-e0cc8b9d025a",
+  "time": 0.45,
+  "cache": "private, no-cache, no-store, max-age=0, must-revalidate",
+  "xrobots": null,
+  "title": [
+   "Abigail Ibrahim — Admitted to Brown University | CLARVO"
+  ],
+  "desc": [
+   "CLARVO is a premium student development platform for Grades 7–12, offering psychometric assessments, personalised career guidance, SAT preparation, one-to-one tutoring, and research/profile building."
+  ],
+  "robots": [
+   "noindex, nofollow"
+  ],
+  "canonical": [
+   "https://clarvo.in"
+  ],
+  "h1": [
+   "ABIGAIL"
+  ],
+  "h2n": 0,
+  "words": 30,
+  "ld": [
+   "EducationalOrganization",
+   "PostalAddress",
+   "WebSite",
+   "SearchAction",
+   "EntryPoint"
+  ],
+  "og_image": [
+   "https://clarvo.in/og-image.png"
+  ],
+  "imgs": 0,
+  "noalt": 0,
+  "emptyalt": 0,
+  "links": [
+   "/admitted-students/d863dffe-942f-4b56-9dc0-e0cc8b9d025a"
+  ],
+  "size": 26310,
+  "inlinks": 2,
+  "in_sitemap": false
+ },
+ "/admitted/f9807c97-43e5-478f-9e85-fd9c78ca6483": {
+  "status": 200,
+  "final": "https://clarvo.in/admitted/f9807c97-43e5-478f-9e85-fd9c78ca6483",
+  "time": 0.4,
+  "cache": "private, no-cache, no-store, max-age=0, must-revalidate",
+  "xrobots": null,
+  "title": [
+   "Madison Kim — Admitted to Boston College | CLARVO"
+  ],
+  "desc": [
+   "CLARVO is a premium student development platform for Grades 7–12, offering psychometric assessments, personalised career guidance, SAT preparation, one-to-one tutoring, and research/profile building."
+  ],
+  "robots": [
+   "noindex, nofollow"
+  ],
+  "canonical": [
+   "https://clarvo.in"
+  ],
+  "h1": [
+   "MADISON"
+  ],
+  "h2n": 0,
+  "words": 30,
+  "ld": [
+   "EducationalOrganization",
+   "PostalAddress",
+   "WebSite",
+   "SearchAction",
+   "EntryPoint"
+  ],
+  "og_image": [
+   "https://clarvo.in/og-image.png"
+  ],
+  "imgs": 0,
+  "noalt": 0,
+  "emptyalt": 0,
+  "links": [
+   "/admitted-students/f9807c97-43e5-478f-9e85-fd9c78ca6483"
+  ],
+  "size": 26725,
+  "inlinks": 2,
+  "in_sitemap": false
+ },
+ "/demo": {
+  "status": 200,
+  "final": "https://clarvo.in/demo",
+  "time": 0.58,
+  "cache": "private, no-cache, no-store, max-age=0, must-revalidate",
+  "xrobots": null,
+  "title": [
+   "Aarav Sharma — Student Portfolio | CLARVO"
+  ],
+  "desc": [
+   "Aarav Sharma's student portfolio: Grade 11 · Science (PCM) · Greenwood International School · Hyderabad. Aspiring Aerospace Engineering. Activities, projects, awards and resume."
+  ],
+  "robots": [
+   "noindex, nofollow"
+  ],
+  "canonical": [
+   "https://clarvo.in/demo"
+  ],
+  "h1": [
+   "AARAV"
+  ],
+  "h2n": 0,
+  "words": 22,
+  "ld": [
+   "EducationalOrganization",
+   "PostalAddress",
+   "WebSite",
+   "SearchAction",
+   "EntryPoint"
+  ],
+  "og_image": [],
+  "imgs": 0,
+  "noalt": 0,
+  "emptyalt": 0,
+  "links": [],
+  "size": 22044,
+  "inlinks": 1,
+  "in_sitemap": false
+ },
+ "/blog/ai-tools-for-academic-research": {
+  "status": 200,
+  "final": "https://clarvo.in/blog/ai-tools-for-academic-research",
+  "time": 0.78,
+  "cache": "private, no-cache, no-store, max-age=0, must-revalidate",
+  "xrobots": null,
+  "title": [
+   "Unlocking Potential: A Comprehensive Guide to AI Tools for Academic Research | CLARVO | CLARVO"
+  ],
+  "desc": [
+   "Explore how cutting-edge AI tools for academic research are revolutionizing scholarship, from literature review to data analysis and writing. This guide offers "
+  ],
+  "robots": [
+   "index, follow"
+  ],
+  "canonical": [
+   "http://localhost:3008/blog/ai-tools-for-academic-research"
+  ],
+  "h1": [
+   "Unlocking Potential: A Comprehensive Guide to AI Tools for Academic Research",
+   "Unlocking Potential: A Comprehensive Guide to AI Tools for Academic Research",
+   "Unlocking Potential: A Comprehensive Guide to AI Tools for Academic Research",
+   "Unlocking Potential: A Comprehensive Guide to AI Tools for Academic Research"
+  ],
+  "h2n": 20,
+  "words": 5251,
+  "ld": [
+   "EducationalOrganization",
+   "PostalAddress",
+   "WebSite",
+   "SearchAction",
+   "EntryPoint",
+   "BlogPosting",
+   "Person",
+   "Organization",
+   "ImageObject",
+   "WebPage",
+   "BlogPosting",
+   "Person",
+   "Organization",
+   "ImageObject",
+   "WebPage"
+  ],
+  "og_image": [
+   "http://localhost:3008/logo-transparent.png"
+  ],
+  "imgs": 4,
+  "noalt": 0,
+  "emptyalt": 0,
+  "links": [
+   "/",
+   "/about-us",
+   "/admitted-students",
+   "/auth",
+   "/blog",
+   "/blog/building-a-research-network",
+   "/blog/common-research-ethics-every-student-should-know",
+   "/blog/how-to-read-scientific-papers-efficiently",
+   "/book-a-demo",
+   "/career-roadmap",
+   "/discover",
+   "/iq-test",
+   "/privacy",
+   "/psychometric-assessment",
+   "/psychometric-test",
+   "/research",
+   "/sample-reports",
+   "/terms",
+   "/university-finder",
+   "mailto:support@clarvo.in",
+   "tel:+918828016354"
+  ],
+  "size": 152940,
+  "inlinks": 1,
+  "in_sitemap": false
+ },
+ "/blog/best-websites-to-find-research-papers": {
+  "status": 200,
+  "final": "https://clarvo.in/blog/best-websites-to-find-research-papers",
+  "time": 0.78,
+  "cache": "private, no-cache, no-store, max-age=0, must-revalidate",
+  "xrobots": null,
+  "title": [
+   "The Best Websites to Find Research Papers: Navigating the Ocean of Academic Knowledge | CLARVO | CLARVO"
+  ],
+  "desc": [
+   "Discover the definitive guide to the  best websites to find research papers , essential for any aspiring scholar. This comprehensive resource explores top  rese"
+  ],
+  "robots": [
+   "index, follow"
+  ],
+  "canonical": [
+   "http://localhost:3008/blog/best-websites-to-find-research-papers"
+  ],
+  "h1": [
+   "The Best Websites to Find Research Papers: Navigating the Ocean of Academic Knowledge",
+   "The Best Websites to Find Research Papers: Navigating the Ocean of Academic Knowledge",
+   "The Best Websites to Find Research Papers: Navigating the Ocean of Academic Knowledge",
+   "The Best Websites to Find Research Papers: Navigating the Ocean of Academic Knowledge"
+  ],
+  "h2n": 20,
+  "words": 4827,
+  "ld": [
+   "EducationalOrganization",
+   "PostalAddress",
+   "WebSite",
+   "SearchAction",
+   "EntryPoint",
+   "BlogPosting",
+   "Person",
+   "Organization",
+   "ImageObject",
+   "WebPage",
+   "BlogPosting",
+   "Person",
+   "Organization",
+   "ImageObject",
+   "WebPage"
+  ],
+  "og_image": [
+   "http://localhost:3008/logo-transparent.png"
+  ],
+  "imgs": 4,
+  "noalt": 0,
+  "emptyalt": 0,
+  "links": [
+   "/",
+   "/about-us",
+   "/admitted-students",
+   "/auth",
+   "/blog",
+   "/blog/building-a-research-network",
+   "/blog/common-research-ethics-every-student-should-know",
+   "/blog/how-to-read-scientific-papers-efficiently",
+   "/book-a-demo",
+   "/career-roadmap",
+   "/discover",
+   "/iq-test",
+   "/privacy",
+   "/psychometric-assessment",
+   "/psychometric-test",
+   "/research",
+   "/sample-reports",
+   "/terms",
+   "/university-finder",
+   "mailto:support@clarvo.in",
+   "tel:+918828016354"
+  ],
+  "size": 147510,
+  "inlinks": 1,
+  "in_sitemap": false
+ },
+ "/blog/building-a-research-network": {
+  "status": 200,
+  "final": "https://clarvo.in/blog/building-a-research-network",
+  "time": 0.56,
+  "cache": "private, no-cache, no-store, max-age=0, must-revalidate",
+  "xrobots": null,
+  "title": [
+   "Mastering the Art of Building a Research Network: A Guide for Emerging Innovators | CLARVO | CLARVO"
+  ],
+  "desc": [
+   "Discover how to strategically approach building a research network, a crucial skill for high school students and aspiring scientists. This comprehensive guide d"
+  ],
+  "robots": [
+   "index, follow"
+  ],
+  "canonical": [
+   "http://localhost:3008/blog/building-a-research-network"
+  ],
+  "h1": [
+   "Mastering the Art of Building a Research Network: A Guide for Emerging Innovators",
+   "Mastering the Art of Building a Research Network: A Guide for Emerging Innovators",
+   "Mastering the Art of Building a Research Network: A Guide for Emerging Innovators",
+   "Mastering the Art of Building a Research Network: A Guide for Emerging Innovators"
+  ],
+  "h2n": 20,
+  "words": 4379,
+  "ld": [
+   "EducationalOrganization",
+   "PostalAddress",
+   "WebSite",
+   "SearchAction",
+   "EntryPoint",
+   "BlogPosting",
+   "Person",
+   "Organization",
+   "ImageObject",
+   "WebPage",
+   "BlogPosting",
+   "Person",
+   "Organization",
+   "ImageObject",
+   "WebPage"
+  ],
+  "og_image": [
+   "http://localhost:3008/logo-transparent.png"
+  ],
+  "imgs": 4,
+  "noalt": 0,
+  "emptyalt": 0,
+  "links": [
+   "/",
+   "/about-us",
+   "/admitted-students",
+   "/auth",
+   "/blog",
+   "/blog/common-research-ethics-every-student-should-know",
+   "/blog/how-to-present-research-at-conferences",
+   "/blog/how-to-read-scientific-papers-efficiently",
+   "/book-a-demo",
+   "/career-roadmap",
+   "/discover",
+   "/iq-test",
+   "/privacy",
+   "/psychometric-assessment",
+   "/psychometric-test",
+   "/research",
+   "/sample-reports",
+   "/terms",
+   "/university-finder",
+   "mailto:support@clarvo.in",
+   "tel:+918828016354"
+  ],
+  "size": 142773,
+  "inlinks": 10,
+  "in_sitemap": false
+ },
+ "/blog/common-research-ethics-every-student-should-know": {
+  "status": 200,
+  "final": "https://clarvo.in/blog/common-research-ethics-every-student-should-know",
+  "time": 0.65,
+  "cache": "private, no-cache, no-store, max-age=0, must-revalidate",
+  "xrobots": null,
+  "title": [
+   "Mastering Common Research Ethics Every Student Should Know | CLARVO | CLARVO"
+  ],
+  "desc": [
+   "Delve into the foundational principles of research ethics essential for every student's academic journey. This guide illuminates the critical importance of acad"
+  ],
+  "robots": [
+   "index, follow"
+  ],
+  "canonical": [
+   "http://localhost:3008/blog/common-research-ethics-every-student-should-know"
+  ],
+  "h1": [
+   "Mastering Common Research Ethics Every Student Should Know",
+   "Mastering Common Research Ethics Every Student Should Know",
+   "Mastering Common Research Ethics Every Student Should Know",
+   "Mastering Common Research Ethics Every Student Should Know"
+  ],
+  "h2n": 20,
+  "words": 4784,
+  "ld": [
+   "EducationalOrganization",
+   "PostalAddress",
+   "WebSite",
+   "SearchAction",
+   "EntryPoint",
+   "BlogPosting",
+   "Person",
+   "Organization",
+   "ImageObject",
+   "WebPage",
+   "BlogPosting",
+   "Person",
+   "Organization",
+   "ImageObject",
+   "WebPage"
+  ],
+  "og_image": [
+   "http://localhost:3008/logo-transparent.png"
+  ],
+  "imgs": 4,
+  "noalt": 0,
+  "emptyalt": 0,
+  "links": [
+   "/",
+   "/about-us",
+   "/admitted-students",
+   "/auth",
+   "/blog",
+   "/blog/building-a-research-network",
+   "/blog/how-to-present-research-at-conferences",
+   "/blog/how-to-read-scientific-papers-efficiently",
+   "/book-a-demo",
+   "/career-roadmap",
+   "/discover",
+   "/iq-test",
+   "/privacy",
+   "/psychometric-assessment",
+   "/psychometric-test",
+   "/research",
+   "/sample-reports",
+   "/terms",
+   "/university-finder",
+   "mailto:support@clarvo.in",
+   "tel:+918828016354"
+  ],
+  "size": 147703,
+  "inlinks": 10,
+  "in_sitemap": false
+ },
+ "/blog/how-to-build-a-research-portfolio": {
+  "status": 200,
+  "final": "https://clarvo.in/blog/how-to-build-a-research-portfolio",
+  "time": 0.84,
+  "cache": "private, no-cache, no-store, max-age=0, must-revalidate",
+  "xrobots": null,
+  "title": [
+   "Mastering Your Academic Journey: How to Build a Research Portfolio for Impact | CLARVO | CLARVO"
+  ],
+  "desc": [
+   "Unlock unparalleled academic and professional opportunities by learning how to build a robust research portfolio. This guide provides high school and undergradu"
+  ],
+  "robots": [
+   "index, follow"
+  ],
+  "canonical": [
+   "http://localhost:3008/blog/how-to-build-a-research-portfolio"
+  ],
+  "h1": [
+   "Mastering Your Academic Journey: How to Build a Research Portfolio for Impact",
+   "Mastering Your Academic Journey: How to Build a Research Portfolio for Impact",
+   "Mastering Your Academic Journey: How to Build a Research Portfolio for Impact",
+   "Mastering Your Academic Journey: How to Build a Research Portfolio for Impact"
+  ],
+  "h2n": 20,
+  "words": 4810,
+  "ld": [
+   "EducationalOrganization",
+   "PostalAddress",
+   "WebSite",
+   "SearchAction",
+   "EntryPoint",
+   "BlogPosting",
+   "Person",
+   "Organization",
+   "ImageObject",
+   "WebPage",
+   "BlogPosting",
+   "Person",
+   "Organization",
+   "ImageObject",
+   "WebPage"
+  ],
+  "og_image": [
+   "http://localhost:3008/logo-transparent.png"
+  ],
+  "imgs": 4,
+  "noalt": 0,
+  "emptyalt": 0,
+  "links": [
+   "/",
+   "/about-us",
+   "/admitted-students",
+   "/auth",
+   "/blog",
+   "/blog/building-a-research-network",
+   "/blog/common-research-ethics-every-student-should-know",
+   "/blog/how-to-read-scientific-papers-efficiently",
+   "/book-a-demo",
+   "/career-roadmap",
+   "/discover",
+   "/iq-test",
+   "/privacy",
+   "/psychometric-assessment",
+   "/psychometric-test",
+   "/research",
+   "/sample-reports",
+   "/terms",
+   "/university-finder",
+   "mailto:support@clarvo.in",
+   "tel:+918828016354"
+  ],
+  "size": 147974,
+  "inlinks": 1,
+  "in_sitemap": false
+ },
+ "/blog/how-to-conduct-a-literature-review": {
+  "status": 200,
+  "final": "https://clarvo.in/blog/how-to-conduct-a-literature-review",
+  "time": 0.86,
+  "cache": "private, no-cache, no-store, max-age=0, must-revalidate",
+  "xrobots": null,
+  "title": [
+   "How to Conduct a Literature Review: A Comprehensive Guide for Young Innovators | CLARVO | CLARVO"
+  ],
+  "desc": [
+   "Master the essential steps of conducting a literature review with this expert guide from Abroad Simplified. Learn how to navigate academic databases, critically"
+  ],
+  "robots": [
+   "index, follow"
+  ],
+  "canonical": [
+   "http://localhost:3008/blog/how-to-conduct-a-literature-review"
+  ],
+  "h1": [
+   "How to Conduct a Literature Review: A Comprehensive Guide for Young Innovators",
+   "How to Conduct a Literature Review: A Comprehensive Guide for Young Innovators",
+   "How to Conduct a Literature Review: A Comprehensive Guide for Young Innovators",
+   "How to Conduct a Literature Review: A Comprehensive Guide for Young Innovators"
+  ],
+  "h2n": 20,
+  "words": 4978,
+  "ld": [
+   "EducationalOrganization",
+   "PostalAddress",
+   "WebSite",
+   "SearchAction",
+   "EntryPoint",
+   "BlogPosting",
+   "Person",
+   "Organization",
+   "ImageObject",
+   "WebPage",
+   "BlogPosting",
+   "Person",
+   "Organization",
+   "ImageObject",
+   "WebPage"
+  ],
+  "og_image": [
+   "http://localhost:3008/logo-transparent.png"
+  ],
+  "imgs": 4,
+  "noalt": 0,
+  "emptyalt": 0,
+  "links": [
+   "/",
+   "/about-us",
+   "/admitted-students",
+   "/auth",
+   "/blog",
+   "/blog/building-a-research-network",
+   "/blog/common-research-ethics-every-student-should-know",
+   "/blog/how-to-read-scientific-papers-efficiently",
+   "/book-a-demo",
+   "/career-roadmap",
+   "/discover",
+   "/iq-test",
+   "/privacy",
+   "/psychometric-assessment",
+   "/psychometric-test",
+   "/research",
+   "/sample-reports",
+   "/terms",
+   "/university-finder",
+   "mailto:support@clarvo.in",
+   "tel:+918828016354"
+  ],
+  "size": 145655,
+  "inlinks": 1,
+  "in_sitemap": false
+ },
+ "/blog/how-to-present-research-at-conferences": {
+  "status": 200,
+  "final": "https://clarvo.in/blog/how-to-present-research-at-conferences",
+  "time": 0.55,
+  "cache": "private, no-cache, no-store, max-age=0, must-revalidate",
+  "xrobots": null,
+  "title": [
+   "Mastering the Podium: A Definitive Guide on How to Present Research at Conferences | CLARVO | CLARVO"
+  ],
+  "desc": [
+   "Unlock the secrets to impactful academic conference presentations. This comprehensive guide offers high school researchers essential research presentation tips,"
+  ],
+  "robots": [
+   "index, follow"
+  ],
+  "canonical": [
+   "http://localhost:3008/blog/how-to-present-research-at-conferences"
+  ],
+  "h1": [
+   "Mastering the Podium: A Definitive Guide on How to Present Research at Conferences",
+   "Mastering the Podium: A Definitive Guide on How to Present Research at Conferences",
+   "Mastering the Podium: A Definitive Guide on How to Present Research at Conferences",
+   "Mastering the Podium: A Definitive Guide on How to Present Research at Conferences"
+  ],
+  "h2n": 20,
+  "words": 3913,
+  "ld": [
+   "EducationalOrganization",
+   "PostalAddress",
+   "WebSite",
+   "SearchAction",
+   "EntryPoint",
+   "BlogPosting",
+   "Person",
+   "Organization",
+   "ImageObject",
+   "WebPage",
+   "BlogPosting",
+   "Person",
+   "Organization",
+   "ImageObject",
+   "WebPage"
+  ],
+  "og_image": [
+   "http://localhost:3008/logo-transparent.png"
+  ],
+  "imgs": 4,
+  "noalt": 0,
+  "emptyalt": 0,
+  "links": [
+   "/",
+   "/about-us",
+   "/admitted-students",
+   "/auth",
+   "/blog",
+   "/blog/building-a-research-network",
+   "/blog/common-research-ethics-every-student-should-know",
+   "/blog/how-to-read-scientific-papers-efficiently",
+   "/book-a-demo",
+   "/career-roadmap",
+   "/discover",
+   "/iq-test",
+   "/privacy",
+   "/psychometric-assessment",
+   "/psychometric-test",
+   "/research",
+   "/sample-reports",
+   "/terms",
+   "/university-finder",
+   "mailto:support@clarvo.in",
+   "tel:+918828016354"
+  ],
+  "size": 134389,
+  "inlinks": 4,
+  "in_sitemap": false
+ },
+ "/blog/how-to-read-scientific-papers-efficiently": {
+  "status": 200,
+  "final": "https://clarvo.in/blog/how-to-read-scientific-papers-efficiently",
+  "time": 0.65,
+  "cache": "private, no-cache, no-store, max-age=0, must-revalidate",
+  "xrobots": null,
+  "title": [
+   "How to Read Scientific Papers Efficiently | CLARVO | CLARVO"
+  ],
+  "desc": [
+   "Master the art of efficiently reading scientific papers with this comprehensive guide from Abroad Simplified. Learn strategic approaches, essential tips, and ef"
+  ],
+  "robots": [
+   "index, follow"
+  ],
+  "canonical": [
+   "http://localhost:3008/blog/how-to-read-scientific-papers-efficiently"
+  ],
+  "h1": [
+   "How to Read Scientific Papers Efficiently",
+   "How to Read Scientific Papers Efficiently",
+   "How to Read Scientific Papers Efficiently",
+   "How to Read Scientific Papers Efficiently"
+  ],
+  "h2n": 20,
+  "words": 4768,
+  "ld": [
+   "EducationalOrganization",
+   "PostalAddress",
+   "WebSite",
+   "SearchAction",
+   "EntryPoint",
+   "BlogPosting",
+   "Person",
+   "Organization",
+   "ImageObject",
+   "WebPage",
+   "BlogPosting",
+   "Person",
+   "Organization",
+   "ImageObject",
+   "WebPage"
+  ],
+  "og_image": [
+   "http://localhost:3008/logo-transparent.png"
+  ],
+  "imgs": 4,
+  "noalt": 0,
+  "emptyalt": 0,
+  "links": [
+   "/",
+   "/about-us",
+   "/admitted-students",
+   "/auth",
+   "/blog",
+   "/blog/building-a-research-network",
+   "/blog/common-research-ethics-every-student-should-know",
+   "/blog/how-to-present-research-at-conferences",
+   "/book-a-demo",
+   "/career-roadmap",
+   "/discover",
+   "/iq-test",
+   "/privacy",
+   "/psychometric-assessment",
+   "/psychometric-test",
+   "/research",
+   "/sample-reports",
+   "/terms",
+   "/university-finder",
+   "mailto:support@clarvo.in",
+   "tel:+918828016354"
+  ],
+  "size": 145856,
+  "inlinks": 10,
+  "in_sitemap": false
+ },
+ "/blog/quantitative-vs-qualitative-research": {
+  "status": 200,
+  "final": "https://clarvo.in/blog/quantitative-vs-qualitative-research",
+  "time": 0.8,
+  "cache": "private, no-cache, no-store, max-age=0, must-revalidate",
+  "xrobots": null,
+  "title": [
+   "Mastering Research: A Deep Dive into Quantitative vs Qualitative Research | CLARVO | CLARVO"
+  ],
+  "desc": [
+   "Unravel the fundamental differences between quantitative and qualitative research approaches, essential for any aspiring innovator. This guide provides a compre"
+  ],
+  "robots": [
+   "index, follow"
+  ],
+  "canonical": [
+   "http://localhost:3008/blog/quantitative-vs-qualitative-research"
+  ],
+  "h1": [
+   "Mastering Research: A Deep Dive into Quantitative vs Qualitative Research",
+   "Mastering Research: A Deep Dive into Quantitative vs Qualitative Research",
+   "Mastering Research: A Deep Dive into Quantitative vs Qualitative Research",
+   "Mastering Research: A Deep Dive into Quantitative vs Qualitative Research"
+  ],
+  "h2n": 20,
+  "words": 4982,
+  "ld": [
+   "EducationalOrganization",
+   "PostalAddress",
+   "WebSite",
+   "SearchAction",
+   "EntryPoint",
+   "BlogPosting",
+   "Person",
+   "Organization",
+   "ImageObject",
+   "WebPage",
+   "BlogPosting",
+   "Person",
+   "Organization",
+   "ImageObject",
+   "WebPage"
+  ],
+  "og_image": [
+   "http://localhost:3008/logo-transparent.png"
+  ],
+  "imgs": 4,
+  "noalt": 0,
+  "emptyalt": 0,
+  "links": [
+   "/",
+   "/about-us",
+   "/admitted-students",
+   "/auth",
+   "/blog",
+   "/blog/building-a-research-network",
+   "/blog/common-research-ethics-every-student-should-know",
+   "/blog/how-to-read-scientific-papers-efficiently",
+   "/book-a-demo",
+   "/career-roadmap",
+   "/discover",
+   "/iq-test",
+   "/privacy",
+   "/psychometric-assessment",
+   "/psychometric-test",
+   "/research",
+   "/sample-reports",
+   "/terms",
+   "/university-finder",
+   "mailto:support@clarvo.in",
+   "tel:+918828016354"
+  ],
+  "size": 147093,
+  "inlinks": 1,
+  "in_sitemap": false
+ },
+ "/blog/understanding-research-methodology": {
+  "status": 200,
+  "final": "https://clarvo.in/blog/understanding-research-methodology",
+  "time": 1.07,
+  "cache": "private, no-cache, no-store, max-age=0, must-revalidate",
+  "xrobots": null,
+  "title": [
+   "Understanding Research Methodology: A Blueprint for Young Innovators | CLARVO | CLARVO"
+  ],
+  "desc": [
+   "Embark on your scientific journey with confidence. This comprehensive guide demystifies  research methodology , offering high school students a foundational und"
+  ],
+  "robots": [
+   "index, follow"
+  ],
+  "canonical": [
+   "http://localhost:3008/blog/understanding-research-methodology"
+  ],
+  "h1": [
+   "Understanding Research Methodology: A Blueprint for Young Innovators",
+   "Understanding Research Methodology: A Blueprint for Young Innovators",
+   "Understanding Research Methodology: A Blueprint for Young Innovators",
+   "Understanding Research Methodology: A Blueprint for Young Innovators"
+  ],
+  "h2n": 20,
+  "words": 4948,
+  "ld": [
+   "EducationalOrganization",
+   "PostalAddress",
+   "WebSite",
+   "SearchAction",
+   "EntryPoint",
+   "BlogPosting",
+   "Person",
+   "Organization",
+   "ImageObject",
+   "WebPage",
+   "BlogPosting",
+   "Person",
+   "Organization",
+   "ImageObject",
+   "WebPage"
+  ],
+  "og_image": [
+   "http://localhost:3008/logo-transparent.png"
+  ],
+  "imgs": 4,
+  "noalt": 0,
+  "emptyalt": 0,
+  "links": [
+   "/",
+   "/about-us",
+   "/admitted-students",
+   "/auth",
+   "/blog",
+   "/blog/building-a-research-network",
+   "/blog/common-research-ethics-every-student-should-know",
+   "/blog/how-to-read-scientific-papers-efficiently",
+   "/book-a-demo",
+   "/career-roadmap",
+   "/discover",
+   "/iq-test",
+   "/privacy",
+   "/psychometric-assessment",
+   "/psychometric-test",
+   "/research",
+   "/sample-reports",
+   "/terms",
+   "/university-finder",
+   "mailto:support@clarvo.in",
+   "tel:+918828016354"
+  ],
+  "size": 153183,
+  "inlinks": 1,
+  "in_sitemap": false
+ },
+ "/sample-report": {
+  "status": 200,
+  "final": "https://clarvo.in/sample-report",
+  "time": 2.9,
+  "cache": "private, no-cache, no-store, max-age=0, must-revalidate",
+  "xrobots": null,
+  "title": [
+   "CLARVO — Clarity for Their Future | Student Development Platform"
+  ],
+  "desc": [
+   "CLARVO is a premium student development platform for Grades 7–12, offering psychometric assessments, personalised career guidance, SAT preparation, one-to-one tutoring, and research/profile building."
+  ],
+  "robots": [
+   "index, follow"
+  ],
+  "canonical": [
+   "https://clarvo.in"
+  ],
+  "h1": [],
+  "h2n": 0,
+  "words": 183,
+  "ld": [
+   "EducationalOrganization",
+   "PostalAddress",
+   "WebSite",
+   "SearchAction",
+   "EntryPoint"
+  ],
+  "og_image": [
+   "https://clarvo.in/og-image.png"
+  ],
+  "imgs": 1,
+  "noalt": 0,
+  "emptyalt": 0,
+  "links": [
+   "/psychometric-test",
+   "/submit-review"
+  ],
+  "size": 808302,
+  "inlinks": 2,
+  "in_sitemap": false
+ },
+ "/sample-reports/sample-report-grade-10.pdf": {
+  "status": 200,
+  "final": "https://clarvo.in/sample-reports/sample-report-grade-10.pdf",
+  "time": 14.92,
+  "cache": "public, max-age=0",
+  "xrobots": null,
+  "title": [],
+  "desc": [],
+  "robots": [],
+  "canonical": [],
+  "h1": [],
+  "h2n": 0,
+  "words": 182043,
+  "ld": [],
+  "og_image": [],
+  "imgs": 0,
+  "noalt": 0,
+  "emptyalt": 0,
+  "links": [],
+  "size": 8281848,
+  "inlinks": 2,
+  "in_sitemap": false
+ },
+ "/sample-reports/sample-report-grades-11-12.pdf": {
+  "status": 200,
+  "final": "https://clarvo.in/sample-reports/sample-report-grades-11-12.pdf",
+  "time": 19.65,
+  "cache": "public, max-age=0",
+  "xrobots": null,
+  "title": [],
+  "desc": [],
+  "robots": [],
+  "canonical": [],
+  "h1": [],
+  "h2n": 0,
+  "words": 179298,
+  "ld": [],
+  "og_image": [],
+  "imgs": 0,
+  "noalt": 0,
+  "emptyalt": 0,
+  "links": [],
+  "size": 8235151,
+  "inlinks": 1,
+  "in_sitemap": false
+ },
+ "/sample-reports/sample-report-grades-7-9.pdf": {
+  "status": 200,
+  "final": "https://clarvo.in/sample-reports/sample-report-grades-7-9.pdf",
+  "time": 20.15,
+  "cache": "public, max-age=0",
+  "xrobots": null,
+  "title": [],
+  "desc": [],
+  "robots": [],
+  "canonical": [],
+  "h1": [],
+  "h2n": 0,
+  "words": 180758,
+  "ld": [],
+  "og_image": [],
+  "imgs": 0,
+  "noalt": 0,
+  "emptyalt": 0,
+  "links": [],
+  "size": 8270958,
+  "inlinks": 1,
+  "in_sitemap": false
+ }
+}

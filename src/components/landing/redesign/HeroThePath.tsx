@@ -193,10 +193,10 @@ export default function HeroThePath() {
             <h1 className="text-[clamp(2.35rem,4.2vw,3.75rem)] font-dmsans font-bold leading-[1.04] tracking-[-0.03em] text-[#12131C] max-w-[20ch]">
               <span className="block overflow-hidden pb-1">
                 <span className="hero-headline-line block">Find the path</span>
-              </span>
+              </span>{' '}
               <span className="block overflow-hidden pb-1">
                 <span className="hero-headline-line block">that fits your</span>
-              </span>
+              </span>{' '}
               <span className="block overflow-hidden pb-1">
                 <span className="hero-headline-line block">child.</span>
               </span>
@@ -204,7 +204,7 @@ export default function HeroThePath() {
 
             {/* Subcopy (max 46ch, wrapped cleanly with clear margin from stage) */}
             <p className="hero-sub text-[15px] sm:text-[1.0625rem] leading-[1.6] text-[#5B6275] max-w-[46ch] mt-3.5 sm:mt-5 font-dmsans font-normal">
-              Scientific assessments, expert counsellors and a clear roadmap, so students and parents choose a stream, career and university with evidence instead of guesswork.
+              Study abroad and Indian university admissions counselling, psychometric assessments, profile building and research programs, so students and parents choose a stream, career and university with evidence instead of guesswork.
             </p>
 
             {/* Action Buttons: Primary & Secondary */}

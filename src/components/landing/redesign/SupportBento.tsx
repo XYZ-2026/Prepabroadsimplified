@@ -26,8 +26,8 @@ export default function SupportBento() {
         {/* Section Heading: Strictly sentence case, no tracked all-caps eyebrows */}
         <div className="mb-10 sm:mb-14 max-w-3xl">
           <SectionHeading
-            title="Comprehensive support for every stage"
-            subtitle="From early aptitude discovery and stream choice to standardized tests, founder-led entrepreneurship and global university admissions—every programme is engineered for student ambition and family clarity."
+            title="Study abroad, admissions & profile building support for every stage"
+            subtitle="From psychometric assessment and stream choice to SAT prep, research and summer programs, founder-led entrepreneurship and admissions to Indian and global universities—every programme is engineered for student ambition and family clarity."
           />
         </div>
 
@@ -228,7 +228,7 @@ export default function SupportBento() {
               </h3>
 
               <p className="text-[13.5px] leading-relaxed text-[#5B6275] font-dmsans">
-                Author original research papers with university mentors, secure high-school peer-reviewed publication, and construct differentiated applicant portfolios.
+                Profile building for top universities: author original research papers with university mentors, add the right research and summer programs, and build a differentiated applicant portfolio.
               </p>
             </div>
 

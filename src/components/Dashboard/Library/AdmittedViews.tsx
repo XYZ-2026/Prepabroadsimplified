@@ -86,12 +86,14 @@ export function AdmittedCard({ student, href, gated = false }: { student: Admitt
       <Link href={href} className={s.cardMain} {...gate}>
         <div className={s.banner} style={{ borderTopColor: t.accent }}>
           <div className={s.bannerTop}>
-            <span className={s.collegeMark} style={{ color: t.accent }}>
-              {initialsOf(student.college, 3)}
-            </span>
+            <span className={s.avatar}>{initialsOf(student.name)}</span>
             <div className={s.collegeText}>
-              <div className={s.college}>{student.college}</div>
-              {student.location && <div className={s.collegeMeta}>{student.location}</div>}
+              <h2 className={s.college}>{student.name}</h2>
+              {(student.major || student.classYear) && (
+                <div className={s.collegeMeta}>
+                  {[student.major, student.classYear && `Class of ${student.classYear}`].filter(Boolean).join(' · ')}
+                </div>
+              )}
             </div>
           </div>
           <div className={s.bannerTags}>
@@ -109,12 +111,12 @@ export function AdmittedCard({ student, href, gated = false }: { student: Admitt
         </div>
         <div className={s.body}>
           <div className={s.person}>
-            <div className={s.avatar}>{initialsOf(student.name)}</div>
+            <span className={s.collegeMark} style={{ color: t.accent }}>
+              {initialsOf(student.college, 3)}
+            </span>
             <div>
-              <h2 className={s.name}>{student.name}</h2>
-              <div className={s.sub}>
-                {[student.major, student.classYear && `Class of ${student.classYear}`].filter(Boolean).join(' · ')}
-              </div>
+              <div className={s.name}>{student.college}</div>
+              {student.location && <div className={s.sub}>{student.location}</div>}
             </div>
           </div>
           <div className={s.metrics}>
@@ -133,7 +135,7 @@ export function AdmittedCard({ student, href, gated = false }: { student: Admitt
         <Link href={href} className={s.actionGhost} {...gate}>
           View profile <ArrowRight size={14} />
         </Link>
-        <Link href={admittedPortfolioPath(student.id)} className={s.actionPrimary}>
+        <Link href={admittedPortfolioPath(student.username)} className={s.actionPrimary}>
           <Clapperboard size={14} /> View portfolio
         </Link>
       </div>
@@ -282,7 +284,7 @@ export function AdmittedProfile({ student: st }: { student: AdmittedDetail }) {
               {st.major && <span className={s.chip}>Major: {st.major}</span>}
               {st.classYear && <span className={s.chip}>Class of {st.classYear}</span>}
             </div>
-            <Link href={admittedPortfolioPath(st.id)} className={`${s.actionPrimary} ${s.profilePortfolioBtn}`}>
+            <Link href={admittedPortfolioPath(st.username)} className={`${s.actionPrimary} ${s.profilePortfolioBtn}`}>
               <Clapperboard size={15} /> View portfolio
             </Link>
           </div>

@@ -165,6 +165,8 @@ export const COLLEGE_TYPES = ['Ivy League', 'Private', 'Public'] as const;
 
 export interface AdmittedSummary {
   id: string;
+  /** URL slug derived from the student's name (unique across the collection). */
+  username: string;
   name: string;
   college: string;
   location: string;
@@ -220,6 +222,7 @@ const meaningful = (v: unknown) => {
 function mapAdmitted(d: Record<string, unknown>): AdmittedDetail {
   return {
     id: text(d._id),
+    username: '',
     name: text(d.studentName) || 'Anonymous student',
     college: text(d.admittedCollege),
     location: text(d.collegeLocation),
@@ -267,6 +270,75 @@ function mapAdmitted(d: Record<string, unknown>): AdmittedDetail {
 /** Rows entered as tests (e.g. college "a") carry no useful information. */
 const isUsable = (s: AdmittedSummary) => s.college.length >= 3 && s.name.length >= 2;
 
+/** "Mariana Shah" → "mariana-shah". */
+export function slugifyName(name: string): string {
+  return (
+    name
+      .normalize('NFKD')
+      .replace(/[̀-ͯ]/g, '')
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '')
+      .slice(0, 60) || 'student'
+  );
+}
+
+interface UsernameIndex {
+  byId: Map<string, string>;
+  byUsername: Map<string, string>;
+}
+
+/**
+ * Every admitted student gets a username slug from their name. Duplicate names get "-2", "-3"…
+ * in creation order, so a student's URL stays stable as new rows are added.
+ */
+const loadUsernameIndex = cache(async (): Promise<UsernameIndex> => {
+  const byId = new Map<string, string>();
+  const byUsername = new Map<string, string>();
+  if (!process.env.WIX_API_KEY || !process.env.WIX_SITE_ID) return { byId, byUsername };
+
+  const rows: { id: string; name: string; created: string }[] = [];
+  const LIMIT = 100;
+  for (let offset = 0; offset < 10000; offset += LIMIT) {
+    const res = await fetch(`${WIX_DATA}/items/query`, {
+      method: 'POST',
+      headers: headers(),
+      body: JSON.stringify({
+        dataCollectionId: ADMITTED_COLLECTION,
+        query: {
+          fields: ['_id', 'studentName', '_createdDate'],
+          sort: [{ fieldName: '_createdDate', order: 'ASC' }],
+          paging: { limit: LIMIT, offset },
+        },
+      }),
+      next: { revalidate: 300 },
+    });
+    if (!res.ok) {
+      console.error(`[WixLibrary] ${ADMITTED_COLLECTION} username index failed: HTTP ${res.status}`);
+      throw new Error('Library is temporarily unavailable.');
+    }
+    const json = await res.json();
+    const page: Record<string, unknown>[] = (json.dataItems || []).map((i: { data?: Record<string, unknown> }) => i.data || {});
+    for (const d of page) rows.push({ id: text(d._id), name: text(d.studentName), created: text(d._createdDate) });
+    if (page.length < LIMIT) break;
+  }
+
+  rows.sort((a, b) => (a.created === b.created ? a.id.localeCompare(b.id) : a.created < b.created ? -1 : 1));
+  for (const r of rows) {
+    if (!r.id) continue;
+    const base = slugifyName(r.name);
+    let username = base;
+    for (let n = 2; byUsername.has(username); n++) username = `${base}-${n}`;
+    byId.set(r.id, username);
+    byUsername.set(username, r.id);
+  }
+  return { byId, byUsername };
+});
+
+function withUsername<T extends AdmittedSummary>(s: T, index: UsernameIndex): T {
+  return { ...s, username: index.byId.get(s.id) || s.id };
+}
+
 export async function listAdmitted(opts: { q?: string; decision?: string; type?: string; page?: number }) {
   const q = cleanQuery(opts.q || '');
   const filters: Record<string, unknown>[] = [];
@@ -282,15 +354,25 @@ export async function listAdmitted(opts: { q?: string; decision?: string; type?:
   if (opts.decision && (DECISIONS as readonly string[]).includes(opts.decision)) filters.push({ admissionDecision: opts.decision });
   if (opts.type && (COLLEGE_TYPES as readonly string[]).includes(opts.type)) filters.push({ collegeType: opts.type });
   const filter = filters.length === 0 ? {} : filters.length === 1 ? filters[0] : { $and: filters };
-  const { items, total } = await query(ADMITTED_COLLECTION, filter, opts.page || 1, [
-    { fieldName: 'admittedCollege', order: 'ASC' },
+  const [{ items, total }, index] = await Promise.all([
+    query(ADMITTED_COLLECTION, filter, opts.page || 1, [{ fieldName: 'admittedCollege', order: 'ASC' }]),
+    loadUsernameIndex(),
   ]);
-  return { items: items.map(mapAdmitted).filter(isUsable), total };
+  return { items: items.map(mapAdmitted).filter(isUsable).map((s) => withUsername(s, index)), total };
 }
 
-export const getAdmitted = cache(async (id: string): Promise<AdmittedDetail | null> => {
+/**
+ * Looks a student up by username (canonical) or by the legacy Wix record id, so old shared
+ * links keep working; pages redirect those to the username URL.
+ */
+export const getAdmitted = cache(async (slug: string): Promise<AdmittedDetail | null> => {
+  const key = slug.trim().toLowerCase();
+  if (!key) return null;
+  const index = await loadUsernameIndex();
+  const id = index.byUsername.get(key) || (index.byId.has(key) ? key : null);
+  if (!id) return null;
   const d = await getById(ADMITTED_COLLECTION, id);
   if (!d) return null;
-  const s = mapAdmitted(d);
+  const s = withUsername(mapAdmitted(d), index);
   return isUsable(s) ? s : null;
 });

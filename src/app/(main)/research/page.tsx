@@ -17,20 +17,20 @@ import ResearchCTA from '@/components/Research/ResearchCTA';
 import { RESEARCH_CONTENT, bookCallHref } from '@/content/researchContent';
 import '@/components/PsychometricAssessment/psychometric.css';
 
-const TITLE = 'High School Research Mentorship — Write & Submit a Research Paper | CLARVO';
+const TITLE = 'Research Programs for High School Students | CLARVO';
 const DESCRIPTION =
-  'Mentor-led research programs for Classes 9–12. Write an original or review research paper in 8 or 16 weeks with weekly feedback and support submitting to journals and competitions.';
+  'Research programs for high school students in Classes 9–12: write a research paper with a mentor in 8 or 16 weeks (a strong summer option) and submit it to journals.';
 
 export const metadata: Metadata = {
-  title: TITLE,
+  title: { absolute: TITLE },
   description: DESCRIPTION,
   keywords: [
-    'high school research program',
+    'research programs for high school students',
+    'summer research programs for high school students',
+    'high school research program India',
     'research paper for college applications',
-    'research mentorship India',
     'publish research paper high school',
-    'review paper high school',
-    'CLARVO research',
+    'profile building research',
   ],
   alternates: { canonical: '/research' },
   openGraph: {

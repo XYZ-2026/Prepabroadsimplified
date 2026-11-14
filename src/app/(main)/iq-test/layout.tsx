@@ -5,7 +5,7 @@ import AccessRestricted from '@/components/Auth/AccessRestricted';
 import ToolLocked from '@/components/Auth/ToolLocked';
 
 export const metadata: Metadata = {
-  title: 'Online IQ / Cognitive Assessment | CLARVO',
+  title: 'Online IQ & Cognitive Aptitude Test for Students',
   description:
     'Take a visual-first 45-question cognitive assessment measuring reasoning, pattern recognition, numerical, spatial and abstract thinking.',
   keywords: [
@@ -19,6 +19,9 @@ export const metadata: Metadata = {
   alternates: {
     canonical: '/iq-test',
   },
+  // Login-gated tool: search engines only see the sign-in wall. Public landing pages
+  // (/psychometric-assessment, /research, home) are the ranking targets.
+  robots: { index: false, follow: true },
   openGraph: {
     title: 'Online IQ / Cognitive Assessment | CLARVO',
     description:

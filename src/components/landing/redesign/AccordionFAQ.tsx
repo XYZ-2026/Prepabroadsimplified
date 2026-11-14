@@ -32,6 +32,26 @@ const FAQS_DATA: FAQItem[] = [
     tag: 'Family Guidance',
   },
   {
+    q: 'How does Clarvo help with study abroad admissions?',
+    a: 'We guide students from Class 8 to 12 through study abroad planning for the USA, UK, Canada, Australia, Europe and Asia: course and country fit, university shortlisting, SAT preparation, essays and SOPs, application tracking, document checklists and visa interview preparation.',
+    tag: 'Study Abroad',
+  },
+  {
+    q: 'Do you help with Indian university admissions as well?',
+    a: 'Yes. Many families apply in India and abroad together. We help with stream selection after Class 10, planning for entrance routes such as CUET, JEE, NEET and CLAT, and applications to leading private universities that review essays, activities and interviews.',
+    tag: 'Indian Universities',
+  },
+  {
+    q: 'My child is applying for 2027 admissions. Is it too late to start?',
+    a: 'No. Many 2027 deadlines, including US Regular Decision, the main UCAS deadline, most Indian entrance exams and private university rounds, fall between January and June 2027. We help Class 12 students prioritise deadlines, finalise university lists and complete strong applications.',
+    tag: 'Admissions 2027',
+  },
+  {
+    q: 'Can you help my child find summer programs and research programs?',
+    a: 'Yes. As part of profile building, our counsellors shortlist summer programs and research programs that fit the student’s interests and target universities, and our mentor-led research program helps students in Classes 9–12 write and submit an original research paper.',
+    tag: 'Summer & Research',
+  },
+  {
     q: 'How is Clarvo different from conventional coaching centers or school career fairs?',
     a: 'Unlike coaching institutes that push every student into generic engineering or medical coaching batches, Clarvo is an objective diagnostic and strategy platform. We do not sell test-prep coaching batches; our sole purpose is empirical fitment, cognitive measurement, and multi-year clarity for families.',
     tag: 'Objective Advisory',

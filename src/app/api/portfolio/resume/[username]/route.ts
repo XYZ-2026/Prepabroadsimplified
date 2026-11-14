@@ -23,9 +23,9 @@ async function loadProfile(username: string): Promise<PortfolioProfile | null> {
   if (username.startsWith(ADMITTED_USERNAME_PREFIX)) {
     // Admitted-student portfolios live behind sign-in, like the admitted-students library.
     if (!(await verifySessionCookie())) return null;
-    const id = username.slice(ADMITTED_USERNAME_PREFIX.length);
-    if (!/^[a-z0-9-]{6,64}$/.test(id)) return null;
-    const student = await getAdmitted(id).catch(() => null);
+    const slug = username.slice(ADMITTED_USERNAME_PREFIX.length);
+    if (!/^[a-z0-9-]{1,80}$/.test(slug)) return null;
+    const student = await getAdmitted(slug).catch(() => null);
     return student ? admittedToPortfolio(student) : null;
   }
   if (!USERNAME_PATTERN.test(username)) return null;

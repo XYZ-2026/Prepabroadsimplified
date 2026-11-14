@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { AnimatePresence, motion, useReducedMotion, useScroll, useTransform } from 'framer-motion';
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { ArrowRight, ArrowDown, Mail, RotateCcw, Award, Download, Sparkles, Trophy } from 'lucide-react';
 import styles from './portfolio.module.css';
 import { PORTFOLIO_BUILDER_URL, type PortfolioProfile } from './portfolioTypes';
@@ -254,11 +254,6 @@ function Intro({ profile, onDone }: { profile: PortfolioProfile; onDone: () => v
 /* ───────────────────────── Sections ───────────────────────── */
 
 function Hero({ profile, firstSection, hasContact }: { profile: PortfolioProfile; firstSection?: SectionId; hasContact: boolean }) {
-  const { scrollY } = useScroll();
-  const y = useTransform(scrollY, [0, 600], [0, 120]);
-  const fade = useTransform(scrollY, [0, 500], [1, 0.2]);
-  const reduce = useReducedMotion();
-
   const meta: string[] = [];
   if (profile.stream) meta.push(profile.stream);
   if (profile.location) meta.push(profile.location);
@@ -268,14 +263,15 @@ function Hero({ profile, firstSection, hasContact }: { profile: PortfolioProfile
   return (
     <section className={styles.hero} id="home">
       <div className={styles.heroGlow} />
-      <motion.div className={styles.heroCopy} style={reduce ? undefined : { opacity: fade }}>
+      {/* The hero stays fully visible while scrolling: no scroll-linked fade, blur or parallax. */}
+      <div className={styles.heroCopy}>
         <motion.span className={styles.kicker} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }}>
           Student Portfolio
         </motion.span>
         <motion.h1
           className={styles.heroName}
-          initial={{ opacity: 0, y: 50, filter: 'blur(10px)' }}
-          animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, ease, delay: 0.1 }}
         >
           {profile.firstName}
@@ -330,11 +326,11 @@ function Hero({ profile, firstSection, hasContact }: { profile: PortfolioProfile
             </motion.a>
           )}
         </motion.div>
-      </motion.div>
+      </div>
 
-      <motion.div className={styles.portraitWrap} style={reduce ? undefined : { y }}>
+      <div className={styles.portraitWrap}>
         <SpotlightPortrait profile={profile} variant="hero" chips={heroChips(profile)} />
-      </motion.div>
+      </div>
     </section>
   );
 }

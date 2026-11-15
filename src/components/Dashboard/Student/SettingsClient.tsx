@@ -245,7 +245,7 @@ export default function SettingsClient({ name, email, signInMethod, initialPrefe
           {portfolio ? (
             <Switch checked={!!portfolio.published} onChange={togglePortfolio} label="Public portfolio" disabled={portfolioBusy} />
           ) : portfolio === null && !portfolioErr ? (
-            <Link href="/dashboard/student/extracurriculars" className={`${styles.btn} ${styles.btnOutline}`}>Create</Link>
+            <Link href="/dashboard/student/portfolio" className={`${styles.btn} ${styles.btnOutline}`}>Create</Link>
           ) : null}
         </div>
         <div className={styles.links}>

@@ -12,6 +12,8 @@ export interface StudentProfileHubData extends StudentProfileData {
   parentPhone?: string;
   parentEmail?: string;
   parentRelation?: string;
+  ugCourse?: string;
+  ugCompletionYear?: string;
 }
 
 interface Props {
@@ -47,9 +49,10 @@ export default function StudentProfileHub({ student, completion, nextStep, saved
   const school = student.schoolName || student.currentSchool || '';
   const location = [student.city, student.state].filter((x) => x && x !== 'Not Provided').join(', ');
   const needsStream = grade === '11' || grade === '12';
+  const isUg = grade === 'UG';
   const degree = student.degreeLevel && student.degreeLevel !== 'Not Provided' ? student.degreeLevel : '';
 
-  const chip = grade ? (needsStream ? 'Class 11/12' : `Grade ${grade}`) : 'Student';
+  const chip = grade ? (isUg ? 'Undergraduate' : needsStream ? 'Class 11/12' : `Grade ${grade}`) : 'Student';
   const completeBySection = Object.fromEntries(completion.sections.map((s) => [s.key, s.complete])) as Record<SectionKey, boolean>;
 
   const railItems: { id: string; label: string; key?: SectionKey }[] = [
@@ -182,8 +185,10 @@ export default function StudentProfileHub({ student, completion, nextStep, saved
                     : 'Set your grade to unlock your assessment'
                 }
               />
-              <Field label="School / college" value={school} />
-              <Field label="Education board" value={student.board} />
+              {isUg && <Field label="Course" value={student.ugCourse} />}
+              {isUg && <Field label="Course finishes in" value={student.ugCompletionYear} />}
+              <Field label={isUg ? 'College / university' : 'School / college'} value={school} />
+              {!isUg && <Field label="Education board" value={student.board} />}
               {(needsStream || student.stream) && <Field label="Academic stream" value={student.stream} />}
               <Field label="Expected graduation year" value={student.graduationYear} />
             </div>
@@ -278,11 +283,11 @@ export default function StudentProfileHub({ student, completion, nextStep, saved
             </div>
             <div className={styles.promo}>
               <p className={styles.promoText}>
-                Build your public portfolio from your activities, projects and awards. You have{' '}
+                Build your complete portfolio — story, activities, projects and awards — and preview it in one place. You have{' '}
                 <strong>{savedCareersCount}</strong> saved career{savedCareersCount === 1 ? '' : 's'}.
               </p>
               <div className={styles.nextActions}>
-                <Link href="/dashboard/student/extracurriculars" className={styles.ctaBtn}>Open Extracurriculars</Link>
+                <Link href="/dashboard/student/portfolio" className={styles.ctaBtn}>Open My Portfolio</Link>
                 <Link href="/dashboard/student/saved-careers" className={styles.linkBtn}>Saved careers →</Link>
               </div>
             </div>

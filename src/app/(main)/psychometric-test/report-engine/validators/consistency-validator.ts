@@ -33,7 +33,7 @@ export function validateReportDataConsistency(
       discrepancies.push(`Identity mismatch: Grade 10 variant contains non-Class-10 grade label: '${data.student.grade}'`);
     }
   } else if (variant === 'senior') {
-    if (!gradeStr.includes('12') && !gradeStr.includes('11') && !gradeStr.includes('senior')) {
+    if (!gradeStr.includes('12') && !gradeStr.includes('11') && !gradeStr.includes('senior') && gradeStr !== 'ug' && !gradeStr.includes('undergrad')) {
       discrepancies.push(`Identity mismatch: Senior variant contains non-senior grade label: '${data.student.grade}'`);
     }
   }

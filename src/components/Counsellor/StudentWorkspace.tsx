@@ -324,7 +324,7 @@ export default function StudentWorkspace({
                 letterSpacing: '0.5px',
                 textTransform: 'uppercase',
               }}>
-                {student.grade ? `Grade ${student.grade}` : (student.studentType || 'Student')}
+                {student.grade ? (String(student.grade).toUpperCase() === 'UG' ? 'Undergraduate' : `Grade ${student.grade}`) : (student.studentType || 'Student')}
               </span>
               {accessPolicy && (
                 <span style={{

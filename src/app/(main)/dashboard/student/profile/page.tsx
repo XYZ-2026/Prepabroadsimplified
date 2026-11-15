@@ -46,6 +46,8 @@ export default async function StudentProfilePage() {
     parentPhone: '',
     parentEmail: '',
     parentRelation: '',
+    ugCourse: '',
+    ugCompletionYear: '',
   };
 
   let savedCareersCount = 0;
@@ -121,6 +123,8 @@ export default async function StudentProfilePage() {
           parentPhone: data.parentPhone || '',
           parentEmail: data.parentEmail || '',
           parentRelation: data.parentRelation || '',
+          ugCourse: data.ugCourse || '',
+          ugCompletionYear: data.ugCompletionYear ? String(data.ugCompletionYear) : '',
         };
       }
     }

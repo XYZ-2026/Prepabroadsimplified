@@ -59,8 +59,8 @@ export interface PortfolioProfile {
   links: { label: string; href: string }[];
 }
 
-/** Where a student builds their own portfolio: the "Public Portfolio" card on the edit-profile page. */
-export const PORTFOLIO_BUILDER_URL = '/dashboard/student/profile/edit#portfolio';
+/** Where a student builds their own portfolio: the "My Portfolio" dashboard page. */
+export const PORTFOLIO_BUILDER_URL = '/dashboard/student/portfolio';
 
 /** Public sample portfolio (rendered from mock data, works without Wix). */
 export const SAMPLE_PORTFOLIO_URL = '/demo';

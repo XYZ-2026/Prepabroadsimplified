@@ -127,7 +127,7 @@ export default function BookADemoPage() {
               email: prev.email || u.parentEmail || u.email || '',
               phone: prev.phone || u.parentPhone || u.mobile || '',
               studentName: prev.studentName || u.studentName || (isStudent ? u.name : ''),
-              grade: prev.grade || (u.grade ? `Grade ${u.grade}` : ''),
+              grade: prev.grade || (u.grade ? (String(u.grade).toUpperCase() === 'UG' ? 'Undergraduate' : `Grade ${u.grade}`) : ''),
               schoolName: prev.schoolName || u.schoolName || u.currentSchool || '',
               board: prev.board || u.board || 'CBSE',
               stream: prev.stream || u.stream || '',

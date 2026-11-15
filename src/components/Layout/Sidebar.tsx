@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname, useSearchParams } from 'next/navigation';
-import { User, FileText, Trophy, PenLine, Bookmark, BookOpen, Brain, Search, Users, Settings } from 'lucide-react';
+import { User, Briefcase, FileText, Trophy, PenLine, Bookmark, BookOpen, Brain, Search, Users, Settings } from 'lucide-react';
 import styles from '@/styles/components.module.css';
 import { clientLogout } from '@/lib/client-logout';
 import {
@@ -17,6 +17,7 @@ import {
 
 const NAV_ICONS: Record<NavItem['icon'], React.ComponentType<{ size?: number }>> = {
   user: User,
+  portfolio: Briefcase,
   file: FileText,
   trophy: Trophy,
   pen: PenLine,

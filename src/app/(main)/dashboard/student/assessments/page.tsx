@@ -315,7 +315,7 @@ export default async function AssessmentsPage() {
 
                 // Attempt Grade (HISTORICALLY IMMUTABLE)
                 const attemptGrade = assessment.academicGradeAtAttempt 
-                  ? `Grade ${assessment.academicGradeAtAttempt}`
+                  ? (assessment.academicGradeAtAttempt === 'UG' ? 'Undergraduate' : `Grade ${assessment.academicGradeAtAttempt}`)
                   : (assessment.student?.grade || 'Class 10');
 
                 // Format strength nicely

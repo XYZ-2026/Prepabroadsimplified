@@ -953,7 +953,7 @@ export function getStudyAbroadGuideData(
   const primaryFit = scores.careerFitment?.[0] || { name: 'Science Stream – Engineering & Tech Track (PCM)', score: 90 };
   const pathwayId = resolvePathwayId(primaryFit);
   const baseDef = PATHWAY_REGISTRY[pathwayId] || PATHWAY_REGISTRY.pcm_stream;
-  const isSenior = /11|12|senior/i.test(student.grade || '');
+  const isSenior = /11|12|senior|^ug$|undergrad/i.test(student.grade || '');
   const isJunior = /7|8|9|junior|middle/i.test(student.grade || '');
 
   let rationale = '';
@@ -1015,7 +1015,7 @@ export function getAcademicProfileRoadmapData(
   student: EditorialStudent,
   scores: EditorialScores
 ): AcademicStage[] {
-  const isSenior = /11|12|senior/i.test(student.grade || '');
+  const isSenior = /11|12|senior|^ug$|undergrad/i.test(student.grade || '');
   const isJunior = /7|8|9|junior|middle/i.test(student.grade || '');
 
   if (isJunior) {
@@ -1050,7 +1050,7 @@ export function getStudentActionPlanData(
   scores: EditorialScores
 ): StudentActionPlanData {
   const firstName = (student.name || 'Candidate').split(' ')[0];
-  const isSenior = /11|12|senior/i.test(student.grade || '');
+  const isSenior = /11|12|senior|^ug$|undergrad/i.test(student.grade || '');
   const isJunior = /7|8|9|junior|middle/i.test(student.grade || '');
 
   if (isJunior) {
@@ -1132,7 +1132,7 @@ export function getPathwayRoadmapData(
   comparisonData?: AlignmentResult | null
 ): PathwayRoadmapData {
   const rank: 1 | 2 | 3 = rankLabel.includes('2') ? 2 : rankLabel.includes('3') ? 3 : 1;
-  const variant: ReportVariant = /12|senior/i.test(student.grade || '')
+  const variant: ReportVariant = /12|senior|^ug$|undergrad/i.test(student.grade || '')
     ? 'senior'
     : /7|8|9|junior/i.test(student.grade || '')
       ? 'junior'

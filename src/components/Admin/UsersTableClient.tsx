@@ -222,7 +222,7 @@ export default function UsersTableClient({ initialUsers }: { initialUsers: UserD
                   </td>
                   <td>
                     <span style={{ display: 'block', color: 'var(--text-heading)', fontWeight: 600 }}>
-                      {user.grade ? `Grade ${user.grade}` : (user.studentType || '—')}
+                      {user.grade ? (String(user.grade).toUpperCase() === 'UG' ? 'Undergraduate' : `Grade ${user.grade}`) : (user.studentType || '—')}
                     </span>
                     <span className={styles.userSubtext}>
                       {user.stream ? `${user.stream} · ` : ''}{user.city ? `${user.city}, ${user.state}` : (user.state || '—')}

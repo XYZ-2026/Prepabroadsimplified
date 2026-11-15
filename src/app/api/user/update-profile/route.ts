@@ -27,6 +27,8 @@ const STRING_FIELDS: Record<string, number> = {
   parentPhone: 20,
   parentEmail: 120,
   parentRelation: 30,
+  ugCourse: 120,
+  ugCompletionYear: 10,
 };
 
 const toCleanString = (v: unknown, max: number): string => {
@@ -62,7 +64,7 @@ export async function POST(request: Request) {
     // Validate grade if provided
     if (rawGradeInput !== undefined && rawGradeInput !== null && rawGradeInput !== '' && !normalizedGrade) {
       return NextResponse.json(
-        { error: 'Invalid academic grade. Supported grades are Grade 7 through Grade 12.' },
+        { error: 'Invalid academic grade. Supported grades are Grade 7 through Grade 12, or Undergraduate.' },
         { status: 400 }
       );
     }
@@ -88,7 +90,13 @@ export async function POST(request: Request) {
       updatePayload.academicGrade = normalizedGrade;
       const isSenior = normalizedGrade === '11' || normalizedGrade === '12';
       const isJunior = ['7', '8', '9'].includes(normalizedGrade);
-      updatePayload.studentType = isSenior ? 'high_school' : isJunior ? 'middle_school' : 'secondary_school';
+      updatePayload.studentType =
+        normalizedGrade === 'UG' ? 'undergraduate' : isSenior ? 'high_school' : isJunior ? 'middle_school' : 'secondary_school';
+      // Course details only apply to undergraduates
+      if (normalizedGrade !== 'UG') {
+        updatePayload.ugCourse = '';
+        updatePayload.ugCompletionYear = '';
+      }
     } else if (typeof body.studentType === 'string') {
       updatePayload.studentType = toCleanString(body.studentType, 30);
     }

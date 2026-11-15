@@ -837,9 +837,16 @@
   border-color: #cbd5e1;
 }
 
-.goalCardActive {
+/* Selected state must also win over :hover, otherwise a just-clicked card looks unselected */
+.goalCardActive,
+.goalCardActive:hover {
   border-color: #2563EB;
-  background: rgba(105, 11, 27, 0.04);
+  background: #EFF6FF;
+  box-shadow: 0 0 0 1px #2563EB;
+}
+
+.goalCardActive .goalCardText {
+  color: #1D4ED8;
 }
 
 .goalIcon {
@@ -883,7 +890,9 @@
   border-color: #cbd5e1;
 }
 
-.interestChipActive {
+/* :hover included so a selected chip never gets the light hover background under its white text */
+.interestChipActive,
+.interestChipActive:hover {
   background: #1e293b;
   border-color: #1e293b;
   color: #ffffff;

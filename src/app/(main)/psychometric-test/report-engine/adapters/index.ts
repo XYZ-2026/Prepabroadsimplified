@@ -49,7 +49,9 @@ export function resolveReportVariant(
     g === '11' || g === '12' || g === '11th' || g === '12th' ||
     g.includes('class 11') || g.includes('class 12') ||
     g.includes('grade 11') || g.includes('grade 12') ||
-    g.includes('senior') || g.includes('highschool') || g.includes('pre-university')
+    g.includes('senior') || g.includes('highschool') || g.includes('pre-university') ||
+    // Undergraduates take the senior assessment
+    g === 'ug' || g.includes('undergrad')
   );
   if (isSeniorGrade) {
     return 'senior';

@@ -3,12 +3,13 @@
 import { sendMail, headerSafe, escapeHtml, type MailStatus } from '@/lib/mailer';
 import { adminDb } from '@/lib/firebase-admin';
 
-const DEFAULT_LEADS_INBOX = 'support@clarvo.in';
+// Hard-coded on purpose: lead alerts always go here, with no env variable to set on the server.
+const LEADS_INBOX = 'support@clarvo.in';
 const EMAIL_RE = /^[^\s@<>"']+@[^\s@<>"']+\.[^\s@<>"']+$/;
 
-/** Where lead alerts go. Override with LEADS_NOTIFY_TO (comma-separated for several inboxes). */
+/** Where lead alerts go. */
 export function leadsInbox(): string {
-  return (process.env.LEADS_NOTIFY_TO || DEFAULT_LEADS_INBOX).trim();
+  return LEADS_INBOX;
 }
 
 export type LeadRow = [label: string, value: unknown];
@@ -110,8 +111,10 @@ export function signupLeadNotice(
       ['Role', role],
       ['Sign-up method', method],
       // Step 2 — Academic
-      ['Grade', p.grade || p.academicGrade],
-      ['School', p.currentSchool || p.schoolName || p.school],
+      ['Grade', (p.grade || p.academicGrade) === 'UG' ? 'Undergraduate' : p.grade || p.academicGrade],
+      ['School / College', p.currentSchool || p.schoolName || p.school],
+      ['Undergraduate course', p.ugCourse],
+      ['Course finishes in', p.ugCompletionYear],
       ['Board', p.board],
       ['Stream', p.stream],
       ['State', p.state],

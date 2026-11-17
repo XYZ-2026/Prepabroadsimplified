@@ -10,7 +10,7 @@ function appBaseUrl(): string {
 const EMAIL_RE = /^[^\s@<>"']+@[^\s@<>"']+\.[^\s@<>"']+$/;
 
 export async function notifySupportOfEnquiry(e: EnquiryRecord): Promise<MailStatus> {
-  const to = process.env.ENQUIRY_NOTIFY_TO || leadsInbox();
+  const to = leadsInbox();
   const adminUrl = `${appBaseUrl()}/dashboard/admin/enquiries`;
 
   const rows: [string, string][] = [

@@ -1,8 +1,7 @@
 // Builds and sends the "new consultation request" alert to the support team.
 import { sendMail, headerSafe, escapeHtml, type MailStatus } from '@/lib/mailer';
 import type { EnquiryRecord } from '@/lib/enquiry-service';
-
-const SUPPORT_FALLBACK = 'support@clarvo.in';
+import { leadsInbox } from '@/lib/lead-notification';
 
 function appBaseUrl(): string {
   return (process.env.NEXT_PUBLIC_APP_URL || 'https://clarvo.in').replace(/\/+$/, '');
@@ -11,7 +10,7 @@ function appBaseUrl(): string {
 const EMAIL_RE = /^[^\s@<>"']+@[^\s@<>"']+\.[^\s@<>"']+$/;
 
 export async function notifySupportOfEnquiry(e: EnquiryRecord): Promise<MailStatus> {
-  const to = process.env.ENQUIRY_NOTIFY_TO || SUPPORT_FALLBACK;
+  const to = process.env.ENQUIRY_NOTIFY_TO || leadsInbox();
   const adminUrl = `${appBaseUrl()}/dashboard/admin/enquiries`;
 
   const rows: [string, string][] = [
@@ -29,6 +28,7 @@ export async function notifySupportOfEnquiry(e: EnquiryRecord): Promise<MailStat
     ['Services of interest', e.clarvoExploration.join(', ') || '—'],
     ['Preferred time', e.preferredTimeFrame],
     ['Notes', e.notes || '—'],
+    ['Consent to be contacted', e.consent ? 'Yes' : 'No'],
     ['Source page', e.sourcePage || '—'],
     ['Submitted at', e.createdAt],
   ];

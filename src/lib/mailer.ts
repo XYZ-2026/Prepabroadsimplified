@@ -1,5 +1,6 @@
-// Outbound email via SMTP (Google Workspace by default). Server-only.
-// If SMTP is not configured the send is skipped — callers must never fail a user action because of email.
+// Outbound email via SMTP (Google Workspace by default), falling back to Resend's HTTP API when SMTP
+// is not configured. Server-only. If neither is configured the send is skipped — callers must never
+// fail a user action because of email.
 import nodemailer from 'nodemailer';
 import type { Transporter } from 'nodemailer';
 
@@ -15,8 +16,32 @@ export interface MailInput {
 
 const g = globalThis as unknown as { __clarvoMailer?: Transporter };
 
-export function isMailConfigured(): boolean {
+function isSmtpConfigured(): boolean {
   return Boolean(process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS);
+}
+
+export function isMailConfigured(): boolean {
+  return isSmtpConfigured() || Boolean(process.env.RESEND_API_KEY);
+}
+
+async function sendViaResend(input: MailInput): Promise<void> {
+  const res = await fetch('https://api.resend.com/emails', {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${process.env.RESEND_API_KEY}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      from: process.env.RESEND_FROM || 'CLARVO <hello@clarvo.in>',
+      to: input.to.split(',').map((t) => t.trim()).filter(Boolean),
+      subject: headerSafe(input.subject),
+      text: input.text,
+      ...(input.html ? { html: input.html } : {}),
+      ...(input.replyTo ? { reply_to: headerSafe(input.replyTo, 120) } : {}),
+    }),
+    signal: AbortSignal.timeout(15_000),
+  });
+  if (!res.ok) {
+    const body = (await res.json().catch(() => ({}))) as { message?: string };
+    throw new Error(`Resend ${res.status}: ${body.message || 'send failed'}`);
+  }
 }
 
 function getTransport(): Transporter {
@@ -43,11 +68,15 @@ export const escapeHtml = (v: string) =>
 
 export async function sendMail(input: MailInput): Promise<{ status: MailStatus; error?: string }> {
   if (!isMailConfigured()) {
-    console.warn('[Mailer] SMTP is not configured — email skipped.');
+    console.warn('[Mailer] Neither SMTP nor Resend is configured — email skipped.');
     return { status: 'skipped' };
   }
 
   try {
+    if (!isSmtpConfigured()) {
+      await sendViaResend(input);
+      return { status: 'sent' };
+    }
     const from = process.env.SMTP_FROM || `CLARVO <${process.env.SMTP_USER}>`;
     await getTransport().sendMail({
       from,

@@ -1,4 +1,5 @@
-import { NextResponse } from 'next/server';
+import { NextResponse, after } from 'next/server';
+import { notifySignupLeadOnce, signupLeadNotice } from '@/lib/lead-notification';
 import { adminDb } from '@/lib/firebase-admin';
 import { verifySessionCookie, createSessionCookie, SESSION_COOKIE_NAME } from '@/lib/auth';
 import { SESSION_TTL_SECONDS } from '@/lib/session-token';
@@ -143,6 +144,12 @@ export async function POST(request: Request) {
     const cached = pCache.get(claims.uid) || {};
     const updatedData = { ...(existing || {}), ...cached, ...updatePayload };
     pCache.set(claims.uid, updatedData);
+
+    // Google sign-ups finish the sign-up steps here: send the full lead alert once (no-op if already sent)
+    if (body.onboarding?.completed === true && existing?.onboarding?.completed !== true) {
+      const lead = { ...updatedData, email: updatedData.email || claims.email, role: roleChangedTo || updatedData.role || claims.role };
+      after(() => notifySignupLeadOnce(claims.uid, signupLeadNotice(claims.uid, lead, 'Google')));
+    }
 
     const userRole = roleChangedTo || claims.role;
     const access = getStudentPsychometricAccess(

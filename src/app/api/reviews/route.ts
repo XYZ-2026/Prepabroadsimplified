@@ -1,4 +1,5 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse, after } from 'next/server';
+import { notifyLead } from '@/lib/lead-notification';
 import { 
   createReview, 
   getReviewsByCategory, 
@@ -102,6 +103,31 @@ export async function POST(request: NextRequest) {
       consentDate: new Date().toISOString(),
       allowSchoolDisplay: Boolean(allowSchoolDisplay),
     });
+
+    after(() =>
+      notifyLead({
+        kind: 'New review submitted',
+        who: review.name,
+        replyTo: review.email,
+        rows: [
+          ['Name', review.name],
+          ['Role', review.role],
+          ['Email', review.email],
+          ['School', review.school],
+          ['Grade', review.grade],
+          ['Category', review.category],
+          ['Report type', review.reportType],
+          ['Rating', `${review.rating} / 5`],
+          ['Headline', review.headline],
+          ['Comment', review.comment],
+          ['Impact tag', review.impactTag],
+          ['Report ID', review.reportId],
+          ['Consent recorded', review.consentRecorded],
+          ['Allow school name on public review', review.allowSchoolDisplay],
+          ['Review ID', review.id],
+        ],
+      })
+    );
 
     return NextResponse.json({
       success: true,

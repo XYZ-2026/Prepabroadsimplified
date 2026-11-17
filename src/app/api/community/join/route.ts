@@ -1,4 +1,5 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse, after } from 'next/server';
+import { notifyLead } from '@/lib/lead-notification';
 import { saveCommunityLead, getCommunitySettings, validateWhatsAppUrl } from '@/lib/community-service';
 
 // In-memory deduplication cache: phone_email_campaign -> timestamp
@@ -130,6 +131,24 @@ export async function POST(req: NextRequest) {
         campaign: isCounsellor ? 'mentor_counsellor_community' : 'clarvo_student_parent_community',
       },
       { ip, userAgent }
+    );
+
+    after(() =>
+      notifyLead({
+        kind: isCounsellor ? 'New mentor/counsellor community lead' : 'New student/parent community lead',
+        who: cleanName,
+        replyTo: cleanEmail,
+        rows: [
+          ['Name', cleanName],
+          ['Phone / WhatsApp', cleanPhone],
+          ['Email', cleanEmail],
+          ...(isCounsellor
+            ? ([['LinkedIn', cleanLinkedIn]] as [string, unknown][])
+            : ([['School', cleanSchoolName], ['Grade', cleanGrade], ['Priority goal', cleanPriorityGoal]] as [string, unknown][])),
+          ['Community', isCounsellor ? 'Mentor / Counsellor' : 'Student / Parent'],
+          ['Lead ID', lead.id],
+        ],
+      })
     );
 
     // 5. Retrieve currently active WhatsApp group URL for this community

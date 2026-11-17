@@ -6,6 +6,7 @@ import { hashPassword } from '@/lib/password-utils';
 import { normalizeGrade } from '@/lib/psychometric-access-policy';
 import { rateLimit, clientIp } from '@/lib/rate-limit';
 import { sendWelcomeEmailOnce } from '@/lib/welcome-email';
+import { notifySignupLeadOnce, signupLeadNotice } from '@/lib/lead-notification';
 
 const RESERVED_EMAILS = new Set(['admin@as.com', 'counsellor@as.com']);
 
@@ -154,6 +155,9 @@ export async function POST(request: NextRequest) {
 
     // One-time welcome email (runs after the response so sign-up stays fast; deduplicated per user)
     after(() => sendWelcomeEmailOnce({ uid, email: cleanEmail, name: cleanName, role: effectiveRole }));
+
+    // Lead alert to the team with everything the user entered at sign-up (once per user)
+    after(() => notifySignupLeadOnce(uid, signupLeadNotice(uid, userProfilePayload, 'Email & password')));
 
     // Auto-allot unassigned students via SJF algorithm
     try {

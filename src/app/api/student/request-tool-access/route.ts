@@ -1,4 +1,5 @@
-import { NextResponse } from 'next/server';
+import { NextResponse, after } from 'next/server';
+import { notifyLead } from '@/lib/lead-notification';
 import { adminDb } from '@/lib/firebase-admin';
 import { requireAuth } from '@/lib/auth';
 import { FieldValue } from 'firebase-admin/firestore';
@@ -21,6 +22,21 @@ export async function POST(request: Request) {
       accessRequests: FieldValue.arrayUnion(toolId),
       updatedAt: new Date().toISOString()
     }, { merge: true });
+
+    after(() =>
+      notifyLead({
+        kind: 'New tool access request',
+        who: claims.name || claims.email || claims.uid,
+        replyTo: claims.email,
+        rows: [
+          ['Name', claims.name],
+          ['Email', claims.email],
+          ['Tool', String(toolName).slice(0, 100)],
+          ['Tool ID', String(toolId).slice(0, 60)],
+          ['User ID', claims.uid],
+        ],
+      })
+    );
 
     return NextResponse.json({ success: true, message: 'Request sent successfully' });
   } catch (error: any) {

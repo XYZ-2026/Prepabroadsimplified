@@ -14,11 +14,15 @@ import { doc, setDoc, getDoc, serverTimestamp } from 'firebase/firestore';
 import styles from '@/styles/auth.module.css';
 import componentsStyles from '@/styles/components.module.css';
 import {
+  ACADEMIC_GRADES,
   AcademicGrade,
   formatGradeLabel,
   getStudentPsychometricAccess,
   normalizeGrade
 } from '@/lib/psychometric-access-policy';
+
+// Expected completion years offered to undergraduates (this year + 6).
+const UG_COMPLETION_YEARS = Array.from({ length: 7 }, (_, i) => String(new Date().getFullYear() + i));
 
 type Tab = 'login' | 'register' | 'forgot';
 
@@ -145,6 +149,10 @@ export default function AuthForm({ defaultTab, redirectTo }: AuthFormProps = {})
   const [regStream, setRegStream] = useState('');
   const [regState, setRegState] = useState('');
   const [regCity, setRegCity] = useState('');
+  // Undergraduate-only details
+  const [regUgCourse, setRegUgCourse] = useState('');
+  const [regUgYear, setRegUgYear] = useState('');
+  const isUgSelected = regGrade === 'UG';
 
   // Step 3: Goals & Interests
   const [regGoals, setRegGoals] = useState<string[]>(['Career Exploration', 'University Discovery']);
@@ -280,6 +288,12 @@ export default function AuthForm({ defaultTab, redirectTo }: AuthFormProps = {})
       if (existingProfileData?.city) {
         setRegCity(existingProfileData.city);
       }
+      if (existingProfileData?.ugCourse) {
+        setRegUgCourse(existingProfileData.ugCourse);
+      }
+      if (existingProfileData?.ugCompletionYear) {
+        setRegUgYear(String(existingProfileData.ugCompletionYear));
+      }
       if (existingProfileData?.goals?.length) {
         setRegGoals(existingProfileData.goals);
       }
@@ -317,8 +331,14 @@ export default function AuthForm({ defaultTab, redirectTo }: AuthFormProps = {})
 
     const cleanEmail = regEmail.trim().toLowerCase();
     const normalizedGrade = regRole === 'student' && regGrade ? normalizeGrade(regGrade) : null;
-    const finalBoard = regBoard === 'Other' && regCustomBoard.trim() ? regCustomBoard.trim() : regBoard;
+    const isUg = normalizedGrade === 'UG';
+    // School boards don't apply to undergraduates
+    const finalBoard = isUg ? '' : regBoard === 'Other' && regCustomBoard.trim() ? regCustomBoard.trim() : regBoard;
     const isSenior = normalizedGrade === '11' || normalizedGrade === '12';
+    const ugFields = {
+      ugCourse: isUg ? regUgCourse.trim() : '',
+      ugCompletionYear: isUg ? regUgYear : '',
+    };
 
     try {
       // 1. Client-side Firestore non-blocking update
@@ -339,6 +359,7 @@ export default function AuthForm({ defaultTab, redirectTo }: AuthFormProps = {})
             stream: isSenior ? regStream : '',
             state: regState,
             city: regCity.trim(),
+            ...ugFields,
             goals: regGoals,
             declaredInterests: regInterests,
             updatedAt: serverTimestamp(),
@@ -365,6 +386,7 @@ export default function AuthForm({ defaultTab, redirectTo }: AuthFormProps = {})
           stream: isSenior ? regStream : '',
           state: regState,
           city: regCity.trim(),
+          ...ugFields,
           goals: regGoals,
           declaredInterests: regInterests,
           onboarding: { completed: true, completedAt: new Date().toISOString() },
@@ -503,14 +525,24 @@ export default function AuthForm({ defaultTab, redirectTo }: AuthFormProps = {})
     setError('');
     if (regRole === 'student') {
       if (!regGrade) {
-        setError('Please select your current grade (Grade 7 to 12)');
+        setError("Please select the student's current grade (Grade 7 to 12 or Undergraduate)");
         return;
+      }
+      if (regGrade === 'UG') {
+        if (!regUgCourse.trim()) {
+          setError('Please enter the undergraduate course (e.g. B.Tech Computer Science)');
+          return;
+        }
+        if (!regUgYear) {
+          setError('Please select the year the course will finish');
+          return;
+        }
       }
       if (!regSchool.trim()) {
-        setError('Please enter your school or institution name');
+        setError(regGrade === 'UG' ? 'Please enter your college or university name' : 'Please enter your school or institution name');
         return;
       }
-      if (regBoard === 'Other' && !regCustomBoard.trim()) {
+      if (regGrade !== 'UG' && regBoard === 'Other' && !regCustomBoard.trim()) {
         setError('Please specify your education board');
         return;
       }
@@ -562,8 +594,14 @@ export default function AuthForm({ defaultTab, redirectTo }: AuthFormProps = {})
 
     const cleanEmail = regEmail.trim().toLowerCase();
     const normalizedGrade = regRole === 'student' && regGrade ? normalizeGrade(regGrade) : null;
-    const finalBoard = regBoard === 'Other' && regCustomBoard.trim() ? regCustomBoard.trim() : regBoard;
+    const isUg = normalizedGrade === 'UG';
+    // School boards don't apply to undergraduates
+    const finalBoard = isUg ? '' : regBoard === 'Other' && regCustomBoard.trim() ? regCustomBoard.trim() : regBoard;
     const isSenior = normalizedGrade === '11' || normalizedGrade === '12';
+    const ugFields = {
+      ugCourse: isUg ? regUgCourse.trim() : '',
+      ugCompletionYear: isUg ? regUgYear : '',
+    };
 
     try {
       // 1. Create account in Firebase Auth client-side
@@ -609,6 +647,7 @@ export default function AuthForm({ defaultTab, redirectTo }: AuthFormProps = {})
             stream: isSenior ? regStream : '',
             state: regState,
             city: regCity.trim(),
+            ...ugFields,
             goals: regGoals,
             declaredInterests: regInterests,
             toolAccess: {
@@ -642,6 +681,7 @@ export default function AuthForm({ defaultTab, redirectTo }: AuthFormProps = {})
           stream: isSenior ? regStream : '',
           state: regState,
           city: regCity.trim(),
+          ...ugFields,
           goals: regGoals,
           declaredInterests: regInterests,
         }),
@@ -1057,36 +1097,70 @@ export default function AuthForm({ defaultTab, redirectTo }: AuthFormProps = {})
               {/* Prominent Grade Selector */}
               <div className={styles.gradeSectionWrapper}>
                 <div className={styles.gradeGridLabel}>
-                  <span>I'm Currently In:</span>
-                  {regGrade && <span style={{ color: '#690b1b' }}>Selected: Grade {regGrade}</span>}
+                  <span>Student is currently in:</span>
+                  {regGrade && <span style={{ color: '#690b1b' }}>Selected: {formatGradeLabel(regGrade)}</span>}
                 </div>
                 <div className={styles.gradeGrid}>
-                  {(['7', '8', '9', '10', '11', '12'] as AcademicGrade[]).map(grade => {
+                  {ACADEMIC_GRADES.map(grade => {
                     const isSelected = regGrade === grade;
+                    const isUg = grade === 'UG';
                     const isJunior = ['7', '8', '9'].includes(grade);
                     const isClass10 = grade === '10';
-                    const isSenior = ['11', '12'].includes(grade);
                     return (
                       <div
                         key={grade}
                         onClick={() => {
                           setRegGrade(grade);
-                          if (['7', '8', '9', '10'].includes(grade)) {
+                          // Stream only applies to Grades 11 & 12
+                          if (grade !== '11' && grade !== '12') {
                             setRegStream('');
                           }
                         }}
                         className={`${styles.gradeCard} ${isSelected ? styles.gradeCardActive : ''}`}
+                        style={isUg ? { gridColumn: '1 / -1' } : undefined}
                       >
                         {isSelected && <span className={styles.gradeCardBadge}>✓</span>}
-                        <span className={styles.gradeCardNumber}>Grade {grade}</span>
+                        <span className={styles.gradeCardNumber}>{isUg ? 'Undergraduate' : `Grade ${grade}`}</span>
                         <span className={styles.gradeCardSub}>
-                          {isJunior ? 'Class 7–9' : isClass10 ? 'Class 10' : 'Senior'}
+                          {isUg ? 'College / University' : isJunior ? 'Class 7–9' : isClass10 ? 'Class 10' : 'Senior'}
                         </span>
                       </div>
                     );
                   })}
                 </div>
               </div>
+
+              {/* Undergraduate details: course + expected completion year */}
+              {isUgSelected && (
+                <div className={styles.formRow} style={{ marginTop: '0.9rem' }}>
+                  <div className={styles.formGroup}>
+                    <label htmlFor="reg-ug-course">Course</label>
+                    <input
+                      type="text"
+                      id="reg-ug-course"
+                      required
+                      maxLength={120}
+                      placeholder="e.g. B.Tech Computer Science, B.Com, BA Economics"
+                      value={regUgCourse}
+                      onChange={(e) => setRegUgCourse(e.target.value)}
+                    />
+                  </div>
+                  <div className={styles.formGroup}>
+                    <label htmlFor="reg-ug-year">Course Finishes In</label>
+                    <select
+                      id="reg-ug-year"
+                      required
+                      value={regUgYear}
+                      onChange={(e) => setRegUgYear(e.target.value)}
+                    >
+                      <option value="" disabled>Select Year</option>
+                      {UG_COMPLETION_YEARS.map(y => (
+                        <option key={y} value={y}>{y}</option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+              )}
 
               {/* Senior Stream Selector for 11-12 */}
               {(regGrade === '11' || regGrade === '12') && (
@@ -1114,18 +1188,19 @@ export default function AuthForm({ defaultTab, redirectTo }: AuthFormProps = {})
 
               {/* School Name */}
               <div className={styles.formGroup} style={{ marginTop: '0.9rem' }}>
-                <label htmlFor="reg-school">School / College Name</label>
+                <label htmlFor="reg-school">{isUgSelected ? 'College / University Name' : 'School / College Name'}</label>
                 <input
                   type="text"
                   id="reg-school"
                   required
-                  placeholder="e.g. Delhi Public School, R.K. Puram"
+                  placeholder={isUgSelected ? 'e.g. St. Stephen\'s College, University of Delhi' : 'e.g. Delhi Public School, R.K. Puram'}
                   value={regSchool}
                   onChange={(e) => setRegSchool(e.target.value)}
                 />
               </div>
 
-              {/* Board Selection */}
+              {/* Board Selection (school students only) */}
+              {!isUgSelected && (
               <div className={styles.formGroup}>
                 <label>Education Board</label>
                 <div className={styles.boardPillsWrapper}>
@@ -1151,6 +1226,7 @@ export default function AuthForm({ defaultTab, redirectTo }: AuthFormProps = {})
                   />
                 )}
               </div>
+              )}
 
               {/* State and City */}
               <div className={styles.formRow}>
@@ -1328,18 +1404,26 @@ export default function AuthForm({ defaultTab, redirectTo }: AuthFormProps = {})
                   <div className={styles.summaryItem}>
                     <span className={styles.summaryItemLabel}>Academic Stage</span>
                     <span className={styles.summaryItemValue}>
-                      {regGrade ? `Grade ${regGrade}` : 'Student'}
-                      {regStream ? ` (${regStream})` : ''}
+                      {regGrade ? formatGradeLabel(regGrade) : 'Student'}
+                      {!isUgSelected && regStream ? ` (${regStream})` : ''}
+                      {isUgSelected && regUgYear ? ` · finishing ${regUgYear}` : ''}
                     </span>
                   </div>
+                  {isUgSelected ? (
+                    <div className={styles.summaryItem}>
+                      <span className={styles.summaryItemLabel}>Course</span>
+                      <span className={styles.summaryItemValue}>{regUgCourse || 'Not provided'}</span>
+                    </div>
+                  ) : (
+                    <div className={styles.summaryItem}>
+                      <span className={styles.summaryItemLabel}>Education Board</span>
+                      <span className={styles.summaryItemValue}>
+                        {regBoard === 'Other' && regCustomBoard ? regCustomBoard : regBoard}
+                      </span>
+                    </div>
+                  )}
                   <div className={styles.summaryItem}>
-                    <span className={styles.summaryItemLabel}>Education Board</span>
-                    <span className={styles.summaryItemValue}>
-                      {regBoard === 'Other' && regCustomBoard ? regCustomBoard : regBoard}
-                    </span>
-                  </div>
-                  <div className={styles.summaryItem}>
-                    <span className={styles.summaryItemLabel}>School / Institution</span>
+                    <span className={styles.summaryItemLabel}>{isUgSelected ? 'College / University' : 'School / Institution'}</span>
                     <span className={styles.summaryItemValue} style={{ textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }}>
                       {regSchool || 'Not provided'}
                     </span>

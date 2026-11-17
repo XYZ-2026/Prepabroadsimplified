@@ -4,9 +4,6 @@ import { redirect } from 'next/navigation';
 import { adminDb } from '@/lib/firebase-admin';
 import { verifySessionCookie } from '@/lib/auth';
 import UpdateProfileForm from '@/components/Dashboard/Student/UpdateProfileForm';
-import PortfolioEditor from '@/components/Dashboard/Student/PortfolioEditor';
-import { getPortfolioByUid } from '@/lib/portfolio-service';
-import type { PortfolioRecord } from '@/components/portfolio/portfolioTypes';
 import styles from '@/styles/student-dashboard.module.css';
 
 export const metadata: Metadata = { title: 'Update Profile' };
@@ -39,6 +36,8 @@ export default async function EditProfilePage() {
     parentRelation: '',
     parentPhone: '',
     parentEmail: '',
+    ugCourse: '',
+    ugCompletionYear: '',
   };
 
   try {
@@ -67,6 +66,8 @@ export default async function EditProfilePage() {
           parentRelation: data.parentRelation || '',
           parentPhone: data.parentPhone || '',
           parentEmail: data.parentEmail || '',
+          ugCourse: data.ugCourse || '',
+          ugCompletionYear: data.ugCompletionYear ? String(data.ugCompletionYear) : '',
         };
       }
     }
@@ -74,18 +75,7 @@ export default async function EditProfilePage() {
     console.error('Error fetching user profile for update:', error);
   }
 
-  // Student portfolio (Wix CMS "StudentPortfolios", one row per student)
   const isStudent = claims.role === 'student';
-  let portfolio: PortfolioRecord | null = null;
-  let portfolioLoadFailed = false;
-  if (isStudent) {
-    try {
-      portfolio = await getPortfolioByUid(claims.uid);
-    } catch (error) {
-      portfolioLoadFailed = true;
-      console.error('Error fetching student portfolio:', error);
-    }
-  }
 
   return (
     <div className={styles.dashboardContent}>
@@ -100,22 +90,19 @@ export default async function EditProfilePage() {
       <UpdateProfileForm initialData={initialData} />
 
       {isStudent && (
-        <PortfolioEditor
-          initialRecord={portfolio}
-          loadFailed={portfolioLoadFailed}
-          title="Public Portfolio — Profile & Story"
-          sections={['basics', 'photo', 'about', 'academics', 'journey', 'links']}
-          defaults={{
-            fullName: initialData.name,
-            grade: /^\d+$/.test(String(initialData.grade).trim())
-              ? `Grade ${String(initialData.grade).trim()}`
-              : initialData.grade,
-            stream: initialData.stream || initialData.board,
-            school: initialData.currentSchool,
-            city: initialData.city,
-            email: initialData.email,
-          }}
-        />
+        <div className={styles.card}>
+          <div className={styles.cardBody} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16, flexWrap: 'wrap' }}>
+            <div>
+              <h2 className={styles.cardTitle} style={{ margin: 0 }}>Your Portfolio</h2>
+              <p style={{ fontSize: 13, color: '#64748b', margin: '4px 0 0 0' }}>
+                Your photo, story, activities, projects and achievements are now all in one place.
+              </p>
+            </div>
+            <Link href="/dashboard/student/portfolio" style={{ fontSize: 14, fontWeight: 700, color: '#2563eb', textDecoration: 'none' }}>
+              Open My Portfolio →
+            </Link>
+          </div>
+        </div>
       )}
     </div>
   );

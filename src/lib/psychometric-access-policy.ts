@@ -3,7 +3,13 @@
 // Central Single Source of Truth
 // ═══════════════════════════════════════════════════════════
 
-export type AcademicGrade = '7' | '8' | '9' | '10' | '11' | '12';
+/** School grades 7–12, plus 'UG' for students currently in an undergraduate degree. */
+export type AcademicGrade = '7' | '8' | '9' | '10' | '11' | '12' | 'UG';
+
+/** Display order for grade pickers. */
+export const ACADEMIC_GRADES: AcademicGrade[] = ['7', '8', '9', '10', '11', '12', 'UG'];
+
+export const isUndergraduate = (grade: unknown): boolean => normalizeGrade(grade) === 'UG';
 
 export type AssessmentVariant = 'JUNIOR_7_9' | 'CLASS_10' | 'SENIOR_12';
 
@@ -50,10 +56,10 @@ export const ASSESSMENT_DEFINITIONS: Record<AssessmentVariant, AssessmentDefinit
     routeType: 'senior',
     name: 'Senior / Class 12 Career Alignment Psychometric Assessment',
     shortName: 'Senior / Class 12 Assessment',
-    targetGrades: ['11', '12'],
-    targetDescription: 'Designed for Class 11 & 12 students',
+    targetGrades: ['11', '12', 'UG'],
+    targetDescription: 'Designed for Class 11 & 12 students and undergraduates',
     href: '/psychometric-test?type=senior',
-    lockedReason: 'Available for Class 11 & 12 students',
+    lockedReason: 'Available for Class 11 & 12 students and undergraduates',
   },
 };
 
@@ -67,15 +73,22 @@ export const GRADE_TO_PSYCHOMETRIC_MAP: Record<AcademicGrade, AssessmentVariant>
   '10': 'CLASS_10',
   '11': 'SENIOR_12',
   '12': 'SENIOR_12',
+  // Undergraduates take the senior career-alignment assessment (closest fit for degree-stage decisions).
+  UG: 'SENIOR_12',
 };
 
 /**
- * Normalizes any grade string/number representation into canonical "7" | "8" | "9" | "10" | "11" | "12".
- * Returns null if not a valid school grade 7..12.
+ * Normalizes any grade string/number representation into canonical "7".."12" or "UG" (undergraduate).
+ * Returns null if not a valid grade.
  */
 export function normalizeGrade(input: unknown): AcademicGrade | null {
   if (input === null || input === undefined) return null;
   const str = String(input).trim().toLowerCase();
+
+  // Undergraduate (checked first so words like "graduation" never fall through to digit/word matching)
+  if (str === 'ug' || str.includes('undergrad') || str.includes('under graduate') || str.includes('under-graduate')) {
+    return 'UG';
+  }
 
   // Direct digits
   if (['7', '8', '9', '10', '11', '12'].includes(str)) {
@@ -109,6 +122,7 @@ export function normalizeGrade(input: unknown): AcademicGrade | null {
 export function formatGradeLabel(grade: unknown): string {
   const norm = normalizeGrade(grade);
   if (!norm) return 'Not Specified';
+  if (norm === 'UG') return 'Undergraduate';
   return `Grade ${norm}`;
 }
 

@@ -197,7 +197,7 @@ export default function CounsellorStudentsClient({ students, iqResults, psychoRe
                     </td>
                     <td>
                       <span style={{ display: 'block', color: 'var(--text-heading)', fontWeight: 600 }}>
-                        {student.grade ? `Grade ${student.grade}` : (student.studentType || '—')}
+                        {student.grade ? (String(student.grade).toUpperCase() === 'UG' ? 'Undergraduate' : `Grade ${student.grade}`) : (student.studentType || '—')}
                       </span>
                       <span className={styles.userSubtext}>
                         {student.stream ? `${student.stream} · ` : ''}{student.city}{student.city && student.state ? ', ' : ''}{student.state}

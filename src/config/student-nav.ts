@@ -5,13 +5,14 @@ export interface NavItem {
   href: string;
   /** 'exact' = pathname must equal href; 'prefix' = pathname starts with href */
   match: 'exact' | 'prefix';
-  icon: 'user' | 'file' | 'trophy' | 'pen' | 'bookmark' | 'book' | 'brain' | 'search' | 'users' | 'settings';
+  icon: 'user' | 'portfolio' | 'file' | 'trophy' | 'pen' | 'bookmark' | 'book' | 'brain' | 'search' | 'users' | 'settings';
 }
 
 export const STUDENT_DASHBOARD_ITEMS: NavItem[] = [
   { label: 'My Profile', href: '/dashboard/student/profile', match: 'prefix', icon: 'user' },
+  // Whole portfolio (profile & story + activities/extracurriculars) is built and previewed here.
+  { label: 'My Portfolio', href: '/dashboard/student/portfolio', match: 'prefix', icon: 'portfolio' },
   { label: 'My Assessments', href: '/dashboard/student/assessments', match: 'exact', icon: 'file' },
-  { label: 'Extracurriculars', href: '/dashboard/student/extracurriculars', match: 'prefix', icon: 'trophy' },
   { label: 'SOP & Essays', href: '/dashboard/student/essays', match: 'prefix', icon: 'pen' },
   { label: 'Saved Careers', href: '/dashboard/student/saved-careers', match: 'prefix', icon: 'bookmark' },
 ];

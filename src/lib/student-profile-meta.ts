@@ -10,6 +10,7 @@ export interface ProfileMetaInput {
   currentSchool?: string;
   board?: string;
   stream?: string;
+  ugCourse?: string;
   city?: string;
   state?: string;
   goals?: string[];
@@ -40,6 +41,7 @@ const has = (v: unknown) => typeof v === 'string' && v.trim() !== '' && v.trim()
 export function computeProfileCompletion(p: ProfileMetaInput): CompletionResult {
   const grade = normalizeGrade(p.grade);
   const needsStream = grade === '11' || grade === '12';
+  const isUg = grade === 'UG';
 
   const checks: { section: SectionKey; label: string; ok: boolean }[] = [
     { section: 'personal', label: 'Full name', ok: has(p.name) },
@@ -48,7 +50,10 @@ export function computeProfileCompletion(p: ProfileMetaInput): CompletionResult 
     { section: 'personal', label: 'State', ok: has(p.state) },
     { section: 'academics', label: 'Academic grade', ok: !!grade },
     { section: 'academics', label: 'School / college', ok: has(p.schoolName) || has(p.currentSchool) },
-    { section: 'academics', label: 'Education board', ok: has(p.board) },
+    // Undergraduates give their course instead of a school board
+    isUg
+      ? { section: 'academics' as SectionKey, label: 'Undergraduate course', ok: has(p.ugCourse) }
+      : { section: 'academics' as SectionKey, label: 'Education board', ok: has(p.board) },
     ...(needsStream ? [{ section: 'academics' as SectionKey, label: 'Academic stream', ok: has(p.stream) }] : []),
     { section: 'goals', label: 'Goals or interests', ok: (p.goals?.length || 0) > 0 || (p.declaredInterests?.length || 0) > 0 },
     { section: 'abroad', label: 'Target countries', ok: has(p.targetCountries) },
@@ -106,7 +111,7 @@ export function computeNextStep(i: NextStepInput): NextStep {
     return {
       id: 'complete-profile',
       title: 'Complete your profile',
-      body: 'Add your current grade so we can unlock the right psychometric assessment for you.',
+      body: 'Add your current grade (or undergraduate course) so we can unlock the right psychometric assessment for you.',
       cta: 'Update profile',
       href: '/dashboard/student/profile/edit',
     };

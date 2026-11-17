@@ -35,6 +35,8 @@ export async function POST(request: NextRequest) {
       stream,
       state,
       city,
+      ugCourse,
+      ugCompletionYear,
       goals = [],
       declaredInterests = [],
     } = body;
@@ -106,6 +108,7 @@ export async function POST(request: NextRequest) {
     // Normalize grade and stream for students
     const normalizedGrade = effectiveRole === 'student' && grade ? normalizeGrade(grade) : null;
     const isSenior = normalizedGrade === '11' || normalizedGrade === '12';
+    const isUg = normalizedGrade === 'UG';
 
     const str = (v: unknown, max: number) => (typeof v === 'string' ? v.trim().slice(0, max) : '');
     const strList = (v: unknown) =>
@@ -121,8 +124,11 @@ export async function POST(request: NextRequest) {
       city: str(city, 60),
       currentSchool: str(school, 120),
       schoolName: str(school, 120),
-      board: str(board, 60) || 'CBSE',
+      // School boards don't apply to undergraduates
+      board: isUg ? '' : str(board, 60) || 'CBSE',
       stream: isSenior ? str(stream, 60) : '',
+      ugCourse: isUg ? str(ugCourse, 120) : '',
+      ugCompletionYear: isUg ? str(ugCompletionYear, 10) : '',
       goals: strList(goals),
       declaredInterests: strList(declaredInterests),
       onboarding: {
@@ -144,7 +150,7 @@ export async function POST(request: NextRequest) {
     if (normalizedGrade) {
       userProfilePayload.grade = normalizedGrade;
       userProfilePayload.academicGrade = normalizedGrade;
-      userProfilePayload.studentType = isSenior ? 'Class 11/12' : `Grade ${normalizedGrade}`;
+      userProfilePayload.studentType = isUg ? 'Undergraduate' : isSenior ? 'Class 11/12' : `Grade ${normalizedGrade}`;
     }
 
     try {

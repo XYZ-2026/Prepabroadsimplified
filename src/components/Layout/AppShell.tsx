@@ -23,6 +23,8 @@ export default function AppShell({ children, userRole, userName, userEmail }: Ap
     pathname.startsWith('/psychometric-test/result') ||
     pathname.startsWith('/psychometric-test/sample-report') ||
     pathname.startsWith('/sample-report') ||
+    // Student's private portfolio preview renders full-screen, like the public portfolio page
+    pathname === '/dashboard/student/portfolio/preview' ||
     (pathname === '/psychometric-test' && searchParams.has('resultId'));
 
   const isLandingView = 

@@ -129,7 +129,7 @@ export function getPathwayRoadmapData(
   comparisonData?: AlignmentResult | null
 ): PathwayRoadmapData {
   const rank: 1 | 2 | 3 = rankLabel.includes('2') ? 2 : rankLabel.includes('3') ? 3 : 1;
-  const variant = /12|senior/i.test(student.grade || '') ? 'senior' : /7|8|9|junior/i.test(student.grade || '') ? 'junior' : 'grade10';
+  const variant = /12|senior|^ug$|undergrad/i.test(student.grade || '') ? 'senior' : /7|8|9|junior/i.test(student.grade || '') ? 'junior' : 'grade10';
 
   // Build a careerFitment list ensuring rank index matches
   let fitmentList = scores?.careerFitment ? [...scores.careerFitment] : [];

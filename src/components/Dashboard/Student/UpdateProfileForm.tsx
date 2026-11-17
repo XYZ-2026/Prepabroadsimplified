@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import styles from '@/styles/student-dashboard.module.css';
 import componentsStyles from '@/styles/components.module.css';
 import { 
+  ACADEMIC_GRADES,
   AcademicGrade, 
   formatGradeLabel, 
   getStudentPsychometricAccess, 
@@ -32,7 +33,12 @@ export interface ProfileData {
   parentRelation?: string;
   parentPhone?: string;
   parentEmail?: string;
+  ugCourse?: string;
+  ugCompletionYear?: string;
 }
+
+// Expected completion years offered to undergraduates (this year + 6).
+const UG_COMPLETION_YEARS = Array.from({ length: 7 }, (_, i) => String(new Date().getFullYear() + i));
 
 const BOARD_OPTIONS = ['CBSE', 'ICSE', 'State Board', 'IB', 'Cambridge', 'Other'];
 
@@ -75,6 +81,7 @@ export default function UpdateProfileForm({ initialData }: { initialData: Profil
 
   const currentNormalizedGrade = normalizeGrade(formData.grade);
   const isSeniorGrade = currentNormalizedGrade === '11' || currentNormalizedGrade === '12';
+  const isUgGrade = currentNormalizedGrade === 'UG';
   const access = getStudentPsychometricAccess(formData.grade);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -98,7 +105,10 @@ export default function UpdateProfileForm({ initialData }: { initialData: Profil
     setSuccess('');
 
     try {
-      const finalBoard = formData.board === 'Other' && customBoard.trim() ? customBoard.trim() : formData.board;
+      // School boards don't apply to undergraduates
+      const finalBoard = isUgGrade
+        ? ''
+        : formData.board === 'Other' && customBoard.trim() ? customBoard.trim() : formData.board;
 
       const payload = {
         ...formData,
@@ -232,10 +242,10 @@ export default function UpdateProfileForm({ initialData }: { initialData: Profil
           {/* Grade Selector */}
           <div style={{ marginBottom: '20px' }}>
             <label style={{ display: 'block', fontSize: '13px', fontWeight: 700, color: '#1e293b', marginBottom: '8px' }}>
-              Current Academic Grade:
+              Student is currently in:
             </label>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(100px, 1fr))', gap: '8px' }}>
-              {(['7', '8', '9', '10', '11', '12'] as AcademicGrade[]).map(g => {
+              {ACADEMIC_GRADES.map(g => {
                 const isSelected = formData.grade === g;
                 return (
                   <button
@@ -255,7 +265,7 @@ export default function UpdateProfileForm({ initialData }: { initialData: Profil
                       textAlign: 'center',
                     }}
                   >
-                    Grade {g}
+                    {formatGradeLabel(g)}
                   </button>
                 );
               })}
@@ -282,10 +292,45 @@ export default function UpdateProfileForm({ initialData }: { initialData: Profil
             </div>
           </div>
 
+          {/* Undergraduate course details */}
+          {isUgGrade && (
+            <div className={styles.formRow}>
+              <div className={styles.formGroup}>
+                <label htmlFor="ugCourse">Course</label>
+                <input
+                  type="text"
+                  id="ugCourse"
+                  name="ugCourse"
+                  required
+                  maxLength={120}
+                  value={formData.ugCourse || ''}
+                  onChange={handleChange}
+                  placeholder="e.g. B.Tech Computer Science"
+                />
+              </div>
+              <div className={styles.formGroup}>
+                <label htmlFor="ugCompletionYear">Course Finishes In</label>
+                <select
+                  id="ugCompletionYear"
+                  name="ugCompletionYear"
+                  required
+                  value={formData.ugCompletionYear || ''}
+                  onChange={handleChange}
+                >
+                  <option value="" disabled>Select Year</option>
+                  {/* Keep a previously saved year selectable even if it falls outside the default range */}
+                  {Array.from(new Set([...(formData.ugCompletionYear ? [formData.ugCompletionYear] : []), ...UG_COMPLETION_YEARS])).map(y => (
+                    <option key={y} value={y}>{y}</option>
+                  ))}
+                </select>
+              </div>
+            </div>
+          )}
+
           {/* School Name & Board */}
           <div className={styles.formRow}>
             <div className={styles.formGroup}>
-              <label htmlFor="currentSchool">School / College Name</label>
+              <label htmlFor="currentSchool">{isUgGrade ? 'College / University Name' : 'School / College Name'}</label>
               <input
                 type="text"
                 id="currentSchool"
@@ -296,6 +341,7 @@ export default function UpdateProfileForm({ initialData }: { initialData: Profil
                 placeholder="e.g. Delhi Public School"
               />
             </div>
+            {!isUgGrade && (
             <div className={styles.formGroup}>
               <label htmlFor="board">Education Board</label>
               <select
@@ -310,9 +356,10 @@ export default function UpdateProfileForm({ initialData }: { initialData: Profil
                 ))}
               </select>
             </div>
+            )}
           </div>
 
-          {formData.board === 'Other' && (
+          {!isUgGrade && formData.board === 'Other' && (
             <div className={styles.formRow} style={{ marginTop: '-8px' }}>
               <div className={styles.formGroup} style={{ width: '100%' }}>
                 <label htmlFor="customBoard">Specify Board Name</label>

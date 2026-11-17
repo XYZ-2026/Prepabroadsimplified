@@ -187,6 +187,7 @@ export default function PortfolioEditor({
   sections,
   title = 'My Portfolio',
   startHidden = false,
+  previewHref,
 }: {
   initialRecord: PortfolioRecord | null;
   defaults: PortfolioDefaults;
@@ -196,6 +197,8 @@ export default function PortfolioEditor({
   title?: string;
   /** New records are created unpublished (used when the student has not chosen to go public yet). */
   startHidden?: boolean;
+  /** When set, a "Preview" link to the student's private portfolio preview is shown once a portfolio is saved. */
+  previewHref?: string;
 }) {
   const show = (key: PortfolioSection) => !sections || sections.includes(key);
   const [state, setState] = useState<EditorState>(() => {
@@ -347,6 +350,11 @@ export default function PortfolioEditor({
             <button type="button" className={ui.urlBtn} onClick={copyUrl}>
               {copied ? 'Copied!' : 'Copy'}
             </button>
+            {previewHref && (
+              <a className={ui.urlBtn} href={previewHref} target="_blank" rel="noopener noreferrer">
+                Preview ↗
+              </a>
+            )}
             {savedPublished && (
               <a className={ui.urlBtn} href={`/${savedUsername}`} target="_blank" rel="noopener noreferrer">
                 Open ↗
@@ -605,11 +613,15 @@ export default function PortfolioEditor({
             >
               {saving ? 'Saving Portfolio...' : 'Save Portfolio'}
             </button>
-            {portfolioUrl && savedPublished && (
+            {savedUsername && previewHref ? (
+              <a href={previewHref} target="_blank" rel="noopener noreferrer" style={{ fontSize: 14, fontWeight: 600 }}>
+                View my portfolio ↗
+              </a>
+            ) : portfolioUrl && savedPublished ? (
               <a href={`/${savedUsername}`} target="_blank" rel="noopener noreferrer" style={{ fontSize: 14, fontWeight: 600 }}>
                 View my portfolio ↗
               </a>
-            )}
+            ) : null}
           </div>
         </form>
       </div>

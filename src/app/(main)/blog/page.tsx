@@ -6,6 +6,7 @@ import BlogListClient from "./BlogListClient";
 import LandingNavbar from "@/components/landing/LandingNavbar";
 import LandingFooter from "@/components/landing/LandingFooter";
 import { Sparkles, BookOpen, BookmarkCheck, ArrowRight } from "lucide-react";
+import WhatsAppFloatingButton from "@/components/landing/WhatsAppFloatingButton";
 
 export const revalidate = 300;
 
@@ -163,6 +164,9 @@ export default async function BlogIndexPage() {
 
       {/* ── FOOTER ──────────────────────────────────────────────── */}
       <LandingFooter />
+
+      {/* FLOATING WHATSAPP CHAT */}
+      <WhatsAppFloatingButton />
     </div>
   );
 }

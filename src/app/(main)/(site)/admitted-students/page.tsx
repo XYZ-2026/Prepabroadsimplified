@@ -8,6 +8,7 @@ import { SearchForm, FilterChips, Pagination, parsePage, first } from '@/compone
 import { AdmittedCard, AdmittedHero } from '@/components/Dashboard/Library/AdmittedViews';
 import AuthGate from '@/components/Auth/AuthGate';
 import PortfolioCTA from '@/components/Auth/PortfolioCTA';
+import WhatsAppFloatingButton from "@/components/landing/WhatsAppFloatingButton";
 
 /** Grid slot (0-based) where the "build your own portfolio" card appears. */
 const CTA_SLOT = 5;
@@ -113,6 +114,8 @@ export default async function PublicAdmittedStudentsPage({
       )}
 
       <PortfolioCTA signedIn={signedIn} variant="band" />
+
+      <WhatsAppFloatingButton />
     </div>
   );
 }

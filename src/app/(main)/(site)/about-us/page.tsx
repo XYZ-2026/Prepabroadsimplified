@@ -23,6 +23,7 @@ import {
   Phone
 } from 'lucide-react';
 import { COMPANY_CONFIG } from '@/config/company';
+import WhatsAppFloatingButton from "@/components/landing/WhatsAppFloatingButton";
 
 export const metadata: Metadata = {
   title: 'About Us — Study Abroad & Admissions Counsellors, Mumbai & Kolkata',
@@ -576,6 +577,7 @@ export default function AboutUsPage() {
         </div>
       </section>
 
+      <WhatsAppFloatingButton />
     </div>
   );
 }

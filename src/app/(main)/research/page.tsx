@@ -16,6 +16,7 @@ import ResearchFAQ from '@/components/Research/ResearchFAQ';
 import ResearchCTA from '@/components/Research/ResearchCTA';
 import { RESEARCH_CONTENT, bookCallHref } from '@/content/researchContent';
 import '@/components/PsychometricAssessment/psychometric.css';
+import WhatsAppFloatingButton from "@/components/landing/WhatsAppFloatingButton";
 
 const TITLE = 'Research Programs for High School Students | CLARVO';
 const DESCRIPTION =
@@ -110,6 +111,7 @@ export default function ResearchPage() {
             label={RESEARCH_CONTENT.bookCall.label}
             secondary={RESEARCH_CONTENT.stickyBar.secondary}
           />
+          <WhatsAppFloatingButton raisedOnMobile />
         </div>
       </MotionProvider>
     </SmoothScrollProvider>

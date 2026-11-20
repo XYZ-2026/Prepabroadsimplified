@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import LandingNavbar from '@/components/landing/LandingNavbar';
 import LandingFooter from '@/components/landing/LandingFooter';
+import WhatsAppFloatingButton from '@/components/landing/WhatsAppFloatingButton';
 
 const HOME_TITLE = 'Study Abroad & Admissions Counselling for Grades 7–12 | CLARVO';
 const HOME_DESC =
@@ -122,6 +123,9 @@ export default function HomePage() {
 
       {/* FOOTER */}
       <LandingFooter />
+
+      {/* FLOATING WHATSAPP CHAT */}
+      <WhatsAppFloatingButton />
     </div>
   );
 }

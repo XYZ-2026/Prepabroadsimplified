@@ -92,7 +92,7 @@ export default function SupportBento() {
           {/* TILE 2: Psychometric Assessments & Diagnostics (5 Cols on Desktop) */}
           <div 
             id="assessments"
-            className="scroll-mt-24 lg:col-span-5 bg-white rounded-[24px] sm:rounded-[28px] border border-[#DDE3F0] p-6 sm:p-8 flex flex-col justify-between hover:border-[#1258DE] transition-all duration-200 group shadow-xs hover:shadow-clarvo-elevated"
+            className="relative scroll-mt-24 lg:col-span-5 bg-white rounded-[24px] sm:rounded-[28px] border border-[#DDE3F0] p-6 sm:p-8 flex flex-col justify-between hover:border-[#1258DE] transition-all duration-200 group shadow-xs hover:shadow-clarvo-elevated"
           >
             <div>
               <div className="flex flex-wrap items-center gap-2 mb-4">
@@ -108,7 +108,13 @@ export default function SupportBento() {
                 <div className="w-8 h-8 rounded-xl bg-[#E6EDFF] flex items-center justify-center text-[#1258DE]">
                   <Brain className="w-4 h-4" />
                 </div>
-                <Link href="/psychometric-assessment" className="hover:text-[#1258DE] transition-colors">
+                {/* Stretched link: its ::after covers the whole tile so a tap anywhere
+                    opens the assessment page. The two pills below sit above it (z-10). */}
+                <Link
+                  href="/psychometric-assessment"
+                  data-testid="psychometric-tile-link"
+                  className="hover:text-[#1258DE] transition-colors focus-visible:outline-none after:content-[''] after:absolute after:inset-0 after:z-[5] after:rounded-[24px] sm:after:rounded-[28px] focus-visible:after:ring-2 focus-visible:after:ring-[#1258DE] focus-visible:after:ring-offset-2"
+                >
                   <h3 className="text-xl sm:text-2xl font-dmsans font-bold text-[#12131C] tracking-tight group-hover:text-[#1258DE] transition-colors">
                     Psychometric diagnostics
                   </h3>
@@ -133,16 +139,16 @@ export default function SupportBento() {
             >
               <div className="absolute inset-0 bg-gradient-to-t from-[#171822]/40 via-transparent to-transparent pointer-events-none" />
 
-              <div className="absolute bottom-3 left-4 right-4 flex flex-wrap sm:flex-nowrap items-center justify-between gap-2 text-white text-xs font-dmsans font-bold pointer-events-auto">
+              <div className="absolute bottom-3 left-4 right-4 flex flex-wrap sm:flex-nowrap items-center justify-between gap-2 text-white text-xs font-dmsans font-bold">
                 <Link
                   href="/psychometric-assessment"
-                  className="bg-[#171822]/80 backdrop-blur-md px-3 py-1 rounded-full border border-white/20 hover:bg-[#171822] transition-colors"
+                  className="pointer-events-auto bg-[#171822]/80 backdrop-blur-md px-3 py-1 rounded-full border border-white/20 hover:bg-[#171822] transition-colors"
                 >
                   Explore 4 phases
                 </Link>
                 <Link
-                  href="/psychometric-test"
-                  className="inline-flex items-center gap-1 text-white bg-[#1258DE] px-3 py-1 rounded-full hover:bg-[#0D4ABF] transition-colors"
+                  href="/psychometric-assessment"
+                  className="pointer-events-auto inline-flex items-center gap-1 text-white bg-[#1258DE] px-3 py-1 rounded-full hover:bg-[#0D4ABF] transition-colors"
                 >
                   <span>Take diagnostic</span>
                   <ArrowRight className="w-3.5 h-3.5" />

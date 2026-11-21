@@ -67,6 +67,11 @@
   overscroll-behavior-x: contain;
   scrollbar-width: none;
   -webkit-overflow-scrolling: touch;
+  /* Keep the off-screen cards from widening the page. Without this, Chromium
+   * counts the row's scroll width in body.scrollWidth (~1050px at 412px wide)
+   * despite the page wrapper's overflow-x: clip, and Android Chrome zooms the
+   * page out and lets it pan sideways. */
+  contain: paint;
 }
 .psy-swipe::-webkit-scrollbar {
   display: none;

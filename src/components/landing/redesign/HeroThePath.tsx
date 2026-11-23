@@ -7,6 +7,12 @@ import { Compass, Sparkles, MessageSquare, ArrowRight, FileText } from 'lucide-r
 import { useReducedMotionPreference } from '@/hooks/useReducedMotionPreference';
 import Button from './primitives/Button';
 
+const HERO_STATS = [
+  { value: '15,000+', label: 'Students guided' },
+  { value: '100+', label: 'Career specialisations' },
+  { value: '98%', label: 'Parent clarity rating' },
+];
+
 export default function HeroThePath() {
   const containerRef = useRef<HTMLElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
@@ -231,33 +237,15 @@ export default function HeroThePath() {
               </Button>
             </div>
 
-            {/* Trust Metrics Row */}
-            <div className="hero-trust grid grid-cols-3 gap-2 sm:gap-4 border-t border-[#DDE3F0] pt-4 sm:pt-5 mt-6 sm:mt-8">
-              <div>
-                <div className="text-[17px] sm:text-[21px] font-dmsans font-bold text-[#12131C] tracking-tight">
-                  15,000+
+            {/* Trust metrics: same wording as StatsStripCountup. The label comes first for screen readers. */}
+            <dl className="hero-trust grid grid-cols-3 xl:grid-cols-[auto_auto_auto] gap-3 xl:gap-6 border-0 border-t border-solid border-[#DDE3F0] pt-4 sm:pt-5 mt-6 sm:mt-8 mb-0 font-dmsans">
+              {HERO_STATS.map((stat) => (
+                <div key={stat.label} className="flex flex-col-reverse justify-end">
+                  <dt className="mt-1 text-[14px] font-medium leading-snug text-[#5B6275]">{stat.label}</dt>
+                  <dd className="m-0 text-[22px] sm:text-[26px] font-bold leading-none tracking-tight text-[#12131C]">{stat.value}</dd>
                 </div>
-                <div className="text-[11px] sm:text-[12px] font-medium text-[#5B6275] mt-0.5 leading-tight">
-                  guided
-                </div>
-              </div>
-              <div>
-                <div className="text-[17px] sm:text-[21px] font-dmsans font-bold text-[#12131C] tracking-tight">
-                  100+
-                </div>
-                <div className="text-[11px] sm:text-[12px] font-medium text-[#5B6275] mt-0.5 leading-tight">
-                  careers
-                </div>
-              </div>
-              <div>
-                <div className="text-[17px] sm:text-[21px] font-dmsans font-bold text-[#12131C] tracking-tight">
-                  98%
-                </div>
-                <div className="text-[11px] sm:text-[12px] font-medium text-[#5B6275] mt-0.5 leading-tight">
-                  parents clearer
-                </div>
-              </div>
-            </div>
+              ))}
+            </dl>
 
           </div>
 

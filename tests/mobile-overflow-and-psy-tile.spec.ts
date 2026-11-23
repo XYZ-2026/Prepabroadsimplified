@@ -243,3 +243,41 @@ test.describe('home page: career roadmaps tile (signed in)', () => {
     await expect(page.getByRole('dialog')).toHaveCount(0);
   });
 });
+
+test.describe('home page: hero stats', () => {
+  const STATS = [
+    ['15,000+', 'Students guided'],
+    ['100+', 'Career specialisations'],
+    ['98%', 'Parent clarity rating'],
+  ];
+
+  for (const width of [360, 390, 768, 1024, 1440, 1920]) {
+    test(`say what each number means, in the brand font, and fit at ${width}px`, async ({ page }) => {
+      await page.setViewportSize({ width, height: 900 });
+      await page.goto('/', { waitUntil: 'networkidle' });
+      const row = page.locator('.hero-trust');
+      const pairs = await row.locator('> div').evaluateAll((els) =>
+        els.map((e) => [e.querySelector('dd')?.textContent?.trim(), e.querySelector('dt')?.textContent?.trim()]),
+      );
+      expect(pairs).toEqual(STATS);
+
+      const labels = await row.locator('dt').evaluateAll((els) =>
+        els.map((e) => ({ font: getComputedStyle(e).fontFamily, size: parseFloat(getComputedStyle(e).fontSize), cut: e.scrollWidth > e.clientWidth })),
+      );
+      for (const l of labels) {
+        expect(l.font).toContain('DM Sans');
+        expect(l.size).toBeGreaterThanOrEqual(14);
+        expect(l.cut).toBe(false);
+      }
+      expect(await row.evaluate((e) => getComputedStyle(e).borderTopStyle + getComputedStyle(e).borderTopWidth)).toBe('solid1px');
+      const tops = await row.locator('dd').evaluateAll((els) => els.map((e) => Math.round(e.getBoundingClientRect().top)));
+      expect(new Set(tops).size).toBe(1); // numbers line up even when a label wraps
+    });
+  }
+
+  test('use the same words as the stats strip further down', async ({ page }) => {
+    await page.goto('/', { waitUntil: 'networkidle' });
+    const strip = page.getByRole('region', { name: 'Clarvo Key Statistics' });
+    for (const [, label] of STATS) await expect(strip.getByText(label, { exact: true })).toHaveCount(1);
+  });
+});

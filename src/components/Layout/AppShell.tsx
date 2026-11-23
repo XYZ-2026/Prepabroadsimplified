@@ -39,6 +39,7 @@ export default function AppShell({ children, userRole, userName, userEmail }: Ap
     pathname.startsWith('/demo-confirmation') ||
     pathname.startsWith('/sample-reports') ||
     pathname === '/research' ||
+    pathname === '/summer-school' ||
     pathname.startsWith('/admitted-students') ||
     pathname.startsWith('/research/');
 

@@ -110,6 +110,9 @@ export function signupLeadNotice(
       ['Mobile', p.mobile],
       ['Role', role],
       ['Sign-up method', method],
+      ['Signed up from', p.signupForm === 'popup' ? 'Sign-up popup' : 'Sign-up page'],
+      ['Parent / guardian', p.parentName],
+      ['Parent consent', p.parentConsent?.given === true],
       // Step 2 — Academic
       ['Grade', (p.grade || p.academicGrade) === 'UG' ? 'Undergraduate' : p.grade || p.academicGrade],
       ['School / College', p.currentSchool || p.schoolName || p.school],

@@ -1,7 +1,7 @@
 /** Sign the user out of Firebase (if signed in client-side) and clear the server session cookie. */
 export async function clientLogout(redirectTo: string = '/') {
   try {
-    const { auth } = await import('@/lib/firebase');
+    const { auth } = await import('@/lib/firebase-auth');
     const { signOut } = await import('firebase/auth');
     await signOut(auth).catch(() => {});
   } catch {

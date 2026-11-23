@@ -1,15 +1,8 @@
 'use client';
 
-import React, { createContext, useContext, useEffect, useRef, useState } from 'react';
-import Lenis from 'lenis';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import React, { createContext, useContext, useEffect, useState } from 'react';
+import type Lenis from 'lenis';
 import { useReducedMotionPreference } from '@/hooks/useReducedMotionPreference';
-
-// Ensure ScrollTrigger is registered with GSAP
-if (typeof window !== 'undefined') {
-  gsap.registerPlugin(ScrollTrigger);
-}
 
 interface SmoothScrollContextValue {
   lenis: Lenis | null;
@@ -41,35 +34,53 @@ export default function SmoothScrollProvider({ children }: SmoothScrollProviderP
       return;
     }
 
-    // 3. Initialize Lenis instance
-    const lenis = new Lenis({
-      duration: 1.15,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      orientation: 'vertical',
-      gestureOrientation: 'vertical',
-      smoothWheel: true,
-      wheelMultiplier: 1.0,
-      touchMultiplier: 0, // Explicitly disable touch hijacking
-    });
+    // 3. Load Lenis and GSAP only now: phones stop above, so they never download them.
+    let cancelled = false;
+    let cleanUp = () => {};
 
-    setLenisInstance(lenis);
+    const start = async () => {
+      const [{ default: LenisClass }, { default: gsap }, { ScrollTrigger }] = await Promise.all([
+        import('lenis'),
+        import('gsap'),
+        import('gsap/ScrollTrigger'),
+      ]);
+      if (cancelled) return;
+      gsap.registerPlugin(ScrollTrigger);
 
-    // 4. Synchronize Lenis scroll position with GSAP ScrollTrigger
-    lenis.on('scroll', ScrollTrigger.update);
+      const lenis = new LenisClass({
+        duration: 1.15,
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        orientation: 'vertical',
+        gestureOrientation: 'vertical',
+        smoothWheel: true,
+        wheelMultiplier: 1.0,
+        touchMultiplier: 0, // Explicitly disable touch hijacking
+      });
+      setLenisInstance(lenis);
 
-    // 5. Connect Lenis render frame to GSAP ticker for single unified animation loop
-    const updateTicker = (time: number) => {
-      lenis.raf(time * 1000);
+      // 4. Synchronize Lenis scroll position with GSAP ScrollTrigger
+      lenis.on('scroll', ScrollTrigger.update);
+
+      // 5. Connect Lenis render frame to GSAP ticker for single unified animation loop
+      const updateTicker = (time: number) => {
+        lenis.raf(time * 1000);
+      };
+      gsap.ticker.add(updateTicker);
+      gsap.ticker.lagSmoothing(0);
+
+      cleanUp = () => {
+        gsap.ticker.remove(updateTicker);
+        lenis.destroy();
+        setLenisInstance(null);
+      };
     };
-
-    gsap.ticker.add(updateTicker);
-    gsap.ticker.lagSmoothing(0);
+    // If the download fails, the page simply keeps normal browser scrolling.
+    start().catch(() => {});
 
     // 6. Cleanup on unmount
     return () => {
-      gsap.ticker.remove(updateTicker);
-      lenis.destroy();
-      setLenisInstance(null);
+      cancelled = true;
+      cleanUp();
     };
   }, [prefersReducedMotion]);
 

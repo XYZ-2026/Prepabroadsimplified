@@ -295,6 +295,7 @@ export default function HeroThePath() {
                   alt="CLARVO students exploring tailored career and academic streams"
                   width={1448}
                   height={1086}
+                  sizes="(min-width: 1280px) 700px, (min-width: 1024px) 56vw, 100vw"
                   priority
                   fetchPriority="high"
                   loading="eager"

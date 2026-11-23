@@ -120,7 +120,7 @@ test.describe('home page: research tile opens the research page', () => {
 });
 
 test.describe('home page: services carousel', () => {
-  const ORDER = ['assessments', 'research-tile', 'entrepreneurship-tile', 'sat-tile', 'career-roadmaps-tile'];
+  const ORDER = ['assessments', 'research-tile', 'summer-school-tile', 'sat-tile', 'career-roadmaps-tile'];
 
   test('cards appear in the agreed order', async ({ page }) => {
     await page.goto('/', { waitUntil: 'networkidle' });
@@ -136,7 +136,7 @@ test.describe('home page: services carousel', () => {
         return `${c.fontSize}|${c.fontWeight}|${c.fontFamily}`;
       }),
     );
-    expect(styles).toHaveLength(4); // the entrepreneurship title has no link
+    expect(styles).toHaveLength(5);
     expect(new Set(styles.slice(2)).size).toBe(1); // SAT and stream cards are the same size
     for (const s of styles) expect(s.split('|')[1]).toBe('700');
   });
@@ -183,12 +183,11 @@ test.describe('home page: services carousel', () => {
     await expect(page).toHaveURL(/\/book-a-demo\?from=home:services-sat$/);
   });
 
-  test('entrepreneurship card has no destination yet, so tapping it stays put', async ({ page }) => {
+  test('summer school card opens its page', async ({ page }) => {
     await page.setViewportSize({ width: 412, height: 915 });
     await page.goto('/', { waitUntil: 'networkidle' });
-    await tapCentre(page, '#entrepreneurship-tile p', 'Learn by building');
-    await page.waitForTimeout(500);
-    await expect(page).toHaveURL(/\/$/);
+    await tapCentre(page, '#summer-school-tile p', 'Mentor-guided programmes');
+    await expect(page).toHaveURL(/\/summer-school$/, { timeout: 20000 }); // first visit compiles the page in dev
   });
 });
 

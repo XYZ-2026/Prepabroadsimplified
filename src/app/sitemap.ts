@@ -14,6 +14,7 @@ const STATIC_PAGES: { path: string; changeFrequency: Freq; priority: number }[] 
   { path: '', changeFrequency: 'weekly', priority: 1.0 },
   { path: '/psychometric-assessment', changeFrequency: 'monthly', priority: 0.9 },
   { path: '/research', changeFrequency: 'monthly', priority: 0.9 },
+  { path: '/summer-school', changeFrequency: 'monthly', priority: 0.9 },
   { path: '/admitted-students', changeFrequency: 'weekly', priority: 0.8 },
   { path: '/discover', changeFrequency: 'monthly', priority: 0.7 },
   { path: '/career-library', changeFrequency: 'monthly', priority: 0.7 },

@@ -18,7 +18,7 @@ const CAREER_LIBRARY_URL = '/career-library';
 const STRETCHED =
   "focus-visible:outline-none after:content-[''] after:absolute after:inset-0 after:z-[5] after:rounded-[24px] sm:after:rounded-[28px] focus-visible:after:ring-2 focus-visible:after:ring-[#1258DE] focus-visible:after:ring-offset-2";
 
-type CardAction = { href: string } | { onClick: () => void } | null;
+type CardAction = { href: string } | { onClick: () => void };
 
 interface ServiceCardProps {
   id: string;
@@ -140,7 +140,7 @@ export default function SupportBento() {
         <div className="mb-10 sm:mb-14 max-w-3xl">
           <SectionHeading
             title="Study abroad, admissions & profile building support for every stage"
-            subtitle="From psychometric assessment and stream choice to SAT prep, research and summer programs, founder-led entrepreneurship and admissions to Indian and global universities—every programme is engineered for student ambition and family clarity."
+            subtitle="From psychometric assessment and stream choice to SAT prep, research and summer programs, summer school certifications and admissions to Indian and global universities—every programme is engineered for student ambition and family clarity."
           />
         </div>
 
@@ -196,27 +196,25 @@ export default function SupportBento() {
             action={{ href: '/research' }}
           />
 
-          {/* 3. Entrepreneurship programme (no dedicated page yet, so not clickable) */}
+          {/* 3. Summer school & certifications */}
           <ServiceCard
-            id="entrepreneurship-tile"
+            id="summer-school-tile"
             span="lg:col-span-4"
             chips={[
-              { label: '1 Year', variant: 'sky' },
-              { label: 'Online', variant: 'paper' },
-              { label: 'Grades 8–12', variant: 'paper' },
+              { label: 'Grades 8–12', variant: 'sky' },
+              { label: 'Summer', variant: 'paper' },
             ]}
             Icon={Rocket}
-            title="Entrepreneurship programme"
-            description="Learn by building. High-school students ideate, validate and launch genuine ventures with guidance from active startup founders, real product sprints, and venture mentor sessions."
+            title="Summer School & Certifications"
+            description="Mentor-guided programmes in business, technology, research and leadership. Students finish with a pitch, prototype, paper or project they can show."
             image={{
-              src: '/images/home/08-building-product.webp',
-              alt: 'High school students building real-world ventures in Clarvo Entrepreneurship Programme',
+              src: '/images/summer-school/business.webp',
+              alt: 'Student pitching a prototype to classmates',
               focalPoint: '55% 50%',
               sizes: '(max-width: 1024px) 88vw, 32vw',
             }}
-            photoLabel="Founder mentorship & venture demo day"
-            ctaLabel="Learn more"
-            action={null}
+            ctaLabel="Explore programmes"
+            action={{ href: '/summer-school' }}
           />
 
           {/* 4. Digital SAT: leads to an enquiry; `from` tells the admin which button it came from */}

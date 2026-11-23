@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
+import { preload } from 'react-dom';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter, usePathname } from 'next/navigation';
@@ -81,10 +82,9 @@ const PROGRAMS: MenuItem[] = [
     icon: Briefcase,
   },
   {
-    label: 'Summer Programs',
-    desc: 'Find and apply to selective summer programs worldwide.',
-    href: '/#programs',
-    scrollTo: 'programs',
+    label: 'Summer School & Certifications',
+    desc: 'Business, technology, research and leadership programmes.',
+    href: '/summer-school',
     icon: Sun,
   },
   {
@@ -146,6 +146,8 @@ const PANEL =
 const MOBILE_LINK = 'flex items-center justify-between px-3.5 py-2 rounded-xl text-[14.5px] transition-colors';
 
 export default function LandingNavbar() {
+  // Every public page shows this bar and uses DM Sans above the fold.
+  preload('/fonts/dm-sans-latin.woff2', { as: 'font', type: 'font/woff2', crossOrigin: 'anonymous' });
   const router = useRouter();
   const pathname = usePathname();
   const sessionUser = useSessionUser();

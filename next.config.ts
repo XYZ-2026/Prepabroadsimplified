@@ -7,6 +7,13 @@ const nextConfig: NextConfig = {
     root: path.resolve(__dirname),
   },
   allowedDevOrigins: ['127.0.0.1', 'localhost', '192.168.137.1'],
+  async headers() {
+    return [
+      { source: '/fonts/:path*', headers: [{ key: 'Cache-Control', value: 'public, max-age=31536000, immutable' }] },
+      // A week: to change a photo straight away, give the new file a new name.
+      { source: '/images/:path*', headers: [{ key: 'Cache-Control', value: 'public, max-age=604800, stale-while-revalidate=86400' }] },
+    ];
+  },
   async redirects() {
     return [
       {

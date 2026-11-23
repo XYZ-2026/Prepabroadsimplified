@@ -76,7 +76,7 @@ export const RESERVED_USERNAMES = new Set([
   'parent-assessment', 'signup', 'admin', 'demo', 'login', 'logout', 'register', 'settings',
   'robots', 'sitemap', 'manifest', 'favicon', 'static', 'public', 'www', 'help', 'support',
   'portfolio', 'portfolios', 'admitted', 'courses', 'course', 'resume', 'student', 'students', 'counsellor', 'contact', 'home', 'clarvo',
-  'research', 'admitted-students',
+  'research', 'summer-school', 'admitted-students',
   'null', 'undefined', '_next',
 ]);
 

@@ -1,0 +1,62 @@
+.ss-page {
+  --ss-navy: #0b1d45;
+  --ss-light: #8fb1ff;
+}
+
+/* ── Hero orbit: keyframes are generated in SummerSchoolHero from the ellipse formula ── */
+.ss-orbit {
+  container-type: inline-size;
+}
+/* One shared 3D space (without perspective) for the student, lines and cards. */
+.ss-stage {
+  transform-style: preserve-3d;
+}
+.ss-orbit-card {
+  position: absolute;
+  left: 50%;
+  top: 57%;
+  width: clamp(92px, 27cqw, 168px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 8px;
+  text-align: center;
+  animation: ss-orbit 36s linear infinite;
+  animation-delay: calc(var(--i) * -6s);
+  will-change: transform;
+}
+/* Icon beside the label once the stage is wide enough for it. */
+@container (min-width: 520px) {
+  .ss-orbit-card {
+    flex-direction: row;
+    gap: 10px;
+    padding: 12px;
+    text-align: left;
+  }
+  .ss-orbit-card > span:last-child {
+    font-size: 14px;
+  }
+}
+/* Pointing at or touching a card holds the orbit so it can be read. */
+.ss-orbit:has(.ss-orbit-card:hover) .ss-orbit-card {
+  animation-play-state: paused;
+}
+
+/* Steps: the new panel slides in from the side the visitor moved towards. */
+.ss-panel-in {
+  animation: ss-panel-in 0.25s ease-out;
+}
+@keyframes ss-panel-in {
+  from { opacity: 0; transform: translateX(calc(var(--dir, 1) * 24px)); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* Paused, not removed: the delays still spread the cards around the student. */
+  .ss-orbit-card {
+    animation-play-state: paused;
+  }
+  .ss-panel-in {
+    animation: none;
+  }
+}

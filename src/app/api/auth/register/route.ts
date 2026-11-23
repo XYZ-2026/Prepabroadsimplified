@@ -7,6 +7,7 @@ import { normalizeGrade } from '@/lib/psychometric-access-policy';
 import { rateLimit, clientIp } from '@/lib/rate-limit';
 import { sendWelcomeEmailOnce } from '@/lib/welcome-email';
 import { notifySignupLeadOnce, signupLeadNotice } from '@/lib/lead-notification';
+import { normalizeQuickSignUp, validateQuickSignUp, parentConsentRecord } from '@/lib/quick-signup';
 
 const RESERVED_EMAILS = new Set(['admin@as.com', 'counsellor@as.com']);
 
@@ -41,6 +42,15 @@ export async function POST(request: NextRequest) {
       declaredInterests = [],
     } = body;
 
+    // The popup's short form: every field it shows is required, checked with the same rules as the browser.
+    const isQuickForm = body.signupForm === 'quick';
+    const quick = isQuickForm ? normalizeQuickSignUp(body) : null;
+    if (quick) {
+      const errors = validateQuickSignUp(quick, { requirePassword: true });
+      const first = Object.values(errors)[0];
+      if (first) return NextResponse.json({ error: first, fields: errors }, { status: 400 });
+    }
+
     // Validation
     const cleanEmail = typeof email === 'string' ? email.trim().toLowerCase() : '';
     if (!cleanEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(cleanEmail)) {
@@ -61,8 +71,8 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Please enter your full name.' }, { status: 400 });
     }
 
-    // Role safety: strictly student or counsellor (never public admin escalation)
-    const effectiveRole: 'student' | 'counsellor' = role === 'counsellor' ? 'counsellor' : 'student';
+    // Role safety: strictly student or counsellor (never public admin escalation). The popup only signs up students.
+    const effectiveRole: 'student' | 'counsellor' = !isQuickForm && role === 'counsellor' ? 'counsellor' : 'student';
 
     // A client-supplied uid is honoured ONLY when it matches a verified Firebase ID token for this email.
     let verifiedUid: string | null = null;
@@ -125,7 +135,8 @@ export async function POST(request: NextRequest) {
       currentSchool: str(school, 120),
       schoolName: str(school, 120),
       // School boards don't apply to undergraduates
-      board: isUg ? '' : str(board, 60) || 'CBSE',
+      // The popup doesn't ask for a board, so don't record a guessed one.
+      board: isUg || isQuickForm ? '' : str(board, 60) || 'CBSE',
       stream: isSenior ? str(stream, 60) : '',
       ugCourse: isUg ? str(ugCourse, 120) : '',
       ugCompletionYear: isUg ? str(ugCompletionYear, 10) : '',
@@ -146,6 +157,12 @@ export async function POST(request: NextRequest) {
       createdAt: new Date(),
       updatedAt: new Date(),
     };
+
+    if (quick) {
+      userProfilePayload.parentName = quick.parentName;
+      userProfilePayload.parentConsent = parentConsentRecord(quick.parentName, 'Email & password');
+      userProfilePayload.signupForm = 'popup';
+    }
 
     if (normalizedGrade) {
       userProfilePayload.grade = normalizedGrade;

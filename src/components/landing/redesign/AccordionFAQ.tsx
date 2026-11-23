@@ -57,9 +57,9 @@ const FAQS_DATA: FAQItem[] = [
     tag: 'Objective Advisory',
   },
   {
-    q: 'What is the Entrepreneurship Programme format and duration?',
-    a: 'The Entrepreneurship Programme runs for 1 year online for high-school students in Grades 8 through 12. Students work with active startup founders, ideating, validating prototypes, and launching real-world initiatives without disrupting school schedules.',
-    tag: 'Entrepreneurship',
+    q: 'What is Summer School & Certifications?',
+    a: 'A set of mentor-guided programmes in business, technology, research and leadership for students in Grades 8 to 12. Each one ends with work the student can show, such as a pitch, prototype, paper or project.',
+    tag: 'Summer School',
   },
 ];
 

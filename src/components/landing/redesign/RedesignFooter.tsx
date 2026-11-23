@@ -82,6 +82,7 @@ export default function RedesignFooter() {
                 { label: 'Grades 11–12 Admissions', href: '/discover' },
                 { label: '1-to-1 Private Tutoring', href: '/book-a-demo' },
                 { label: 'High School Research', href: '/research' },
+                { label: 'Summer School & Certifications', href: '/summer-school' },
               ].map((item) => (
                 <li key={item.label}>
                   <Link

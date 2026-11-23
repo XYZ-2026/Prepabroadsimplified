@@ -5,6 +5,7 @@ import { verifySessionCookie, createSessionCookie, SESSION_COOKIE_NAME } from '@
 import { SESSION_TTL_SECONDS } from '@/lib/session-token';
 import { normalizeGrade, getStudentPsychometricAccess } from '@/lib/psychometric-access-policy';
 import { isSameOrigin } from '@/lib/rate-limit';
+import { normalizeQuickSignUp, validateQuickSignUp, parentConsentRecord } from '@/lib/quick-signup';
 
 // Allow-listed free-text fields and their maximum lengths.
 // Only keys PRESENT in the request body are written, so partial updates
@@ -78,6 +79,17 @@ export async function POST(request: Request) {
 
     if (updatePayload.parentEmail && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(updatePayload.parentEmail)) {
       return NextResponse.json({ error: 'Please enter a valid parent / guardian email address.' }, { status: 400 });
+    }
+
+    // Google sign-ups from the popup: the same required fields and parent consent as the email form.
+    if (body.signupForm === 'quick') {
+      const quick = normalizeQuickSignUp({ ...body, school: body.schoolName ?? body.currentSchool, email: claims.email });
+      const errors = validateQuickSignUp(quick, { requirePassword: false });
+      const first = Object.values(errors)[0];
+      if (first) return NextResponse.json({ error: first, fields: errors }, { status: 400 });
+      updatePayload.parentName = quick.parentName;
+      updatePayload.parentConsent = parentConsentRecord(quick.parentName, 'Google');
+      updatePayload.signupForm = 'popup';
     }
 
     if (body.schoolName !== undefined || body.currentSchool !== undefined) {

@@ -109,7 +109,7 @@
   /* Typography */
   --next-font-primary: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   --next-font-heading: 'Lexend', -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-dm-sans: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-dm-sans: 'DM Sans', 'DM Sans Fallback', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-anton: 'Anton', Impact, sans-serif;
   --font-primary: var(--next-font-primary), 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-heading: var(--next-font-heading), 'Lexend', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -332,13 +332,18 @@ body:has(.report-viewer-shell) .page-transition,
 }
 
 @keyframes pageSlideIn {
+  /* No fade: starting from white hid finished pages and delayed the main image. */
   from {
-    opacity: 0;
     transform: translateY(20px);
   }
   to {
-    opacity: 1;
     transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-transition {
+    animation: none;
   }
 }
 

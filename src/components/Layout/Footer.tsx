@@ -61,7 +61,7 @@ export default function Footer() {
           <Link href="/university-finder?country=Australia">Australia Guide</Link>
         </div>
         <div className={styles.footerCol}>
-          <h4>Company & Locations</h4>
+          <h4>Company & Location</h4>
           <Link href="/about-us">About Us</Link>
           <Link href="/book-a-demo">Schedule Consultation</Link>
           <Link href="/terms">Terms of Service</Link>
@@ -69,8 +69,6 @@ export default function Footer() {
           <div className="mt-3 text-[11px] text-slate-500 space-y-1">
             <p className="font-semibold text-slate-700">Head Office:</p>
             <p className="text-[10.5px] leading-tight text-slate-500">Chand Society, Juhu, Mumbai 400049</p>
-            <p className="font-semibold text-slate-700 mt-2">Kolkata Branch:</p>
-            <p className="text-[10.5px] leading-tight text-slate-500">Pottery Road, Kolkata 700015</p>
           </div>
         </div>
       </div>

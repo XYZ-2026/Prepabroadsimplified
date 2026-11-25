@@ -1,0 +1,27 @@
+/* Plays once when the band scrolls into view: the line under "for free", then one line splitting
+ * into the four decisions, then the decisions themselves. Finished state is the default. */
+.free-line {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+}
+.free-band[data-draw='waiting'] .free-line {
+  stroke-dashoffset: 1;
+}
+.free-band[data-draw='waiting'] .free-tree {
+  transform: scaleY(0);
+}
+.free-band[data-draw='waiting'] .free-tool {
+  opacity: 0;
+  transform: translateY(8px);
+}
+.free-band[data-draw='drawing'] .free-line {
+  transition: stroke-dashoffset 0.4s ease-out;
+}
+.free-band[data-draw='drawing'] .free-tree {
+  transition: transform 0.3s ease-out 0.2s;
+}
+.free-band[data-draw='drawing'] .free-tool {
+  transition:
+    opacity 0.25s ease-out 0.4s,
+    transform 0.25s ease-out 0.4s;
+}

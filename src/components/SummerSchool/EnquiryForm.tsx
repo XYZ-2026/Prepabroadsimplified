@@ -5,24 +5,64 @@ import { Field, FieldError, FormNotice, inputClass, primaryButtonClass } from '@
 import { SUMMER_SCHOOL_GRADES, SUMMER_SCHOOL_NAME } from '@/content/summerSchoolContent';
 import { isValidMobile } from '@/lib/quick-signup';
 
-const EMPTY = { parentName: '', studentName: '', phone: '', email: '', grade: '', schoolName: '', companyWebsite: '' };
+const EMPTY = { programme: '', parentName: '', studentName: '', phone: '', email: '', grade: '', schoolName: '', month: '', time: '', companyWebsite: '' };
 type Errors = Partial<Record<keyof typeof EMPTY | 'consent', string>>;
 
+const TIMES = ['Weekday mornings', 'Weekday afternoons', 'Weekday evenings', 'Not sure yet'];
+
+interface EnquiryFormProps {
+  /** Shows a programme picker when given. */
+  programmes?: { slug: string; name: string }[];
+  /** Slug of the programme this page is about. */
+  selected?: string;
+  /** Upcoming months: turns the form into a batch request. */
+  months?: string[];
+}
+
 /** Order matters: after a failed submit, focus goes to the first field with an error. */
-function validate(v: typeof EMPTY, consent: boolean): Errors {
+function validate(v: typeof EMPTY, consent: boolean, asks: { programme: boolean; batch: boolean }): Errors {
   const errors: Errors = {};
+  if (asks.programme && !v.programme) errors.programme = 'Choose a programme.';
   if (v.parentName.trim().length < 2) errors.parentName = 'Enter the parent or guardian’s name.';
   if (v.studentName.trim().length < 2) errors.studentName = 'Enter the student’s name.';
   if (!isValidMobile(v.phone)) errors.phone = 'Enter a 10-digit mobile number, or add + and the country code.';
   if (v.email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.email.trim())) errors.email = 'Check the email address.';
   if (!v.grade) errors.grade = 'Choose the student’s grade.';
   if (v.schoolName.trim().length < 2) errors.schoolName = 'Enter the school name.';
+  if (asks.batch && !v.month) errors.month = 'Choose a month.';
+  if (asks.batch && !v.time) errors.time = 'Choose a time.';
   if (!consent) errors.consent = 'Tick this box so we can contact you.';
   return errors;
 }
 
-export default function EnquiryForm() {
-  const [values, setValues] = useState(EMPTY);
+interface SelectFieldProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
+  id: string;
+  label: string;
+  placeholder: string;
+  options: { value: string; label: string }[];
+  error?: string;
+  wide?: boolean;
+}
+
+function SelectField({ id, label, placeholder, options, error, wide, ...select }: SelectFieldProps) {
+  return (
+    <div className={wide ? 'sm:col-span-2' : ''}>
+      <label htmlFor={id} className="block mb-1.5 text-[14.5px] font-semibold text-ink">{label}</label>
+      <select id={id} aria-invalid={Boolean(error)} aria-describedby={error ? `${id}-error` : undefined} className={`${inputClass(Boolean(error))} !bg-white !text-ink`} {...select}>
+        <option value="">{placeholder}</option>
+        {options.map((o) => (
+          <option key={o.value} value={o.value}>{o.label}</option>
+        ))}
+      </select>
+      <FieldError id={`${id}-error`} message={error} />
+    </div>
+  );
+}
+
+const plain = (values: string[]) => values.map((value) => ({ value, label: value }));
+
+export default function EnquiryForm({ programmes, selected = '', months }: EnquiryFormProps) {
+  const [values, setValues] = useState({ ...EMPTY, programme: selected });
   const [consent, setConsent] = useState(false);
   const [errors, setErrors] = useState<Errors>({});
   const [formError, setFormError] = useState('');
@@ -49,22 +89,24 @@ export default function EnquiryForm() {
     e.preventDefault();
     if (sending.current) return;
     setFormError('');
-    const found = validate(values, consent);
+    const found = validate(values, consent, { programme: Boolean(programmes), batch: Boolean(months) });
     showErrors(found);
     if (Object.keys(found).length) return;
 
     sending.current = true;
     setStatus('sending');
+    const { programme, month, time, ...contact } = values;
     try {
       const res = await fetch('/api/book-a-demo', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          ...values,
+          ...contact,
           consent,
           academicLevel: values.grade === 'Grade 8' ? 'Middle School (Grades 6-8)' : 'High School (Grades 9-12)',
-          clarvoExploration: [SUMMER_SCHOOL_NAME],
-          sourcePage: 'summer-school:form',
+          clarvoExploration: [programmes?.find((p) => p.slug === programme)?.name ?? SUMMER_SCHOOL_NAME],
+          ...(months && { preferredTimeFrame: `${month}, ${time}` }),
+          sourcePage: `summer-school:${months ? 'batches' : selected || 'form'}`,
         }),
       });
       const data = await res.json().catch(() => ({}));
@@ -91,24 +133,24 @@ export default function EnquiryForm() {
   }
 
   return (
-    <form ref={form} onSubmit={submit} noValidate aria-label="Schedule a consultation call">
+    <form ref={form} onSubmit={submit} noValidate aria-label={months ? 'Request a batch' : 'Schedule a consultation call'}>
       {formError && <FormNotice tone="error">{formError}</FormNotice>}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {programmes && (
+          <SelectField {...bind('programme')} label="Programme" placeholder="Select programme" options={programmes.map((p) => ({ value: p.slug, label: p.name }))} error={errors.programme} wide />
+        )}
         <Field {...bind('parentName')} label="Parent / guardian name" autoComplete="name" maxLength={100} error={errors.parentName} />
         <Field {...bind('studentName')} label="Student name" maxLength={100} error={errors.studentName} />
         <Field {...bind('phone')} label="Parent mobile number" type="tel" autoComplete="tel" maxLength={20} error={errors.phone} />
         <Field {...bind('email')} label="Email (optional)" type="email" autoComplete="email" maxLength={120} error={errors.email} />
-        <div>
-          <label htmlFor="ss-grade" className="block mb-1.5 text-[14.5px] font-semibold text-ink">Grade</label>
-          <select {...bind('grade')} aria-invalid={Boolean(errors.grade)} aria-describedby={errors.grade ? 'ss-grade-error' : undefined} className={`${inputClass(Boolean(errors.grade))} !bg-white !text-ink`}>
-            <option value="">Select grade</option>
-            {SUMMER_SCHOOL_GRADES.map((g) => (
-              <option key={g}>{g}</option>
-            ))}
-          </select>
-          <FieldError id="ss-grade-error" message={errors.grade} />
-        </div>
+        <SelectField {...bind('grade')} label="Grade" placeholder="Select grade" options={plain(SUMMER_SCHOOL_GRADES)} error={errors.grade} />
         <Field {...bind('schoolName')} label="School name" maxLength={150} error={errors.schoolName} />
+        {months && (
+          <>
+            <SelectField {...bind('month')} label="Preferred month" placeholder="Select month" options={plain(months)} error={errors.month} />
+            <SelectField {...bind('time')} label="Preferred time" placeholder="Select time" options={plain(TIMES)} error={errors.time} />
+          </>
+        )}
         {/* Hidden from people; bots that fill it are ignored by the server. */}
         <div aria-hidden="true" className="absolute w-px h-px overflow-hidden -left-[9999px]">
           <input {...bind('companyWebsite')} tabIndex={-1} autoComplete="off" />
@@ -136,7 +178,7 @@ export default function EnquiryForm() {
         </div>
       </div>
       <button type="submit" disabled={status === 'sending'} className={`${primaryButtonClass} mt-5`}>
-        {status === 'sending' ? 'Sending…' : 'Request my free consultation'}
+        {status === 'sending' ? 'Sending…' : months ? 'Request this batch' : 'Request my free consultation'}
       </button>
     </form>
   );

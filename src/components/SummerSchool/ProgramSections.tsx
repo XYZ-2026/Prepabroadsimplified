@@ -30,7 +30,7 @@ export function ProgramsBento() {
                 </p>
               </div>
               <div className="relative mt-auto grow min-h-56">
-                <CoverPhoto photo={p.photo} sizes="(min-width: 1024px) 400px, (min-width: 640px) 50vw, 84vw" position={i === 1 ? 'object-[center_62%]' : undefined} />
+                <CoverPhoto photo={p.photo} sizes="(min-width: 1024px) 400px, 100vw" position={i === 1 ? 'object-[center_62%]' : undefined} />
               </div>
             </li>
           ))}

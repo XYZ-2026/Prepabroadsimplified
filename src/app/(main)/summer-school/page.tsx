@@ -12,6 +12,9 @@ import SummerSchoolHero from '@/components/SummerSchool/SummerSchoolHero';
 import { AdmittedStudents, FactsBento, UniversityWall } from '@/components/SummerSchool/ProofSections';
 import Reviews from '@/components/SummerSchool/Reviews';
 import { Advantage, CtaBand, Mentors, ProgramsBento, StandOutFormula } from '@/components/SummerSchool/ProgramSections';
+import { PosterWall, SINGLE_SLUGS } from '@/components/Programmes/sections';
+import { CtaLink } from '@/components/SummerSchool/ui';
+import { JR_MBA_URL } from '@/content/programmeList';
 import StepsTabs from '@/components/SummerSchool/StepsTabs';
 import OutcomeCarousel from '@/components/SummerSchool/OutcomeCarousel';
 import EnquiryForm from '@/components/SummerSchool/EnquiryForm';
@@ -19,6 +22,7 @@ import { CARD_TITLE, Heading, SECTION } from '@/components/SummerSchool/ui';
 import { FAQ, HERO } from '@/content/summerSchoolContent';
 import '@/components/PsychometricAssessment/psychometric.css';
 import '@/components/SummerSchool/summer-school.css';
+import '@/components/Programmes/programmes.css';
 
 const TITLE = 'Summer School & Certifications for Grades 8–12 | CLARVO';
 const DESCRIPTION =
@@ -66,6 +70,12 @@ export default function SummerSchoolPage() {
               <AdmittedStudents />
             </Suspense>
             <ProgramsBento />
+            <PosterWall title="Jr MBA programmes" sub="Ten live online programmes. Fifteen sessions over three weeks, and a project at the end." slugs={SINGLE_SLUGS} />
+            <div className="bg-paper pb-16 sm:pb-20 lg:pb-24 -mt-6">
+              <Container>
+                <CtaLink href={JR_MBA_URL}>See all Jr MBA programmes and tracks</CtaLink>
+              </Container>
+            </div>
             <StandOutFormula />
             <StepsTabs />
             <Reviews />

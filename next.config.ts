@@ -7,6 +7,8 @@ const nextConfig: NextConfig = {
     root: path.resolve(__dirname),
   },
   allowedDevOrigins: ['127.0.0.1', 'localhost', '192.168.137.1'],
+  // One high setting for every photo: the usual 75 made faces look soft, and above 84 only adds weight.
+  images: { qualities: [84] },
   async headers() {
     return [
       { source: '/fonts/:path*', headers: [{ key: 'Cache-Control', value: 'public, max-age=31536000, immutable' }] },

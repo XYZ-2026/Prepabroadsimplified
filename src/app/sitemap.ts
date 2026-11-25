@@ -2,6 +2,7 @@ import type { MetadataRoute } from 'next';
 import { listPublishedPortfolios } from '@/lib/portfolio-service';
 import { getValidSiteUrl } from '@/lib/site-url';
 import { fetchAllWixBlogs } from '@/lib/wixCms';
+import { BATCHES_URL, JR_MBA_URL, PROGRAMMES, programmeUrl } from '@/content/programmeList';
 
 // Rebuilt hourly so newly published student portfolios get picked up.
 export const revalidate = 3600;
@@ -15,6 +16,9 @@ const STATIC_PAGES: { path: string; changeFrequency: Freq; priority: number }[] 
   { path: '/psychometric-assessment', changeFrequency: 'monthly', priority: 0.9 },
   { path: '/research', changeFrequency: 'monthly', priority: 0.9 },
   { path: '/summer-school', changeFrequency: 'monthly', priority: 0.9 },
+  { path: JR_MBA_URL, changeFrequency: 'monthly', priority: 0.9 },
+  ...PROGRAMMES.map((p) => ({ path: programmeUrl(p.slug), changeFrequency: 'monthly' as const, priority: 0.8 })),
+  { path: BATCHES_URL, changeFrequency: 'monthly', priority: 0.6 },
   { path: '/admitted-students', changeFrequency: 'weekly', priority: 0.8 },
   { path: '/discover', changeFrequency: 'monthly', priority: 0.7 },
   { path: '/career-library', changeFrequency: 'monthly', priority: 0.7 },

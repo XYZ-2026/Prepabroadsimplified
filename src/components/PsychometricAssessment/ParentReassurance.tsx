@@ -11,7 +11,7 @@ export default function ParentReassurance() {
     <section aria-label="Built for families" className="w-full bg-paper border-b border-line">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-20 lg:py-24 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-center">
         <Reveal className="lg:col-span-5 relative overflow-hidden rounded-[20px] aspect-[16/10] lg:aspect-[4/5] bg-sky">
-          <Image src={content.photo.src} alt={content.photo.alt} fill sizes="(min-width: 1024px) 40vw, 100vw" className="object-cover" style={{ objectPosition: '50% 40%' }} />
+          <Image src={content.photo.src} alt={content.photo.alt} fill sizes="(min-width: 1024px) 66vw, 100vw" className="object-cover" style={{ objectPosition: '50% 40%' }} />
         </Reveal>
 
         <div className="lg:col-span-7">

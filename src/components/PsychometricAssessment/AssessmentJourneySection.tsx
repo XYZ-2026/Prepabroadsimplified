@@ -88,7 +88,7 @@ export default function AssessmentJourneySection() {
 
                   {step.photo && (
                     <div className="relative mt-4 overflow-hidden rounded-[20px] aspect-[16/10] bg-sky hidden sm:block">
-                      <Image src={step.photo} alt={step.photoAlt} fill sizes="(min-width: 1024px) 18vw, 50vw" className="object-cover" />
+                      <Image src={step.photo} alt={step.photoAlt} fill sizes="(min-width: 1024px) 18vw, 90vw" className="object-cover" />
                     </div>
                   )}
                 </div>

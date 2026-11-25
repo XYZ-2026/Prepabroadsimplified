@@ -10,6 +10,8 @@ export const SUMMER_SCHOOL_GRADES = ['Grade 8', 'Grade 9', 'Grade 10', 'Grade 11
 export interface Photo {
   src: string;
   alt: string;
+  /** object-position that keeps the subject in view when cropped. */
+  focus?: string;
 }
 
 const photo = (name: string, alt: string): Photo => ({ src: `/images/summer-school/${name}.webp`, alt });

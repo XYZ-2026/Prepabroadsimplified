@@ -3,6 +3,7 @@
 import React from 'react';
 import SmoothScrollProvider from '@/components/providers/SmoothScrollProvider';
 import HeroThePath from '../redesign/HeroThePath';
+import FreeForStudents from '../redesign/FreeForStudents';
 import TopSchoolsTicker from './TopSchoolsTicker';
 import SupportBento from '../redesign/SupportBento';
 import StatsStripCountup from '../redesign/StatsStripCountup';
@@ -21,8 +22,10 @@ export default function CinematicLandingExperience() {
         {/* Section 2: Hero "The Path" (DESIGN.md Section 2) */}
         <HeroThePath />
 
+        <FreeForStudents />
+
         {/* Section 3: Top Schools Marquee Ticker (LOCKED: code, speed, direction, content untouched) */}
-        <div className="relative z-20 -mt-6 sm:-mt-8 lg:-mt-10">
+        <div className="relative z-20">
           <TopSchoolsTicker />
         </div>
 

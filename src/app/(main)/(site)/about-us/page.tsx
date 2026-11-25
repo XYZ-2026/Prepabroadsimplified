@@ -26,12 +26,12 @@ import { COMPANY_CONFIG } from '@/config/company';
 import WhatsAppFloatingButton from "@/components/landing/WhatsAppFloatingButton";
 
 export const metadata: Metadata = {
-  title: 'About Us — Study Abroad & Admissions Counsellors, Mumbai & Kolkata',
+  title: 'About Us — Study Abroad & Admissions Counsellors, Mumbai',
   description:
-    'CLARVO is a study abroad and admissions counselling company in Mumbai and Kolkata helping Grades 7–12 students with assessments, profile building and university applications.',
+    'CLARVO is a study abroad and admissions counselling company in Mumbai helping Grades 7–12 students with assessments, profile building and university applications.',
   keywords: [
     'study abroad consultants Mumbai',
-    'admission counsellors Kolkata',
+    'admission counsellors Mumbai',
     'education counselling India',
     'career counselling for students',
   ],
@@ -428,7 +428,7 @@ export default function AboutUsPage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-6 border-t border-slate-800">
+          <div className="grid grid-cols-1 gap-6 pt-6 border-t border-slate-800">
             <div className="bg-slate-900/60 p-6 rounded-2xl border border-slate-800/80">
               <div className="flex items-center gap-2 text-blue-400 font-bold text-xs uppercase tracking-wider mb-2">
                 <MapPin className="w-4 h-4 shrink-0" />
@@ -436,16 +436,6 @@ export default function AboutUsPage() {
               </div>
               <p className="text-slate-300 text-sm leading-relaxed">
                 {COMPANY_CONFIG.headOffice.fullAddress}
-              </p>
-            </div>
-
-            <div className="bg-slate-900/60 p-6 rounded-2xl border border-slate-800/80">
-              <div className="flex items-center gap-2 text-blue-400 font-bold text-xs uppercase tracking-wider mb-2">
-                <MapPin className="w-4 h-4 shrink-0" />
-                <span>{COMPANY_CONFIG.kolkataBranch.label}</span>
-              </div>
-              <p className="text-slate-300 text-sm leading-relaxed">
-                {COMPANY_CONFIG.kolkataBranch.fullAddress}
               </p>
             </div>
           </div>

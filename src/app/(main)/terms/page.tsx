@@ -79,7 +79,6 @@ export default function TermsAndConditionsPage() {
               <p><strong>Email:</strong> <a href={COMPANY_CONFIG.mailtoLink} className="text-[#2563EB] font-bold underline">{COMPANY_CONFIG.email}</a></p>
               <p><strong>Phone:</strong> <a href={COMPANY_CONFIG.telLink} className="text-[#2563EB] font-bold underline">{COMPANY_CONFIG.phoneFormatted}</a></p>
               <p><strong>Head Office:</strong> {COMPANY_CONFIG.headOffice.fullAddress}</p>
-              <p><strong>{COMPANY_CONFIG.kolkataBranch.label}:</strong> {COMPANY_CONFIG.kolkataBranch.fullAddress}</p>
             </div>
           </section>
         </div>

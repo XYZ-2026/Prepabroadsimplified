@@ -96,23 +96,16 @@ export default function RedesignFooter() {
             </ul>
           </div>
 
-          {/* ORGANIZATION & OFFICES (3 cols on desktop) */}
+          {/* ORGANIZATION & OFFICE (3 cols on desktop) */}
           <div className="lg:col-span-3 space-y-4">
             <h4 className="text-xs font-dmsans font-bold text-white uppercase tracking-wider">
-              Offices &amp; Contact
+              Office &amp; Contact
             </h4>
             <div className="space-y-3 text-xs sm:text-[12px] text-[#A6AFBF]">
               <div>
                 <p className="font-semibold text-white">Head Office (Mumbai):</p>
                 <p className="leading-snug text-[#767E94] mt-0.5">
                   ISKCON Temple Entrance Rd, Chand Society, Juhu, Mumbai 400049
-                </p>
-              </div>
-
-              <div>
-                <p className="font-semibold text-white">Kolkata Branch:</p>
-                <p className="leading-snug text-[#767E94] mt-0.5">
-                  Shiivani Complex, Pottery Road, Kolkata 700015
                 </p>
               </div>
 

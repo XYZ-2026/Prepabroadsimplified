@@ -25,7 +25,6 @@ export interface CompanyConfig {
   telLink: string;
   mailtoLink: string;
   headOffice: OfficeAddress;
-  kolkataBranch: OfficeAddress;
   copyright: string;
 }
 
@@ -54,22 +53,6 @@ export const COMPANY_CONFIG: CompanyConfig = {
     pincode: '400049',
     country: 'India',
     fullAddress: 'ISKCON Temple Entrance Rd, Chand Society, Vithal Nagar, Juhu, Mumbai, Maharashtra 400049, India',
-  },
-
-  // Kolkata Branch (Provided by business owner)
-  kolkataBranch: {
-    label: 'Kolkata Branch',
-    isHeadOffice: false,
-    addressLines: [
-      'Shiivani Complex, 47/C, BL-3, FL-A3',
-      'Pottery Road',
-      'Kolkata – 700015',
-    ],
-    city: 'Kolkata',
-    state: 'West Bengal',
-    pincode: '700015',
-    country: 'India',
-    fullAddress: 'Shiivani Complex, 47/C, BL-3, FL-A3, Pottery Road, Kolkata – 700015, West Bengal, India',
   },
 
   copyright: `© ${new Date().getFullYear()} CLARVO EDUCATION PRIVATE LIMITED. All rights reserved.`,

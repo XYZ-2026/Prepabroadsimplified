@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 
-const WHATSAPP_NUMBER = '917400191765'; // +91 74001 91765
+const WHATSAPP_NUMBER = '918828016354'; // +91 88280 16354
 const WHATSAPP_MESSAGE = 'Hi CLARVO, I would like to know more about your counselling services.';
 const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(WHATSAPP_MESSAGE)}`;
 

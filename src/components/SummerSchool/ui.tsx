@@ -11,15 +11,16 @@ interface HeadingProps {
   sub?: string;
   center?: boolean;
   dark?: boolean;
+  as?: 'h1' | 'h2';
 }
 
 /** Section heading at the home page's scale. Not the home primitive: that one leaves browser default margins here. */
-export function Heading({ children, sub, center, dark }: HeadingProps) {
+export function Heading({ children, sub, center, dark, as: Tag = 'h2' }: HeadingProps) {
   return (
     <div className={`mb-10 sm:mb-14 max-w-3xl ${center ? 'mx-auto text-center' : ''}`}>
-      <h2 className={`m-0 font-dmsans font-bold text-[clamp(2rem,4vw,3.25rem)] leading-[1.08] tracking-[-0.02em] [text-wrap:balance] ${dark ? 'text-white' : 'text-ink'}`}>
+      <Tag className={`m-0 font-dmsans font-bold text-[clamp(2rem,4vw,3.25rem)] leading-[1.08] tracking-[-0.02em] [text-wrap:balance] ${dark ? 'text-white' : 'text-ink'}`}>
         {children}
-      </h2>
+      </Tag>
       {sub && <p className={`m-0 mt-4 text-[17px] leading-[1.6] max-w-[62ch] ${center ? 'mx-auto' : ''} ${dark ? 'text-white/75' : 'text-muted'}`}>{sub}</p>}
     </div>
   );

@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell($env:NODE_PATH=\"$PWD\\\\node_modules\"; node \"C:\\\\Users\\\\Agam\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\be386fbefeed9cb2\\\\30169c52-b0a7-4ec2-b543-57da013ddf72\\\\scratchpad\\\\place.js\"; npx tsc --noEmit -p . ; \"TSC $LASTEXITCODE\"; npx eslint src/components/Programmes src/content 'src/app/\\(main\\)/summer-school' next.config.ts; \"LINT $LASTEXITCODE\"; Get-ChildItem public/images/programmes | Measure-Object Length -Sum | ForEach-Object { \"$\\($_.Count\\) files, $\\([math]::Round\\($_.Sum/1MB,1\\)\\) MB\" }; git status --short public)",
+      "PowerShell(git grep -n \"sizes=\" -- src/components/PsychometricAssessment src/components/SummerSchool | ForEach-Object { $_.Substring\\(0,[Math]::Min\\(230,$_.Length\\)\\) }; git grep -n \"psy-06\\\\|psy-07\\\\|psy-08\\\\|psy-09\" -- src/content src/components | Select-Object -First 8; Select-String \"$env:TEMP\\\\sh.log\" -Pattern 'join-counsellor-community is sharp on a desktop' -Context 0,14 | Select-Object -First 1 | ForEach-Object { $_.ToString\\(\\) })"
+    ]
+  }
+}

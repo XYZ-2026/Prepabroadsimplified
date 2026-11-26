@@ -83,6 +83,7 @@ export default function RedesignFooter() {
                 { label: '1-to-1 Private Tutoring', href: '/book-a-demo' },
                 { label: 'High School Research', href: '/research' },
                 { label: 'Summer School & Certifications', href: '/summer-school' },
+                { label: 'Jr MBA Programmes', href: '/summer-school/jr-mba' },
               ].map((item) => (
                 <li key={item.label}>
                   <Link

@@ -1,0 +1,47 @@
+/* Opening shot: two bars pull apart while the camera settles. Runs once, in CSS, so it starts before scripts load. */
+.pg-bar {
+  animation: pg-bar 0.7s cubic-bezier(0.65, 0, 0.35, 1) 0.1s both;
+}
+.pg-camera {
+  animation: pg-camera 1.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+@keyframes pg-bar {
+  to { transform: scaleY(0); }
+}
+@keyframes pg-camera {
+  from { transform: scale(1.08); }
+}
+
+/* Each act slides over the one before it. Only where a whole act fits on screen. */
+@media (min-width: 768px) and (min-height: 620px) {
+  .pg-act {
+    position: sticky;
+    top: 70px;
+    min-height: calc(100vh - 70px);
+  }
+}
+
+/* Posters: the picture moves closer when chosen. */
+.pg-poster img {
+  transition: transform 0.25s ease-out;
+}
+.pg-poster:hover img,
+.pg-poster:focus-visible img {
+  transform: scale(1.04);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pg-bar {
+    display: none;
+  }
+  .pg-camera {
+    animation: none;
+  }
+  .pg-act {
+    position: relative; /* keeps the big numeral inside its act */
+    min-height: 0;
+  }
+  .pg-poster img {
+    transition: none;
+  }
+}

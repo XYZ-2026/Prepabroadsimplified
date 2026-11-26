@@ -27,6 +27,7 @@ import SampleReportModal from '@/components/Report/SampleReportModal';
 import UserAvatarMenu from '@/components/Layout/UserAvatarMenu';
 import { useSessionUser, dashboardHomeFor } from '@/components/providers/SessionProvider';
 import { clientLogout } from '@/lib/client-logout';
+import { BATCHES_URL, INCUBATOR, JR_MBA_URL, SINGLES, TRACKS, YOUNG_CEO, programmeUrl } from '@/content/programmeList';
 
 type MenuKey = 'services' | 'programs' | 'assessments';
 
@@ -95,6 +96,11 @@ const PROGRAMS: MenuItem[] = [
     icon: HeartHandshake,
   },
 ];
+
+const toLink = (p: { name: string; slug: string }) => ({ label: p.name, href: programmeUrl(p.slug) });
+
+const LEADERSHIP_LINKS = [{ label: 'Jr MBA overview', href: JR_MBA_URL }, toLink(INCUBATOR), ...TRACKS.map(toLink), toLink(YOUNG_CEO), { label: 'Request a batch', href: BATCHES_URL }];
+const SINGLE_LINKS = SINGLES.map(toLink);
 
 const ASSESSMENTS: MenuItem[] = [
   {
@@ -278,6 +284,25 @@ export default function LandingNavbar() {
     </div>
   );
 
+  const linkList = (links: { label: string; href: string }[]) => (
+    <ul className="list-none p-0 m-0">
+      {links.map((link) => (
+        <li key={link.href}>
+          <Link
+            href={link.href}
+            onClick={closeAll}
+            aria-current={pathname === link.href ? 'page' : undefined}
+            className={`flex items-center min-h-11 xl:min-h-9 px-2.5 rounded-lg text-[14px] xl:text-[13.5px] hover:bg-[#F1F5F9] hover:text-[#1258DE] transition-colors ${
+              pathname === link.href ? 'font-bold text-[#1258DE]' : 'font-medium text-[#334155]'
+            }`}
+          >
+            {link.label}
+          </Link>
+        </li>
+      ))}
+    </ul>
+  );
+
   // Shared section header so every dropdown reads the same.
   const panelHeading = (text: string, badge?: string, divider = false) => (
     <div
@@ -371,9 +396,19 @@ export default function LandingNavbar() {
             <div className="relative" onMouseEnter={() => enterMenu('programs')} onMouseLeave={leaveMenu}>
               {menuTrigger('programs', 'Programs')}
               {openMenu === 'programs' && (
-                <div className={`${PANEL} w-[340px]`}>
-                  {panelHeading('Programs')}
-                  {renderItems(PROGRAMS)}
+                <div className={`${PANEL} w-[800px] max-h-[calc(100vh-90px)] overflow-y-auto grid grid-cols-[320px_1fr_1fr] gap-4`}>
+                  <div>
+                    {panelHeading('Programs')}
+                    {renderItems(PROGRAMS)}
+                  </div>
+                  <div>
+                    {panelHeading('Leadership')}
+                    {linkList(LEADERSHIP_LINKS)}
+                  </div>
+                  <div>
+                    {panelHeading('Single Jr MBA')}
+                    {linkList(SINGLE_LINKS)}
+                  </div>
                 </div>
               )}
             </div>
@@ -503,7 +538,17 @@ export default function LandingNavbar() {
         <div className="xl:hidden bg-white/98 backdrop-blur-xl border-b border-[#E2E8F0] shadow-xl px-4 py-4 space-y-3 max-h-[calc(100dvh-64px)] overflow-y-auto">
           <div className="space-y-1">
             {mobileAccordion('services', 'Services', renderItems(SERVICES, true))}
-            {mobileAccordion('programs', 'Programs', renderItems(PROGRAMS, true))}
+            {mobileAccordion(
+              'programs',
+              'Programs',
+              <>
+                {renderItems(PROGRAMS, true)}
+                {panelHeading('Leadership', undefined, true)}
+                {linkList(LEADERSHIP_LINKS)}
+                {panelHeading('Single Jr MBA', undefined, true)}
+                {linkList(SINGLE_LINKS)}
+              </>,
+            )}
             {mobileAccordion(
               'assessments',
               'Assessments',

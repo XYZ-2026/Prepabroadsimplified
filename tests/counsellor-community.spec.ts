@@ -83,6 +83,7 @@ test.describe('CLARVO — Global Counselling Association (/join-counsellor-commu
     await page.fill('input#phone', testPhone);
     await page.fill('input#email', testEmail);
     await page.fill('input#linkedInUrl', testLinkedIn);
+    await page.check('input#consent');
 
     let capturedJson: any = null;
     await page.route('**/api/community/join', async (route) => {

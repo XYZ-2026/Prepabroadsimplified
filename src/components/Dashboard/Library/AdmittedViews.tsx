@@ -143,29 +143,46 @@ export function AdmittedCard({ student, href, gated = false }: { student: Admitt
   );
 }
 
-export function AdmittedHero({ total }: { total: number }) {
+interface AdmittedHeroProps {
+  total: number;
+  title?: string;
+  text?: string;
+  kicker?: string;
+  /** What `total` counts, e.g. "Portfolios". */
+  unit?: string;
+  showUniversities?: boolean;
+}
+
+export function AdmittedHero({ total, title = 'Admitted Students', text, kicker = 'Real admits · Real profiles', unit = 'Profiles', showUniversities = true }: AdmittedHeroProps) {
   return (
     <div className={s.hero}>
       <svg className={s.heroArt} viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="1.2" aria-hidden>
         <path d="M22 10 12 5 2 10l10 5 10-5Z" />
         <path d="M6 12v5c3 2 9 2 12 0v-5" />
       </svg>
-      <div className={s.heroKicker}>Real admits · Real profiles</div>
-      <h1 className={s.heroTitle}>Admitted Students</h1>
+      <div className={s.heroKicker}>{kicker}</div>
+      <h1 className={s.heroTitle}>{title}</h1>
       <p className={s.heroText}>
-        See exactly what got students into top universities — their scores, activities, awards, leadership and the
-        essays they wrote. Use them to benchmark and plan your own application.
+        {text ??
+          'See exactly what got students into top universities — their scores, activities, awards, leadership and the essays they wrote. Use them to benchmark and plan your own application.'}
       </p>
-      <div className={s.heroStats}>
-        <div className={s.heroStat}>
-          <strong>{total.toLocaleString('en-IN')}</strong>
-          <span>Profiles</span>
+      {/* A zero only ever means the list could not load, so it is not shown. */}
+      {(total > 0 || showUniversities) && (
+        <div className={s.heroStats}>
+          {total > 0 && (
+            <div className={s.heroStat}>
+              <strong>{total.toLocaleString('en-IN')}</strong>
+              <span>{unit}</span>
+            </div>
+          )}
+          {showUniversities && (
+            <div className={s.heroStat}>
+              <strong>Ivy · Private · Public</strong>
+              <span>Universities</span>
+            </div>
+          )}
         </div>
-        <div className={s.heroStat}>
-          <strong>Ivy · Private · Public</strong>
-          <span>Universities</span>
-        </div>
-      </div>
+      )}
     </div>
   );
 }

@@ -409,7 +409,7 @@ export default function PortfolioEditor({
             </label>
           </div>
           <p className={ui.sectionHint} style={{ marginTop: -4 }}>
-            A published portfolio can appear in Google search results for your name. Turn this off at any time to hide it.
+            A published portfolio is listed under Student Profiles on CLARVO and can appear in Google search results for your name. Turn this off at any time to hide it.
           </p>
 
           </>

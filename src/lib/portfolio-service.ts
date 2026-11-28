@@ -7,6 +7,8 @@ import {
   emptyPortfolioRecord,
   usernameError,
   USERNAME_PATTERN,
+  toPortfolioCards,
+  type PortfolioCard,
   type PortfolioRecord,
 } from '@/components/portfolio/portfolioTypes';
 
@@ -221,6 +223,34 @@ export async function listPublishedPortfolios(): Promise<{ username: string; upd
     console.error('[Portfolio] Sitemap listing failed:', err);
   }
   return out;
+}
+
+export const PORTFOLIO_PAGE_SIZE = 24;
+
+/**
+ * One page of published portfolios for the public Student Profiles list, newest first.
+ * Hidden portfolios are never returned. Throws when Wix cannot be reached, so the page can say so.
+ */
+export async function listPublicPortfolios(page: number): Promise<{ items: PortfolioCard[]; total: number }> {
+  if (!process.env.WIX_API_KEY || !process.env.WIX_SITE_ID) return { items: [], total: 0 };
+  const res = await fetch(`${WIX_DATA}/items/query`, {
+    method: 'POST',
+    headers: wixHeaders(),
+    next: { revalidate: 300 },
+    body: JSON.stringify({
+      dataCollectionId: PORTFOLIO_COLLECTION_ID,
+      query: {
+        filter: { published: { $ne: false } },
+        sort: [{ fieldName: '_updatedDate', order: 'DESC' }],
+        paging: { limit: PORTFOLIO_PAGE_SIZE, offset: (Math.max(1, page) - 1) * PORTFOLIO_PAGE_SIZE },
+      },
+      returnTotalCount: true,
+    }),
+  });
+  if (!res.ok) throw new Error(`Wix query failed (HTTP ${res.status})`);
+  const json = await res.json();
+  const rows: { data?: Record<string, unknown> }[] = json?.dataItems || [];
+  return { items: toPortfolioCards(rows.map((r) => rowToRecord(r.data || {}))), total: json.pagingMetadata?.total ?? 0 };
 }
 
 export class PortfolioValidationError extends Error {}

@@ -29,7 +29,7 @@ export default function RedesignFooter() {
                 <span className="text-xl sm:text-2xl font-dmsans font-bold tracking-tight text-white block">
                   CLARVO
                 </span>
-                <span className="block text-[10px] text-[#767E94] tracking-wider uppercase font-semibold">
+                <span className="block text-[10px] text-[#A6AFBF] tracking-wider uppercase font-semibold">
                   {COMPANY_CONFIG.legalName}
                 </span>
               </div>
@@ -39,7 +39,7 @@ export default function RedesignFooter() {
               {COMPANY_CONFIG.tagline} Empirical student development platform for Grades 7–12 offering cognitive diagnostics, stream selection, Digital SAT 1500+ mastery, private tutoring, and faculty-led research profile building.
             </p>
 
-            <div className="mt-3 text-[11px] text-[#767E94]">
+            <div className="mt-3 text-[11px] text-[#A6AFBF]">
               <span>CIN: {COMPANY_CONFIG.cin}</span>
             </div>
           </div>
@@ -105,12 +105,12 @@ export default function RedesignFooter() {
             <div className="space-y-3 text-xs sm:text-[12px] text-[#A6AFBF]">
               <div>
                 <p className="font-semibold text-white">Head Office (Mumbai):</p>
-                <p className="leading-snug text-[#767E94] mt-0.5">
+                <p className="leading-snug text-[#A6AFBF] mt-0.5">
                   ISKCON Temple Entrance Rd, Chand Society, Juhu, Mumbai 400049
                 </p>
               </div>
 
-              <div className="pt-2 text-[11px] text-[#767E94]">
+              <div className="pt-2 text-[11px] text-[#A6AFBF]">
                 <span>Contact: </span>
                 <a href={COMPANY_CONFIG.mailtoLink} className="text-[#A6AFBF] hover:text-white underline">
                   {COMPANY_CONFIG.email}
@@ -126,7 +126,7 @@ export default function RedesignFooter() {
         </div>
 
         {/* BOTTOM ROW: Copyright & Legal */}
-        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#767E94]">
+        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#A6AFBF]">
           <p>
             {COMPANY_CONFIG.copyright}
           </p>

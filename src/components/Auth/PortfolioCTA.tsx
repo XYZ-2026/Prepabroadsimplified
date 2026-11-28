@@ -48,7 +48,7 @@ export default function PortfolioCTA({ signedIn, variant }: PortfolioCTAProps) {
             <Sparkles size={12} aria-hidden="true" /> Your turn
           </span>
           <h2 className="mt-4 mb-0 text-[22px] leading-tight font-bold text-white">Your portfolio could be next.</h2>
-          <p className="mt-2.5 mb-0 text-[14.5px] leading-relaxed text-white/75">
+          <p className="mt-2.5 mb-0 text-[14.5px] leading-relaxed text-white/90">
             Every student here told their story well. Put your activities, projects, awards and resume on one link
             admissions teams can open.
           </p>
@@ -75,7 +75,7 @@ export default function PortfolioCTA({ signedIn, variant }: PortfolioCTAProps) {
       <div aria-hidden="true" className="absolute -right-24 -top-24 w-[420px] h-[420px] rounded-full bg-white/10 blur-3xl pointer-events-none" />
       <div className="relative grid grid-cols-1 lg:grid-cols-12 gap-8 p-7 sm:p-10 lg:p-12 items-center">
         <div className="lg:col-span-7">
-          <p className="m-0 text-[12px] font-bold uppercase tracking-[0.14em] text-white/70">Free for every CLARVO student</p>
+          <p className="m-0 text-[12px] font-bold uppercase tracking-[0.14em] text-white/90">Free for every CLARVO student</p>
           <h2 className="mt-3 mb-0 text-[clamp(1.75rem,3.2vw,2.6rem)] leading-[1.1] font-bold tracking-tight text-white">
             They had a story. Start building yours.
           </h2>
@@ -105,7 +105,7 @@ export default function PortfolioCTA({ signedIn, variant }: PortfolioCTAProps) {
               <span className="mt-1 w-2 h-2 rounded-full bg-[#4ADE80] shrink-0" aria-hidden="true" />
               <span>
                 <span className="block text-[15px] font-bold text-white">{t}</span>
-                <span className="block text-[13.5px] text-white/75 mt-0.5">{d}</span>
+                <span className="block text-[13.5px] text-white mt-0.5">{d}</span>
               </span>
             </li>
           ))}

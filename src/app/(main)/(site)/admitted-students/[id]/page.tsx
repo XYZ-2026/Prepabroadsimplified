@@ -36,7 +36,7 @@ export default async function PublicAdmittedProfilePage({ params }: { params: Pr
   return (
     <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
       <Link href="/admitted-students" className={lib.back}>
-        ← Back to Admitted Students
+        ← Back to Student Profiles
       </Link>
       {signedIn ? (
         <>

@@ -59,6 +59,37 @@ export interface PortfolioProfile {
   links: { label: string; href: string }[];
 }
 
+/** What the public Student Profiles list shows for one portfolio. */
+export interface PortfolioCard {
+  username: string;
+  fullName: string;
+  initials: string;
+  photoUrl: string;
+  /** "Grade 11 · Science (PCM)" */
+  stage: string;
+  /** "Delhi Public School, New Delhi" */
+  place: string;
+  dream: string;
+}
+
+/** Only published portfolios with a valid username become cards. */
+export function toPortfolioCards(records: PortfolioRecord[]): PortfolioCard[] {
+  return records
+    .filter((r) => r.published && USERNAME_PATTERN.test(r.username))
+    .map((r) => {
+      const p = recordToProfile(r);
+      return {
+        username: p.username,
+        fullName: p.fullName,
+        initials: p.initials,
+        photoUrl: p.photoUrl,
+        stage: [p.grade, p.stream].filter(Boolean).join(' · '),
+        place: [p.school, p.location].filter(Boolean).join(', '),
+        dream: p.dream,
+      };
+    });
+}
+
 /** Where a student builds their own portfolio: the "My Portfolio" dashboard page. */
 export const PORTFOLIO_BUILDER_URL = '/dashboard/student/portfolio';
 

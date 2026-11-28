@@ -3,6 +3,7 @@ import Script from 'next/script';
 import './fonts.css';
 import './globals.css';
 import { getValidSiteUrl } from '@/lib/site-url';
+import { COMPANY_CONFIG } from '@/config/company';
 
 
 const siteUrl = getValidSiteUrl(process.env.NEXT_PUBLIC_APP_URL);
@@ -111,11 +112,11 @@ export default function RootLayout({
           addressCountry: 'IN',
         },
         email: 'support@clarvo.in',
-        telephone: '+91-8828016354',
+        telephone: COMPANY_CONFIG.phone,
         contactPoint: {
           '@type': 'ContactPoint',
           contactType: 'admissions counselling',
-          telephone: '+91-8828016354',
+          telephone: COMPANY_CONFIG.phone,
           email: 'support@clarvo.in',
           areaServed: 'IN',
           availableLanguage: ['en'],

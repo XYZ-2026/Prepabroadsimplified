@@ -2,8 +2,9 @@
 
 import React, { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
+import { COMPANY_CONFIG } from '@/config/company';
 
-const WHATSAPP_NUMBER = '918828016354'; // +91 88280 16354
+const WHATSAPP_NUMBER = COMPANY_CONFIG.phone.replace(/\D/g, '');
 const WHATSAPP_MESSAGE = 'Hi CLARVO, I would like to know more about your counselling services.';
 const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(WHATSAPP_MESSAGE)}`;
 

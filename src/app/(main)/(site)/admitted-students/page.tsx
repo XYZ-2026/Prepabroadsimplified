@@ -1,11 +1,15 @@
 import React from 'react';
 import type { Metadata } from 'next';
+import Link from 'next/link';
 import { verifySessionCookie } from '@/lib/auth';
 import { listAdmitted, COLLEGE_TYPES, DECISIONS, LIBRARY_PAGE_SIZE, type AdmittedSummary } from '@/lib/wix-library';
+import { listPublicPortfolios, PORTFOLIO_PAGE_SIZE } from '@/lib/portfolio-service';
+import type { PortfolioCard } from '@/components/portfolio/portfolioTypes';
 import lib from '@/styles/student-library.module.css';
 import s from '@/styles/admitted-students.module.css';
 import { SearchForm, FilterChips, Pagination, parsePage, first } from '@/components/Dashboard/Library/LibraryControls';
 import { AdmittedCard, AdmittedHero } from '@/components/Dashboard/Library/AdmittedViews';
+import PortfolioGrid from '@/components/Dashboard/Library/PortfolioGrid';
 import AuthGate from '@/components/Auth/AuthGate';
 import PortfolioCTA from '@/components/Auth/PortfolioCTA';
 import WhatsAppFloatingButton from "@/components/landing/WhatsAppFloatingButton";
@@ -14,13 +18,13 @@ import WhatsAppFloatingButton from "@/components/landing/WhatsAppFloatingButton"
 const CTA_SLOT = 5;
 
 export const metadata: Metadata = {
-  title: 'Admitted Students — Real Profiles from Top Universities',
+  title: 'Student Profiles — Admitted Students & Student Portfolios',
   description:
-    'Real profiles of students admitted to Ivy League and top universities: scores, majors, activities, research and essays that got them in.',
+    'Real profiles of students admitted to Ivy League and top universities, and portfolios built by CLARVO students: scores, activities, projects and awards.',
   keywords: [
     'admitted student profiles',
+    'student portfolio examples',
     'ivy league admits from india',
-    'study abroad success stories',
     'college admissions profile examples',
     'profile building examples',
   ],
@@ -28,11 +32,17 @@ export const metadata: Metadata = {
 };
 
 const BASE = '/admitted-students';
+const PORTFOLIOS = 'portfolios';
+
+const TABS = [
+  { view: '', label: 'Admitted students', href: BASE },
+  { view: PORTFOLIOS, label: 'Student portfolios', href: `${BASE}?view=${PORTFOLIOS}` },
+];
 
 /**
- * Public admitted-students library (website, not dashboard). Same Wix data as
- * /dashboard/student/admitted-students. Cards and portfolios are open to everyone;
- * full profiles ask signed-out visitors to sign in through a popup.
+ * Public Student Profiles (website, not dashboard): two tabs. Admitted students come from the
+ * Wix library (full profiles ask signed-out visitors to sign in); student portfolios are the
+ * ones students chose to publish, and open to everyone.
  */
 export default async function PublicAdmittedStudentsPage({
   searchParams,
@@ -42,10 +52,83 @@ export default async function PublicAdmittedStudentsPage({
   const signedIn = Boolean(await verifySessionCookie());
 
   const sp = await searchParams;
+  const view = first(sp.view) === PORTFOLIOS ? PORTFOLIOS : '';
+  const page = parsePage(first(sp.page));
+
+  return (
+    <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+      {view === PORTFOLIOS ? (
+        <PortfoliosView page={page} signedIn={signedIn} />
+      ) : (
+        <AdmittedView sp={sp} page={page} signedIn={signedIn} />
+      )}
+
+      <PortfolioCTA signedIn={signedIn} variant="band" />
+
+      <WhatsAppFloatingButton />
+    </div>
+  );
+}
+
+function Tabs({ active }: { active: string }) {
+  return (
+    <nav aria-label="Profile type" className="flex gap-2 mb-6 overflow-x-auto">
+      {TABS.map((t) => (
+        <Link
+          key={t.label}
+          href={t.href}
+          aria-current={t.view === active ? 'page' : undefined}
+          className={`shrink-0 inline-flex items-center min-h-11 px-5 rounded-full text-[15px] font-bold no-underline border border-solid transition-colors ${
+            t.view === active ? 'bg-clarvo-blue border-clarvo-blue text-white' : 'bg-white border-line text-ink hover:border-clarvo-blue'
+          }`}
+        >
+          {t.label}
+        </Link>
+      ))}
+    </nav>
+  );
+}
+
+const HERO_TEXT =
+  'Real profiles of students admitted to top universities, and portfolios built by CLARVO students. Use them to benchmark and plan your own application.';
+
+async function PortfoliosView({ page, signedIn }: { page: number; signedIn: boolean }) {
+  let cards: PortfolioCard[] = [];
+  let total = 0;
+  let failed = false;
+  try {
+    ({ items: cards, total } = await listPublicPortfolios(page));
+  } catch {
+    failed = true;
+  }
+  const totalPages = Math.max(1, Math.ceil(total / PORTFOLIO_PAGE_SIZE));
+
+  return (
+    <>
+      <AdmittedHero total={total} title="Student Profiles" text={HERO_TEXT} kicker="Built by CLARVO students" unit="Portfolios" showUniversities={false} />
+      <Tabs active={PORTFOLIOS} />
+      {failed ? (
+        <div className={lib.empty}>Student portfolios are temporarily unavailable. Please try again in a moment.</div>
+      ) : cards.length === 0 ? (
+        <div className={lib.empty}>No student has published a portfolio yet. Yours could be the first.</div>
+      ) : (
+        <>
+          <p className={s.count}>
+            Showing <strong>{total.toLocaleString('en-IN')}</strong> student portfolio{total === 1 ? '' : 's'}
+          </p>
+          <PortfolioGrid cards={cards} />
+          <Pagination base={BASE} current={{ view: PORTFOLIOS, page: page > 1 ? String(page) : undefined }} page={page} totalPages={totalPages} />
+        </>
+      )}
+      {!failed && cards.length === 0 && <PortfolioCTA signedIn={signedIn} variant="card" />}
+    </>
+  );
+}
+
+async function AdmittedView({ sp, page, signedIn }: { sp: Record<string, string | string[] | undefined>; page: number; signedIn: boolean }) {
   const q = (first(sp.q) || '').slice(0, 80);
   const type = first(sp.type) || '';
   const decision = first(sp.decision) || '';
-  const page = parsePage(first(sp.page));
   const current = {
     q: q || undefined,
     type: type || undefined,
@@ -64,8 +147,9 @@ export default async function PublicAdmittedStudentsPage({
   const totalPages = Math.max(1, Math.ceil(total / LIBRARY_PAGE_SIZE));
 
   return (
-    <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
-      <AdmittedHero total={total} />
+    <>
+      <AdmittedHero total={total} title="Student Profiles" text={HERO_TEXT} />
+      <Tabs active="" />
 
       <div className={s.toolbar}>
         <SearchForm
@@ -112,10 +196,6 @@ export default async function PublicAdmittedStudentsPage({
           <Pagination base={BASE} current={current} page={page} totalPages={totalPages} />
         </>
       )}
-
-      <PortfolioCTA signedIn={signedIn} variant="band" />
-
-      <WhatsAppFloatingButton />
-    </div>
+    </>
   );
 }

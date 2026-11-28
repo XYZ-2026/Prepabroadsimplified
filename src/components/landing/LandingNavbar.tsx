@@ -21,6 +21,8 @@ import {
   HeartHandshake,
   Brain,
   Lightbulb,
+  Info,
+  Newspaper,
   type LucideIcon,
 } from 'lucide-react';
 import SampleReportModal from '@/components/Report/SampleReportModal';
@@ -29,7 +31,16 @@ import { useSessionUser, dashboardHomeFor } from '@/components/providers/Session
 import { clientLogout } from '@/lib/client-logout';
 import { BATCHES_URL, INCUBATOR, JR_MBA_URL, SINGLES, TRACKS, YOUNG_CEO, programmeUrl } from '@/content/programmeList';
 
-type MenuKey = 'services' | 'programs' | 'assessments';
+type MenuKey = 'services' | 'programs' | 'assessments' | 'more';
+
+/** CLARVO's school finder, on its own subdomain. */
+const SCHOOLS_URL = 'https://schools.clarvo.in';
+export const STUDENT_PROFILES_LABEL = 'Student Profiles';
+
+const MORE: MenuItem[] = [
+  { label: 'About Us', desc: 'Who we are and how to reach us.', href: '/about-us', icon: Info },
+  { label: 'Blogs', desc: 'Guides on streams, exams and admissions.', href: '/blog', icon: Newspaper },
+];
 
 interface MenuItem {
   label: string;
@@ -473,9 +484,20 @@ export default function LandingNavbar() {
             </div>
 
             {desktopLink('/research', 'Research')}
-            {desktopLink('/admitted-students', 'Admitted Students')}
-            {desktopLink('/about-us', 'About Us')}
-            {desktopLink('/blog', 'Blogs')}
+            {desktopLink('/admitted-students', STUDENT_PROFILES_LABEL)}
+            <a href={SCHOOLS_URL} className={`${PILL_BASE} ${PILL_IDLE}`}>
+              Find Schools
+            </a>
+
+            {/* MORE */}
+            <div className="relative" onMouseEnter={() => enterMenu('more')} onMouseLeave={leaveMenu}>
+              {menuTrigger('more', 'More', isActive('/about-us') || isActive('/blog'))}
+              {openMenu === 'more' && (
+                <div className={`${PANEL} w-[300px]`}>
+                  {renderItems(MORE)}
+                </div>
+              )}
+            </div>
           </div>
         </div>
 
@@ -593,9 +615,12 @@ export default function LandingNavbar() {
             )}
 
             {mobileLink('/research', 'Research')}
-            {mobileLink('/admitted-students', 'Admitted Students')}
-            {mobileLink('/about-us', 'About Us')}
-            {mobileLink('/blog', 'Blogs')}
+            {mobileLink('/admitted-students', STUDENT_PROFILES_LABEL)}
+            <a href={SCHOOLS_URL} className={`${MOBILE_LINK} font-semibold text-[#334155] hover:bg-[#F1F5F9]`}>
+              <span>Find Schools</span>
+              <span className="text-[#94A3B8]">→</span>
+            </a>
+            {mobileAccordion('more', 'More', renderItems(MORE, true))}
           </div>
 
           <div className="pt-3 border-t border-slate-100 flex flex-col gap-2">
